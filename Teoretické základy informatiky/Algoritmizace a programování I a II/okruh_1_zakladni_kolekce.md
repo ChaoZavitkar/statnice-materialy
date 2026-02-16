@@ -515,9 +515,3 @@ studenti_slovnik = {
 info_anna = studenti_slovnik["Anna"]
 print(info_anna)  # {'vek': 20, 'email': 'anna@email.cz'}
 ```
-
----
-
-**Připraveno pro okruh 1!** ✅
-
-Až budete připraveni, můžeme pokračovat na **Okruh 2: Komplexní algoritmy nad seznamy** (třídění, vyhledávání, merge sort).
