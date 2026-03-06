@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 5 – Diferenciální a integrální počet</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script defer src="../../lib/plotly.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../szztp.html" class="back-link">← Zpět na SZZTP</a>
+
+        <h1>Okruh 5 – Diferenciální a integrální počet</h1>
+        <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
+
+        <h2>1. Derivace funkce</h2>
+
+        <h3>Intuitivní vysvětlení</h3>
+        <p><strong>Derivace je "okamžitá rychlost změny".</strong> Stejně jako když jedete autom a tachometr ukazuje "teď jedu 80 km/h", derivace funkce říká "v tomto bodě se funkce mění touto rychlostí".</p>
+
+        <div class="note-box">
+            <strong>Praktické příklady:</strong>
+            <ul>
+                <li><strong>Auto:</strong> Derivace vzdálenosti = okamžitá rychlost (km/h)</li>
+                <li><strong>Ekonomie:</strong> Derivace ceny = jak moc se cena mění s objemem výroby</li>
+                <li><strong>Biologie:</strong> Derivace populace = kolik nových jedinců se rodí za čas</li>
+                <li><strong>Fyzika:</strong> Derivace polohy = rychlost, Derivace rychlosti = zrychlení</li>
+            </ul>
+        </div>
+
+        <h3>Geometrické vysvětlení</h3>
+        <p><strong>Derivace v bodě = sklon tečny v tom bodě.</strong></p>
+
+        <p>Když nakreslíte graf funkce a na něm nakreslíte dotyčnou linii (tečnu) v některém bodě, sklon té čáry je právě derivace:</p>
+        <ul>
+            <li><strong>Sklon = 0:</strong> Tečna je vodorovná → derivace je nula → funkce se právě v tom bodě nemění</li>
+            <li><strong>Sklon > 0:</strong> Tečna stoupá → derivace je kladná → funkce roste</li>
+            <li><strong>Sklon < 0:</strong> Tečna klesá → derivace je záporná → funkce klesá</li>
+        </ul>
+
+        <div id="plotDerivative" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Modrá křivka: funkce. Červená čára: tečna. Sklon tečny = derivace!</p>
+
+        <h3>Formální definice</h3>
+        <p>Derivace funkce $f$ v bodě $x_0$ je definována jako:</p>
+
+        <div class="formula">
+            $$f'(x_0) = \lim_{h \to 0} \frac{f(x_0 + h) - f(x_0)}{h}$$
+        </div>
+
+        <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\lim$ znamená "limita" (to, k čemu se něco blíží). Symbol $\to$ znamená "blíží se".</em></p>
+
+        <p><strong>Co to znamená:</strong></p>
+        <ul>
+            <li>$f(x_0 + h) - f(x_0)$ = změna funkční hodnoty (o kolik se funkce změnila)</li>
+            <li>$h$ = jak malá změna x (jak blízko jsme u bodu $x_0$)</li>
+            <li>$\frac{\Delta f}{\Delta x}$ = změna funkce / změna x = sklon</li>
+            <li>$\lim_{h \to 0}$ = když se h blíží nule (infinitesimální přírůstek)</li>
+        </ul>
+
+        <div class="highlight-box">
+            <p><strong>Zápisy derivace (všechny znamenají totéž):</strong></p>
+            <p>$f'(x)$ nebo $\frac{df}{dx}$ nebo $\frac{dy}{dx}$ nebo $Df(x)$</p>
+        </div>
+
+        <h3>Tečna k funkcí</h3>
+        <p>Rovnice tečny ke grafu v bodě $[x_0, f(x_0)]$ je:</p>
+        <div class="formula">$$y = f(x_0) + f'(x_0) \cdot (x - x_0)$$</div>
+        <p><strong>Tečna má sklon $f'(x_0)$ a prochází bodem $[x_0, f(x_0)]$ — právě jako přímka y = mx + b!</strong></p>
+
+        <h3>Základní vzorce pro derivace</h3>
+
+        <p><strong>Nejdůležitější derivace, které si musíte zapamatovat:</strong></p>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Funkce</th>
+                        <th>Derivace</th>
+                        <th>Vysvětlení</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$c$ (konstanta, např. 5)</td>
+                        <td>$0$</td>
+                        <td>Konstanta se nemění → derivace = 0</td>
+                    </tr>
+                    <tr>
+                        <td>$x$</td>
+                        <td>$1$</td>
+                        <td>Každý krok v x = jeden krok v y</td>
+                    </tr>
+                    <tr>
+                        <td>$x^2$</td>
+                        <td>$2x$</td>
+                        <td>Speciální případ mocniny (n=2)</td>
+                    </tr>
+                    <tr>
+                        <td>$x^n$ (libovolná mocnina)</td>
+                        <td>$n \cdot x^{n-1}$</td>
+                        <td>Mocnina jde dolů, koeficient jde nahoru</td>
+                    </tr>
+                    <tr>
+                        <td>$e^x$ (exponenciála)</td>
+                        <td>$e^x$</td>
+                        <td>Unikátní: funkce = její derivaci!</td>
+                    </tr>
+                    <tr>
+                        <td>$\ln(x)$ (přirozený log)</td>
+                        <td>$\frac{1}{x}$</td>
+                        <td>Inverzní funkce k $e^x$</td>
+                    </tr>
+                    <tr>
+                        <td>$\sin(x)$</td>
+                        <td>$\cos(x)$</td>
+                        <td>Sinus a kosinus se střídají</td>
+                    </tr>
+                    <tr>
+                        <td>$\cos(x)$</td>
+                        <td>$-\sin(x)$</td>
+                        <td>Obráceně a se záporným znaménkem</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Pravidla pro derivování</h3>
+
+        <div class="highlight-box">
+            <p><strong>1. Součet/rozdíl:</strong> Derivujte každý člen zvlášť</p>
+            <p style="margin: 5px 0;">$$[f(x) \pm g(x)]' = f'(x) \pm g'(x)$$</p>
+            <p><em>Příklad: $(x^2 + 3x)' = 2x + 3$</em></p>
+
+            <p><strong>2. Součin (Product Rule):</strong> Nemůžete jen násobit derivace!</p>
+            <p style="margin: 5px 0;">$$[f(x) \cdot g(x)]' = f'(x) \cdot g(x) + f(x) \cdot g'(x)$$</p>
+            <p><em>Příklad: $(x \cdot \sin(x))' = 1 \cdot \sin(x) + x \cdot \cos(x) = \sin(x) + x\cos(x)$</em></p>
+
+            <p><strong>3. Podíl (Quotient Rule):</strong> Pro dělení funkcí</p>
+            <p style="margin: 5px 0;">$$\left[\frac{f(x)}{g(x)}\right]' = \frac{f'(x) \cdot g(x) - f(x) \cdot g'(x)}{[g(x)]^2}$$</p>
+            <p><em>Poznámka: "Čitatel primární minus čitatel sekundární, kvadratický jmenovatel"</em></p>
+
+            <p><strong>4. Složená funkce (Chain Rule):</strong> "Vnější funkce krát vnitřní"</p>
+            <p style="margin: 5px 0;">$$[f(g(x))]' = f'(g(x)) \cdot g'(x)$$</p>
+            <p><em>Příklad: $(e^{2x})' = e^{2x} \cdot 2$</em></p>
+        </div>
+
+        <h3>Interaktivní příklady derivací</h3>
+
+        <div class="math-box" style="background-color: #f0f8ff; border-left: 4px solid #0d6efd;">
+            <strong>Kalkulátor derivací</strong>
+            <p>Viz, jak se mění derivace těchto funkcí v různých bodech:</p>
+
+            <label for="derivInput" style="display: block; margin-bottom: 10px;">
+                Zadej x: <input type="number" id="derivInput" value="2" min="-5" max="5" step="0.1" style="width: 80px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            </label>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div style="padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+                    <strong>$f(x) = x^2$</strong><br>
+                    $f'(x) = 2x$<br>
+                    <p style="color: #0d6efd; font-weight: bold; font-size: 1.1em;"><span id="deriv1">4</span></p>
+                </div>
+                <div style="padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+                    <strong>$f(x) = x^3$</strong><br>
+                    $f'(x) = 3x^2$<br>
+                    <p style="color: #0d6efd; font-weight: bold; font-size: 1.1em;"><span id="deriv2">12</span></p>
+                </div>
+                <div style="padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+                    <strong>$f(x) = \sin(x)$</strong><br>
+                    $f'(x) = \cos(x)$<br>
+                    <p style="color: #0d6efd; font-weight: bold; font-size: 1.1em;"><span id="deriv3">-0.42</span></p>
+                </div>
+                <div style="padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+                    <strong>$f(x) = e^x$</strong><br>
+                    $f'(x) = e^x$<br>
+                    <p style="color: #0d6efd; font-weight: bold; font-size: 1.1em;"><span id="deriv4">7.39</span></p>
+                </div>
+            </div>
+            <p style="font-size: 0.9em; color: #666; margin-top: 10px;">💡 Pozoruj, jak se derivace mění s x! Když je x=0, derivace $2x$ je 0 (plochý bod).</p>
+        </div>
+
+        <hr>
+
+        <h2>2. Extrémy funkce</h2>
+
+        <h3>Co je extrém?</h3>
+        <p><strong>Extrém = maximum nebo minimum.</strong> To je bod, kde má funkce "hřeben" (vrchol) nebo "jámu" (dno).</p>
+
+        <div class="note-box">
+            <strong>Praktické příklady:</strong>
+            <ul>
+                <li>Kdy je cena nejnižší? (minimum)</li>
+                <li>Kdy je zisk nejvyšší? (maximum)</li>
+                <li>V které nadmořské výšce je nejchladněji v horách? (minimum teploty)</li>
+                <li>Kdy prodej dosáhne vrcholu? (maximum prodeje)</li>
+            </ul>
+        </div>
+
+        <h3>Klíčové pozorování</h3>
+        <div class="highlight-box">
+            <p><strong>V místě maxima nebo minima má funkce "zastaveníček" — její sklon je nula!</strong></p>
+            <p>Proto: <strong>derivace v extrému se rovná nule</strong></p>
+            <div class="formula">$$f'(c) = 0$$</div>
+            <p><strong>Body, kde $f'(x) = 0$, se nazývají "kritické body".</strong> V nich by mohly být extrémy.</p>
+        </div>
+
+        <h3>Jak poznat, co to je?</h3>
+
+        <h4>Metoda 1: Druhá derivace</h4>
+        <p>Druhá derivace $f''(x)$ vám říká, jak se "Zakřivení" grafu v bodě. Je-li $f'(c) = 0$:</p>
+        <ul>
+            <li>Pokud $f''(c) > 0$ (druhá derivace kladná) → $c$ je <strong>minimum</strong> (konkávní, "happy face" ∪)</li>
+            <li>Pokud $f''(c) < 0$ (druhá derivace záporná) → $c$ je <strong>maximum</strong> (konvexní, "sad face" ∩)</li>
+            <li>Pokud $f''(c) = 0$ → test nerozhoduje (inflexní bod, změna zakřivení)</li>
+        </ul>
+
+        <h4>Metoda 2: Znak derivace (Jednodušší)</h4>
+        <p>Podívejte se, jak se znaménko derivace změní kolem kritického bodu:</p>
+        <ul>
+            <li><strong>$-$ na $+$</strong> (derivace změní ze záporné na kladnou) → <strong>minimum</strong> (dno)</li>
+            <li><strong>$+$ na $-$</strong> (derivace změní z kladné na zápornou) → <strong>maximum</strong> (vrchol)</li>
+            <li><strong>Znaménko se nezmění</strong> → <strong>inflexní bod</strong> (jen zmena v zakřivení)</li>
+        </ul>
+
+        <div id="plotExtrema" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Funkce s vyznačenými extrémy — zelená = maximum, červená = minimum</p>
+
+        <hr>
+
+        <h2>3. Integrál funkce</h2>
+
+        <h3>Intuitivní vysvětlení: Co je integrál?</h3>
+        <p><strong>Integrál je "opis" (inverzní funkce) derivace.</strong> Pokud víte, jak se funkce mění (derivace), integrál vám řekne, jakou "práci" už funktionalita "nastřídala".</p>
+
+        <div class="note-box">
+            <strong>Praktické příklady:</strong>
+            <ul>
+                <li><strong>Auto a vzdálenost:</strong> Máte graf rychlosti v čase. Integrál = ujetá vzdálenost!</li>
+                <li><strong>Práce a síla:</strong> Máte graf síly. Integrál = práce vykonaná (síla × vzdálenost)</li>
+                <li><strong>Ekonomie:</strong> Máte graf příjmů za den. Integrál = celkový příjem za období</li>
+                <li><strong>Medicína:</strong> Máte graf léku v krvi v čase. Integrál = kumulativní expozice léku</li>
+            </ul>
+        </div>
+
+        <h3>Neurčitý integrál — "Najděte funkci, která má tuto derivaci"</h3>
+
+        <p><strong>Neurčitý integrál = opak derivace.</strong> Máte-li derivaci $f(x)$, hledáte původní funkci $F(x)$:</p>
+
+        <div class="formula">$$F'(x) = f(x) \quad \Rightarrow \quad \int f(x) \, dx = F(x) + C$$</div>
+
+        <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\int$ znamená "integrál" (součet nekonečně mnoha nekonečně malých částí). Symbol $dx$ znamená "malý kus x". Symbol $\Rightarrow$ znamená "znamená" nebo "vede na".</em></p>
+
+        <p><strong>Příklad:</strong> Víte, že derivace $x^2$ je $2x$. Takže $\int 2x \, dx = x^2 + C$</p>
+
+        <p><strong>Proč $+ C$?</strong> Protože derivace konstanty je 0, takže všechny funkce tvaru $F(x) + 5$, $F(x) + 100$, atd. mají stejnou derivaci. Konstanta $C$ je "libovolná integrační konstanta".</p>
+
+        <h3>Určitý integrál — "Jaká je plocha pod křivkou?"</h3>
+
+        <p><strong>Určitý integrál počítá PLOCHU pod grafem funkce.</strong> Od bodu $a$ do bodu $b$:</p>
+
+        <div class="formula">$$\int_a^b f(x) \, dx = F(b) - F(a)$$</div>
+
+        <p><strong>Co se  stane:</strong></p>
+        <ol>
+            <li>Najdete "antiderivaci" $F(x)$ (neurčitý integrál bez $C$)</li>
+            <li>Spočítáte $F(b)$ (funkce v bodě $b$)</li>
+            <li>Spočítáte $F(a)$ (funkce v bodě $a$)</li>
+            <li>Odečtete: $F(b) - F(a)$ = plocha pod křivkou!</li>
+        </ol>
+
+        <div id="plotIntegral" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Určitý integrál = plocha pod křivkou (stínovaná oblast)</p>
+
+        <h3>Základní integrály</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Funkce</th>
+                        <th>Integrál</th>
+                        <th>Vysvětlení</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$c$ (konstanta, např. 5)</td>
+                        <td>$cx + C$</td>
+                        <td>Konstantu vynásobíme x, přidáme C</td>
+                    </tr>
+                    <tr>
+                        <td>$x$</td>
+                        <td>$\frac{x^2}{2} + C$</td>
+                        <td>Speciální případ mocniny (n=1)</td>
+                    </tr>
+                    <tr>
+                        <td>$x^n$ (libovolná mocnina, n ≠ -1)</td>
+                        <td>$\frac{x^{n+1}}{n+1} + C$</td>
+                        <td>Mocnina jde nahoru, vydělíme novou mocninou</td>
+                    </tr>
+                    <tr>
+                        <td>$\frac{1}{x}$</td>
+                        <td>$\ln|x| + C$</td>
+                        <td>Speciální případ: přirozený logaritmus</td>
+                    </tr>
+                    <tr>
+                        <td>$e^x$ (exponenciála)</td>
+                        <td>$e^x + C$</td>
+                        <td>Exponenciála se při integraci nezmění!</td>
+                    </tr>
+                    <tr>
+                        <td>$\sin(x)$</td>
+                        <td>$-\cos(x) + C$</td>
+                        <td>Sinus a kosinus se střídají, se záporným znaménkem</td>
+                    </tr>
+                    <tr>
+                        <td>$\cos(x)$</td>
+                        <td>$\sin(x) + C$</td>
+                        <td>Kosinus a sinus se střídají</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
+        <h2>4. Numerické integrační metody</h2>
+
+        <h3>Proč máme numerické metody?</h3>
+        <p><strong>Problém:</strong> Ne všechny funkce se dají integrovat algebraicky (žádný vzorec neexistuje).</p>
+
+        <p><strong>Řešení:</strong> Přibližujeme plochu pod křivkou pomocí jednoduchých tvarů (obdélníky, lichoběžníky, atd.)</p>
+
+        <div class="note-box">
+            <strong>Princip všech metod:</strong>
+            <ol>
+                <li>Interval $[a, b]$ rozdělíme na $n$ malých kúsků</li>
+                <li>V každém kúsku aproximujeme plochu jednoduchou formou (obdélník, lichoběžník, parabola)</li>
+                <li>Sečteme všechny aproximace</li>
+                <li>Čím víc kúsků, tím přesnější!</li>
+            </ol>
+        </div>
+
+        <h3>Obdélníková metoda</h3>
+
+        <p><strong>Myšlenka:</strong> Rozdělte interval na kúsky a aproximujte každý obdélníkem.</p>
+
+        <div class="formula">$$\int_a^b f(x) \, dx \approx \sum_{i=1}^{n} f(x_i^*) \cdot \Delta x$$</div>
+
+        <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\sum$ (velké sigma) znamená "suma" (sečtení). Zápis $\sum_{i=1}^{n}$ znamená "sečti pro i od 1 do n".</em></p>
+
+        <p>kde:</p>
+        <ul>
+            <li>$\Delta x = \frac{b-a}{n}$ = velikost jednoho kúsku</li>
+            <li>$f(x_i^*)$ = výška obdélníku v kúsku $i$ (můžete vzít levý, pravý nebo střední bod)</li>
+            <li>Plocha obdélníku = výška × šírka = $f(x_i^*) \cdot \Delta x$</li>
+        </ul>
+
+        <p><strong>Výhody:</strong> Jednoduchá, snadné pochopit</p>
+        <p><strong>Nevýhody:</strong> Málo přesná (pokud není funkce hladká)</p>
+
+        <h3>Lichoběžníková metoda</h3>
+
+        <p><strong>Myšlenka:</strong> Místo obdélníků použijeme lichoběžníky (to je přesnější!).</p>
+
+        <div class="formula">$$\int_a^b f(x) \, dx \approx \sum_{i=1}^{n} \frac{f(x_{i-1}) + f(x_i)}{2} \cdot \Delta x$$</div>
+
+        <p><strong>Čím je to lepší?</strong> Lichoběžník se "přimyká" křivce lépe než obdélník.</p>
+
+        <h3>Simpsonovo pravidlo</h3>
+
+        <p><strong>Myšlenka:</strong> Místo přímých čar používáme malé paraboly (zakřivené čáry). Jsou to nejlepší aproximace!</p>
+
+        <div class="formula">$$\int_a^b f(x) \, dx \approx \frac{\Delta x}{3} \sum_{i=0}^{n/2} [f(x_{2i}) + 4f(x_{2i+1}) + f(x_{2i+2})]$$</div>
+
+        <p><strong>Výsledek:</strong> Velmi přesná (funguje prakticky dokonale pro polynomy a hladké funkce)</p>
+
+        <div class="plot-row">
+            <div id="plotRectangle" class="plot-container"></div>
+            <div id="plotTrapezoid" class="plot-container"></div>
+        </div>
+
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Sleva: Obdélníková metoda, Zprava: Lichoběžníková metoda (oba pro $\int_0^\pi \sin(x) \, dx$)</p>
+
+        <div id="plotSimpson" class="plot-container"></div>
+
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Simpsonovo pravidlo pro $\int_0^\pi \sin(x) \, dx$</p>
+
+    </div>
+
+    <script>
+        // Wait for Plotly to load before running code
+        function waitForPlotly(callback, attempts = 0) {
+            if (typeof Plotly !== 'undefined') {
+                callback();
+            } else if (attempts < 50) {  // max 50 attempts = 10 seconds
+                setTimeout(() => waitForPlotly(callback, attempts + 1), 200);
+            }
+        }
+
+        // Initialize MathJax when document is ready
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+                }
+            }, 500);
+        });
+
+        // Helper function
+        function linspace(a, b, n) {
+            const result = [];
+            for (let i = 0; i < n; i++) {
+                result.push(a + (b - a) * i / (n - 1));
+            }
+            return result;
+        }
+
+        // ===== DERIVATIVES CALCULATOR =====
+        function updateDerivatives() {
+            const x = parseFloat(document.getElementById('derivInput').value);
+
+            // Derivative 1: d/dx(x^2) = 2x
+            const deriv1 = 2 * x;
+            document.getElementById('deriv1').textContent = deriv1.toFixed(2);
+
+            // Derivative 2: d/dx(x^3) = 3x^2
+            const deriv2 = 3 * x * x;
+            document.getElementById('deriv2').textContent = deriv2.toFixed(2);
+
+            // Derivative 3: d/dx(sin(x)) = cos(x)
+            const deriv3 = Math.cos(x);
+            document.getElementById('deriv3').textContent = deriv3.toFixed(2);
+
+            // Derivative 4: d/dx(e^x) = e^x
+            const deriv4 = Math.exp(x);
+            document.getElementById('deriv4').textContent = deriv4.toFixed(2);
+        }
+
+        document.getElementById('derivInput').addEventListener('input', updateDerivatives);
+
+        waitForPlotly(function() {
+            // ===== DERIVATIVE PLOT =====
+            const xDer = linspace(-1, 4, 200);
+        const yDer = xDer.map(x => x*x - 2*x + 2);
+
+        // Tangent line at x = 1.5
+        // f(x) = x^2 - 2x + 2, f'(x) = 2x - 2
+        // f(1.5) = 2.25 - 3 + 2 = 1.25, f'(1.5) = 1
+        const x0 = 1.5;
+        const f0 = x0*x0 - 2*x0 + 2;
+        const fprime0 = 2*x0 - 2;
+        const xTang = [x0 - 1.5, x0 + 1.5];
+        const yTang = xTang.map(x => f0 + fprime0 * (x - x0));
+
+        const traceFunc = { x: xDer, y: yDer, mode: 'lines', name: 'f(x) = x² - 2x + 2',
+                            line: { color: 'blue', width: 2 } };
+        const traceTang = { x: xTang, y: yTang, mode: 'lines', name: 'Tangent line',
+                           line: { color: 'red', dash: 'dash', width: 2 } };
+        const tracePoint = { x: [x0], y: [f0], mode: 'markers', marker: { size: 8, color: 'green' },
+                            name: 'Point' };
+
+        Plotly.newPlot('plotDerivative', [traceFunc, traceTang, tracePoint],
+            { title: 'Derivace a tečna', xaxis: { title: 'x' }, yaxis: { title: 'y' },
+              margin: { l: 50, r: 50, b: 50, t: 50 } },
+            { responsive: true });
+
+        // ===== EXTREMA PLOT =====
+        const xEx = linspace(-3, 5, 300);
+        const yEx = xEx.map(x => x*x*x - 3*x*x - 9*x + 5);
+
+        // Critical points: f'(x) = 3x^2 - 6x - 9 = 0 => x = 3, x = -1
+        const x1Crit = -1, x2Crit = 3;
+        const y1Crit = x1Crit**3 - 3*x1Crit**2 - 9*x1Crit + 5;  // 8
+        const y2Crit = x2Crit**3 - 3*x2Crit**2 - 9*x2Crit + 5;  // -22
+
+        const traceExFunc = { x: xEx, y: yEx, mode: 'lines', name: 'f(x) = x³ - 3x² - 9x + 5',
+                             line: { color: 'blue', width: 2 } };
+        const traceExMax = { x: [x1Crit], y: [y1Crit], mode: 'markers', marker: { size: 10, color: 'green', symbol: 'circle' },
+                            name: 'Local max' };
+        const traceExMin = { x: [x2Crit], y: [y2Crit], mode: 'markers', marker: { size: 10, color: 'red', symbol: 'circle' },
+                            name: 'Local min' };
+
+        Plotly.newPlot('plotExtrema', [traceExFunc, traceExMax, traceExMin],
+            { title: 'Extrémy funkce', xaxis: { title: 'x' }, yaxis: { title: 'y' },
+              margin: { l: 50, r: 50, b: 50, t: 50 } },
+            { responsive: true });
+
+        // ===== INTEGRAL PLOT =====
+        const xInt = linspace(0, 2, 150);
+        const yInt = xInt.map(x => x*x + 1);
+
+        const xFill = [0, ...xInt.filter(x => x >= 0 && x <= 2), 2];
+        const yFill = xFill.map(x => x*x + 1);
+
+        const traceIntFunc = { x: xInt, y: yInt, mode: 'lines', name: 'f(x) = x² + 1',
+                              line: { color: 'blue', width: 2 } };
+        const traceFill = { x: xFill, y: yFill, fill: 'tozeroy', name: 'Area under curve',
+                          fillcolor: 'rgba(0, 0, 255, 0.2)', line: { color: 'blue' } };
+
+        Plotly.newPlot('plotIntegral', [traceFill, traceIntFunc],
+            { title: 'Určitý integrál ∫₀² (x² + 1) dx', xaxis: { title: 'x' }, yaxis: { title: 'y' },
+              margin: { l: 50, r: 50, b: 50, t: 50 } },
+            { responsive: true });
+
+        // ===== RECTANGLE METHOD =====
+        const xRec = linspace(0, Math.PI, 300);
+        const yRec = xRec.map(x => Math.sin(x));
+
+        const n = 8;
+        const deltaX = Math.PI / n;
+        const xRect = [];
+        const yRect = [];
+        for (let i = 0; i < n; i++) {
+            const xi = i * deltaX;
+            const xi1 = (i + 1) * deltaX;
+            const yi = Math.sin(xi);
+            xRect.push(xi, xi, xi1, xi1, xi, null);
+            yRect.push(0, yi, yi, 0, 0, null);
+        }
+
+        const traceRecFunc = { x: xRec, y: yRec, mode: 'lines', name: 'sin(x)',
+                             line: { color: 'blue', width: 2 } };
+        const traceRec = { x: xRect, y: yRect, mode: 'lines', fill: 'tozeroy', name: 'Rectangles',
+                         fillcolor: 'rgba(255, 0, 0, 0.3)', line: { color: 'red' } };
+
+        Plotly.newPlot('plotRectangle', [traceRecFunc, traceRec],
+            { title: 'Obdélníková metoda', xaxis: { title: 'x' }, yaxis: { title: 'y' },
+              margin: { l: 50, r: 50, b: 50, t: 50 } },
+            { responsive: true });
+
+        // ===== TRAPEZOID METHOD =====
+        const xTrap = [];
+        const yTrap = [];
+        for (let i = 0; i < n; i++) {
+            const xi = i * deltaX;
+            const xi1 = (i + 1) * deltaX;
+            const yi = Math.sin(xi);
+            const yi1 = Math.sin(xi1);
+            xTrap.push(xi, xi1, xi1, xi, xi, null);
+            yTrap.push(0, 0, yi1, yi, 0, null);
+        }
+
+        const traceTrapFunc = { x: xRec, y: yRec, mode: 'lines', name: 'sin(x)',
+                              line: { color: 'blue', width: 2 } };
+        const traceTrap = { x: xTrap, y: yTrap, mode: 'lines', fill: 'tozeroy', name: 'Trapezoids',
+                          fillcolor: 'rgba(0, 255, 0, 0.3)', line: { color: 'green' } };
+
+        Plotly.newPlot('plotTrapezoid', [traceTrapFunc, traceTrap],
+            { title: 'Lichoběžníková metoda', xaxis: { title: 'x' }, yaxis: { title: 'y' },
+              margin: { l: 50, r: 50, b: 50, t: 50 } },
+            { responsive: true });
+
+        // ===== SIMPSON METHOD =====
+        const xSimp = xRec;
+        const ySimp = yRec;
+        const xSimpFill = [];
+        const ySimpFill = [];
+
+        for (let i = 0; i < n; i++) {
+            const xi = i * deltaX;
+            const xi1 = (i + 1) * deltaX;
+            const xMid = (xi + xi1) / 2;
+            const yi = Math.sin(xi);
+            const yMid = Math.sin(xMid);
+            const yi1 = Math.sin(xi1);
+
+            // Create parabola points
+            for (let t = 0; t <= 1; t += 0.1) {
+                const x = xi + t * deltaX;
+                // Simple parabola through 3 points
+                const a = (yi - 2*yMid + yi1) / (deltaX*deltaX);
+                const b = (yi1 - yi) / deltaX - a * deltaX;
+                const c = yi;
+                const y = a*(x-xi)*(x-xi) + b*(x-xi) + c;
+                xSimpFill.push(x);
+                ySimpFill.push(y);
+            }
+            xSimpFill.push(null);
+            ySimpFill.push(null);
+        }
+
+        const traceSimpFunc = { x: xSimp, y: ySimp, mode: 'lines', name: 'sin(x)',
+                              line: { color: 'blue', width: 2 } };
+        const traceSimp = { x: xSimpFill, y: ySimpFill, fill: 'tozeroy', name: 'Simpson',
+                          fillcolor: 'rgba(255, 128, 0, 0.3)', line: { color: 'orange' } };
+
+            Plotly.newPlot('plotSimpson', [traceSimpFunc, traceSimp],
+                { title: 'Simpsonovo pravidlo', xaxis: { title: 'x' }, yaxis: { title: 'y' },
+                  margin: { l: 50, r: 50, b: 50, t: 50 } },
+                { responsive: true });
+
+            hljs.highlightAll();
+        });
+    </script>
+</body>
+</html>

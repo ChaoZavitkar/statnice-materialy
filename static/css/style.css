@@ -1,0 +1,623 @@
+/* ===== UNIFIED STYLE.CSS ===== */
+/* Combined styles for SZZTP chapters (Algorithmization APR and Mathematics MT) */
+
+/* ===== GLOBAL STYLES ===== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+.container {
+    width: 100%;
+    max-width: 1140px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+}
+
+a.link-secondary {
+    color: #6c757d;
+    text-decoration: none;
+}
+
+a.link-secondary:hover {
+    text-decoration: underline;
+}
+
+/* ===== HEADINGS ===== */
+h1 {
+    color: #2c3e50;
+    border-bottom: 3px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    color: #34495e;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border-left: 4px solid #3498db;
+    padding-left: 15px;
+}
+
+h3 {
+    color: #5a6c7d;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+h4 {
+    color: #666;
+    margin-top: 15px;
+}
+
+/* ===== BACK LINK ===== */
+.back-link {
+    display: inline-block;
+    margin-bottom: 30px;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+/* ===== SUBTITLE ===== */
+.subtitle {
+    color: #7f8c8d;
+    font-size: 0.95em;
+    margin-bottom: 10px;
+}
+
+/* ===== CODE & PRE ===== */
+pre {
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 12px;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+code {
+    color: #c7254e;
+    background-color: #f9f2f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+}
+
+pre code {
+    color: inherit;
+    background-color: transparent;
+    padding: 0;
+}
+
+pre code.hljs {
+    border-radius: 0.375rem;
+}
+
+/* ===== TABLES ===== */
+.table-responsive {
+    margin: 20px 0;
+}
+
+table {
+    font-size: 0.95em;
+}
+
+/* ===== INFO/ALERT BOXES ===== */
+.math-box {
+    background-color: #f0f4f8;
+    border-left: 4px solid #3498db;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.formula {
+    text-align: center;
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.note-box {
+    background-color: #e8f4f8;
+    border-left: 4px solid #27ae60;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.warning-box {
+    background-color: #fff5e6;
+    border-left: 4px solid #f39c12;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+.highlight-box {
+    background-color: #fff9e6;
+    border-left: 4px solid #f1c40f;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+}
+
+/* ===== VISUALIZATION BOXES (Algorithmization) ===== */
+.viz-box {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    padding: 1.25rem 1.25rem;
+    margin: 1rem 0 1.5rem 0;
+    overflow-x: auto;
+}
+
+.viz-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.4rem;
+}
+
+.viz-caption {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 0.6rem;
+}
+
+.viz-msg {
+    min-height: 1.4em;
+    font-size: 0.82rem;
+    font-family: monospace;
+    color: #343a40;
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.5rem;
+    border-left: 3px solid #dee2e6;
+    background: #fff;
+    border-radius: 0 4px 4px 0;
+}
+
+.viz-step-arrow {
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin: 0.6rem 0;
+}
+
+/* ===== CELLS (Array visualization) ===== */
+.viz-cells {
+    display: flex;
+    align-items: stretch;
+}
+
+.viz-cell {
+    border: 2px solid #adb5bd;
+    padding: 0.45rem 0.7rem;
+    text-align: center;
+    min-width: 76px;
+    background: #fff;
+    font-family: monospace;
+    font-size: 0.88rem;
+    cursor: default;
+    transition: background 0.25s, border-color 0.25s, color 0.25s;
+    user-select: none;
+}
+
+.viz-cell + .viz-cell {
+    border-left: none;
+}
+
+.viz-cell.clickable {
+    cursor: pointer;
+}
+
+.viz-cell.clickable:hover {
+    background: #f0f4ff;
+}
+
+.viz-cell.hl-blue {
+    background: #cfe2ff;
+    border-color: #0d6efd;
+    color: #084298;
+    font-weight: 700;
+}
+
+.viz-cell.hl-green {
+    background: #d1e7dd;
+    border-color: #198754;
+    color: #0f5132;
+    font-weight: 700;
+}
+
+.viz-cell.hl-yellow {
+    background: #fff3cd;
+    border-color: #e6a817;
+    color: #664d03;
+}
+
+.viz-cell.hl-fade {
+    background: #f8f9fa;
+    border-color: #ced4da;
+    color: #adb5bd;
+}
+
+/* ===== INDEX ROWS ===== */
+.viz-idxrow {
+    display: flex;
+    margin-bottom: 3px;
+}
+
+.viz-idx {
+    min-width: 80px;
+    text-align: center;
+    font-size: 0.7rem;
+    color: #6c757d;
+    font-family: monospace;
+}
+
+.viz-idx.hl {
+    color: #0d6efd;
+    font-weight: 700;
+}
+
+/* ===== POINTER ROWS ===== */
+.viz-ptrrow {
+    display: flex;
+    margin-top: 4px;
+}
+
+.viz-ptr-item {
+    min-width: 80px;
+    text-align: center;
+    font-size: 0.78rem;
+    line-height: 1.3;
+    color: #6c757d;
+    transition: color 0.25s;
+}
+
+.viz-ptr-item.hl {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+/* ===== LEGEND ===== */
+.viz-legend {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+}
+
+.viz-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.viz-legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,.15);
+    flex-shrink: 0;
+}
+
+/* ===== QUEUE ===== */
+.viz-queue-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.viz-queue-dir {
+    font-size: 0.78rem;
+    font-weight: 700;
+    white-space: nowrap;
+    padding: 0.2rem 0;
+}
+
+.viz-queue-track {
+    display: flex;
+    border: 2px solid #adb5bd;
+    border-radius: 4px;
+    overflow: hidden;
+    min-width: 60px;
+}
+
+.viz-queue-cell {
+    padding: 0.45rem 0.85rem;
+    text-align: center;
+    font-family: monospace;
+    font-size: 0.85rem;
+    background: #fff;
+    min-width: 72px;
+    transition: background 0.3s, color 0.3s;
+}
+
+.viz-queue-cell + .viz-queue-cell {
+    border-left: 2px solid #adb5bd;
+}
+
+.viz-queue-cell.q-first {
+    background: #d1e7dd;
+    color: #0f5132;
+    font-weight: 700;
+}
+
+.viz-queue-cell.q-last {
+    background: #dbeafe;
+    color: #1e3a5f;
+}
+
+.viz-queue-cell.q-empty {
+    font-style: italic;
+    color: #adb5bd;
+    min-width: 140px;
+}
+
+.viz-queue-cell.viz-enter {
+    animation: enterRight 0.3s ease;
+}
+
+@keyframes enterRight {
+    from {
+        opacity: 0;
+        transform: translateX(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ===== STACK ===== */
+.viz-stack-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.viz-stack-col {
+    display: inline-flex;
+    flex-direction: column;
+    min-width: 150px;
+}
+
+.viz-stack-item {
+    border: 2px solid #adb5bd;
+    border-bottom: none;
+    padding: 0.45rem 1rem;
+    text-align: center;
+    font-family: monospace;
+    font-size: 0.85rem;
+    background: #fff;
+    transition: background 0.25s, border-color 0.25s, color 0.25s;
+}
+
+.viz-stack-item:first-child {
+    border-radius: 4px 4px 0 0;
+}
+
+.viz-stack-item.s-top {
+    background: #cfe2ff;
+    border-color: #0d6efd;
+    color: #084298;
+    font-weight: 700;
+}
+
+.viz-stack-item.s-empty {
+    font-style: italic;
+    color: #adb5bd;
+    border-radius: 4px 4px 0 0;
+    border-bottom: none;
+}
+
+.viz-stack-base {
+    border: 2px solid #adb5bd;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    height: 5px;
+    background: #dee2e6;
+}
+
+.viz-stack-item.viz-enter {
+    animation: enterTop 0.3s ease;
+}
+
+@keyframes enterTop {
+    from {
+        opacity: 0;
+        transform: translateY(-12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== BUTTONS ===== */
+.viz-btn {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    padding: 0.4rem 0.85rem;
+    font-size: 0.84rem;
+    cursor: pointer;
+    background: #fff;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    min-height: 42px;
+    font-family: inherit;
+}
+
+.viz-btn:hover {
+    background: #f0f0f0;
+    border-color: #adb5bd;
+}
+
+.viz-btn:active {
+    background: #e2e6ea;
+}
+
+.viz-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.viz-btn-primary {
+    background: #0d6efd;
+    color: #fff;
+    border-color: #0d6efd;
+}
+
+.viz-btn-primary:hover {
+    background: #0b5ed7;
+    border-color: #0b5ed7;
+}
+
+.viz-btn-danger {
+    background: #dc3545;
+    color: #fff;
+    border-color: #dc3545;
+}
+
+.viz-btn-danger:hover {
+    background: #bb2d3b;
+    border-color: #bb2d3b;
+}
+
+.viz-btn-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.75rem;
+}
+
+/* ===== PLOT CONTAINERS (Mathematics) ===== */
+.plot-container {
+    width: 100%;
+    min-height: 450px;
+    margin: 30px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #fafafa;
+}
+
+.plot-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.plot-container-3d {
+    width: 100%;
+    height: 500px;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+
+/* ===== SURFACE GRID (for multivariable functions) ===== */
+.surface-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.surface-item {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.surface-item h4 {
+    background-color: #f0f4f8;
+    padding: 10px 15px;
+    margin: 0;
+    border-bottom: 1px solid #ddd;
+    font-size: 0.95em;
+}
+
+.surface-plot {
+    width: 100%;
+    height: 400px;
+}
+
+/* ===== MOBILE RESPONSIVITY ===== */
+@media (max-width: 576px) {
+    /* Algorithmization styles */
+    .viz-cell {
+        min-width: 58px;
+        padding: 0.4rem 0.4rem;
+        font-size: 0.78rem;
+    }
+
+    .viz-idx {
+        min-width: 62px;
+        font-size: 0.62rem;
+    }
+
+    .viz-ptr-item {
+        min-width: 62px;
+        font-size: 0.7rem;
+    }
+
+    .viz-queue-cell {
+        min-width: 58px;
+        padding: 0.4rem 0.5rem;
+        font-size: 0.78rem;
+    }
+
+    .viz-stack-item {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.78rem;
+    }
+
+    .viz-btn {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.65rem;
+    }
+
+    /* Mathematics styles */
+    .plot-container {
+        min-height: 350px;
+    }
+
+    .plot-row {
+        grid-template-columns: 1fr;
+    }
+
+    .plot-container-3d {
+        height: 400px;
+    }
+
+    .surface-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Headings */
+    h1 {
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+}

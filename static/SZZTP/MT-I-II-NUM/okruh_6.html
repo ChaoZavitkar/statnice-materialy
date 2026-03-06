@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 6 – Soustavy lineárních rovnic</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script defer src="../../lib/plotly.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../szztp.html" class="back-link">← Zpět na SZZTP</a>
+
+        <h1>Okruh 6 – Soustavy lineárních rovnic</h1>
+        <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
+
+        <h2>1. Soustavy lineárních rovnic</h2>
+
+        <h3>Co je soustava lineárních rovnic?</h3>
+        <p><strong>Soustava lineárních rovnic = více rovnic s více neznámými, které se řeší dohromady.</strong></p>
+
+        <div class="note-box">
+            <strong>Příklady z reálného světa:</strong>
+            <ul>
+                <li><strong>Ekonomie:</strong> "Kolik jablek a hrušek bych měl koupit za 100 Kč, aby byla váha 10 kg?"</li>
+                <li><strong>Fyzika:</strong> "Kde se dva objekty pohybující se různými rychlostmi setkají?"</li>
+                <li><strong>Elektřina:</strong> "Jaké proudy protékají různými větvemi obvodu?" (Kirchhoffovy zákony)</li>
+                <li><strong>Stavitelství:</strong> "Jaké mají být síly v kloubech mostní konstrukce?"</li>
+                <li><strong>Počítačová grafika:</strong> "Jaké jsou barvy pixelu po složení více vrstev?"</li>
+            </ul>
+        </div>
+
+        <h3>Matematická definice</h3>
+        <p><strong>Soustava lineárních rovnic</strong> o $n$ neznámých má tvar:</p>
+
+        <div class="formula">
+            $$\begin{aligned}
+            a_{11}x_1 + a_{12}x_2 + \cdots + a_{1n}x_n &= b_1 \\
+            a_{21}x_1 + a_{22}x_2 + \cdots + a_{2n}x_n &= b_2 \\
+            &\vdots \\
+            a_{m1}x_1 + a_{m2}x_2 + \cdots + a_{mn}x_n &= b_m
+            \end{aligned}$$
+        </div>
+
+        <p><strong>Co znamená zápis:</strong>
+        <em style="color: #666; font-size: 0.9em;">💡 Dolní indexy (např. $x_1, x_2$) rozlišují různé neznámé. Symbol $\cdots$ (tři tečky) znamená "a tak dále". Symbol $\vdots$ (vertikální tečky) znamená "víc řádků stejného typu".</em></p>
+        <ul>
+            <li>$x_1, x_2, \ldots, x_n$ = <strong>neznámé</strong> — to hledáme</li>
+            <li>$a_{ij}$ = <strong>koeficienty</strong> — číselné "váhy" u jednotlivých neznámých</li>
+            <li>$b_i$ = <strong>pravé strany</strong> — výsledky rovnic</li>
+            <li>$m$ = počet rovnic, $n$ = počet neznámých</li>
+        </ul>
+
+        <div class="math-box">
+            <strong>Konkrétní příklad:</strong>
+            <p>Chcete koupit jablka ($x_1$) a hrušky ($x_2$):</p>
+            <div class="formula">
+                $$\begin{aligned}
+                2x_1 + 3x_2 &= 7 \quad \text{(Cena: 2 Kč za jablko, 3 Kč za hrušku, máme 7 Kč)} \\
+                x_1 - x_2 &= 1 \quad \text{(Chceme o 1 více jablek než hrušek)}
+                \end{aligned}$$
+            </div>
+            <p><strong>Otázka:</strong> Kolik jablek a kolik hrušek koupit? (Řešení: $x_1 = 2$, $x_2 = 1$)</p>
+        </div>
+
+        <h3>Kompaktní zápis</h3>
+        <p>Jednoduše zapíšeme soustavu pomocí matic (tabulek čísel):</p>
+
+        <div class="formula">
+            $$\mathbf{Ax} = \mathbf{b}$$
+        </div>
+
+        <p>kde:</p>
+        <ul>
+            <li>$\mathbf{A}$ = matice koeficientů (tabulka čísel $a_{ij}$)</li>
+            <li>$\mathbf{x}$ = vektor neznámých ($x_1, x_2, \ldots, x_n$)</li>
+            <li>$\mathbf{b}$ = vektor pravých stran ($b_1, b_2, \ldots, b_m$)</li>
+        </ul>
+
+        <div class="highlight-box">
+            <p><strong>Příklad v maticovém zápisu:</strong></p>
+            <div class="formula">
+                $$\begin{pmatrix} 2 & 3 \\ 1 & -1 \end{pmatrix}
+                \begin{pmatrix} x_1 \\ x_2 \end{pmatrix}
+                =
+                \begin{pmatrix} 7 \\ 1 \end{pmatrix}$$
+            </div>
+            <p>(Matice koeficientů) × (vektor neznámých) = (vektor výsledků)</p>
+        </div>
+
+        <hr>
+
+        <h2>2. Řešitelnost soustavy</h2>
+
+        <h3>Kolik může být řešení?</h3>
+        <p><strong>Soustava lineárních rovnic může mít tři případy:</strong></p>
+
+        <div class="math-box">
+            <ol>
+                <li><strong>Právě jedno řešení:</strong> Jediná sada čísel vyhovuje všem rovnicím
+                    <br><em>Příklad: $2x + 3y = 7$ a $x - y = 1$ → $(x, y) = (2, 1)$ ✓</em></li>
+                <li><strong>Nekonečně mnoho řešení:</strong> Více sad čísel vyhovuje všem rovnicím
+                    <br><em>Příklad: $2x + 3y = 7$ a $4x + 6y = 14$ (druhá rovnice je jen dvojnásobek první) → každý bod na přímce</em></li>
+                <li><strong>Žádné řešení:</strong> Žádná sada čísel nevyhovuje všem rovnicím
+                    <br><em>Příklad: $2x + 3y = 7$ a $2x + 3y = 10$ (stejná levá strana, různé pravé strany!) → spor</em></li>
+            </ol>
+        </div>
+
+        <h3>Geometrické vysvětlení</h3>
+        <p>Každá lineární rovnice v 2D je přímka. Soustava 2 rovnic = hledáme průsečík dvou přímek:</p>
+        <ul>
+            <li><strong>Přímky se kříží v jednom bodě:</strong> 1 řešení</li>
+            <li><strong>Přímky se shodují (jsou totožné):</strong> ∞ řešení (všechny body přímky)</li>
+            <li><strong>Přímky jsou rovnoběžné a různé:</strong> 0 řešení (nikdy se nesetkají)</li>
+        </ul>
+
+        <p>V 3D je každá rovnice ROVINA. Hledáme průsečík tří rovin — podobně, mohou se potkat v bodě, přímce, rovině nebo vůbec.</p>
+
+        <h3>Praktická pravidla</h3>
+
+        <p><strong>Při řešení Gaussovou eliminací (viz později) si všimněte:</strong></p>
+        <ul>
+            <li><strong>"Normální" řešení (1 řešení):</strong> Po eliminaci máte $n$ rovnic a $n$ neznámých, všechny rovnice jsou nezávislé</li>
+            <li><strong>"Volné proměnné" (∞ řešení):</strong> Na konci vám zbyde $0 = 0$ (výsledky, které neobsahují neznámé) → můžete si zvolit některé proměnné</li>
+            <li><strong>"Spor" (0 řešení):</strong> Na konci máte $0 = 5$ (nebo nějaké jiné číslo) — to je nemožné!</li>
+        </ul>
+
+        <div class="highlight-box">
+            <p><strong>Formálně (pro pokročilé):</strong> Počet řešení určuje <strong>hodnost matice</strong> (rank) — počet nezávislých rovnic. Pokud je hodnost matice koeficientů stejná jako hodnost rozšířené matice (s pravými stranami), pak má soustava řešení.</p>
+        </div>
+
+        <hr>
+
+        <h2>Geometrická interpretace v 3D</h2>
+        <p>Soustava 3 rovnic o 3 neznámých: Každá rovnice představuje <strong>rovinu v 3D prostoru</strong>. Řešení je průsečík těchto rovin.</p>
+
+        <div id="plot3d" class="plot-container"></div>
+
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Tři roviny se protínají v jednom bodě — soustava má právě jedno řešení.</p>
+
+        <hr>
+
+        <h2>Metody řešení soustav lineárních rovnic</h2>
+
+        <h3>3. Gaussova eliminace</h3>
+
+        <h4>Myšlenka — "Převedeme rovnice na jednoduchou formu"</h4>
+        <p><strong>Princip:</strong> Pomocí jednoduchých operací (jako u řešení rovnic v ZŠ) převedeme soustavu na jednodušší tvar, kterou už umíme řešit.</p>
+
+        <h4>Povolené operace</h4>
+        <p><strong>Smíme:</strong></p>
+        <ol>
+            <li>Vyměnit si pořadí rovnic</li>
+            <li>Vynásobit rovnici nenulovým číslem</li>
+            <li>Přičíst k jedné rovnici násobek jiné rovnice</li>
+        </ol>
+        <p><strong>Výsledek:</strong> Řešení se nezmění!</p>
+
+        <div class="highlight-box">
+            <p><strong>Výhody Gaussovy eliminace:</strong></p>
+            <ul>
+                <li>✓ Funguje na jakoukoli soustavu</li>
+                <li>✓ Relativně rychlá ($O(n^3)$ operací)</li>
+                <li>✓ Zjistí, jestli soustava nemá řešení</li>
+            </ul>
+        </div>
+
+        <h4>Cramerovo pravidlo</h4>
+        <p><strong>Platí pouze pro soustavy s</strong> $n$ <strong>rovnicemi a</strong> $n$ <strong>neznámými</strong>, kde $\det(\mathbf{A}) \neq 0$.
+        <em style="color: #666; font-size: 0.9em;">💡 Symbol $\neq$ znamená "není rovno" nebo "je různé od". Symbol $\det$ znamená "determinant" — speciální číslo přiřazené matici, které nám řekne, jestli má soustava jediné řešení (když $\det \neq 0$).</em></p>
+
+        <div class="formula">$$x_i = \frac{\det(\mathbf{A}_i)}{\det(\mathbf{A})}$$</div>
+
+        <p>kde $\mathbf{A}_i$ vznikne z $\mathbf{A}$ <strong>nahrazením</strong> $i$-tého sloupce vektorem pravých stran $\mathbf{b}$.</p>
+
+        <div class="warning-box">
+            <strong>Nevýhody Cramerova pravidla:</strong>
+            <ul>
+                <li><strong>Vysoká výpočetní složitost:</strong> $O(n! \cdot n)$ kvůli výpočtu determinantů</li>
+                <li><strong>Numericky nestabilní</strong> pro větší soustavy</li>
+                <li><strong>Používá se pouze</strong> pro malé soustavy (max 3-4 neznámé) nebo teoretické účely</li>
+            </ul>
+        </div>
+
+        <h4>Gaussova eliminační metoda</h4>
+        <p><strong>Nejpoužívanější metoda</strong> pro ruční i počítačové řešení. Založena na <strong>elementárních řádkových operacích</strong>.</p>
+
+        <h5>Elementární řádkové operace</h5>
+        <ol>
+            <li><strong>Výměna</strong> dvou řádků</li>
+            <li><strong>Vynásobení</strong> řádku nenulovým číslem</li>
+            <li><strong>Přičtení</strong> násobku jednoho řádku k jinému řádku</li>
+        </ol>
+        <p>Tyto operace <strong>nemění řešení</strong> soustavy!</p>
+
+        <h5>Algoritmus (dopředný chod)</h5>
+        <p>Cíl: převést rozšířenou matici (A|b) na schodovitý tvar</p>
+        <pre><code class="language-plaintext">1. Pro i = 1 až n:
+   a. Najdi pivot (ненулový prvek) v i-tém sloupci
+   b. Pokud je pivot 0, vyměň řádky
+   c. Vynuluj všechny prvky POD pivotem:
+      - Pro každý řádek j > i:
+        řádek_j = řádek_j - (a_ji / a_ii) * řádek_i</code></pre>
+
+        <h5>Algoritmus (zpětný chod)</h5>
+        <pre><code class="language-plaintext">Po dopředném chodu máme schodovitý tvar.
+
+1. Řeš od posledního řádku:
+   x_n = b_n / a_nn
+
+2. Pro i = n-1 až 1:
+   x_i = (b_i - součet(a_ij * x_j pro j > i)) / a_ii</code></pre>
+
+        <div class="highlight-box">
+            <strong>Výhody Gaussovy eliminace:</strong>
+            <ul>
+                <li><strong>Univerzální</strong> — funguje pro libovolnou soustavu</li>
+                <li><strong>Efektivní</strong> — složitost $O(n^3)$</li>
+                <li><strong>Stabilní</strong> s částečnou pivotací</li>
+                <li><strong>Zjistí neslnitelnost</strong> nebo neurčitost</li>
+            </ul>
+        </div>
+
+        <h4>Metoda LU rozkladu</h4>
+        <p><strong>Idea:</strong> Rozložit matici $\mathbf{A}$ na součin <strong>dolní trojúhelníkové</strong> (L) a <strong>horní trojúhelníkové</strong> (U) matice.</p>
+
+        <div class="formula">$$\mathbf{A} = \mathbf{LU}$$</div>
+
+        <p>kde:</p>
+        <ul>
+            <li>$\mathbf{L}$ je <strong>dolní trojúhelníková</strong> matice (Lower) — pod diagonálou nenulové prvky</li>
+            <li>$\mathbf{U}$ je <strong>horní trojúhelníková</strong> matice (Upper) — nad diagonálou nenulové prvky</li>
+        </ul>
+
+        <p><strong>Výhoda:</strong> Pokud máme stejnou matici $\mathbf{A}$ ale různé pravé strany $\mathbf{b}$, LU rozklad <strong>počítáme jen jednou</strong>!</p>
+
+        <h3>Iterační metody</h3>
+        <p>Iterační metody generují <strong>posloupnost přibližných řešení</strong>, která konverguje k přesnému řešení.</p>
+
+        <p><strong>Výhody:</strong></p>
+        <ul>
+            <li>Efektivní pro <strong>řídké matice</strong> (hodně nulových prvků)</li>
+            <li>Menší paměťové nároky</li>
+            <li>Odolné vůči zaokrouhlovacím chybám</li>
+        </ul>
+
+        <p><strong>Nevýhody:</strong></p>
+        <ul>
+            <li>Nemusí konvergovat (závisí na vlastnostech matice)</li>
+            <li>Dávají pouze <strong>přibližné</strong> řešení</li>
+        </ul>
+
+        <h4>Jacobiho iterační metoda</h4>
+        <p>Z každé rovnice vyjádříme jednu neznámou:</p>
+        <div class="formula">$$x_i^{(k+1)} = \frac{1}{a_{ii}}\left(b_i - \sum_{j \neq i} a_{ij}x_j^{(k)}\right)$$</div>
+
+        <p>Všechny neznámé se aktualizují <strong>současně</strong> (používáme hodnoty z předchozí iterace).</p>
+
+        <h4>Gauss-Seidelova iterační metoda</h4>
+        <p><strong>Vylepšení</strong> Jacobiho metody — používáme <strong>nejnovější dostupné</strong> hodnoty.</p>
+        <div class="formula">$$x_i^{(k+1)} = \frac{1}{a_{ii}}\left(b_i - \sum_{j < i} a_{ij}x_j^{(k+1)} - \sum_{j > i} a_{ij}x_j^{(k)}\right)$$</div>
+
+        <p>Jakmile vypočteme novou hodnotu $x_i^{(k+1)}$, okamžitě ji používáme pro další neznámé.</p>
+
+        <div class="highlight-box">
+            <strong>Podmínky konvergence:</strong><br>
+            Metoda konverguje, pokud matice $\mathbf{A}$ splňuje jednu z podmínek:
+            <ol>
+                <li><strong>Striktně diagonálně dominantní:</strong>
+                    $$|a_{ii}| > \sum_{j \neq i} |a_{ij}| \quad \text{pro všechna } i$$
+                </li>
+                <li><strong>Symetrická pozitivně definitní</strong> matice</li>
+            </ol>
+        </div>
+
+        <h3>Srovnění metod</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Metoda</th>
+                        <th>Typ</th>
+                        <th>Složitost</th>
+                        <th>Použití</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Cramer</strong></td>
+                        <td>Přímá</td>
+                        <td>$O(n! \cdot n)$</td>
+                        <td>Malé soustavy (n ≤ 3)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gaussova eliminace</strong></td>
+                        <td>Přímá</td>
+                        <td>$O(n^3)$</td>
+                        <td>Obecné soustavy</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LU rozklad</strong></td>
+                        <td>Přímá</td>
+                        <td>$O(n^3)$ + $O(n^2)$ per řešení</td>
+                        <td>Více soustav, inverze</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Jacobi</strong></td>
+                        <td>Iterační</td>
+                        <td>$O(kn^2)$</td>
+                        <td>Paralelní výpočty</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gauss-Seidel</strong></td>
+                        <td>Iterační</td>
+                        <td>$O(kn^2)$</td>
+                        <td>Řídké matice</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3>Interaktivní řešitel soustav</h3>
+
+        <div class="math-box" style="background-color: #f0f8ff; border-left: 4px solid #0d6efd;">
+            <strong>Řešitel 2×2 soustavy lineárních rovnic</strong>
+            <p>Modifikuj koeficienty a sleduj, jak se změní řešení:</p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
+                <div>
+                    <strong>Rovnice 1: a₁x + b₁y = c₁</strong><br>
+                    a₁: <input type="number" id="a1" value="2" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;"><br>
+                    b₁: <input type="number" id="b1" value="3" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;"><br>
+                    c₁: <input type="number" id="c1" value="7" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+                <div>
+                    <strong>Rovnice 2: a₂x + b₂y = c₂</strong><br>
+                    a₂: <input type="number" id="a2" value="1" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;"><br>
+                    b₂: <input type="number" id="b2" value="-1" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;"><br>
+                    c₂: <input type="number" id="c2" value="1" style="width: 60px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+                </div>
+            </div>
+
+            <div style="background: white; padding: 15px; border-radius: 4px; border: 1px solid #ddd; margin-top: 15px;">
+                <strong>Řešení (Cramerovo pravidlo):</strong><br>
+                det(A) = <span id="determinant" style="color: #0d6efd; font-weight: bold;">1</span><br>
+                <p style="color: #0d6efd; font-weight: bold; font-size: 1.1em;">
+                    x = <span id="solutionX">2</span><br>
+                    y = <span id="solutionY">1</span>
+                </p>
+                <p id="statusMsg" style="color: green; font-size: 0.9em;"></p>
+            </div>
+
+            <p style="font-size: 0.9em; color: #666; margin-top: 10px;">
+                💡 Zkus měnit koeficienty! Když det(A) = 0, soustava nemá jediné řešení (buď žádné, nebo nekonečně mnoho).
+            </p>
+        </div>
+
+        <hr>
+
+    </div>
+
+    <script>
+        // ===== LINEAR SYSTEM SOLVER =====
+        function solveLinearSystem() {
+            const a1 = parseFloat(document.getElementById('a1').value);
+            const b1 = parseFloat(document.getElementById('b1').value);
+            const c1 = parseFloat(document.getElementById('c1').value);
+            const a2 = parseFloat(document.getElementById('a2').value);
+            const b2 = parseFloat(document.getElementById('b2').value);
+            const c2 = parseFloat(document.getElementById('c2').value);
+
+            // Calculate determinant using Cramer's rule
+            const det = a1 * b2 - a2 * b1;
+
+            document.getElementById('determinant').textContent = det.toFixed(2);
+
+            if (Math.abs(det) < 1e-10) {
+                document.getElementById('solutionX').textContent = 'N/A';
+                document.getElementById('solutionY').textContent = 'N/A';
+                document.getElementById('statusMsg').textContent = 'det(A) = 0: Soustava nemá jediné řešení (buď žádné, nebo nekonečně mnoho)';
+                document.getElementById('statusMsg').style.color = '#d9534f';
+            } else {
+                // Cramer's rule: x = det_x / det, y = det_y / det
+                const det_x = c1 * b2 - c2 * b1;
+                const det_y = a1 * c2 - a2 * c1;
+
+                const x = det_x / det;
+                const y = det_y / det;
+
+                document.getElementById('solutionX').textContent = x.toFixed(2);
+                document.getElementById('solutionY').textContent = y.toFixed(2);
+                document.getElementById('statusMsg').textContent = 'Soustava má jediné řešení! ✓';
+                document.getElementById('statusMsg').style.color = '#5cb85c';
+            }
+        }
+
+        // Add event listeners to all input fields
+        ['a1', 'b1', 'c1', 'a2', 'b2', 'c2'].forEach(id => {
+            document.getElementById(id).addEventListener('input', solveLinearSystem);
+        });
+
+        // Calculate initial solution
+        solveLinearSystem();
+
+        // Wait for Plotly to load before running code
+        function waitForPlotly(callback, attempts = 0) {
+            if (typeof Plotly !== 'undefined') {
+                callback();
+            } else if (attempts < 50) {  // max 50 attempts = 10 seconds
+                setTimeout(() => waitForPlotly(callback, attempts + 1), 200);
+            }
+        }
+
+        // Initialize MathJax when document is ready
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+                }
+            }, 500);
+        });
+
+        // Helper function to create linspace
+        function linspace(a, b, n) {
+            const result = [];
+            for (let i = 0; i < n; i++) {
+                result.push(a + (b - a) * i / (n - 1));
+            }
+            return result;
+        }
+
+        waitForPlotly(function() {
+            // 3D plot: Three planes intersecting at point (3, 2, -1)
+            // Plane 1: x + 2y + z = 8
+            // Plane 2: 3x + z = 10
+            // Plane 3: x - y + 2z = 3
+
+            const x = linspace(-2, 6, 30);
+        const y = linspace(-2, 6, 30);
+
+        // Plane 1: z = 8 - x - 2y
+        const z1 = [];
+        for (let yi = 0; yi < y.length; yi++) {
+            let row = [];
+            for (let xi = 0; xi < x.length; xi++) {
+                row.push(8 - x[xi] - 2 * y[yi]);
+            }
+            z1.push(row);
+        }
+
+        // Plane 2: z = 10 - 3x
+        const z2 = [];
+        for (let yi = 0; yi < y.length; yi++) {
+            let row = [];
+            for (let xi = 0; xi < x.length; xi++) {
+                row.push(10 - 3 * x[xi]);
+            }
+            z2.push(row);
+        }
+
+        // Plane 3: z = (3 - x + y) / 2
+        const z3 = [];
+        for (let yi = 0; yi < y.length; yi++) {
+            let row = [];
+            for (let xi = 0; xi < x.length; xi++) {
+                row.push((3 - x[xi] + y[yi]) / 2);
+            }
+            z3.push(row);
+        }
+
+        const trace1 = {
+            x: x,
+            y: y,
+            z: z1,
+            type: 'surface',
+            colorscale: 'Reds',
+            opacity: 0.7,
+            name: 'Plane 1: x + 2y + z = 8'
+        };
+
+        const trace2 = {
+            x: x,
+            y: y,
+            z: z2,
+            type: 'surface',
+            colorscale: 'Blues',
+            opacity: 0.7,
+            name: 'Plane 2: 3x + z = 10'
+        };
+
+        const trace3 = {
+            x: x,
+            y: y,
+            z: z3,
+            type: 'surface',
+            colorscale: 'Greens',
+            opacity: 0.7,
+            name: 'Plane 3: x - y + 2z = 3'
+        };
+
+        // Solution point
+        const solutionTrace = {
+            x: [3],
+            y: [2],
+            z: [-1],
+            mode: 'markers',
+            marker: {
+                size: 10,
+                color: 'black',
+                symbol: 'circle'
+            },
+            name: 'Solution (3, 2, -1)'
+        };
+
+        const layout = {
+            title: 'Tři roviny v 3D prostoru<br><sub>x + 2y + z = 8; 3x + z = 10; x - y + 2z = 3</sub>',
+            scene: {
+                xaxis: { title: 'x' },
+                yaxis: { title: 'y' },
+                zaxis: { title: 'z' },
+                camera: {
+                    eye: { x: 1.5, y: 1.5, z: 1.3 }
+                }
+            },
+            margin: { l: 0, r: 0, b: 0, t: 50 },
+            height: 500
+        };
+
+            Plotly.newPlot('plot3d', [trace1, trace2, trace3, solutionTrace], layout, {responsive: true});
+
+            // Highlight code blocks
+            hljs.highlightAll();
+        });
+
+    </script>
+</body>
+</html>

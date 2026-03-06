@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 4 – Funkce, polynomy a numerické metody</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script defer src="../../lib/plotly.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../szztp.html" class="back-link">← Zpět na SZZTP</a>
+
+        <h1>Okruh 4 – Funkce, polynomy a numerické metody</h1>
+        <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
+
+        <h2>1. Funkce</h2>
+
+        <h3>Co je funkce?</h3>
+        <p><strong>Funkce je jednoduše pravidlo</strong>, které pro každý vstup dá právě jeden výstup.</p>
+
+        <div class="note-box">
+            <strong>Příklady z reálného světa:</strong>
+            <ul>
+                <li><strong>Teplota v čase:</strong> Když znáte čas dne, můžete určit teplotu venku. Čas → Teplota</li>
+                <li><strong>Plat po pracovní době:</strong> Kolik hodin jste pracovali → Kolik dostanete zaplaceno</li>
+                <li><strong>Vzorec na obsah kruhu:</strong> Poloměr → Obsah: $A = \pi r^2$</li>
+                <li><strong>Cena za benzín:</strong> Počet litrů → Cena v Kč</li>
+            </ul>
+        </div>
+
+        <h3>Formální definice</h3>
+        <p><strong>Funkce</strong> je matematické zobrazení, které každému prvku z <strong>definičního oboru</strong> přiřadí právě jeden prvek z <strong>oboru hodnot</strong>.</p>
+
+        <div class="formula">$$f: D \to H, \quad f(x) = y$$</div>
+
+        <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\to$ (šipka) znamená "mapuje na" – funkce bere prvky z D a dává je do H. Symbol : znamená "je definováno jako".</em></p>
+
+        <p><strong>Co znamená zápis:</strong></p>
+        <ul>
+            <li>$D$ je <strong>definiční obor</strong> — všechny dovolené vstupy (např. všechny kladné čísla, všechny reálné čísla atd.)</li>
+            <li>$H$ je <strong>obor hodnot</strong> — možné výstupy (čemu se může funkce rovnat)</li>
+            <li>$x$ je <strong>vstup</strong> (nezávislá proměnná) — co do funkce dáváme</li>
+            <li>$y = f(x)$ je <strong>výstup</strong> (závislá proměnná) — co funkce vrátí</li>
+        </ul>
+
+        <div class="math-box">
+            <strong>Příklad:</strong> Pro funkci $f(x) = \sqrt{x}$ (druhá odmocnina):
+            <ul>
+                <li>Definiční obor: $x \geq 0$ <em style="font-size: 0.85em;">(Symbol $\geq$ znamená "větší nebo rovno")</em> (odmocninu můžeme počítat jen z nezáporných čísel)</li>
+                <li>Obor hodnot: $y \geq 0$ (výsledek odmocniny je vždycky nezáporný)</li>
+                <li>Příklad: $f(4) = 2$ (když dáme 4, dostaneme 2)</li>
+            </ul>
+        </div>
+
+        <h3>Vlastnosti funkcí</h3>
+
+        <h4>1. Rostoucí a klesající funkce</h4>
+        <p><strong>Rostoucí funkce:</strong> Čím větší vstup, tím větší výstup.</p>
+        <ul>
+            <li><strong>Formálně:</strong> Jestliže $x_1 < x_2$ pak $f(x_1) < f(x_2)$</li>
+            <li><strong>Příklad:</strong> $f(x) = 2x$ — když se x zvětší, výstup se také zvětší</li>
+        </ul>
+
+        <p><strong>Klesající funkce:</strong> Čím větší vstup, tím menší výstup.</p>
+        <ul>
+            <li><strong>Formálně:</strong> Jestliže $x_1 < x_2$ pak $f(x_1) > f(x_2)$</li>
+            <li><strong>Příklad:</strong> $f(x) = -x$ — když se x zvětší, výstup se zmenší</li>
+        </ul>
+
+        <h4>2. Sudé a liché funkce</h4>
+        <p><strong>Sudá funkce:</strong> Je symetrická podle osy y (levá a pravá strana vypadají stejně).</p>
+        <ul>
+            <li><strong>Formálně:</strong> $f(-x) = f(x)$ (když si obrátíme x, funkce se nezmění)</li>
+            <li><strong>Příklad:</strong> $f(x) = x^2$ — protože $(-2)^2 = 4$ a $2^2 = 4$</li>
+        </ul>
+
+        <p><strong>Lichá funkce:</strong> Je symetrická kolem počátku (otočená funkce).</p>
+        <ul>
+            <li><strong>Formálně:</strong> $f(-x) = -f(x)$</li>
+            <li><strong>Příklad:</strong> $f(x) = x^3$ — protože $(-2)^3 = -8$ a $-(2^3) = -8$</li>
+        </ul>
+
+        <h4>3. Injektivní funkce</h4>
+        <p><strong>Injektivní znamená:</strong> Každý výstup se dá dostat z právě jedného vstupu.</p>
+        <ul>
+            <li><strong>Formálně:</strong> Různým vstupům odpovídají různé výstupy</li>
+            <li><strong>Příklad:</strong> $f(x) = 2x$ je injektivní (nemůžete se dostat na stejný výstup ze dvou různých vstupů)</li>
+            <li><strong>Protipříklad:</strong> $f(x) = x^2$ NENÍ injektivní (můžete dostat 4 z $x = 2$ i z $x = -2$)</li>
+        </ul>
+
+        <h3>Interaktivní příklady</h3>
+
+        <div class="math-box" style="background-color: #f0f8ff; border-left: 4px solid #0d6efd;">
+            <strong>Kalkulátor funkcí</strong>
+            <p>Zkus si vypočítat hodnoty těchto funkcí pro různá x:</p>
+
+            <label for="funcInput" style="display: block; margin-bottom: 10px;">
+                Zadej x: <input type="number" id="funcInput" value="2" style="width: 80px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            </label>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <div style="padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+                    <strong>$f(x) = 2x$</strong> (lineární)
+                    <p>Výsledek: <span id="linear" style="color: #0d6efd; font-weight: bold;">4</span></p>
+                </div>
+                <div style="padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+                    <strong>$f(x) = x^2$</strong> (kvadratická)
+                    <p>Výsledek: <span id="quadratic" style="color: #0d6efd; font-weight: bold;">4</span></p>
+                </div>
+                <div style="padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+                    <strong>$f(x) = \sqrt{x}$</strong> (odmocnina)
+                    <p>Výsledek: <span id="sqrt" style="color: #0d6efd; font-weight: bold;">1.41</span></p>
+                </div>
+                <div style="padding: 10px; background: white; border-radius: 4px; border: 1px solid #ddd;">
+                    <strong>$f(x) = -x$</strong> (klesající)
+                    <p>Výsledek: <span id="negative" style="color: #0d6efd; font-weight: bold;">-2</span></p>
+                </div>
+            </div>
+        </div>
+
+        <h3>Limita a spojitost</h3>
+
+        <p><strong>Limita funkce v bodě $a$:</strong> Čemu se blíží funkce, když se x blíží k $a$?</p>
+        <div class="formula">$$\lim_{x \to a} f(x) = L$$</div>
+
+        <p>To znamená: "Když se x přibližuje k $a$, funkční hodnota $f(x)$ se přibližuje k $L$."
+        <em style="color: #666; font-size: 0.9em;">💡 Symbol $\lim$ znamená "limita" (co funkce přibližně dělá). Šipka $\to$ znamená "blíží se" nebo "approaches".</em></p>
+
+        <div class="note-box">
+            <strong>Praktický příklad:</strong> Jaká je cena za 1 metr kabelu, když víme cenu za různé metry? Limita vám řekne, čemu se cena přibližuje, i když se cena mění s množstvím.
+        </div>
+
+        <p><strong>Spojitost:</strong> Funkce je "hladká" bez skoků nebo děr.</p>
+        <div class="highlight-box">
+            <p><strong>Funkce $f$ je spojitá v bodě $a$, pokud:</strong></p>
+            <ol>
+                <li>$f(a)$ existuje (funkce má hodnotu v bodě $a$)</li>
+                <li>Limita $\lim_{x \to a} f(x)$ existuje</li>
+                <li>Limita se rovná funkční hodnotě: $\lim_{x \to a} f(x) = f(a)$</li>
+            </ol>
+            <p><strong>Zkrátka:</strong> Můžete nakreslit funkci jedním tahem bez zvednutí tužky.</p>
+        </div>
+
+        <hr>
+
+        <h2>2. Polynomy</h2>
+
+        <h3>Co je polynom?</h3>
+        <p><strong>Polynom</strong> je součet mocnin x s číselными koeficienty. Prostě to je výraz jako $3x^2 + 2x - 5$.</p>
+
+        <div class="math-box">
+            <strong>Příklady polynomů:</strong>
+            <ul>
+                <li>$5$ — konstanta (polynom stupně 0)</li>
+                <li>$2x + 3$ — lineární funkce (polynom stupně 1)</li>
+                <li>$x^2 - 4x + 3$ — kvadratická funkce (polynom stupně 2)</li>
+                <li>$x^3 + 2x^2 - x + 1$ — kubická funkce (polynom stupně 3)</li>
+            </ul>
+        </div>
+
+        <h3>Obecná forma</h3>
+        <p><strong>Polynom $n$-tého stupně</strong> vypadá takto:</p>
+
+        <div class="formula">$$P(x) = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_1 x + a_0$$</div>
+
+        <p><strong>Co znamená zápis:</strong>
+        <em style="color: #666; font-size: 0.9em;">💡 Symbol $\cdots$ (tři tečky) znamená "a tak dále" — víc členů stejného typu. Dolní index (jako $a_n$) rozlišuje jednotlivé koeficienty.</em></p>
+        <ul>
+            <li>$n$ je <strong>stupeň polynomu</strong> — nejvyšší mocnina x, která se v polynomu vyskytuje</li>
+            <li>$a_0, a_1, \ldots, a_n$ jsou <strong>koeficienty</strong> — čísla před mocninami x</li>
+            <li>$a_n \neq 0$ je <strong>vedoucí koeficient</strong> — koeficient u nejvyšší mocniny (nesmí být nula)</li>
+        </ul>
+
+        <div class="note-box">
+            <strong>Příklad:</strong> Polynom $P(x) = 3x^3 + 2x^2 - 5x + 1$
+            <ul>
+                <li>Stupeň: 3 (nejvyšší mocnina je $x^3$)</li>
+                <li>Koeficienty: $a_3 = 3$, $a_2 = 2$, $a_1 = -5$, $a_0 = 1$</li>
+                <li>Vedoucí koeficient: $a_3 = 3$</li>
+            </ul>
+        </div>
+
+        <h3>Proč jsou polynomy důležité?</h3>
+        <div class="highlight-box">
+            <ul>
+                <li><strong>Snadné na výpočet</strong> — jen sčítání, odčítání, násobení</li>
+                <li><strong>Aproximace jiných funkcí</strong> — můžete libovolně komplexní funkci aproximovat polynomem</li>
+                <li><strong>Řešení rovnic</strong> — polynomické rovnice se vyskytují všude v přírodě a technice</li>
+            </ul>
+        </div>
+
+        <h3>Základní věta algebry</h3>
+        <div class="note-box">
+            <p><strong>"Každý polynom stupně $n \geq 1$ má alespoň jeden kořen v oboru komplexních čísel."</strong></p>
+            <p><strong>Česky řečeno:</strong> Každá polynomická rovnice se dá vyřešit — někdy v reálných číslech, někdy v imaginárních. Polynom stupně $n$ má právě $n$ kořenů (některé se mohou opakovat).</p>
+            <p><strong>Příklad:</strong> $x^2 - 1 = 0$ má kořeny $x = 1$ a $x = -1$ (2 kořeny pro polynom stupně 2 ✓)</p>
+        </div>
+
+        <h3>Hornerovo schéma</h3>
+        <p><strong>Proč nám to pomáhá:</strong> Místo výpočtu všech mocnin (což je pomalé), použijeme opakované násobení a sčítání.</p>
+
+        <h4>Přímý způsob</h4>
+        <div class="formula">$$P(x) = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_1 x + a_0$$</div>
+        <p>Musíme vypočítat $x^n$, $x^{n-1}$, atd. (to trvá dlouho!)</p>
+
+        <h4>Hornerův způsob</h4>
+        <div class="formula">$$P(x) = (\cdots ((a_n x + a_{n-1}) x + a_{n-2}) x + \cdots + a_1) x + a_0$$</div>
+        <p>Jenom násobíme a sčítáme postupně — mnohem rychlejší!</p>
+
+        <h4>Algoritmus v krocích:</h4>
+        <pre><code class="language-plaintext">1. Vezmi první koeficient: y = a_n
+2. Opakuj pro zbývající koeficienty (od druhého k poslednímu):
+   - Vynásob y číslem x
+   - Přičti další koeficient
+3. Výsledek je polynom v bodě x
+</code></pre>
+
+        <h4>Praktický příklad</h4>
+        <p>Polynom: $P(x) = 2x^3 - 3x^2 + 4x - 5$, chceme $P(2)$</p>
+
+        <div class="math-box">
+            <p><strong>Přímý výpočet (komplikované):</strong><br>
+            $P(2) = 2(2)^3 - 3(2)^2 + 4(2) - 5 = 2(8) - 3(4) + 8 - 5 = 16 - 12 + 8 - 5 = 7$</p>
+
+            <p><strong>Hornerovo schéma (jednoduché):</strong></p>
+            <table class="table table-sm">
+                <tr><td>Krok 1:</td><td>$y = 2$ (první koeficient)</td></tr>
+                <tr><td>Krok 2:</td><td>$y = 2 \cdot 2 - 3 = 1$ (vynásobím x, přičtu další koef.)</td></tr>
+                <tr><td>Krok 3:</td><td>$y = 1 \cdot 2 + 4 = 6$ (opakuji)</td></tr>
+                <tr><td>Krok 4:</td><td>$y = 6 \cdot 2 - 5 = 7$ (poslední krok)</td></tr>
+            </table>
+            <p><strong>Výsledek:</strong> $P(2) = 7$ ✓</p>
+        </div>
+
+        <h3>Interaktivní kalkulátor</h3>
+
+        <div class="math-box" style="background-color: #f0f8ff; border-left: 4px solid #0d6efd;">
+            <strong>Vypočítej polynom: $P(x) = 2x^3 - 3x^2 + 4x - 5$</strong>
+            <p>Zadej různé x a sleduj, jak se vypočítá výsledek:</p>
+
+            <label for="polyInput" style="display: block; margin-bottom: 10px;">
+                Zadej x: <input type="number" id="polyInput" value="2" min="-10" max="10" step="0.5" style="width: 80px; padding: 5px; border: 1px solid #ccc; border-radius: 4px;">
+            </label>
+
+            <div style="padding: 15px; background: white; border-radius: 4px; border: 2px solid #0d6efd; margin-top: 15px;">
+                <p><strong>Výsledek:</strong> $P(x) = $ <span id="polyResult" style="color: #0d6efd; font-weight: bold; font-size: 1.2em;">7</span></p>
+                <p style="font-size: 0.9em; color: #666; margin: 10px 0 0 0;">Zkus třeba x = 0, 1, 3, -1...</p>
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>3. Numerické řešení rovnic</h2>
+
+        <h3>Proč potřebujeme numerické metody?</h3>
+        <p><strong>Problém:</strong> Chceme najít hodnotu $x$, pro kterou se $f(x) = 0$ (kde funkce protíná osu x).</p>
+
+        <div class="note-box">
+            <strong>Příklady:</strong>
+            <ul>
+                <li>Kdy bude teplota 25°C během dne?</li>
+                <li>Kdy bude řeka nejvyšší?</li>
+                <li>Kdy budou dva objekty na stejné pozici?</li>
+            </ul>
+        </div>
+
+        <p><strong>Problém:</strong> Řešit algebraicky (na papíře) jde jen u jednoduchých rovnic. Pro $e^x + x = 0$ nebo $\sin(x) + x = 0$ nemáme vzorec!</p>
+
+        <p><strong>Řešení:</strong> Použijeme <strong>numerické metody</strong> — počítáme si postupně přesnější aproximace.</p>
+
+        <h3>Metoda půlení intervalu</h3>
+
+        <h4>Princip</h4>
+        <p>Představte si, že hledáte v knize stránku 200. Nepročítáváte od začátku, ale:</p>
+        <ol>
+            <li>Otevřete knižku na půl → stránka 150</li>
+            <li>Pokud jste přes stránku 200, otevřete druhou polovinu</li>
+            <li>Opakujete, dokud se nedostanete na stránku 200</li>
+        </ol>
+
+        <p><strong>U rovnic je to stejné:</strong> Pokud $f(a) < 0$ a $f(b) > 0$, kořen je někde mezi $a$ a $b$. Půlíme interval a opakujeme.</p>
+
+        <h4>Algoritmus v lidské češtině:</h4>
+        <pre><code class="language-plaintext">1. Zadáme interval [a, b], kde funkce mění znaménko
+2. Spočítáme střed: c = (a + b) / 2
+3. Zkoušíme:
+   - Pokud f(c) = 0: našli jsme řešení!
+   - Pokud f(a) a f(c) mají různá znaménka: vyhledáváme v [a, c]
+   - Jinak: vyhledáváme v [c, b]
+4. Opakujeme, dokud není interval dost malý
+</code></pre>
+
+        <div class="highlight-box">
+            <p><strong>Výhody a nevýhody:</strong></p>
+            <ul>
+                <li>✓ <strong>Konverguje vždy</strong> — zaručeně nás dovede na řešení</li>
+                <li>✗ <strong>Pomalá</strong> — potřebujeme spoustu iterací</li>
+            </ul>
+        </div>
+
+        <h3>Newtonova metoda</h3>
+
+        <h4>Princip</h4>
+        <p>Místo blbého půlení, "kopneme" do funkce chytřeji — použijeme <strong>tečnu</strong> (směr, kterým funkce stoupá/klesá).</p>
+
+        <ol>
+            <li>Začneme s nějakým odhadem $x_0$</li>
+            <li>Nakreslíme tečnu v bodě $(x_0, f(x_0))$</li>
+            <li>Tečna protíná osu x v novém bodě $x_1$ (lepší odhad!)</li>
+            <li>Opakujeme pro $x_1$, $x_2$, ... dokud se nedostaneme na řešení</li>
+        </ol>
+
+        <div class="formula">$$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$$</div>
+
+        <p><strong>Vysvětlení vzorce:</strong></p>
+        <ul>
+            <li>$x_n$ — současný odhad</li>
+            <li>$f'(x_n)$ — strmost funkce (derivace) — jak moc funkce stoupá</li>
+            <li>$\frac{f(x_n)}{f'(x_n)}$ — jak daleko od nuly jsme (oprava)</li>
+            <li>$x_{n+1}$ — nový, lepší odhad</li>
+        </ul>
+
+        <h4>Algoritmus v krocích:</h4>
+        <pre><code class="language-plaintext">1. Zadáme počáteční odhad x_0 (třeba uprostřed intervalu)
+2. Opakujeme dokud se x nemění:
+   a) Spočítáme: x_new = x - f(x) / f'(x)
+   b) Pokud je změna malá: máme řešení!
+   c) Jinak: x = x_new a opakujeme
+</code></pre>
+
+        <div class="highlight-box">
+            <p><strong>Výhody a nevýhody:</strong></p>
+            <ul>
+                <li>✓ <strong>Velmi rychlá</strong> — converguje exponenciálně</li>
+                <li>✗ <strong>Potřebujeme derivaci</strong> — musíme vědět, jak se funkce mění</li>
+                <li>✗ <strong>Nemusí konvergovat</strong> — špatný počáteční odhad = ztraceno</li>
+            </ul>
+        </div>
+
+        <h3>Která metoda se kterou?</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Situace</th>
+                        <th>Půlení intervalu</th>
+                        <th>Newtonova metoda</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Znáte funkci i derivaci?</td>
+                        <td>Nepotřebujete znát</td>
+                        <td>Potřebujete obojí!</td>
+                    </tr>
+                    <tr>
+                        <td>Máte interval s různými znaménky?</td>
+                        <td>Skvělé!</td>
+                        <td>Nepotřebujete</td>
+                    </tr>
+                    <tr>
+                        <td>Chcete zaručené řešení?</td>
+                        <td>Ano, konverguje vždy</td>
+                        <td>Jen pokud je dobrý odhad</td>
+                    </tr>
+                    <tr>
+                        <td>Chcete rychle?</td>
+                        <td>Pomalé (lineární konvergence)</td>
+                        <td>Velmi rychlé (kvadratická)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
+        <h2>4. Interpolace</h2>
+
+        <h3>Co je problém?</h3>
+        <p>Máme několik bodů (například naměřené teploty v různé časy) a chceme vědět, co se dějalo <strong>mezi těmito body</strong>.</p>
+
+        <div class="note-box">
+            <strong>Praktický příklad:</strong>
+            <ul>
+                <li>Měří se teplota každou hodinu (8:00, 9:00, 10:00, ...)</li>
+                <li>Chceme vědět, jaká byla teplota v 8:30?</li>
+                <li>Interpolace nám vytvoří hladkou křivku procházející všemi body</li>
+            </ul>
+        </div>
+
+        <p><strong>Formálně:</strong> Máme body $[x_0, y_0], [x_1, y_1], \ldots, [x_n, y_n]$. Chceme funkci $P(x)$, která prochází všemi těmito body a umožní nám odhadnout hodnoty mezi nimi.</p>
+
+        <h3>Lagrangeova interpolace</h3>
+
+        <h4>Myšlenka</h4>
+        <p>Namísto jedné velké funkce, vytvoříme pro každý bod svou "váhu" a sečteme je. Tam, kde je bod, má váha hodnotu 1. Jinde je blízko 0.</p>
+
+        <div class="formula">$$P(x) = \sum_{i=0}^{n} y_i \cdot L_i(x)$$</div>
+
+        <p>Kde každá "váha" $L_i(x)$ (Lagrangeův polynom) je definována tak, aby:</p>
+        <ul>
+            <li>V bodě $x_i$ měla hodnotu 1 (máme tam data)</li>
+            <li>V ostatních bodech měla hodnotu 0 (ignorujeme ostatní data)</li>
+        </ul>
+
+        <div class="formula">$$L_i(x) = \prod_{j=0, j \neq i}^{n} \frac{x - x_j}{x_i - x_j}$$</div>
+
+        <p><strong>Prakticky:</strong> Tímto způsobem vytvoříme polynom, který projde všemi body.</p>
+
+        <div class="highlight-box">
+            <p><strong>Důležité vlastnosti:</strong></p>
+            <ul>
+                <li>✓ Jednoduchý na pochopení</li>
+                <li>✓ Vždy existuje právě jeden polynom, který prochází $n+1$ body</li>
+                <li>✗ Pro více bodů se polynom "vlní" a může dávat nesmyslné hodnoty</li>
+                <li>✗ Pomalý pro velké počty bodů</li>
+            </ul>
+        </div>
+
+        <h3>Newtonova dělená diference</h3>
+
+        <h4>Myšlenka</h4>
+        <p>Lagrangův přístup se překomplikuje u velkého počtu bodů. Newton vymyslel chytřejší zápis:</p>
+
+        <div class="formula">$$P(x) = a_0 + a_1(x - x_0) + a_2(x - x_0)(x - x_1) + \cdots + a_n(x - x_0) \cdots (x - x_{n-1})$$</div>
+
+        <p><strong>Výhoda:</strong> Když přidáte nový bod, nemusíte počítat všechno znovu! Jen přidáte další člen.</p>
+
+        <div class="note-box">
+            <p><strong>Kde se koeficienty $a_i$ vezmou?</strong> Z tabulky <strong>dělených diferencí</strong> — pomocí algoritmu, který systematicky kombinuje Body.</p>
+        </div>
+
+        <p><strong>V praxi:</strong> Newtonova dělená diference se používá víc, protože je efektivnější na počítači, zvlášť když se data mění postupně.</p>
+
+    </div>
+
+    <script>
+        // Initialize MathJax when document is ready
+        window.addEventListener('load', function() {
+            hljs.highlightAll();
+            setTimeout(function() {
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+                }
+            }, 500);
+        });
+
+        // Interaktivní kalkulátor funkcí
+        const funcInput = document.getElementById('funcInput');
+
+        function updateFunctions() {
+            const x = parseFloat(funcInput.value);
+
+            document.getElementById('linear').textContent = (2 * x).toFixed(2);
+            document.getElementById('quadratic').textContent = (x * x).toFixed(2);
+            document.getElementById('sqrt').textContent = (x >= 0 ? Math.sqrt(x).toFixed(2) : 'N/A');
+            document.getElementById('negative').textContent = (-x).toFixed(2);
+        }
+
+        funcInput.addEventListener('input', updateFunctions);
+        updateFunctions(); // inicializace
+
+        // Interaktivní kalkulátor polynomů
+        const polyInput = document.getElementById('polyInput');
+
+        function updatePolynomial() {
+            const x = parseFloat(polyInput.value);
+            // P(x) = 2x³ - 3x² + 4x - 5
+            const result = 2 * x * x * x - 3 * x * x + 4 * x - 5;
+            document.getElementById('polyResult').textContent = result.toFixed(2);
+        }
+
+        polyInput.addEventListener('input', updatePolynomial);
+        updatePolynomial(); // inicializace
+    </script>
+</body>
+</html>

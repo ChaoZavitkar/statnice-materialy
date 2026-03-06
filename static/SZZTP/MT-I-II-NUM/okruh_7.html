@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 7 – Funkce více proměnných</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script defer src="../../lib/plotly.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../szztp.html" class="back-link">← Zpět na SZZTP</a>
+
+        <h1>Okruh 7 – Funkce více proměnných a metoda nejmenších čtverců</h1>
+        <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
+
+        <h2>1. Funkce více proměnných</h2>
+
+        <h3>Co je funkce více proměnných?</h3>
+        <p><strong>Zatímco funkce jedné proměnné má jeden vstup, funkce více proměnných má VÍCE vstupů!</strong></p>
+
+        <div class="math-box">
+            <strong>Příklady:</strong>
+            <ul>
+                <li><strong>Teplota v místnosti:</strong> $T(x, y, z)$ — závisí na 3 souřadnicích polohy</li>
+                <li><strong>Cena domu:</strong> $C(m^2, poloha, staří)$ — závisí na ploše, poloze a věku</li>
+                <li><strong>Produkce:</strong> $Q(kapitál, práce) = L \cdot K^\alpha$ — (Cobb-Douglasův model)</li>
+                <li><strong>Výšková mapa:</strong> $h(x, y)$ — nadmořská výška na souřadnicích (x, y)</li>
+            </ul>
+        </div>
+
+        <p><strong>Matematicky:</strong></p>
+        <div class="formula">$$z = f(x, y) \quad \text{nebo} \quad w = f(x_1, x_2, \ldots, x_n)$$</div>
+
+        <p>Čtete to jako "z je funkcí x a y" nebo "w je funkcí x1, x2, ..., xn".
+        <em style="color: #666; font-size: 0.9em;">💡 Číslice pod proměnnou (jako $x_1, x_2$) se jmenuje "dolní index" nebo "subscript" — rozlišuje různé proměnné. Symbol $\ldots$ (tři tečky) znamená "a tak dále" — víc proměnných stejného typu.</em></p>
+
+        <h3>Visualizace — Jak vypadá funkce dvou proměnných?</h3>
+        <p><strong>Funkce jedné proměnné = křivka v 2D (graf na papíře)</strong></p>
+        <p><strong>Funkce dvou proměnných = plocha v 3D (skoro jako krajina s kopci a údolími!)</strong></p>
+
+        <p>Níže vidíte příklady různých 3D ploch:
+        <em style="color: #666; font-size: 0.9em;">💡 V těchto příkladech uvidíte symbol $^2$ (mocnina/exponent — znamená "umocnit na druhou" nebo "vynásobit samo sebou"), a symbol $\sqrt{}$ (odmocnina — znamená "obráceně k mocnině").</em></p>
+
+        <h2>Vizualizace základních ploch</h2>
+
+        <div class="surface-grid">
+            <div class="surface-item">
+                <h4>1. Rovina: $z = 2x + 3y - 1$</h4>
+                <div id="plot1" class="surface-plot"></div>
+            </div>
+            <div class="surface-item">
+                <h4>2. Paraboloid: $z = x^2 + y^2$</h4>
+                <div id="plot2" class="surface-plot"></div>
+            </div>
+            <div class="surface-item">
+                <h4>3. Sedlo: $z = x^2 - y^2$</h4>
+                <div id="plot3" class="surface-plot"></div>
+            </div>
+            <div class="surface-item">
+                <h4>4. Kužel: $z = \sqrt{x^2 + y^2}$</h4>
+                <div id="plot4" class="surface-plot"></div>
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>2. Parciální derivace</h2>
+
+        <h3>Myšlenka</h3>
+        <p><strong>Parciální derivace = derivace, ale jenom v JEDNOM směru (ostatní proměnné ignorujeme!).</strong></p>
+
+        <p>Pro funkci $f(x, y)$:</p>
+        <ul>
+            <li><strong>Parciální derivace podle x:</strong> Derivujeme jako obvykle, ale Y je konstanta</li>
+            <li><strong>Parciální derivace podle y:</strong> Derivujeme jako obvykle, ale X je konstanta</li>
+        </ul>
+
+        <div class="math-box">
+            <strong>Příklad:</strong> Funkce $f(x, y) = x^2 + 3xy + y^2$
+            <ul>
+                <li>$\frac{\partial f}{\partial x} = 2x + 3y$ <em style="font-size: 0.85em;">(Symbol $\partial$ znamená "parciální" – derivace v jednom směru)</em> (Y je konstanta, tak se "zmrazí")</li>
+                <li>$\frac{\partial f}{\partial y} = 3x + 2y$ (X je konstanta)</li>
+            </ul>
+        </div>
+
+        <h3>Geometrické vysvětlení</h3>
+        <p>Představte si krajinu (horu). Parciální derivace podle X = jak moc stoupá/klesá v směru Východ-Západ. Parciální derivace podle Y = jak moc stoupá/klesá v směru Sever-Jih.</p>
+
+        <h2>3. Extrémy funkcí více proměnných</h2>
+
+        <h3>Jak najít maximum a minimum?</h3>
+        <p><strong>Na vrcholu hory:</strong> Všechny směry jsou "vodorovné" → všechny parciální derivace jsou 0!</p>
+
+        <div class="formula">$$\frac{\partial f}{\partial x} = 0 \quad \text{a} \quad \frac{\partial f}{\partial y} = 0$$</div>
+
+        <p><strong>Takovéto body se nazývají "kritické body".</strong></p>
+
+        <p><strong>Aby jsme věděli, jestli je to maximum, minimum, nebo sedlo, použijeme druhou derivaci (Hessovu matici):</strong></p>
+        <ul>
+            <li><strong>∪ tvar (konkávní):</strong> Lokální minimum (dno údolí)</li>
+            <li><strong>∩ tvar (konvexní):</strong> Lokální maximum (vrchol hory)</li>
+            <li><strong>Sedlovitý tvar:</strong> Sedlový bod (vrchol v jednom směru, údolí v druhém)</li>
+        </ul>
+
+        <h2>4. Metoda nejmenších čtverců</h2>
+
+        <h3>Jaký je problém?</h3>
+        <p><strong>Máme datové body a chceme jimi proložit nejlepší přímku!</strong> Např. data o ceně domu (velikost vs cena) a chceme najít trend.</p>
+
+        <div class="math-box">
+            <strong>Praktický příklad:</strong>
+            <ul>
+                <li>5 domů s rozměry a cenami: (100m², 2M), (120m², 2.3M), (150m², 3M), (180m², 3.5M), (200m², 4M)</li>
+                <li>Chceme najít přímku: Cena ≈ a × (Velikost) + b</li>
+                <li>Která přímka je "nejlepší"?</li>
+            </ul>
+        </div>
+
+        <h3>Myšlenka — "Minimalizuj chyby"</h3>
+        <p><strong>Chyba = vzdálenost bodů od přímky (čtverec chyby).</strong> Hledáme přímku s nejmenší sumou těchto chyb.</p>
+
+        <div class="formula">$$E(a, b) = \sum_{i=1}^{n} (\text{skutečná}_i - \text{předpověď}_i)^2 = \sum_{i=1}^{n} (y_i - (ax_i + b))^2$$</div>
+
+        <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\approx$ znamená "přibližně rovno" – není přesné, ale blízké správné hodnotě.</em></p>
+
+        <p><strong>Minimalizujeme $E$ podle $a$ a $b$ (sklon a průsečík)!</strong></p>
+
+        <h3>Řešení (Výsledné formule)</h3>
+
+        <p><strong>Bez složitého počítání (parciální derivace), výsledek je:</strong></p>
+
+        <div class="formula">$$a = \frac{n \sum x_i y_i - \sum x_i \sum y_i}{n \sum x_i^2 - (\sum x_i)^2}, \quad b = \frac{\sum y_i - a \sum x_i}{n}$$</div>
+
+        <p><strong>Kde:</strong></p>
+        <ul>
+            <li>$a$ = sklon přímky (jak moc se cena mění na m²)</li>
+            <li>$b$ = průsečík s osou Y (cena "zdarma")</li>
+            <li>$n$ = počet datových bodů</li>
+        </ul>
+
+        <div id="plotRegression" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Červená přímka je "nejlepší" podle metody nejmenších čtverců</p>
+
+        <h3>Jak dobrá je naše přímka? ($R^2$ koeficient)</h3>
+
+        <div class="formula">$$R^2 = 1 - \frac{\text{chyba přímky}}{\text{variance dat}}$$</div>
+
+        <p><strong>Hodnota $R^2$:</strong></p>
+        <ul>
+            <li>$R^2 = 1$ → Přímka je dokonalá (všechny body leží na ní)</li>
+            <li>$R^2 = 0.9$ → Velmi dobrá (90% variance vysvětleno)</li>
+            <li>$R^2 = 0.5$ → Středně dobrá</li>
+            <li>$R^2 \approx 0$ → Přímka je bezvýznamná</li>
+        </ul>
+
+        <h3>Interaktivní lineární regrese</h3>
+
+        <div class="math-box" style="background-color: #f0f8ff; border-left: 4px solid #0d6efd;">
+            <strong>Kalkulátor lineární regrese</strong>
+            <p>Zadej datové body a podívej se na nejlepší přímku:</p>
+
+            <div style="margin: 15px 0;">
+                <p><strong>Datové body (x, y):</strong></p>
+                <textarea id="regressionData" style="width: 100%; height: 100px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-family: monospace; font-size: 0.9em;">1,2
+2,3
+3,5
+4,4
+5,6</textarea>
+                <p style="font-size: 0.85em; color: #666;">Jeden bod na řádek, formát: x,y (např. 1,2)</p>
+            </div>
+
+            <div style="background: white; padding: 15px; border-radius: 4px; border: 1px solid #ddd;">
+                <strong>Výsledky lineární regrese:</strong><br><br>
+                <p style="font-weight: bold; color: #0d6efd;">
+                    Rovnice: y = <span id="regressionA">0.70</span>x + <span id="regressionB">1.90</span><br>
+                    <span style="font-size: 1.05em;">R² = <span id="regressionR2">0.60</span></span>
+                </p>
+                <p id="regressionStatus" style="color: #666; font-size: 0.9em; margin-top: 10px;"></p>
+            </div>
+
+            <div id="regressionPlot" style="margin-top: 15px; background: #f9f9f9; border-radius: 4px; padding: 10px;"></div>
+
+            <p style="font-size: 0.9em; color: #666; margin-top: 10px;">
+                💡 Zkus měnit data! Když jsou body lépe rozptýleny kolem přímky, R² je blíž 1.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        // ===== LINEAR REGRESSION CALCULATOR =====
+        function calculateRegression() {
+            const textarea = document.getElementById('regressionData');
+            const lines = textarea.value.trim().split('\n').filter(line => line.trim());
+
+            const data = [];
+            for (let line of lines) {
+                const parts = line.split(',').map(s => parseFloat(s.trim()));
+                if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                    data.push(parts);
+                }
+            }
+
+            if (data.length < 2) {
+                document.getElementById('regressionStatus').textContent = 'Potřebuješ aspoň 2 datové body!';
+                document.getElementById('regressionStatus').style.color = '#d9534f';
+                return;
+            }
+
+            const xData = data.map(p => p[0]);
+            const yData = data.map(p => p[1]);
+            const n = data.length;
+
+            // Calculate sums
+            const sumX = xData.reduce((a, b) => a + b, 0);
+            const sumY = yData.reduce((a, b) => a + b, 0);
+            const sumXY = xData.reduce((sum, x, i) => sum + x * yData[i], 0);
+            const sumX2 = xData.reduce((sum, x) => sum + x * x, 0);
+
+            // Regression coefficients
+            const denominator = n * sumX2 - sumX * sumX;
+            if (Math.abs(denominator) < 1e-10) {
+                document.getElementById('regressionStatus').textContent = 'Data nemohou mít všechny stejné x!';
+                document.getElementById('regressionStatus').style.color = '#d9534f';
+                return;
+            }
+
+            const a = (n * sumXY - sumX * sumY) / denominator;
+            const b = (sumY - a * sumX) / n;
+
+            document.getElementById('regressionA').textContent = a.toFixed(2);
+            document.getElementById('regressionB').textContent = b.toFixed(2);
+
+            // Calculate R²
+            const meanY = sumY / n;
+            const ssRes = yData.reduce((sum, y, i) => {
+                const predicted = a * xData[i] + b;
+                return sum + (y - predicted) ** 2;
+            }, 0);
+            const ssTot = yData.reduce((sum, y) => sum + (y - meanY) ** 2, 0);
+            const r2 = 1 - (ssRes / ssTot);
+
+            document.getElementById('regressionR2').textContent = r2.toFixed(2);
+            document.getElementById('regressionStatus').textContent = `${data.length} bodů, R² = ${r2.toFixed(3)} ✓`;
+            document.getElementById('regressionStatus').style.color = '#5cb85c';
+
+            // Draw plot if Plotly is available
+            drawRegressionPlot(xData, yData, a, b);
+        }
+
+        function drawRegressionPlot(xData, yData, a, b) {
+            // Only draw if Plotly is loaded
+            if (typeof Plotly === 'undefined') {
+                setTimeout(() => drawRegressionPlot(xData, yData, a, b), 100);
+                return;
+            }
+
+            const xMin = Math.min(...xData) - 0.5;
+            const xMax = Math.max(...xData) + 0.5;
+            const xLine = [];
+            for (let x = xMin; x <= xMax; x += (xMax - xMin) / 50) {
+                xLine.push(x);
+            }
+            const yLine = xLine.map(x => a * x + b);
+
+            const tracePoints = {
+                x: xData, y: yData, mode: 'markers',
+                marker: { size: 8, color: '#0d6efd' }, name: 'Data body'
+            };
+
+            const traceLine = {
+                x: xLine, y: yLine, mode: 'lines',
+                line: { color: 'red', width: 2 }, name: 'Regresní přímka'
+            };
+
+            Plotly.newPlot('regressionPlot', [tracePoints, traceLine],
+                { margin: { l: 50, r: 50, b: 50, t: 30 }, height: 300,
+                  xaxis: { title: 'x' }, yaxis: { title: 'y' } },
+                { responsive: true });
+        }
+
+        document.getElementById('regressionData').addEventListener('input', calculateRegression);
+        calculateRegression();  // Initial calculation
+
+        // Wait for Plotly to load before running code
+        function waitForPlotly(callback, attempts = 0) {
+            if (typeof Plotly !== 'undefined') {
+                callback();
+            } else if (attempts < 50) {  // max 50 attempts = 10 seconds
+                setTimeout(() => waitForPlotly(callback, attempts + 1), 200);
+            }
+        }
+
+        // Initialize MathJax when document is ready
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (window.MathJax && MathJax.typesetPromise) {
+                    MathJax.typesetPromise().catch(err => console.log('MathJax error:', err));
+                }
+            }, 500);
+        });
+
+        // Helper function
+        function linspace(a, b, n) {
+            const result = [];
+            for (let i = 0; i < n; i++) {
+                result.push(a + (b - a) * i / (n - 1));
+            }
+            return result;
+        }
+
+        waitForPlotly(function() {
+            const x = linspace(-3, 3, 40);
+            const y = linspace(-3, 3, 40);
+
+        // ===== PLANE =====
+        const z1 = [];
+        for (let yi = 0; yi < y.length; yi++) {
+            let row = [];
+            for (let xi = 0; xi < x.length; xi++) {
+                row.push(2 * x[xi] + 3 * y[yi] - 1);
+            }
+            z1.push(row);
+        }
+
+        const trace1 = {
+            x: x, y: y, z: z1, type: 'surface',
+            colorscale: 'Viridis', opacity: 0.8
+        };
+
+        Plotly.newPlot('plot1', [trace1],
+            { margin: { l: 0, r: 0, b: 0, t: 0 }, scene: { camera: { eye: { x: 1.5, y: 1.5, z: 1.3 } } } },
+            { responsive: true });
+
+        // ===== PARABOLOID =====
+        const z2 = [];
+        for (let yi = 0; yi < y.length; yi++) {
+            let row = [];
+            for (let xi = 0; xi < x.length; xi++) {
+                row.push(x[xi]*x[xi] + y[yi]*y[yi]);
+            }
+            z2.push(row);
+        }
+
+        const trace2 = {
+            x: x, y: y, z: z2, type: 'surface',
+            colorscale: 'Reds', opacity: 0.8
+        };
+
+        Plotly.newPlot('plot2', [trace2],
+            { margin: { l: 0, r: 0, b: 0, t: 0 }, scene: { camera: { eye: { x: 1.5, y: 1.5, z: 1.3 } } } },
+            { responsive: true });
+
+        // ===== SADDLE =====
+        const z3 = [];
+        for (let yi = 0; yi < y.length; yi++) {
+            let row = [];
+            for (let xi = 0; xi < x.length; xi++) {
+                row.push(x[xi]*x[xi] - y[yi]*y[yi]);
+            }
+            z3.push(row);
+        }
+
+        const trace3 = {
+            x: x, y: y, z: z3, type: 'surface',
+            colorscale: 'Greens', opacity: 0.8
+        };
+
+        Plotly.newPlot('plot3', [trace3],
+            { margin: { l: 0, r: 0, b: 0, t: 0 }, scene: { camera: { eye: { x: 1.5, y: 1.5, z: 1.3 } } } },
+            { responsive: true });
+
+        // ===== CONE =====
+        const z4 = [];
+        for (let yi = 0; yi < y.length; yi++) {
+            let row = [];
+            for (let xi = 0; xi < x.length; xi++) {
+                row.push(Math.sqrt(x[xi]*x[xi] + y[yi]*y[yi]));
+            }
+            z4.push(row);
+        }
+
+        const trace4 = {
+            x: x, y: y, z: z4, type: 'surface',
+            colorscale: 'Blues', opacity: 0.8
+        };
+
+        Plotly.newPlot('plot4', [trace4],
+            { margin: { l: 0, r: 0, b: 0, t: 0 }, scene: { camera: { eye: { x: 1.5, y: 1.5, z: 1.3 } } } },
+            { responsive: true });
+
+        // ===== LINEAR REGRESSION =====
+        const data = [[1, 2], [2, 3], [3, 5], [4, 4], [5, 6]];
+        const xData = data.map(p => p[0]);
+        const yData = data.map(p => p[1]);
+
+        // Calculate regression
+        const n = data.length;
+        const sumX = xData.reduce((a, b) => a + b, 0);
+        const sumY = yData.reduce((a, b) => a + b, 0);
+        const sumXY = xData.reduce((sum, x, i) => sum + x * yData[i], 0);
+        const sumX2 = xData.reduce((sum, x) => sum + x*x, 0);
+
+        const a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX*sumX);
+        const b = (sumY - a * sumX) / n;
+
+        const xLine = linspace(0.5, 5.5, 100);
+        const yLine = xLine.map(x => a * x + b);
+
+        const tracePoints = {
+            x: xData, y: yData, mode: 'markers',
+            marker: { size: 8, color: 'blue' }, name: 'Data points'
+        };
+
+        const traceLine = {
+            x: xLine, y: yLine, mode: 'lines',
+            line: { color: 'red', width: 2 }, name: `Fitted line: y ≈ ${a.toFixed(2)}x + ${b.toFixed(2)}`
+        };
+
+            Plotly.newPlot('plotRegression', [tracePoints, traceLine],
+                { title: 'Linear Regression', xaxis: { title: 'x' }, yaxis: { title: 'y' },
+                  margin: { l: 50, r: 50, b: 50, t: 50 } },
+                { responsive: true });
+        });
+    </script>
+</body>
+</html>
