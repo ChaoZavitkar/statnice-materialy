@@ -1,6 +1,6 @@
 # Okruh 1: Základní abstraktní kolekce
 
-## 📚 Co se naučíte
+## Co se naučíte
 - Seznamy (List) a jejich operace
 - Slovníky (Dictionary) a kdy je použít
 - Iterátory - procházení kolekcí
@@ -9,7 +9,7 @@
 
 ---
 
-## 1️⃣ SEZNAMY (List)
+## 1. Seznamy (List)
 
 ### Praktický příklad na začátek
 
@@ -46,7 +46,7 @@ je_anna = "Anna" in studenti       # True
 je_tom = "Tom" in studenti         # False
 ```
 
-### ⏱️ Časová složitost operací se seznamem
+### Časová složitost operací se seznamem
 
 **Co to vůbec je "časová složitost"?**
 
@@ -144,7 +144,7 @@ Index:  0       1       2       3       4
 
 ---
 
-## 2️⃣ SLOVNÍKY (Dictionary)
+## 2. Slovníky (Dictionary)
 
 ### Praktický příklad
 
@@ -206,7 +206,7 @@ if "Anna" in telefony:             # O(1) - RYCHLÉ!
 tel = telefony.get("Neexistující", "Nenalezeno")  # "Nenalezeno"
 ```
 
-### ⏱️ Časová složitost slovníku
+### Časová složitost slovníku
 
 | Operace | Složitost | Vysvětlení |
 |---------|-----------|------------|
@@ -234,7 +234,7 @@ tel = telefony.get("Neexistující", "Nenalezeno")  # "Nenalezeno"
 
 ---
 
-## 3️⃣ ITERÁTORY
+## 3. Iterátory
 
 ### Co to je iterátor?
 
@@ -298,7 +298,7 @@ treti = next(iterator)             # "Eva"
 
 ---
 
-## 4️⃣ FRONTA (Queue)
+## 4. Fronta (Queue)
 
 ### Princip: FIFO - First In, First Out
 
@@ -335,7 +335,7 @@ druhy = fronta.popleft()           # "Pavel"
                                    # Fronta: [Eva]
 ```
 
-### ⏱️ Časová složitost fronty
+### Časová složitost fronty
 
 | Operace | Složitost |
 |---------|-----------|
@@ -350,7 +350,7 @@ druhy = fronta.popleft()           # "Pavel"
 
 ---
 
-## 5️⃣ ZÁSOBNÍK (Stack)
+## 5. Zásobník (Stack)
 
 ### Princip: LIFO - Last In, First Out
 
@@ -389,7 +389,7 @@ if zasobnik:                       # Kontrola, že není prázdný
     vrchol = zasobnik[-1]          # "Talíř 1"
 ```
 
-### ⏱️ Časová složitost zásobníku
+### Časová složitost zásobníku
 
 | Operace | Složitost |
 |---------|-----------|
@@ -407,7 +407,7 @@ if zasobnik:                       # Kontrola, že není prázdný
 
 ---
 
-## 📋 SHRNUTÍ PRO ZKOUŠKU
+## Shrnutí pro zkoušku
 
 ### Základní kolekce
 
@@ -448,7 +448,7 @@ if zasobnik:                       # Kontrola, že není prázdný
 
 ---
 
-## 🎯 Praktické příklady k procvičení
+## Praktické příklady k procvičení
 
 ### Příklad 1: Fronta v nemocnici
 

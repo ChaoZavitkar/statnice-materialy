@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 1: Základní abstraktní kolekce</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <style>
+        pre code.hljs { border-radius: 0.375rem; }
+        pre { margin-bottom: 1rem; }
+        h2 { margin-top: 2rem; }
+        h3 { margin-top: 1.5rem; }
+
+        /* ===== VIZUALIZACE – základ ===== */
+        .viz-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 1.25rem 1.25rem;
+            margin: 1rem 0 1.5rem 0;
+            overflow-x: auto;
+        }
+        .viz-label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.4rem;
+        }
+        .viz-caption {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-bottom: 0.6rem;
+        }
+        .viz-msg {
+            min-height: 1.4em;
+            font-size: 0.82rem;
+            font-family: monospace;
+            color: #343a40;
+            margin-top: 0.5rem;
+            padding: 0.3rem 0.5rem;
+            border-left: 3px solid #dee2e6;
+            background: #fff;
+            border-radius: 0 4px 4px 0;
+        }
+        .viz-step-arrow {
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin: 0.6rem 0;
+        }
+
+        /* ===== Buňky pole ===== */
+        .viz-cells { display: flex; align-items: stretch; }
+        .viz-cell {
+            border: 2px solid #adb5bd;
+            padding: 0.45rem 0.7rem;
+            text-align: center;
+            min-width: 76px;
+            background: #fff;
+            font-family: monospace;
+            font-size: 0.88rem;
+            cursor: default;
+            transition: background 0.25s, border-color 0.25s, color 0.25s;
+            user-select: none;
+        }
+        .viz-cell + .viz-cell { border-left: none; }
+        .viz-cell.clickable { cursor: pointer; }
+        .viz-cell.clickable:hover { background: #f0f4ff; }
+        .viz-cell.hl-blue   { background: #cfe2ff; border-color: #0d6efd; color: #084298; font-weight: 700; }
+        .viz-cell.hl-green  { background: #d1e7dd; border-color: #198754; color: #0f5132; font-weight: 700; }
+        .viz-cell.hl-yellow { background: #fff3cd; border-color: #e6a817; color: #664d03; }
+        .viz-cell.hl-fade   { background: #f8f9fa; border-color: #ced4da; color: #adb5bd; }
+
+        /* Indexy nad buňkami */
+        .viz-idxrow { display: flex; margin-bottom: 3px; }
+        .viz-idx {
+            min-width: 80px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6c757d;
+            font-family: monospace;
+        }
+        .viz-idx.hl { color: #0d6efd; font-weight: 700; }
+
+        /* Ukazatel pod buňkami */
+        .viz-ptrrow { display: flex; margin-top: 4px; }
+        .viz-ptr-item {
+            min-width: 80px;
+            text-align: center;
+            font-size: 0.78rem;
+            line-height: 1.3;
+            color: #6c757d;
+            transition: color 0.25s;
+        }
+        .viz-ptr-item.hl { color: #0d6efd; font-weight: 600; }
+
+        /* Legenda */
+        .viz-legend { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.75rem; font-size: 0.8rem; }
+        .viz-legend-item { display: flex; align-items: center; gap: 0.35rem; }
+        .viz-legend-dot { width: 14px; height: 14px; border-radius: 2px; border: 1px solid rgba(0,0,0,.15); flex-shrink: 0; }
+
+        /* ===== Fronta ===== */
+        .viz-queue-wrap { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+        .viz-queue-dir {
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+            padding: 0.2rem 0;
+        }
+        .viz-queue-track {
+            display: flex;
+            border: 2px solid #adb5bd;
+            border-radius: 4px;
+            overflow: hidden;
+            min-width: 60px;
+        }
+        .viz-queue-cell {
+            padding: 0.45rem 0.85rem;
+            text-align: center;
+            font-family: monospace;
+            font-size: 0.85rem;
+            background: #fff;
+            min-width: 72px;
+            transition: background 0.3s, color 0.3s;
+        }
+        .viz-queue-cell + .viz-queue-cell { border-left: 2px solid #adb5bd; }
+        .viz-queue-cell.q-first { background: #d1e7dd; color: #0f5132; font-weight: 700; }
+        .viz-queue-cell.q-last  { background: #dbeafe; color: #1e3a5f; }
+        .viz-queue-cell.q-empty { font-style: italic; color: #adb5bd; min-width: 140px; }
+        .viz-queue-cell.viz-enter { animation: enterRight 0.3s ease; }
+
+        @keyframes enterRight {
+            from { opacity: 0; transform: translateX(16px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+
+        /* ===== Zásobník ===== */
+        .viz-stack-wrap { display: flex; align-items: flex-start; gap: 1.5rem; flex-wrap: wrap; }
+        .viz-stack-col { display: inline-flex; flex-direction: column; min-width: 150px; }
+        .viz-stack-item {
+            border: 2px solid #adb5bd;
+            border-bottom: none;
+            padding: 0.45rem 1rem;
+            text-align: center;
+            font-family: monospace;
+            font-size: 0.85rem;
+            background: #fff;
+            transition: background 0.25s, border-color 0.25s, color 0.25s;
+        }
+        .viz-stack-item:first-child { border-radius: 4px 4px 0 0; }
+        .viz-stack-item.s-top { background: #cfe2ff; border-color: #0d6efd; color: #084298; font-weight: 700; }
+        .viz-stack-item.s-empty { font-style: italic; color: #adb5bd; border-radius: 4px 4px 0 0; border-bottom: none; }
+        .viz-stack-base { border: 2px solid #adb5bd; border-top: none; border-radius: 0 0 4px 4px; height: 5px; background: #dee2e6; }
+        .viz-stack-item.viz-enter { animation: enterTop 0.3s ease; }
+
+        @keyframes enterTop {
+            from { opacity: 0; transform: translateY(-12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== Tlačítka ===== */
+        .viz-btn {
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            padding: 0.4rem 0.85rem;
+            font-size: 0.84rem;
+            cursor: pointer;
+            background: #fff;
+            transition: background 0.15s, border-color 0.15s, color 0.15s;
+            min-height: 42px;
+            font-family: inherit;
+        }
+        .viz-btn:hover  { background: #f0f0f0; border-color: #adb5bd; }
+        .viz-btn:active { background: #e2e6ea; }
+        .viz-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .viz-btn-primary { background: #0d6efd; color: #fff; border-color: #0d6efd; }
+        .viz-btn-primary:hover { background: #0b5ed7; border-color: #0b5ed7; }
+        .viz-btn-danger  { background: #dc3545; color: #fff; border-color: #dc3545; }
+        .viz-btn-danger:hover  { background: #bb2d3b; border-color: #bb2d3b; }
+        .viz-btn-row { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; }
+
+        /* ===== Mobilní responzivita ===== */
+        @media (max-width: 576px) {
+            .viz-cell    { min-width: 58px; padding: 0.4rem 0.4rem; font-size: 0.78rem; }
+            .viz-idx     { min-width: 62px; font-size: 0.62rem; }
+            .viz-ptr-item{ min-width: 62px; font-size: 0.7rem; }
+            .viz-queue-cell { min-width: 58px; padding: 0.4rem 0.5rem; font-size: 0.78rem; }
+            .viz-stack-item { padding: 0.4rem 0.6rem; font-size: 0.78rem; }
+            .viz-btn     { font-size: 0.8rem; padding: 0.4rem 0.65rem; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container py-4">
+
+    <h1>Okruh 1: Základní abstraktní kolekce</h1>
+    <p><a href="../szztp.html" class="link-secondary link-opacity-50-hover link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">← Zpět</a></p>
+
+    <h2>Co se naučíte</h2>
+    <ul>
+        <li>Seznamy (List) a jejich operace</li>
+        <li>Slovníky (Dictionary) a kdy je použít</li>
+        <li>Iterátory – procházení kolekcí</li>
+        <li>Časová složitost – jak měřit rychlost algoritmů</li>
+        <li>Fronta (Queue) a Zásobník (Stack)</li>
+    </ul>
+
+    <hr>
+
+    <h2>1. Seznamy (List)</h2>
+
+    <h3>Praktický příklad na začátek</h3>
+    <p>Představte si, že máte seznam studentů ve třídě:</p>
+
+    <pre><code class="language-python">studenti = ["Anna", "Pavel", "Eva", "Martin", "Jana"]</code></pre>
+
+    <p><strong>Co s tím můžete dělat?</strong></p>
+
+    <pre><code class="language-python"># 1. Přístup k prvkům (podle indexu)
+prvni_student = studenti[0]        # "Anna" - indexy začínají od 0!
+treti_student = studenti[2]        # "Eva"
+
+# 2. Přidání nového studenta
+studenti.append("Petr")            # Přidá na konec
+# studenti = ["Anna", "Pavel", "Eva", "Martin", "Jana", "Petr"]
+
+# 3. Vložení doprostřed
+studenti.insert(1, "Lukáš")        # Vloží na pozici 1
+# studenti = ["Anna", "Lukáš", "Pavel", "Eva", "Martin", "Jana", "Petr"]
+
+# 4. Odebrání studenta
+studenti.remove("Eva")             # Odebere prvního "Eva"
+# studenti = ["Anna", "Lukáš", "Pavel", "Martin", "Jana", "Petr"]
+
+# 5. Zjištění délky
+pocet = len(studenti)              # 6
+
+# 6. Kontrola, zda je prvek v seznamu
+je_anna = "Anna" in studenti       # True
+je_tom = "Tom" in studenti         # False</code></pre>
+
+    <h3>Časová složitost operací se seznamem</h3>
+    <p><strong>Co to vůbec je „časová složitost"?</strong></p>
+    <p>Časová složitost říká: <strong>„Jak moc se zpomalí operace, když zvětším seznam?"</strong></p>
+    <ul>
+        <li>Máte seznam 10 studentů → operace trvá X času</li>
+        <li>Máte seznam 100 studentů → kolikrát déle to trvá?</li>
+        <li>Máte seznam 1000 studentů → kolikrát déle to trvá?</li>
+    </ul>
+
+    <h4>Rychlé operace – O(1) „konstantní čas"</h4>
+
+    <pre><code class="language-python">x = studenti[2]    # O(1) - RYCHLÉ! Nezáleží na velikosti seznamu</code></pre>
+
+    <p><strong>Proč je to rychlé?</strong> Seznam je v paměti jako řada políček vedle sebe. Počítač ví přesně, kde políčko leží – nevyhledává celý seznam.</p>
+
+    <!-- INTERAKTIVNÍ: Přístup k poli -->
+    <div class="viz-box" id="viz-array">
+        <div class="viz-caption">Klikněte na buňku a uvidíte, jak přístup funguje</div>
+        <div class="viz-idxrow" id="arr-idxrow">
+            <div class="viz-idx">index 0</div>
+            <div class="viz-idx">index 1</div>
+            <div class="viz-idx">index 2</div>
+            <div class="viz-idx">index 3</div>
+            <div class="viz-idx">index 4</div>
+        </div>
+        <div class="viz-cells" id="arr-cells">
+            <div class="viz-cell clickable" onclick="arrSelect(0)">"Anna"</div>
+            <div class="viz-cell clickable" onclick="arrSelect(1)">"Pavel"</div>
+            <div class="viz-cell clickable hl-blue" onclick="arrSelect(2)">"Eva"</div>
+            <div class="viz-cell clickable" onclick="arrSelect(3)">"Martin"</div>
+            <div class="viz-cell clickable" onclick="arrSelect(4)">"Jana"</div>
+        </div>
+        <div class="viz-ptrrow" id="arr-ptrrow">
+            <div class="viz-ptr-item"></div>
+            <div class="viz-ptr-item"></div>
+            <div class="viz-ptr-item hl">↑<br>studenti[2]</div>
+            <div class="viz-ptr-item"></div>
+            <div class="viz-ptr-item"></div>
+        </div>
+        <div class="viz-msg" id="arr-msg">studenti[2] = "Eva" — O(1), přímý skok na adresu v paměti</div>
+    </div>
+
+    <h4>Přidání na konec – O(1) „konstantní čas"</h4>
+
+    <pre><code class="language-python">studenti.append("Petr")    # O(1) - prostě připojí další políčko na konec</code></pre>
+
+    <h4>Pomalé operace – O(n) „lineární čas"</h4>
+
+    <pre><code class="language-python"># Hledání prvku (bez znalosti indexu)
+if "Martin" in studenti:           # O(n) - POMALÉ!
+    print("Našel jsem Martina!")
+
+# Python musí projít celý seznam, prvek po prvku:
+# "Je to Anna? Ne. Je to Pavel? Ne. Je to Eva? Ne. Je to Martin? ANO!"</code></pre>
+
+    <p><strong>n</strong> = počet prvků v seznamu. 10 prvků → max 10 kontrol, 1000 prvků → max 1000 kontrol.</p>
+
+    <pre><code class="language-python">studenti.insert(1, "Lukáš")    # O(n) - musí posunout všechny prvky za pozicí 1</code></pre>
+
+    <!-- INTERAKTIVNÍ: Insert animace -->
+    <div class="viz-box" id="viz-insert">
+        <div class="viz-label" id="insert-state-label">Stav před <code>insert(1, "Lukáš")</code></div>
+        <div id="insert-cells"></div>
+        <div class="viz-msg" id="insert-msg">Klikněte na tlačítko a projděte insert krok za krokem.</div>
+        <div class="viz-btn-row">
+            <button class="viz-btn viz-btn-primary" id="insert-btn" onclick="insertNext()">Krok 1: posunout prvky</button>
+            <button class="viz-btn" onclick="insertReset()">Reset</button>
+        </div>
+    </div>
+
+    <h4>Shrnutí časové složitosti seznamu</h4>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr><th>Operace</th><th>Složitost</th><th>Vysvětlení</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>seznam[i]</code></td><td>O(1)</td><td>Přímý přístup podle indexu</td></tr>
+            <tr><td><code>seznam.append(x)</code></td><td>O(1)</td><td>Přidání na konec</td></tr>
+            <tr><td><code>len(seznam)</code></td><td>O(1)</td><td>Délka je uložená</td></tr>
+            <tr><td><code>x in seznam</code></td><td>O(n)</td><td>Musí projít celý seznam</td></tr>
+            <tr><td><code>seznam.remove(x)</code></td><td>O(n)</td><td>Musí najít a posunout prvky</td></tr>
+            <tr><td><code>seznam.insert(i, x)</code></td><td>O(n)</td><td>Musí posunout prvky</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <hr>
+
+    <h2>2. Slovníky (Dictionary)</h2>
+
+    <h3>Praktický příklad</h3>
+    <p>Potřebujete uložit telefonní čísla studentů:</p>
+
+    <pre><code class="language-python"># Se seznamem by to bylo nepraktické:
+studenti = ["Anna", "Pavel", "Eva"]
+telefony = ["777111222", "777333444", "777555666"]
+# Jak najdete telefon na Annu? Musíte ji najít v prvním seznamu,
+# zjistit index a pak použít stejný index v druhém seznamu. Složité!
+
+# Se slovníkem je to jednoduché:
+telefony = {
+    "Anna": "777111222",
+    "Pavel": "777333444",
+    "Eva": "777555666"
+}
+
+# Použití:
+tel_anna = telefony["Anna"]        # "777111222" - O(1) RYCHLÉ!</code></pre>
+
+    <h3>Klíč vs Hodnota</h3>
+
+    <pre><code class="language-python">vek = {
+    "Anna": 20,     # klíč: "Anna", hodnota: 20
+    "Pavel": 22,    # klíč: "Pavel", hodnota: 22
+    "Eva": 21       # klíč: "Eva", hodnota: 21
+}</code></pre>
+
+    <h3>Základní operace</h3>
+
+    <pre><code class="language-python">telefony = {"Anna": "777111222", "Pavel": "777333444"}
+
+telefony["Martin"] = "777777888"   # Přidání
+telefony["Anna"]   = "666999888"   # Změna
+del telefony["Pavel"]              # Odebrání
+
+if "Anna" in telefony:             # O(1) - RYCHLÉ!
+    print("Anna má záznam")
+
+tel = telefony.get("Neexistující", "Nenalezeno")  # "Nenalezeno"</code></pre>
+
+    <h3>Časová složitost slovníku</h3>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr><th>Operace</th><th>Složitost</th><th>Vysvětlení</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>slovnik[klic]</code></td><td>O(1)</td><td>Přímý přístup pomocí hashe</td></tr>
+            <tr><td><code>slovnik[klic] = hodnota</code></td><td>O(1)</td><td>Přidání/změna</td></tr>
+            <tr><td><code>klic in slovnik</code></td><td>O(1)</td><td>Kontrola existence</td></tr>
+            <tr><td><code>del slovnik[klic]</code></td><td>O(1)</td><td>Odebrání</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <p><strong>Proč je slovník tak rychlý?</strong> Používá <strong>hash funkci</strong> – klíč se převede na číslo, které říká přesně kam v paměti sáhnout. Nehledá postupně jako seznam.</p>
+
+    <h3>Kdy použít seznam vs slovník?</h3>
+    <p><strong>Seznam</strong> – když záleží na pořadí, nebo potřebujete přístup podle pozice (index).<br>
+    <strong>Slovník</strong> – když potřebujete rychlé vyhledávání podle klíče (jméno, ID, kód).</p>
+
+    <hr>
+
+    <h2>3. Iterátory</h2>
+
+    <h3>Co to je iterátor?</h3>
+    <p>Iterátor je způsob, jak <strong>postupně procházet</strong> kolekci prvek po prvku.</p>
+
+    <pre><code class="language-python">studenti = ["Anna", "Pavel", "Eva", "Martin"]
+
+for student in studenti:
+    print(student)
+# Python vytvoří iterátor, který postupně vrací:
+# "Anna" -> "Pavel" -> "Eva" -> "Martin" -> KONEC (StopIteration)</code></pre>
+
+    <h3>Iterace přes slovník</h3>
+
+    <pre><code class="language-python">vek = {"Anna": 20, "Pavel": 22, "Eva": 21}
+
+for jmeno in vek:               # přes klíče
+    print(jmeno)
+
+for cislo in vek.values():      # přes hodnoty
+    print(cislo)
+
+for jmeno, cislo in vek.items():  # přes páry
+    print(f"{jmeno} má {cislo} let")</code></pre>
+
+    <h3>Manuální vytvoření iterátoru</h3>
+
+    <pre><code class="language-python">studenti = ["Anna", "Pavel", "Eva"]
+
+iterator = iter(studenti)
+
+prvni = next(iterator)             # "Anna"
+druhy = next(iterator)             # "Pavel"
+treti = next(iterator)             # "Eva"
+# dalsi = next(iterator)           # CHYBA! StopIteration</code></pre>
+
+    <p><strong>Proč jsou iterátory užitečné?</strong> Šetří paměť – nemusíte mít celou kolekci najednou v paměti. Umožňují pracovat s nekonečnými sekvencemi.</p>
+
+    <hr>
+
+    <h2>4. Fronta (Queue)</h2>
+
+    <h3>Princip: FIFO – First In, First Out</h3>
+    <p><strong>„Kdo přišel první, ten odchází první"</strong> – jako fronta u pokladny.</p>
+
+    <!-- INTERAKTIVNÍ: Fronta -->
+    <div class="viz-box">
+        <div class="viz-label mb-2">Fronta – FIFO (interaktivní)</div>
+        <div class="viz-queue-wrap">
+            <div class="viz-queue-dir text-success">VÝSTUP &larr;</div>
+            <div class="viz-queue-track" id="queue-track" style="flex: 1; min-width: 0;"></div>
+            <div class="viz-queue-dir text-primary">&rarr; VSTUP</div>
+        </div>
+        <div class="viz-msg" id="queue-msg">Fronta obsahuje 4 prvky. Anna je první – bude obsloužena jako první.</div>
+        <div class="viz-btn-row">
+            <button class="viz-btn viz-btn-primary" onclick="queueEnqueue()">Přidat (append)</button>
+            <button class="viz-btn viz-btn-danger" onclick="queueDequeue()">Odebrat z čela (popleft)</button>
+            <button class="viz-btn" onclick="queueReset()">Reset</button>
+        </div>
+    </div>
+
+    <h3>Implementace v Pythonu</h3>
+
+    <pre><code class="language-python">from collections import deque
+
+fronta = deque()
+
+fronta.append("Anna")              # Fronta: [Anna]
+fronta.append("Pavel")             # Fronta: [Anna, Pavel]
+fronta.append("Eva")               # Fronta: [Anna, Pavel, Eva]
+
+prvni = fronta.popleft()           # "Anna" — Fronta: [Pavel, Eva]
+druhy = fronta.popleft()           # "Pavel" — Fronta: [Eva]</code></pre>
+
+    <h3>Časová složitost fronty</h3>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr><th>Operace</th><th>Složitost</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>fronta.append(x)</code> – přidání na konec</td><td>O(1)</td></tr>
+            <tr><td><code>fronta.popleft()</code> – odebrání z čela</td><td>O(1)</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Praktické použití fronty</h3>
+    <ul>
+        <li><strong>Tisk dokumentů:</strong> kdo poslal první, ten se vytiskne první</li>
+        <li><strong>Zpracování požadavků:</strong> server zpracovává dotazy v pořadí, jak přišly</li>
+        <li><strong>BFS algoritmus:</strong> prohledávání do šířky (breadth-first search)</li>
+    </ul>
+
+    <hr>
+
+    <h2>5. Zásobník (Stack)</h2>
+
+    <h3>Princip: LIFO – Last In, First Out</h3>
+    <p><strong>„Kdo přišel poslední, ten odchází první"</strong> – jako zásobník talířů.</p>
+
+    <!-- INTERAKTIVNÍ: Zásobník -->
+    <div class="viz-box">
+        <div class="viz-label mb-2">Zásobník – LIFO (interaktivní)</div>
+        <div class="viz-stack-wrap">
+            <div>
+                <div class="viz-caption text-center mb-1">push / pop (vrchol)</div>
+                <div id="stack-col"></div>
+                <div class="viz-stack-base" id="stack-base" style="display:none"></div>
+                <div class="text-center mt-1 small text-muted">— dno zásobníku —</div>
+            </div>
+            <div class="align-self-center" style="max-width: 200px">
+                <div class="viz-msg" id="stack-msg">Zásobník obsahuje 3 talíře. Talíř 3 je na vrcholu.</div>
+            </div>
+        </div>
+        <div class="viz-btn-row">
+            <button class="viz-btn viz-btn-primary" onclick="stackPush()">Push (append)</button>
+            <button class="viz-btn viz-btn-danger" onclick="stackPop()">Pop</button>
+            <button class="viz-btn" onclick="stackReset()">Reset</button>
+        </div>
+    </div>
+
+    <h3>Implementace v Pythonu</h3>
+
+    <pre><code class="language-python"># V Pythonu použijeme prostý seznam!
+zasobnik = []
+
+zasobnik.append("Talíř 1")         # push — zásobník: [Talíř 1]
+zasobnik.append("Talíř 2")         # push — zásobník: [Talíř 1, Talíř 2]
+zasobnik.append("Talíř 3")         # push — zásobník: [Talíř 1, Talíř 2, Talíř 3]
+
+vrchni = zasobnik.pop()            # pop — "Talíř 3", zásobník: [Talíř 1, Talíř 2]
+vrchol  = zasobnik[-1]             # nahlédnutí bez odebrání — "Talíř 2"</code></pre>
+
+    <h3>Časová složitost zásobníku</h3>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr><th>Operace</th><th>Složitost</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><code>zasobnik.append(x)</code> – push</td><td>O(1)</td></tr>
+            <tr><td><code>zasobnik.pop()</code> – pop</td><td>O(1)</td></tr>
+            <tr><td><code>zasobnik[-1]</code> – nahlédnutí</td><td>O(1)</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Praktické použití zásobníku</h3>
+    <ul>
+        <li><strong>Zpět v prohlížeči:</strong> historie navštívených stránek</li>
+        <li><strong>Ctrl+Z (Undo):</strong> poslední akce se vrátí první</li>
+        <li><strong>Vyhodnocování výrazů:</strong> <code>(2 + 3) * 4</code></li>
+        <li><strong>DFS algoritmus:</strong> prohledávání do hloubky (depth-first search)</li>
+        <li><strong>Volání funkcí:</strong> call stack v programování</li>
+    </ul>
+
+    <hr>
+
+    <h2>Shrnutí pro zkoušku</h2>
+
+    <h3>Základní kolekce</h3>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr><th>Kolekce</th><th>Hlavní použití</th><th>Přístup</th><th>Vyhledávání</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Seznam</strong></td><td>Seřazená data, přístup podle pozice</td><td>O(1)</td><td>O(n)</td></tr>
+            <tr><td><strong>Slovník</strong></td><td>Párování klíč-hodnota, rychlé vyhledávání</td><td>O(1)</td><td>O(1)</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Specializované kolekce</h3>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr><th>Kolekce</th><th>Princip</th><th>Přidání</th><th>Odebrání</th><th>Použití</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Fronta</strong></td><td>FIFO</td><td>O(1)</td><td>O(1)</td><td>Zpracování v pořadí</td></tr>
+            <tr><td><strong>Zásobník</strong></td><td>LIFO</td><td>O(1)</td><td>O(1)</td><td>Historie, zpět</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Časová složitost – rychlý přehled</h3>
+    <ul>
+        <li><strong>O(1)</strong> – konstantní – rychlé za jakékoli velikosti (přístup v seznamu, operace ve slovníku)</li>
+        <li><strong>O(n)</strong> – lineární – roste s velikostí (vyhledávání v seznamu)</li>
+        <li><strong>O(log n)</strong> – logaritmická – velmi rychlé i pro velká data (binární vyhledávání)</li>
+        <li><strong>O(n²)</strong> – kvadratická – pomalé pro velká data (vnořené cykly)</li>
+    </ul>
+
+    <h3>Klíčové otázky ke zkoušce</h3>
+    <ol>
+        <li>
+            <strong>Jaký je rozdíl mezi seznamem a slovníkem?</strong>
+            <ul>
+                <li>Seznam: pozice (index), O(n) vyhledávání</li>
+                <li>Slovník: klíč-hodnota, O(1) vyhledávání</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Kdy použít frontu vs zásobník?</strong>
+            <ul>
+                <li>Fronta: FIFO – pořadí je důležité (tisk, požadavky)</li>
+                <li>Zásobník: LIFO – zpět k předchozímu (undo, historie)</li>
+            </ul>
+        </li>
+        <li>
+            <strong>Co je iterátor?</strong>
+            <ul><li>Způsob postupného procházení kolekce prvek po prvku</li></ul>
+        </li>
+        <li>
+            <strong>Jaká je časová složitost vyhledávání v seznamu?</strong>
+            <ul><li>O(n) – musí projít celý seznam v nejhorším případě</li></ul>
+        </li>
+    </ol>
+
+    <hr>
+
+    <h2>Praktické příklady k procvičení</h2>
+
+    <h3>Příklad 1: Fronta v nemocnici</h3>
+
+    <pre><code class="language-python">from collections import deque
+
+pacienti = deque()
+pacienti.append("Pan Novák - 8:00")
+pacienti.append("Paní Svobodová - 8:15")
+pacienti.append("Pan Dvořák - 8:30")
+
+while pacienti:
+    aktualni = pacienti.popleft()
+    print(f"Ošetřuji: {aktualni}")
+
+# Ošetřuji: Pan Novák - 8:00
+# Ošetřuji: Paní Svobodová - 8:15
+# Ošetřuji: Pan Dvořák - 8:30</code></pre>
+
+    <h3>Příklad 2: Zásobník operací (Undo)</h3>
+
+    <pre><code class="language-python">operace = []
+
+operace.append("Napsal 'Ahoj'")
+operace.append("Napsal ' světe'")
+operace.append("Smazal poslední slovo")
+
+if operace:
+    posledni = operace.pop()
+    print(f"Vracím: {posledni}")
+# Vracím: Smazal poslední slovo</code></pre>
+
+    <h3>Příklad 3: Rychlé vyhledávání se slovníkem</h3>
+
+    <pre><code class="language-python">studenti_seznam = [
+    ("Anna", 20, "anna@email.cz"),
+    ("Pavel", 22, "pavel@email.cz"),
+    ("Eva", 21, "eva@email.cz")
+]
+
+studenti_slovnik = {
+    jmeno: {"vek": vek, "email": email}
+    for jmeno, vek, email in studenti_seznam
+}
+
+info_anna = studenti_slovnik["Anna"]
+print(info_anna)  # {'vek': 20, 'email': 'anna@email.cz'}</code></pre>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+hljs.highlightAll();
+
+/* ===================================================================
+   INTERAKTIVNÍ VIZUALIZACE
+   =================================================================== */
+
+/* ---------- 1. Přístup k poli ---------- */
+const ARR_NAMES = ["Anna", "Pavel", "Eva", "Martin", "Jana"];
+
+function arrSelect(idx) {
+    const cells   = document.querySelectorAll('#arr-cells .viz-cell');
+    const indices = document.querySelectorAll('#arr-idxrow .viz-idx');
+    const ptrs    = document.querySelectorAll('#arr-ptrrow .viz-ptr-item');
+
+    cells.forEach((c, i) => {
+        c.className = 'viz-cell clickable' + (i === idx ? ' hl-blue' : '');
+    });
+    indices.forEach((c, i) => {
+        c.className = 'viz-idx' + (i === idx ? ' hl' : '');
+    });
+    ptrs.forEach((c, i) => {
+        if (i === idx) {
+            c.innerHTML = '&uarr;<br>studenti[' + idx + ']';
+            c.className = 'viz-ptr-item hl';
+        } else {
+            c.innerHTML = '';
+            c.className = 'viz-ptr-item';
+        }
+    });
+    document.getElementById('arr-msg').textContent =
+        'studenti[' + idx + '] = "' + ARR_NAMES[idx] + '" — O(1), přímý skok na adresu v paměti';
+}
+
+/* ---------- 2. Insert animace ---------- */
+let insertStep = 0;
+
+const INSERT_STEPS = [
+    {
+        label: 'Stav před <code>insert(1, "Lukáš")</code>',
+        cells: [
+            { text: '"Anna"',   cls: '' },
+            { text: '"Pavel"',  cls: '' },
+            { text: '"Eva"',    cls: '' },
+            { text: '"Martin"', cls: '' },
+        ],
+        indices: ['0','1','2','3'],
+        msg: 'Původní seznam se 4 prvky. Chceme vložit "Lukáš" na index 1.',
+        btn: 'Krok 1: posunout prvky doprava',
+    },
+    {
+        label: 'Krok 1: Python posouvá prvky za indexem 1 doprava',
+        cells: [
+            { text: '"Anna"',   cls: '' },
+            { text: '???',      cls: 'hl-fade' },
+            { text: '"Pavel"',  cls: 'hl-yellow' },
+            { text: '"Eva"',    cls: 'hl-yellow' },
+            { text: '"Martin"', cls: 'hl-yellow' },
+        ],
+        indices: ['0','1','2','3','4'],
+        msg: 'Pavel, Eva, Martin se posunuly o 1 doprava — to je O(n) operace.',
+        btn: 'Krok 2: vložit "Lukáš" na index 1',
+    },
+    {
+        label: 'Výsledek po <code>insert(1, "Lukáš")</code>',
+        cells: [
+            { text: '"Anna"',   cls: '' },
+            { text: '"Lukáš"',  cls: 'hl-green' },
+            { text: '"Pavel"',  cls: 'hl-yellow' },
+            { text: '"Eva"',    cls: 'hl-yellow' },
+            { text: '"Martin"', cls: 'hl-yellow' },
+        ],
+        indices: ['0','1','2','3','4'],
+        msg: 'Hotovo. "Lukáš" je na indexu 1. Celkem bylo posunuto 3 prvků.',
+        btn: null,
+    },
+];
+
+function renderInsert() {
+    const step = INSERT_STEPS[insertStep];
+    document.getElementById('insert-state-label').innerHTML = step.label;
+    document.getElementById('insert-msg').textContent = step.msg;
+
+    let html = '<div class="viz-idxrow">';
+    step.indices.forEach(i => { html += `<div class="viz-idx">${i}</div>`; });
+    html += '</div><div class="viz-cells">';
+    step.cells.forEach(c => { html += `<div class="viz-cell ${c.cls}">${c.text}</div>`; });
+    html += '</div>';
+
+    if (insertStep === 1) {
+        html += '<div class="viz-legend">'
+             + '<div class="viz-legend-item"><div class="viz-legend-dot" style="background:#fff3cd;border-color:#e6a817"></div>posunuto doprava</div>'
+             + '</div>';
+    } else if (insertStep === 2) {
+        html += '<div class="viz-legend">'
+             + '<div class="viz-legend-item"><div class="viz-legend-dot" style="background:#d1e7dd;border-color:#198754"></div>nový prvek</div>'
+             + '<div class="viz-legend-item"><div class="viz-legend-dot" style="background:#fff3cd;border-color:#e6a817"></div>posunuto doprava</div>'
+             + '</div>';
+    }
+
+    document.getElementById('insert-cells').innerHTML = html;
+
+    const btn = document.getElementById('insert-btn');
+    if (step.btn) {
+        btn.textContent = step.btn;
+        btn.disabled = false;
+    } else {
+        btn.textContent = 'Hotovo';
+        btn.disabled = true;
+    }
+}
+
+function insertNext() {
+    if (insertStep < INSERT_STEPS.length - 1) {
+        insertStep++;
+        renderInsert();
+    }
+}
+
+function insertReset() {
+    insertStep = 0;
+    renderInsert();
+}
+
+/* ---------- 3. Fronta ---------- */
+const QUEUE_NAMES = ["Jana", "Tomáš", "Lucie", "Petr", "Marie", "Ondřej", "Klára", "Filip"];
+let queueState   = ["Anna", "Pavel", "Eva", "Martin"];
+let queueNameIdx = 0;
+
+function renderQueue() {
+    const track = document.getElementById('queue-track');
+    if (queueState.length === 0) {
+        track.innerHTML = '<div class="viz-queue-cell q-empty">prázdná fronta</div>';
+        return;
+    }
+    track.innerHTML = queueState.map((name, i) => {
+        const isFirst = i === 0;
+        const isLast  = i === queueState.length - 1;
+        const cls     = isFirst ? 'q-first' : isLast ? 'q-last' : '';
+        const sub     = isFirst ? '<br><small>čelo</small>' : isLast ? '<br><small>konec</small>' : '<br><small>&nbsp;</small>';
+        return `<div class="viz-queue-cell ${cls}">"${name}"${sub}</div>`;
+    }).join('');
+}
+
+function queueEnqueue() {
+    if (queueState.length >= 8) {
+        document.getElementById('queue-msg').textContent = 'Fronta je pro ukázku omezena na 8 prvků.';
+        return;
+    }
+    const name = QUEUE_NAMES[queueNameIdx % QUEUE_NAMES.length];
+    queueNameIdx++;
+    queueState.push(name);
+    renderQueue();
+    // Animate last cell
+    const cells = document.getElementById('queue-track').children;
+    if (cells.length > 0) {
+        const last = cells[cells.length - 1];
+        last.classList.add('viz-enter');
+        last.addEventListener('animationend', () => last.classList.remove('viz-enter'), { once: true });
+    }
+    document.getElementById('queue-msg').textContent =
+        `append("${name}") — přidáno na konec. Délka fronty: ${queueState.length}`;
+}
+
+function queueDequeue() {
+    if (queueState.length === 0) {
+        document.getElementById('queue-msg').textContent = 'Fronta je prázdná — nelze odebrat!';
+        return;
+    }
+    const removed = queueState.shift();
+    renderQueue();
+    document.getElementById('queue-msg').textContent =
+        `popleft() vrátilo "${removed}" — odebráno z čela. Délka fronty: ${queueState.length}`;
+}
+
+function queueReset() {
+    queueState   = ["Anna", "Pavel", "Eva", "Martin"];
+    queueNameIdx = 0;
+    renderQueue();
+    document.getElementById('queue-msg').textContent = 'Fronta resetována. Anna je první.';
+}
+
+/* ---------- 4. Zásobník ---------- */
+const STACK_NAMES = ["Talíř 4", "Talíř 5", "Talíř 6", "Talíř 7", "Talíř 8"];
+let stackState   = ["Talíř 1", "Talíř 2", "Talíř 3"];
+let stackPushIdx = 0;
+
+function renderStack() {
+    const col  = document.getElementById('stack-col');
+    const base = document.getElementById('stack-base');
+
+    if (stackState.length === 0) {
+        col.innerHTML  = '<div class="viz-stack-item s-empty">prázdný zásobník</div>';
+        base.style.display = 'block';
+        return;
+    }
+    base.style.display = 'block';
+
+    // Render from top (last) to bottom (first)
+    const reversed = [...stackState].reverse();
+    col.innerHTML = '<div class="viz-stack-col">'
+        + reversed.map((item, i) => {
+            const isTop    = i === 0;
+            const isBottom = i === reversed.length - 1;
+            const style    = isBottom ? 'border-bottom:2px solid #adb5bd; border-radius:0 0 4px 4px;' : '';
+            const label    = isTop ? ' <small style="font-weight:400">(vrchol)</small>' : '';
+            return `<div class="viz-stack-item ${isTop ? 's-top' : ''}" style="${style}">"${item}"${label}</div>`;
+        }).join('')
+        + '</div>';
+}
+
+function stackPush() {
+    if (stackState.length >= 7) {
+        document.getElementById('stack-msg').textContent = 'Zásobník je pro ukázku omezen na 7 prvků.';
+        return;
+    }
+    const item = STACK_NAMES[stackPushIdx % STACK_NAMES.length];
+    stackPushIdx++;
+    stackState.push(item);
+    renderStack();
+    // Animate top cell
+    const topCell = document.querySelector('#stack-col .viz-stack-item');
+    if (topCell) {
+        topCell.classList.add('viz-enter');
+        topCell.addEventListener('animationend', () => topCell.classList.remove('viz-enter'), { once: true });
+    }
+    document.getElementById('stack-msg').textContent =
+        `append("${item}") — přidáno na vrchol. Hloubka zásobníku: ${stackState.length}`;
+}
+
+function stackPop() {
+    if (stackState.length === 0) {
+        document.getElementById('stack-msg').textContent = 'Zásobník je prázdný — nelze odebrat!';
+        return;
+    }
+    const removed = stackState.pop();
+    renderStack();
+    document.getElementById('stack-msg').textContent =
+        `pop() vrátilo "${removed}" — odebráno z vrcholu. Hloubka zásobníku: ${stackState.length}`;
+}
+
+function stackReset() {
+    stackState   = ["Talíř 1", "Talíř 2", "Talíř 3"];
+    stackPushIdx = 0;
+    renderStack();
+    document.getElementById('stack-msg').textContent = 'Zásobník resetován. Talíř 3 je na vrcholu.';
+}
+
+/* ---------- Inicializace ---------- */
+arrSelect(2);
+renderInsert();
+renderQueue();
+renderStack();
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # Okruh 3: Spojové datové struktury
 
-## 📚 Co se naučíte
+## Co se naučíte
 - Jednosměrný spojový seznam (Linked List)
 - Základní operace: vkládání, výmaz, vyhledávání
 - Binární strom (Binary Tree)
@@ -10,7 +10,7 @@
 
 ---
 
-## 🔗 CO JSOU SPOJOVÉ STRUKTURY?
+## Co jsou to spojové struktury
 
 ### Problém s klasickými seznamy (pole)
 
@@ -50,7 +50,7 @@ seznam.insert(2, 25)  # Vložit 25 na pozici 2
 
 ---
 
-## 1️⃣ JEDNOSMĚRNÝ SPOJOVÝ SEZNAM
+## 1. Jednosměrný spojový seznam
 
 ### Struktura uzlu (Node)
 
@@ -143,7 +143,7 @@ seznam.vypis()  # 10 → 20 → 30 → None
 
 ---
 
-## 2️⃣ VKLÁDÁNÍ DO SPOJOVÉHO SEZNAMU
+## 2. Vkládání do spojového seznamu
 
 ### A) Vložení na ZAČÁTEK (prepend)
 
@@ -170,7 +170,7 @@ Krok 3: Head je teď nový uzel
   head → [5|●] → [10|●] → [20|×]
 ```
 
-**⏱️ Časová složitost: O(1)** - konstantní, vždy stejně rychlé!
+**Časová složitost: O(1)** - konstantní, vždy stejně rychlé!
 
 ### B) Vložení na KONEC (append)
 
@@ -209,7 +209,7 @@ Krok 2: Připoj nový uzel
                                       nový uzel
 ```
 
-**⏱️ Časová složitost: O(n)** - musíme projít celý seznam, abychom našli konec
+**Časová složitost: O(n)** - musíme projít celý seznam, abychom našli konec
 
 ### C) Vložení DOPROSTŘED (na konkrétní pozici)
 
@@ -258,7 +258,7 @@ Krok 2: Vytvoř nový uzel a přesměruj odkazy
 
 ---
 
-## 3️⃣ VÝMAZ ZE SPOJOVÉHO SEZNAMU
+## 3. Výmaz se spojového seznamu
 
 ### A) Výmaz ze ZAČÁTKU
 
@@ -282,7 +282,7 @@ Po:          head → [20|●] → [30|×]
      [10] už není dostupný → automaticky se uvolní z paměti
 ```
 
-**⏱️ Časová složitost: O(1)** - konstantní
+**Časová složitost: O(1)** - konstantní
 
 ### B) Výmaz z KONCE
 
@@ -325,7 +325,7 @@ Krok 2: Odstraň odkaz
         [30] už není dostupný → uvolní se z paměti
 ```
 
-**⏱️ Časová složitost: O(n)** - musíme najít předposlední uzel
+**Časová složitost: O(n)** - musíme najít předposlední uzel
 
 ### C) Výmaz KONKRÉTNÍ HODNOTY
 
@@ -370,11 +370,11 @@ Krok 2: Přesměruj odkaz (přeskoč 20)
                        [20|●] (už není dostupný)
 ```
 
-**⏱️ Časová složitost: O(n)** - v nejhorším případě projdeme celý seznam
+**Časová složitost: O(n)** - v nejhorším případě projdeme celý seznam
 
 ---
 
-## 4️⃣ VYHLEDÁVÁNÍ VE SPOJOÉM SEZNAMU
+## 4. Vyhledávání ve spojovém seznamu
 
 ```python
 def vyhledej(self, hodnota):
@@ -399,11 +399,11 @@ head → [10|●] → [20|●] → [30|●] → [40|×]
     10==30?  20==30?  30==30? ANO! Vrať pozici 2
 ```
 
-**⏱️ Časová složitost: O(n)** - v nejhorším případě projdeme celý seznam
+**Časová složitost: O(n)** - v nejhorším případě projdeme celý seznam
 
 ---
 
-## 📊 SROVNÁNÍ: POLE vs SPOJOVÝ SEZNAM
+## SROVNÁNÍ: POLE vs SPOJOVÝ SEZNAM
 
 | Operace | Pole (Python list) | Spojový seznam |
 |---------|-------------------|----------------|
@@ -432,7 +432,7 @@ head → [10|●] → [20|●] → [30|●] → [40|×]
 
 ---
 
-## 🌳 BINÁRNÍ STROM
+## BINÁRNÍ STROM
 
 ### Co je to binární strom?
 
@@ -488,7 +488,7 @@ root.right.right = TreeNode(80)
 
 ---
 
-## 5️⃣ OPERACE NAD BINÁRNÍM STROMEM
+## 5. Operace nad binárním stromem
 
 ### A) VKLÁDÁNÍ DO BINÁRNÍHO VYHLEDÁVACÍHO STROMU (BST)
 
@@ -539,7 +539,7 @@ Krok 4: Vlož 20 (20 < 50 → doleva, 20 < 30 → doleva)
     [20]
 ```
 
-**⏱️ Časová složitost:**
+**Časová složitost:**
 - **Vyvážený strom:** O(log n) - půlíme prostor podobně jako binární vyhledávání
 - **Nevyvážený strom:** O(n) - může degenerovat na spojový seznam
 
@@ -592,7 +592,7 @@ def vyhledej_v_bst(root, hodnota):
     [20] [40]    40 == 40 → NAŠLI JSME!
 ```
 
-**⏱️ Časová složitost:**
+**Časová složitost:**
 - **Vyvážený strom:** O(log n)
 - **Nevyvážený strom:** O(n)
 
@@ -689,7 +689,7 @@ def najdi_minimum(root):
 
 ---
 
-## 6️⃣ PRŮCHODY STROMEM
+## 6. Průchody stromem
 
 Existují 3 hlavní způsoby, jak projít všechny uzly ve stromu:
 
@@ -768,7 +768,7 @@ Post-order: 20 40 30 80 70 50  ← Děti před rodičem
 
 ---
 
-## 📋 SHRNUTÍ PRO ZKOUŠKU
+## SHRNUTÍ PRO ZKOUŠKU
 
 ### Spojový seznam - časová složitost
 
@@ -827,7 +827,7 @@ Post-order: 20 40 30 80 70 50  ← Děti před rodičem
 
 ---
 
-## 🎯 Praktické příklady
+## Praktické příklady
 
 ### Příklad 1: Kompletní spojový seznam
 

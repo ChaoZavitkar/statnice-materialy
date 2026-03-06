@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 2: Komplexní algoritmy nad seznamy</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <style>
+        pre code.hljs { border-radius: 0.375rem; }
+        pre { margin-bottom: 1rem; }
+        h2 { margin-top: 2rem; }
+        h3 { margin-top: 1.5rem; }
+
+        /* ── Visualization components ── */
+        .viz-box {
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            background: #fafafa;
+            overflow-x: auto;
+        }
+        .viz-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #495057;
+            margin-bottom: 0.4rem;
+        }
+        .viz-cells {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin: 0.4rem 0;
+        }
+        .viz-cell {
+            width: 48px;
+            height: 48px;
+            border: 2px solid #6c757d;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1rem;
+            background: #fff;
+            transition: background 0.25s, border-color 0.25s;
+        }
+        .viz-row { display: flex; gap: 4px; }
+        .viz-sub {
+            width: 48px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6c757d;
+        }
+        .viz-ptr-label { font-weight: 700; font-size: 0.72rem; }
+        .ptr-L { color: #198754; }
+        .ptr-M { color: #0d6efd; }
+        .ptr-R { color: #dc3545; }
+
+        /* Cell highlight states */
+        .hl-scan   { background: #fff3cd !important; border-color: #ffc107 !important; }
+        .hl-found  { background: #d1e7dd !important; border-color: #198754 !important; }
+        .hl-elim   { background: #f8f9fa !important; border-color: #ced4da !important; color: #adb5bd !important; }
+        .hl-mid    { background: #cfe2ff !important; border-color: #0d6efd !important; }
+        .hl-sorted { background: #d1e7dd !important; border-color: #198754 !important; }
+        .hl-min    { background: #f8d7da !important; border-color: #dc3545 !important; }
+
+        /* Buttons */
+        .viz-btn {
+            padding: 0.4rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            min-height: 42px;
+            transition: opacity 0.15s;
+        }
+        .viz-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .viz-btn-primary  { background: #0d6efd; color: #fff; }
+        .viz-btn-primary:hover:not(:disabled)   { background: #0b5ed7; }
+        .viz-btn-secondary { background: #6c757d; color: #fff; }
+        .viz-btn-secondary:hover:not(:disabled) { background: #5c636a; }
+        .viz-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; align-items: center; }
+        .step-counter { font-size: 0.82rem; color: #6c757d; }
+
+        /* Message box */
+        .viz-msg {
+            margin-top: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            background: #e9ecef;
+            border-radius: 0.375rem;
+            font-size: 0.9rem;
+            min-height: 2.5rem;
+        }
+
+        /* Legend */
+        .viz-legend { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0.5rem 0 0; }
+        .viz-legend-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; }
+        .viz-legend-dot { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid; flex-shrink: 0; }
+
+        /* Mobile */
+        @media (max-width: 576px) {
+            .viz-cell { width: 38px; height: 38px; font-size: 0.85rem; }
+            .viz-sub  { width: 38px; }
+            .viz-btn  { min-height: 44px; font-size: 0.85rem; padding: 0.4rem 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container py-4">
+
+    <h1>Okruh 2: Komplexní algoritmy nad seznamy</h1>
+    <p><a href="../szztp.html" class="link-secondary link-opacity-50-hover link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">&larr; Zpět</a></p>
+
+    <h2>Co se naučíte</h2>
+    <ul>
+        <li>Filtrování a vyhledávání v seznamech</li>
+        <li>Jednoduché třídění (selection sort, insertion sort)</li>
+        <li>Binární vyhledávání (rychlé vyhledávání v seřazeném seznamu)</li>
+        <li>Merge sort (efektivní třídění)</li>
+        <li>Analýza časové složitosti algoritmů</li>
+    </ul>
+
+    <hr>
+
+    <h2>1. Filtrování</h2>
+
+    <h3>Praktický příklad</h3>
+    <p>Máte seznam studentů s jejich body a chcete najít ty, kteří mají více než 50 bodů:</p>
+
+    <pre><code class="language-python">studenti = [
+    {"jmeno": "Anna", "body": 85},
+    {"jmeno": "Pavel", "body": 42},
+    {"jmeno": "Eva", "body": 67},
+    {"jmeno": "Martin", "body": 35},
+    {"jmeno": "Jana", "body": 91}
+]
+
+# Filtrování - způsob 1: List comprehension
+prospeli = [s for s in studenti if s["body"] >= 50]
+
+print(prospeli)
+# [{"jmeno": "Anna", "body": 85},
+#  {"jmeno": "Eva", "body": 67},
+#  {"jmeno": "Jana", "body": 91}]</code></pre>
+
+    <h3>Filtrování – krok po kroku</h3>
+
+    <pre><code class="language-python"># Způsob 2: Klasický cyklus (více vidět, co se děje)
+prospeli = []
+
+for student in studenti:
+    if student["body"] >= 50:
+        prospeli.append(student)
+
+# Co se děje?
+# 1. Projdi každého studenta
+# 2. Pokud má >= 50 bodů, přidej ho do nového seznamu
+# 3. Ostatní přeskoč</code></pre>
+
+    <h3>Použití funkce filter()</h3>
+
+    <pre><code class="language-python"># Způsob 3: Pomocí filter() - funkcionální přístup
+def ma_50_bodu(student):
+    return student["body"] >= 50
+
+prospeli = list(filter(ma_50_bodu, studenti))
+
+# Nebo s lambda funkcí (anonymní funkce)
+prospeli = list(filter(lambda s: s["body"] >= 50, studenti))</code></pre>
+
+    <h3>Časová složitost filtrování</h3>
+    <p><strong>O(n)</strong> – lineární</p>
+    <ul>
+        <li>Musíme projít KAŽDÝ prvek v seznamu</li>
+        <li>n prvků &rarr; n kontrol</li>
+    </ul>
+    <pre><code>Seznam 5 studentů    → 5 kontrol
+Seznam 100 studentů  → 100 kontrol
+Seznam 1000 studentů → 1000 kontrol</code></pre>
+
+    <hr>
+
+    <h2>2. Vyhledávání</h2>
+
+    <h3>Lineární vyhledávání (Sequential Search)</h3>
+    <p><strong>Princip:</strong> Projdi seznam od začátku do konce, dokud nenajdeš hledaný prvek.</p>
+
+    <pre><code class="language-python">def linealni_vyhledavani(seznam, hledany):
+    """
+    Najde index prvního výskytu hledaného prvku.
+    Vrací -1, pokud prvek není v seznamu.
+    """
+    for i in range(len(seznam)):
+        if seznam[i] == hledany:
+            return i  # Našli jsme! Vrátíme index
+    return -1  # Nenašli jsme
+
+# Použití
+cisla = [64, 34, 25, 12, 22, 11, 90]
+index = linealni_vyhledavani(cisla, 22)
+print(f"Číslo 22 je na indexu: {index}")  # 4</code></pre>
+
+    <h3>Vizualizace lineárního vyhledávání</h3>
+    <p>Hledáme číslo <strong>22</strong>. Procházíme prvek po prvku.</p>
+
+    <div class="viz-box">
+        <div class="viz-label">Pole: [64, 34, 25, 12, 22, 11, 90] &nbsp;&nbsp; Hledáme: 22</div>
+        <div class="viz-cells" id="ls-cells">
+            <div class="viz-cell" id="ls-c0">64</div>
+            <div class="viz-cell" id="ls-c1">34</div>
+            <div class="viz-cell" id="ls-c2">25</div>
+            <div class="viz-cell" id="ls-c3">12</div>
+            <div class="viz-cell" id="ls-c4">22</div>
+            <div class="viz-cell" id="ls-c5">11</div>
+            <div class="viz-cell" id="ls-c6">90</div>
+        </div>
+        <div class="viz-row">
+            <div class="viz-sub">0</div><div class="viz-sub">1</div><div class="viz-sub">2</div>
+            <div class="viz-sub">3</div><div class="viz-sub">4</div><div class="viz-sub">5</div>
+            <div class="viz-sub">6</div>
+        </div>
+        <div class="viz-legend">
+            <div class="viz-legend-item">
+                <div class="viz-legend-dot" style="background:#fff3cd;border-color:#ffc107;"></div>
+                Aktuálně porovnáváno
+            </div>
+            <div class="viz-legend-item">
+                <div class="viz-legend-dot" style="background:#d1e7dd;border-color:#198754;"></div>
+                Nalezeno
+            </div>
+        </div>
+        <div class="viz-btns">
+            <button class="viz-btn viz-btn-primary" id="ls-next" onclick="lsNext()">Další krok</button>
+            <button class="viz-btn viz-btn-secondary" onclick="lsReset()">Reset</button>
+            <span class="step-counter" id="ls-step">Krok 0 / 5</span>
+        </div>
+        <div class="viz-msg" id="ls-msg">Hledáme číslo <strong>22</strong>. Klikni na "Další krok".</div>
+    </div>
+
+    <h3>Časová složitost lineárního vyhledávání</h3>
+    <p><strong>O(n)</strong> – lineární</p>
+    <ul>
+        <li><strong>Nejlepší případ:</strong> O(1) – prvek je hned na začátku</li>
+        <li><strong>Průměrný případ:</strong> O(n/2) = O(n) – v průměru najdeme v polovině</li>
+        <li><strong>Nejhorší případ:</strong> O(n) – prvek je na konci nebo není v seznamu</li>
+    </ul>
+
+    <hr>
+
+    <h2>3. Binární vyhledávání</h2>
+
+    <h3>Podmínka: SEZNAM MUSÍ BÝT SEŘAZENÝ!</h3>
+    <p><strong>Princip:</strong> Půlíme seznam, dokud nenajdeme prvek (jako hádání čísla).</p>
+
+    <h3>Analogie: Hádání čísla 1–100</h3>
+
+    <pre><code>Hádám číslo mezi 1 a 100.
+
+Pokus 1: "Je to 50?"
+         "Ne, je to VĚTŠÍ"
+         Vím, že to NENÍ 1-50 → hledám v 51-100
+
+Pokus 2: "Je to 75?"
+         "Ne, je to MENŠÍ"
+         Vím, že to NENÍ 76-100 → hledám v 51-74
+
+Pokus 3: "Je to 63?"
+         "Ne, je to VĚTŠÍ"
+         → hledám v 64-74
+
+Pokus 4: "Je to 69?"
+         "ANO!"
+
+Našel jsem číslo za 4 pokusy místo až 69!</code></pre>
+
+    <h3>Implementace binárního vyhledávání</h3>
+
+    <pre><code class="language-python">def binarni_vyhledavani(serazeny_seznam, hledany):
+    """
+    Vyhledávání půlením intervalu.
+    FUNGUJE JEN NA SEŘAZENÉM SEZNAMU!
+    """
+    levy = 0
+    pravy = len(serazeny_seznam) - 1
+
+    while levy &lt;= pravy:
+        stred = (levy + pravy) // 2  # Index prostředního prvku
+
+        if serazeny_seznam[stred] == hledany:
+            return stred  # Našli jsme!
+
+        elif serazeny_seznam[stred] &lt; hledany:
+            # Hledaný je VĚTŠÍ → hledej v pravé polovině
+            levy = stred + 1
+
+        else:
+            # Hledaný je MENŠÍ → hledej v levé polovině
+            pravy = stred - 1
+
+    return -1  # Nenašli jsme
+
+# Použití
+cisla = [11, 12, 22, 25, 34, 64, 90]  # MUSÍ být seřazený!
+index = binarni_vyhledavani(cisla, 25)
+print(f"Číslo 25 je na indexu: {index}")  # 3</code></pre>
+
+    <h3>Vizualizace binárního vyhledávání</h3>
+    <p>Hledáme číslo <strong>64</strong> v seřazeném poli. Zkratka: L = levá hranice, M = střed, P = pravá hranice.</p>
+
+    <div class="viz-box">
+        <div class="viz-label">Seřazené pole &nbsp;&nbsp; Hledáme: 64</div>
+        <div class="viz-cells" id="bs-cells">
+            <div class="viz-cell" id="bs-c0">11</div>
+            <div class="viz-cell" id="bs-c1">12</div>
+            <div class="viz-cell" id="bs-c2">22</div>
+            <div class="viz-cell" id="bs-c3">25</div>
+            <div class="viz-cell" id="bs-c4">34</div>
+            <div class="viz-cell" id="bs-c5">64</div>
+            <div class="viz-cell" id="bs-c6">90</div>
+        </div>
+        <!-- Index row -->
+        <div class="viz-row">
+            <div class="viz-sub">0</div><div class="viz-sub">1</div><div class="viz-sub">2</div>
+            <div class="viz-sub">3</div><div class="viz-sub">4</div><div class="viz-sub">5</div>
+            <div class="viz-sub">6</div>
+        </div>
+        <!-- L pointer row -->
+        <div class="viz-row mt-1">
+            <div class="viz-sub viz-ptr-label ptr-L" id="bs-l0"></div>
+            <div class="viz-sub viz-ptr-label ptr-L" id="bs-l1"></div>
+            <div class="viz-sub viz-ptr-label ptr-L" id="bs-l2"></div>
+            <div class="viz-sub viz-ptr-label ptr-L" id="bs-l3"></div>
+            <div class="viz-sub viz-ptr-label ptr-L" id="bs-l4"></div>
+            <div class="viz-sub viz-ptr-label ptr-L" id="bs-l5"></div>
+            <div class="viz-sub viz-ptr-label ptr-L" id="bs-l6"></div>
+        </div>
+        <!-- M pointer row -->
+        <div class="viz-row">
+            <div class="viz-sub viz-ptr-label ptr-M" id="bs-m0"></div>
+            <div class="viz-sub viz-ptr-label ptr-M" id="bs-m1"></div>
+            <div class="viz-sub viz-ptr-label ptr-M" id="bs-m2"></div>
+            <div class="viz-sub viz-ptr-label ptr-M" id="bs-m3"></div>
+            <div class="viz-sub viz-ptr-label ptr-M" id="bs-m4"></div>
+            <div class="viz-sub viz-ptr-label ptr-M" id="bs-m5"></div>
+            <div class="viz-sub viz-ptr-label ptr-M" id="bs-m6"></div>
+        </div>
+        <!-- R pointer row -->
+        <div class="viz-row">
+            <div class="viz-sub viz-ptr-label ptr-R" id="bs-r0"></div>
+            <div class="viz-sub viz-ptr-label ptr-R" id="bs-r1"></div>
+            <div class="viz-sub viz-ptr-label ptr-R" id="bs-r2"></div>
+            <div class="viz-sub viz-ptr-label ptr-R" id="bs-r3"></div>
+            <div class="viz-sub viz-ptr-label ptr-R" id="bs-r4"></div>
+            <div class="viz-sub viz-ptr-label ptr-R" id="bs-r5"></div>
+            <div class="viz-sub viz-ptr-label ptr-R" id="bs-r6"></div>
+        </div>
+        <div class="viz-legend">
+            <div class="viz-legend-item">
+                <div class="viz-legend-dot" style="background:#cfe2ff;border-color:#0d6efd;"></div>
+                Střed (M)
+            </div>
+            <div class="viz-legend-item">
+                <div class="viz-legend-dot" style="background:#f8f9fa;border-color:#ced4da;"></div>
+                Vyloučeno
+            </div>
+            <div class="viz-legend-item">
+                <div class="viz-legend-dot" style="background:#d1e7dd;border-color:#198754;"></div>
+                Nalezeno
+            </div>
+        </div>
+        <div class="viz-btns">
+            <button class="viz-btn viz-btn-primary" id="bs-next" onclick="bsNext()">Další krok</button>
+            <button class="viz-btn viz-btn-secondary" onclick="bsReset()">Reset</button>
+            <span class="step-counter" id="bs-step">Krok 0 / 3</span>
+        </div>
+        <div class="viz-msg" id="bs-msg">Hledáme číslo <strong>64</strong> v seřazeném poli. Klikni na "Další krok".</div>
+    </div>
+
+    <h3>Časová složitost binárního vyhledávání</h3>
+    <p><strong>O(log n)</strong> – logaritmická</p>
+    <p>Při každém kroku PŮLÍME prostor hledání:</p>
+
+    <pre><code>1000 prvků → 500 → 250 → 125 → 63 → ... → 1
+Počet kroků: asi 10
+
+Pro n = 1000:     log₂(1000) ≈ 10 kroků
+Pro n = 1 000 000: log₂(1 000 000) ≈ 20 kroků
+
+Lineární hledání: 1 000 000 kroků!
+Binární hledání:         20 kroků!</code></pre>
+
+    <p><strong>Srovnání kroků:</strong></p>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr>
+                <th>Velikost seznamu</th>
+                <th>Lineární O(n)</th>
+                <th>Binární O(log n)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>10</td><td>10</td><td>4</td></tr>
+            <tr><td>100</td><td>100</td><td>7</td></tr>
+            <tr><td>1 000</td><td>1 000</td><td>10</td></tr>
+            <tr><td>1 000 000</td><td>1 000 000</td><td>20</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <hr>
+
+    <h2>4. Selection Sort (Třídění výběrem)</h2>
+
+    <h3>Princip</h3>
+    <p>Opakovaně najdi NEJMENŠÍ prvek v neseřazené části a přesuň ho na začátek.</p>
+
+    <h3>Analogie: Třídění karet</h3>
+
+    <pre><code>Máte karty: [7, 3, 9, 2, 5]
+
+Krok 1: Najděte nejmenší (2), vyměňte s prvním
+        [2, 3, 9, 7, 5]
+         [OK]
+
+Krok 2: Najděte nejmenší v [3, 9, 7, 5] → je to 3, už je na místě
+        [2, 3, 9, 7, 5]
+         [OK][OK]
+
+Krok 3: Nejmenší v [9, 7, 5] → je to 5, vyměňte s 9
+        [2, 3, 5, 7, 9]
+         [OK][OK][OK]
+
+Hotovo!</code></pre>
+
+    <h3>Implementace</h3>
+
+    <pre><code class="language-python">def selection_sort(seznam):
+    n = len(seznam)
+
+    for i in range(n - 1):
+        min_index = i
+
+        for j in range(i + 1, n):
+            if seznam[j] &lt; seznam[min_index]:
+                min_index = j
+
+        # Vyměň nejmenší prvek s prvkem na pozici i
+        seznam[i], seznam[min_index] = seznam[min_index], seznam[i]
+
+    return seznam
+
+cisla = [64, 34, 25, 12, 22, 11, 90]
+serazene = selection_sort(cisla.copy())
+print("Seřazené:", serazene)</code></pre>
+
+    <h3>Vizualizace selection sort – krok po kroku</h3>
+
+    <div class="viz-box">
+        <div class="viz-label">Třídíme: [64, 34, 25, 12, 22, 11, 90]</div>
+        <div class="viz-cells" id="ss-cells"></div>
+        <div class="viz-legend">
+            <div class="viz-legend-item">
+                <div class="viz-legend-dot" style="background:#d1e7dd;border-color:#198754;"></div>
+                Seřazeno
+            </div>
+            <div class="viz-legend-item">
+                <div class="viz-legend-dot" style="background:#f8d7da;border-color:#dc3545;"></div>
+                Aktuální minimum
+            </div>
+        </div>
+        <div class="viz-btns">
+            <button class="viz-btn viz-btn-primary" id="ss-next" onclick="ssNext()">Další průchod</button>
+            <button class="viz-btn viz-btn-secondary" onclick="ssReset()">Reset</button>
+            <span class="step-counter" id="ss-step">Krok 1 / 7</span>
+        </div>
+        <div class="viz-msg" id="ss-msg"></div>
+    </div>
+
+    <h3>Časová složitost Selection Sort</h3>
+    <p><strong>O(n²)</strong> – kvadratická</p>
+    <pre><code>n = 7 prvků
+
+Průchod 1: 6 porovnání
+Průchod 2: 5 porovnání
+...
+Průchod 6: 1 porovnání
+
+Celkem: 6+5+4+3+2+1 = 21 porovnání
+Obecně: n(n-1)/2 ≈ n² / 2 = O(n²)</code></pre>
+
+    <hr>
+
+    <h2>5. Insertion Sort (Třídění vkládáním)</h2>
+
+    <h3>Princip</h3>
+    <p>Postupně beru prvky a vkládám je na správné místo v už seřazené části (jako třídění karet v ruce).</p>
+
+    <h3>Analogie: Karty v ruce</h3>
+
+    <pre><code>Berete karty z balíčku a postupně je řadíte:
+
+Start: []         Balíček: [5, 2, 4, 6, 1]
+
+Krok 1: Vezmu 5  → [5]
+Krok 2: Vezmu 2  → před 5        → [2, 5]
+Krok 3: Vezmu 4  → mezi 2 a 5   → [2, 4, 5]
+Krok 4: Vezmu 6  → za 5         → [2, 4, 5, 6]
+Krok 5: Vezmu 1  → na začátek   → [1, 2, 4, 5, 6]</code></pre>
+
+    <h3>Implementace</h3>
+
+    <pre><code class="language-python">def insertion_sort(seznam):
+    n = len(seznam)
+
+    for i in range(1, n):
+        klic = seznam[i]  # Prvek, který vkládáme
+        j = i - 1
+
+        # Posouváme větší prvky doprava
+        while j >= 0 and seznam[j] &gt; klic:
+            seznam[j + 1] = seznam[j]
+            j -= 1
+
+        # Vložíme klíč na správné místo
+        seznam[j + 1] = klic
+
+    return seznam</code></pre>
+
+    <h3>Vizualizace krok po kroku</h3>
+
+    <pre><code>Původní: [64, 34, 25, 12, 22, 11, 90]
+
+Krok 1: Vkládám 34  → [34, 64, 25, 12, 22, 11, 90]
+Krok 2: Vkládám 25  → [25, 34, 64, 12, 22, 11, 90]
+Krok 3: Vkládám 12  → [12, 25, 34, 64, 22, 11, 90]
+Krok 4: Vkládám 22  → [12, 22, 25, 34, 64, 11, 90]
+Krok 5: Vkládám 11  → [11, 12, 22, 25, 34, 64, 90]
+Krok 6: Vkládám 90  → [11, 12, 22, 25, 34, 64, 90]</code></pre>
+
+    <h3>Časová složitost Insertion Sort</h3>
+    <p><strong>O(n²)</strong> – kvadratická (v nejhorším případě)</p>
+    <ul>
+        <li><strong>Nejlepší případ:</strong> O(n) – seznam už je seřazený</li>
+        <li><strong>Průměrný případ:</strong> O(n²)</li>
+        <li><strong>Nejhorší případ:</strong> O(n²) – seznam je seřazený obráceně</li>
+    </ul>
+    <p><strong>Výhoda:</strong> Velmi rychlý pro TÉMĚŘ seřazené seznamy!</p>
+
+    <hr>
+
+    <h2>6. Merge Sort (Třídění slučováním)</h2>
+
+    <h3>Princip: Rozděl a panuj (Divide and Conquer)</h3>
+    <ol>
+        <li><strong>Rozděl</strong> seznam na poloviny, dokud nemáš jednosměrné seznamy</li>
+        <li><strong>Slučuj</strong> seřazené poloviny zpět dohromady</li>
+    </ol>
+
+    <h3>Vizualizace rozkladu</h3>
+
+    <pre><code>            [38, 27, 43, 3, 9, 82, 10]
+                      |
+        ──────────────+──────────────
+        |                           |
+  [38, 27, 43, 3]           [9, 82, 10]
+        |                           |
+    ────+────                   ────+────
+    |       |                   |       |
+[38, 27] [43, 3]            [9, 82]   [10]
+    |       |                   |
+  ──+──   ──+──               ──+──
+  |   |   |   |               |   |
+[38][27][43] [3]            [9] [82]
+
+Slučování (merge):
+  [38][27] → [27, 38]
+  [43][3]  → [3, 43]
+  [27, 38] + [3, 43] → [3, 27, 38, 43]
+
+  [9][82]  → [9, 82]
+  [9, 82]  + [10] → [9, 10, 82]
+
+  [3, 27, 38, 43] + [9, 10, 82] → [3, 9, 10, 27, 38, 43, 82]</code></pre>
+
+    <h3>Implementace</h3>
+
+    <pre><code class="language-python">def merge_sort(seznam):
+    if len(seznam) &lt;= 1:
+        return seznam
+
+    stred = len(seznam) // 2
+    leva_serazena  = merge_sort(seznam[:stred])
+    prava_serazena = merge_sort(seznam[stred:])
+
+    return merge(leva_serazena, prava_serazena)
+
+
+def merge(leva, prava):
+    vysledek = []
+    i = j = 0
+
+    while i &lt; len(leva) and j &lt; len(prava):
+        if leva[i] &lt;= prava[j]:
+            vysledek.append(leva[i])
+            i += 1
+        else:
+            vysledek.append(prava[j])
+            j += 1
+
+    vysledek.extend(leva[i:])
+    vysledek.extend(prava[j:])
+    return vysledek</code></pre>
+
+    <h3>Časová složitost Merge Sort</h3>
+    <p><strong>O(n log n)</strong> – linearitmická</p>
+    <ul>
+        <li><strong>Rozklad:</strong> log n úrovní (půlíme seznam)</li>
+        <li><strong>Slučování:</strong> n operací na každé úrovni</li>
+    </ul>
+
+    <pre><code>Pro n = 8:
+
+Úroveň 0: [1 seznam o 8 prvcích]    → 8 operací
+Úroveň 1: [2 seznamy po 4 prvcích]  → 8 operací
+Úroveň 2: [4 seznamy po 2 prvcích]  → 8 operací
+Úroveň 3: [8 jednoprvkových]        → 0 (bázový případ)
+
+Celkem: 3 úrovně × 8 = 24  →  O(n log n)</code></pre>
+
+    <p><strong>Výhody:</strong> Garantovaná O(n log n) i v nejhorším případě; stabilní třídění.</p>
+    <p><strong>Nevýhody:</strong> Potřebuje extra paměť O(n).</p>
+
+    <hr>
+
+    <h2>Srovnání algoritmů</h2>
+
+    <h3>Třídící algoritmy</h3>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr>
+                <th>Algoritmus</th>
+                <th>Časová složitost</th>
+                <th>Prostorová</th>
+                <th>Stabilní?</th>
+                <th>Kdy použít?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Selection Sort</strong></td><td>O(n²)</td><td>O(1)</td><td>Ne</td><td>Malé seznamy, málo paměti</td></tr>
+            <tr><td><strong>Insertion Sort</strong></td><td>O(n²)</td><td>O(1)</td><td>Ano</td><td>Téměř seřazené seznamy</td></tr>
+            <tr><td><strong>Merge Sort</strong></td><td>O(n log n)</td><td>O(n)</td><td>Ano</td><td>Velké seznamy</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Vyhledávací algoritmy</h3>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr>
+                <th>Algoritmus</th>
+                <th>Časová složitost</th>
+                <th>Podmínka</th>
+                <th>Kdy použít?</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Lineární</strong></td><td>O(n)</td><td>Žádná</td><td>Neseřazené seznamy</td></tr>
+            <tr><td><strong>Binární</strong></td><td>O(log n)</td><td>Seřazený seznam!</td><td>Seřazené seznamy, časté vyhledávání</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Růst časové složitosti</h3>
+
+    <pre><code>Pro n = 1000 prvků:
+
+O(1):      1 operace          → okamžité
+O(log n):  ~10 operací        → velmi rychlé
+O(n):      1 000 operací      → rychlé
+O(n log n): ~10 000 operací   → přijatelné
+O(n²):     1 000 000 operací  → pomalé!
+O(2ⁿ):     2^1000 operací     → nemožné!</code></pre>
+
+    <hr>
+
+    <h2>Shrnutí pro zkoušku</h2>
+
+    <ol>
+        <li><strong>Filtrování</strong> – O(n): projít celý seznam a vybrat prvky dle podmínky</li>
+        <li><strong>Lineární vyhledávání</strong> – O(n): funguje na jakémkoliv seznamu</li>
+        <li><strong>Binární vyhledávání</strong> – O(log n): POUZE na seřazeném seznamu, půlíme prostor</li>
+        <li><strong>Selection Sort</strong> – O(n²): opakovaně najdi minimum a přesuň na začátek</li>
+        <li><strong>Insertion Sort</strong> – O(n²): vkládej prvky na správné místo; rychlé pro téměř seřazené</li>
+        <li><strong>Merge Sort</strong> – O(n log n): rozděl a panuj; potřebuje extra paměť</li>
+    </ol>
+
+    <h3>Pořadí rychlosti (od nejrychlejší)</h3>
+
+    <pre><code>O(1) > O(log n) > O(n) > O(n log n) > O(n²) > O(2ⁿ)</code></pre>
+
+    <h3>Otázky ke zkoušce</h3>
+
+    <p><strong>1. Jaký je rozdíl mezi lineárním a binárním vyhledáváním?</strong></p>
+    <ul>
+        <li>Lineární: O(n), funguje vždy</li>
+        <li>Binární: O(log n), POUZE na seřazeném seznamu</li>
+    </ul>
+
+    <p><strong>2. Proč je binární vyhledávání rychlejší?</strong></p>
+    <ul>
+        <li>Půlí prostor hledání při každém kroku – log n místo n kroků</li>
+    </ul>
+
+    <p><strong>3. Proč je merge sort lepší než selection sort?</strong></p>
+    <ul>
+        <li>Merge sort: O(n log n) – rychlejší pro velké seznamy</li>
+        <li>Selection sort: O(n²) – kvadratická složitost</li>
+    </ul>
+
+    <p><strong>4. Jak funguje princip "rozděl a panuj" u merge sort?</strong></p>
+    <ul>
+        <li>Rozděl seznam na poloviny, seřaď každou polovinu rekurzivně, slouč seřazené poloviny</li>
+    </ul>
+
+    <hr>
+
+    <h2>Praktické příklady k procvičení</h2>
+
+    <pre><code class="language-python">import time
+
+# Porovnání rychlosti vyhledávání
+velky_seznam = list(range(1000000))
+
+start = time.time()
+velky_seznam.index(999999)
+cas_linearni = time.time() - start
+
+start = time.time()
+binarni_vyhledavani(velky_seznam, 999999)
+cas_binarni = time.time() - start
+
+print(f"Lineární: {cas_linearni:.6f} s")
+print(f"Binární:  {cas_binarni:.6f} s")
+print(f"Binární je {cas_linearni/cas_binarni:.0f}x rychlejší!")</code></pre>
+
+    <pre><code class="language-python">studenti = [
+    {"jmeno": "Anna",   "body": 85, "rocnik": 2},
+    {"jmeno": "Pavel",  "body": 42, "rocnik": 1},
+    {"jmeno": "Eva",    "body": 67, "rocnik": 2},
+    {"jmeno": "Martin", "body": 91, "rocnik": 3},
+]
+
+# 1. Filtruj studenty z 2. ročníku
+druhy_rocnik = [s for s in studenti if s["rocnik"] == 2]
+
+# 2. Seřaď podle bodů (od nejvyššího)
+serazeni = sorted(druhy_rocnik, key=lambda s: s["body"], reverse=True)
+
+print(serazeni)
+# [{'jmeno': 'Anna', 'body': 85}, {'jmeno': 'Eva', 'body': 67}]</code></pre>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+/* ══════════════════════════════════════
+   LINEAR SEARCH
+══════════════════════════════════════ */
+const LS_STEPS = [
+    { cur: -1, done: false, msg: 'Hledáme číslo <strong>22</strong>. Klikni na "Další krok".' },
+    { cur: 0,  done: false, msg: 'Index 0: 64 &ne; 22 &mdash; pokračuj.' },
+    { cur: 1,  done: false, msg: 'Index 1: 34 &ne; 22 &mdash; pokračuj.' },
+    { cur: 2,  done: false, msg: 'Index 2: 25 &ne; 22 &mdash; pokračuj.' },
+    { cur: 3,  done: false, msg: 'Index 3: 12 &ne; 22 &mdash; pokračuj.' },
+    { cur: 4,  done: true,  msg: 'Index 4: 22 = 22 &mdash; <strong>Nalezeno!</strong> Vrátíme index 4.' },
+];
+let lsStep = 0;
+
+function lsNext() { if (lsStep < LS_STEPS.length - 1) { lsStep++; renderLS(); } }
+function lsReset() { lsStep = 0; renderLS(); }
+
+function renderLS() {
+    const s = LS_STEPS[lsStep];
+    for (let i = 0; i < 7; i++) {
+        const c = document.getElementById('ls-c' + i);
+        c.className = 'viz-cell';
+        if (i === s.cur) c.classList.add(s.done ? 'hl-found' : 'hl-scan');
+    }
+    document.getElementById('ls-msg').innerHTML = s.msg;
+    document.getElementById('ls-next').disabled = (lsStep === LS_STEPS.length - 1);
+    document.getElementById('ls-step').textContent = 'Krok ' + lsStep + ' / ' + (LS_STEPS.length - 1);
+}
+
+/* ══════════════════════════════════════
+   BINARY SEARCH
+══════════════════════════════════════ */
+// Array: [11, 12, 22, 25, 34, 64, 90], searching for 64
+const BS_STEPS = [
+    { L: -1, M: -1, R: -1, elim: [], found: -1,
+      msg: 'Seřazené pole. Hledáme <strong>64</strong>. Klikni na "Další krok".' },
+    { L: 0,  M: 3,  R: 6,  elim: [],        found: -1,
+      msg: 'L=0, P=6, <strong>M=3</strong> &rarr; hodnota 25. 64 &gt; 25 &rarr; hledej v pravé polovině (L = 4).' },
+    { L: 4,  M: 5,  R: 6,  elim: [0,1,2,3], found: -1,
+      msg: 'L=4, P=6, <strong>M=5</strong> &rarr; hodnota 64. 64 = 64 &mdash; <strong>Nalezeno!</strong>' },
+    { L: 4,  M: 5,  R: 6,  elim: [0,1,2,3], found: 5,
+      msg: '<strong>Výsledek:</strong> 64 nalezeno na indexu 5 za pouhé 2 kroky (lineární: až 6 kroků).' },
+];
+let bsStep = 0;
+
+function bsNext() { if (bsStep < BS_STEPS.length - 1) { bsStep++; renderBS(); } }
+function bsReset() { bsStep = 0; renderBS(); }
+
+function renderBS() {
+    const s = BS_STEPS[bsStep];
+    for (let i = 0; i < 7; i++) {
+        const c = document.getElementById('bs-c' + i);
+        c.className = 'viz-cell';
+        if (s.found === i)                          c.classList.add('hl-found');
+        else if (i === s.M && s.found === -1)       c.classList.add('hl-mid');
+        else if (s.elim.includes(i))                c.classList.add('hl-elim');
+
+        document.getElementById('bs-l' + i).textContent = (i === s.L) ? 'L' : '';
+        document.getElementById('bs-m' + i).textContent = (i === s.M && s.found === -1) ? 'M' : '';
+        document.getElementById('bs-r' + i).textContent = (i === s.R) ? 'P' : '';
+    }
+    document.getElementById('bs-msg').innerHTML = s.msg;
+    document.getElementById('bs-next').disabled = (bsStep === BS_STEPS.length - 1);
+    document.getElementById('bs-step').textContent = 'Krok ' + bsStep + ' / ' + (BS_STEPS.length - 1);
+}
+
+/* ══════════════════════════════════════
+   SELECTION SORT
+══════════════════════════════════════ */
+const SS_DATA = [
+    { arr:[64,34,25,12,22,11,90], sorted:0, minI:5, done:false,
+      msg:'Průchod 1: minimum v celém poli = <strong>11</strong> (index 5). Zaměním s pozicí 0.' },
+    { arr:[11,34,25,12,22,64,90], sorted:1, minI:3, done:false,
+      msg:'Průchod 2: minimum v [34..90] = <strong>12</strong> (index 3). Zaměním s pozicí 1.' },
+    { arr:[11,12,25,34,22,64,90], sorted:2, minI:4, done:false,
+      msg:'Průchod 3: minimum v [25..90] = <strong>22</strong> (index 4). Zaměním s pozicí 2.' },
+    { arr:[11,12,22,34,25,64,90], sorted:3, minI:4, done:false,
+      msg:'Průchod 4: minimum v [34..90] = <strong>25</strong> (index 4). Zaměním s pozicí 3.' },
+    { arr:[11,12,22,25,34,64,90], sorted:4, minI:4, done:false,
+      msg:'Průchod 5: minimum v [34..90] = <strong>34</strong> (index 4). Již na správném místě.' },
+    { arr:[11,12,22,25,34,64,90], sorted:5, minI:5, done:false,
+      msg:'Průchod 6: minimum v [64, 90] = <strong>64</strong> (index 5). Již na správném místě.' },
+    { arr:[11,12,22,25,34,64,90], sorted:7, minI:-1, done:true,
+      msg:'<strong>Hotovo!</strong> Pole je seřazené: [11, 12, 22, 25, 34, 64, 90] &mdash; celkem 6 průchodů.' },
+];
+let ssStep = 0;
+
+function ssNext() { if (ssStep < SS_DATA.length - 1) { ssStep++; renderSS(); } }
+function ssReset() { ssStep = 0; renderSS(); }
+
+function renderSS() {
+    const s = SS_DATA[ssStep];
+    const container = document.getElementById('ss-cells');
+    container.innerHTML = '';
+    s.arr.forEach((val, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'viz-cell';
+        cell.textContent = val;
+        if (i < s.sorted)     cell.classList.add('hl-sorted');
+        else if (i === s.minI) cell.classList.add('hl-min');
+        container.appendChild(cell);
+    });
+    document.getElementById('ss-msg').innerHTML = s.msg;
+    document.getElementById('ss-next').disabled = (ssStep === SS_DATA.length - 1);
+    document.getElementById('ss-step').textContent = 'Krok ' + (ssStep + 1) + ' / ' + SS_DATA.length;
+}
+
+// Init all visualizations on load
+renderLS();
+renderBS();
+renderSS();
+</script>
+</body>
+</html>

@@ -1,0 +1,571 @@
+---
+title: "Okruh 6 – Soustavy lineárních rovnic"
+subtitle: "KI/SZZTP – Teoretické základy informatiky"
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    theme: cosmo
+---
+
+# Soustava lineárních rovnic
+
+## Definice
+
+**Soustava lineárních rovnic** (SLR) o `m` rovnicích a `n` neznámých má tvar:
+
+$$
+\begin{aligned}
+a_{11}x_1 + a_{12}x_2 + \cdots + a_{1n}x_n &= b_1 \\
+a_{21}x_1 + a_{22}x_2 + \cdots + a_{2n}x_n &= b_2 \\
+&\vdots \\
+a_{m1}x_1 + a_{m2}x_2 + \cdots + a_{mn}x_n &= b_m
+\end{aligned}
+$$
+
+kde:
+
+- $a_{ij}$ jsou **koeficienty** soustavy
+- $x_1, x_2, \ldots, x_n$ jsou **neznámé**
+- $b_1, b_2, \ldots, b_m$ jsou **pravé strany**
+
+::: {.callout-note}
+## Maticový zápis
+
+Soustavu můžeme zapsat kompaktně jako:
+$$\mathbf{Ax} = \mathbf{b}$$
+
+kde:
+
+- $\mathbf{A}$ je **matice soustavy** rozměru $m \times n$
+- $\mathbf{x}$ je **vektor neznámých** rozměru $n \times 1$
+- $\mathbf{b}$ je **vektor pravých stran** rozměru $m \times 1$
+:::
+
+### Příklad
+
+$$
+\begin{aligned}
+2x_1 + 3x_2 &= 7 \\
+x_1 - x_2 &= 1
+\end{aligned}
+$$
+
+Maticový zápis:
+$$
+\begin{pmatrix} 2 & 3 \\ 1 & -1 \end{pmatrix}
+\begin{pmatrix} x_1 \\ x_2 \end{pmatrix}
+=
+\begin{pmatrix} 7 \\ 1 \end{pmatrix}
+$$
+
+---
+
+## Řešitelnost soustavy
+
+Soustava lineárních rovnic může mít:
+
+1. **Právě jedno řešení** — soustava je **určitá**
+2. **Nekonečně mnoho řešení** — soustava je **neurčitá**
+3. **Žádné řešení** — soustava je **nesplnitelná** (rozporná)
+
+::: {.callout-important}
+## Frobeniova věta (základní kritérium řešitelnosti)
+
+Soustava $\mathbf{Ax} = \mathbf{b}$ má řešení právě tehdy, když:
+$$
+\text{rank}(\mathbf{A}) = \text{rank}(\mathbf{A}|\mathbf{b})
+$$
+
+kde $(\mathbf{A}|\mathbf{b})$ je **rozšířená matice** soustavy.
+
+**Počet řešení:**
+
+- Pokud $\text{rank}(\mathbf{A}) = \text{rank}(\mathbf{A}|\mathbf{b}) = n$ → **právě jedno řešení**
+- Pokud $\text{rank}(\mathbf{A}) = \text{rank}(\mathbf{A}|\mathbf{b}) < n$ → **nekonečně mnoho řešení**
+- Pokud $\text{rank}(\mathbf{A}) \neq \text{rank}(\mathbf{A}|\mathbf{b})$ → **žádné řešení**
+:::
+
+### Hodnost matice (rank)
+
+**Hodnost** matice = maximální počet **lineárně nezávislých** řádků (nebo sloupců).
+
+Prakticky: počet nenulových řádků po převedení na schodovitý tvar.
+
+---
+
+## Metody řešení soustav lineárních rovnic
+
+# Přímé metody {#sec-prime}
+
+Přímé metody dávají **přesné řešení** v konečném počtu kroků (za předpokladu přesné aritmetiky).
+
+## Cramerovo pravidlo
+
+**Platí pouze pro soustavy s** $n$ **rovnicemi a** $n$ **neznámými**, kde $\det(\mathbf{A}) \neq 0$.
+
+### Vzorec
+
+$$
+x_i = \frac{\det(\mathbf{A}_i)}{\det(\mathbf{A})}
+$$
+
+kde $\mathbf{A}_i$ vznikne z $\mathbf{A}$ **nahrazením** $i$-tého sloupce vektorem pravých stran $\mathbf{b}$.
+
+### Algoritmus
+
+```
+1. Vypočti det(A)
+2. Pokud det(A) = 0 → soustava nemá jednoznačné řešení
+3. Pro každou neznámou xᵢ:
+   a. Vytvoř matici Aᵢ (nahraď i-tý sloupec A vektorem b)
+   b. Vypočti det(Aᵢ)
+   c. xᵢ = det(Aᵢ) / det(A)
+```
+
+### Příklad
+
+$$
+\begin{aligned}
+2x_1 + 3x_2 &= 7 \\
+x_1 - x_2 &= 1
+\end{aligned}
+$$
+
+$$
+\mathbf{A} = \begin{pmatrix} 2 & 3 \\ 1 & -1 \end{pmatrix}, \quad
+\mathbf{b} = \begin{pmatrix} 7 \\ 1 \end{pmatrix}
+$$
+
+**Krok 1:** Determinant $\mathbf{A}$:
+$$
+\det(\mathbf{A}) = 2 \cdot (-1) - 3 \cdot 1 = -2 - 3 = -5 \neq 0
+$$
+
+**Krok 2:** Řešení pro $x_1$:
+$$
+\mathbf{A}_1 = \begin{pmatrix} 7 & 3 \\ 1 & -1 \end{pmatrix}
+$$
+$$
+\det(\mathbf{A}_1) = 7 \cdot (-1) - 3 \cdot 1 = -7 - 3 = -10
+$$
+$$
+x_1 = \frac{-10}{-5} = 2
+$$
+
+**Krok 3:** Řešení pro $x_2$:
+$$
+\mathbf{A}_2 = \begin{pmatrix} 2 & 7 \\ 1 & 1 \end{pmatrix}
+$$
+$$
+\det(\mathbf{A}_2) = 2 \cdot 1 - 7 \cdot 1 = 2 - 7 = -5
+$$
+$$
+x_2 = \frac{-5}{-5} = 1
+$$
+
+**Výsledek:** $x_1 = 2, \, x_2 = 1$ ✓
+
+::: {.callout-warning}
+## Nevýhody Cramerova pravidla
+
+- **Vysoká výpočetní složitost:** $O(n! \cdot n)$ kvůli výpočtu determinantů
+- **Numericky nestabilní** pro větší soustavy
+- **Používá se pouze** pro malé soustavy (max 3-4 neznámé) nebo teoretické účely
+:::
+
+---
+
+## Gaussova eliminační metoda
+
+**Nejpoužívanější metoda** pro ruční i počítačové řešení. Založena na **elementárních řádkových operacích**.
+
+### Elementární řádkové operace
+
+1. **Výměna** dvou řádků
+2. **Vynásobení** řádku nenulovým číslem
+3. **Přičtení** násobku jednoho řádku k jinému řádku
+
+Tyto operace **nemění řešení** soustavy!
+
+### Algoritmus (dopředný chod)
+
+```
+Cíl: převést rozšířenou matici (A|b) na schodovitý tvar
+
+1. Pro i = 1 až n:
+   a. Najdi pivot (ненулový prvek) v i-tém sloupci
+   b. Pokud je pivot 0, vyměň řádky
+   c. Vynuluj všechny prvky POD pivotem:
+      - Pro každý řádek j > i:
+        řádek_j = řádek_j - (a_ji / a_ii) * řádek_i
+```
+
+### Algoritmus (zpětný chod)
+
+```
+Po dopředném chodu máme schodovitý tvar.
+
+1. Řeš od posledního řádku:
+   x_n = b_n / a_nn
+   
+2. Pro i = n-1 až 1:
+   x_i = (b_i - součet(a_ij * x_j pro j > i)) / a_ii
+```
+
+### Příklad: Gaussova eliminace
+
+Soustava:
+$$
+\begin{aligned}
+2x_1 + x_2 - x_3 &= 8 \\
+-3x_1 - x_2 + 2x_3 &= -11 \\
+-2x_1 + x_2 + 2x_3 &= -3
+\end{aligned}
+$$
+
+**Rozšířená matice:**
+$$
+\left(\begin{array}{ccc|c}
+2 & 1 & -1 & 8 \\
+-3 & -1 & 2 & -11 \\
+-2 & 1 & 2 & -3
+\end{array}\right)
+$$
+
+**Krok 1:** Vynuluj prvky pod pivotom $a_{11} = 2$
+
+Řádek 2: $R_2 = R_2 + \frac{3}{2}R_1$
+$$
+R_2 = (-3, -1, 2, -11) + \frac{3}{2}(2, 1, -1, 8) = (0, 0.5, 0.5, 1)
+$$
+
+Řádek 3: $R_3 = R_3 + R_1$
+$$
+R_3 = (-2, 1, 2, -3) + (2, 1, -1, 8) = (0, 2, 1, 5)
+$$
+
+**Po kroku 1:**
+$$
+\left(\begin{array}{ccc|c}
+2 & 1 & -1 & 8 \\
+0 & 0.5 & 0.5 & 1 \\
+0 & 2 & 1 & 5
+\end{array}\right)
+$$
+
+**Krok 2:** Vynuluj prvek pod $a_{22} = 0.5$
+
+Řádek 3: $R_3 = R_3 - 4R_2$
+$$
+R_3 = (0, 2, 1, 5) - 4(0, 0.5, 0.5, 1) = (0, 0, -1, 1)
+$$
+
+**Po kroku 2 (schodovitý tvar):**
+$$
+\left(\begin{array}{ccc|c}
+2 & 1 & -1 & 8 \\
+0 & 0.5 & 0.5 & 1 \\
+0 & 0 & -1 & 1
+\end{array}\right)
+$$
+
+**Zpětný chod:**
+
+Z 3. řádku: $-x_3 = 1 \Rightarrow x_3 = -1$
+
+Z 2. řádku: $0.5x_2 + 0.5x_3 = 1$
+$$
+0.5x_2 + 0.5(-1) = 1 \Rightarrow x_2 = 3
+$$
+
+Z 1. řádku: $2x_1 + x_2 - x_3 = 8$
+$$
+2x_1 + 3 - (-1) = 8 \Rightarrow x_1 = 2
+$$
+
+**Výsledek:** $x_1 = 2, \, x_2 = 3, \, x_3 = -1$ ✓
+
+::: {.callout-tip}
+## Výhody Gaussovy eliminace
+
+- **Univerzální** — funguje pro libovolnou soustavu
+- **Efektivní** — složitost $O(n^3)$
+- **Stabilní** s částečnou pivotací
+- **Zjistí neslnitelnost** nebo neurčitost
+:::
+
+---
+
+## Metoda LU rozkladu
+
+**Idea:** Rozložit matici $\mathbf{A}$ na součin **dolní trojúhelníkové** (L) a **horní trojúhelníkové** (U) matice.
+
+$$
+\mathbf{A} = \mathbf{LU}
+$$
+
+kde:
+
+- $\mathbf{L}$ je **dolní trojúhelníková** matice (Lower) — pod diagonálou nenulové prvky
+- $\mathbf{U}$ je **horní trojúhelníková** matice (Upper) — nad diagonálou nenulové prvky
+
+### Proč LU rozklad?
+
+Řešení $\mathbf{Ax} = \mathbf{b}$ se rozdělí na **dva jednoduché kroky**:
+
+1. Řeš $\mathbf{Ly} = \mathbf{b}$ (dopředná substituce)
+2. Řeš $\mathbf{Ux} = \mathbf{y}$ (zpětná substituce)
+
+**Výhoda:** Pokud máme stejnou matici $\mathbf{A}$ ale různé pravé strany $\mathbf{b}$, LU rozklad **počítáme jen jednou**!
+
+### Algoritmus (Doolittle)
+
+```
+1. Inicializace: L = I (jednotková matice), U = 0
+
+2. Pro i = 1 až n:
+   a. Pro j = i až n:
+      U[i][j] = A[i][j] - součet(L[i][k] * U[k][j] pro k = 1 až i-1)
+   
+   b. Pro j = i+1 až n:
+      L[j][i] = (A[j][i] - součet(L[j][k] * U[k][i] pro k = 1 až i-1)) / U[i][i]
+```
+
+### Příklad: LU rozklad
+
+$$
+\mathbf{A} = \begin{pmatrix} 2 & 1 & 1 \\ 4 & -6 & 0 \\ -2 & 7 & 2 \end{pmatrix}
+$$
+
+**Proces (zjednodušeně):**
+
+Po výpočtech dostaneme:
+$$
+\mathbf{L} = \begin{pmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ -1 & -1 & 1 \end{pmatrix}, \quad
+\mathbf{U} = \begin{pmatrix} 2 & 1 & 1 \\ 0 & -8 & -2 \\ 0 & 0 & 1 \end{pmatrix}
+$$
+
+**Ověření:** $\mathbf{LU} = \mathbf{A}$ ✓
+
+**Řešení soustavy:**
+
+Pro $\mathbf{Ax} = \mathbf{b}$ s $\mathbf{b} = (4, -2, 3)^T$:
+
+1. **Dopředná substituce** $\mathbf{Ly} = \mathbf{b}$:
+   $$
+   \begin{aligned}
+   y_1 &= 4 \\
+   2y_1 + y_2 &= -2 \Rightarrow y_2 = -10 \\
+   -y_1 - y_2 + y_3 &= 3 \Rightarrow y_3 = -1
+   \end{aligned}
+   $$
+
+2. **Zpětná substituce** $\mathbf{Ux} = \mathbf{y}$:
+   $$
+   \begin{aligned}
+   x_3 &= -1 \\
+   -8x_2 - 2x_3 &= -10 \Rightarrow x_2 = 1 \\
+   2x_1 + x_2 + x_3 &= 4 \Rightarrow x_1 = 2
+   \end{aligned}
+   $$
+
+**Výsledek:** $x_1 = 2, \, x_2 = 1, \, x_3 = -1$ ✓
+
+::: {.callout-note}
+## Kdy použít LU rozklad?
+
+- Když řešíme **více soustav** se stejnou maticí $\mathbf{A}$
+- Výpočet **determinantu**: $\det(\mathbf{A}) = \det(\mathbf{L}) \cdot \det(\mathbf{U}) = \prod u_{ii}$
+- Výpočet **inverze** matice
+:::
+
+---
+
+# Iterační metody {#sec-iteracni}
+
+Iterační metody generují **posloupnost přibližných řešení**, která konverguje k přesnému řešení.
+
+**Výhody:**
+
+- Efektivní pro **řídké matice** (hodně nulových prvků)
+- Menší paměťové nároky
+- Odolné vůči zaokrouhlovacím chybám
+
+**Nevýhody:**
+
+- Nemusí konvergovat (závisí na vlastnostech matice)
+- Dávají pouze **přibližné** řešení
+
+---
+
+## Jacobiho iterační metoda
+
+### Princip
+
+Z každé rovnice vyjádříme jednu neznámou:
+
+$$
+x_i^{(k+1)} = \frac{1}{a_{ii}}\left(b_i - \sum_{j \neq i} a_{ij}x_j^{(k)}\right)
+$$
+
+Všechny neznámé se aktualizují **současně** (používáme hodnoty z předchozí iterace).
+
+### Algoritmus
+
+```
+1. Zvol počáteční odhad x⁽⁰⁾ (často nulový vektor)
+
+2. Opakuj dokud |x⁽ᵏ⁺¹⁾ - x⁽ᵏ⁾| < ε:
+   
+   Pro i = 1 až n:
+      x_i⁽ᵏ⁺¹⁾ = (1/a_ii) * [b_i - součet(a_ij * x_j⁽ᵏ⁾ pro j ≠ i)]
+```
+
+### Příklad: Jacobiho metoda
+
+$$
+\begin{aligned}
+10x_1 + x_2 &= 11 \\
+2x_1 + 10x_2 &= 12
+\end{aligned}
+$$
+
+**Přepis:**
+$$
+\begin{aligned}
+x_1 &= \frac{1}{10}(11 - x_2) \\
+x_2 &= \frac{1}{10}(12 - 2x_1)
+\end{aligned}
+$$
+
+**Počáteční odhad:** $x_1^{(0)} = 0, \, x_2^{(0)} = 0$
+
+**Iterace 1:**
+$$
+\begin{aligned}
+x_1^{(1)} &= \frac{1}{10}(11 - 0) = 1.1 \\
+x_2^{(1)} &= \frac{1}{10}(12 - 0) = 1.2
+\end{aligned}
+$$
+
+**Iterace 2:**
+$$
+\begin{aligned}
+x_1^{(2)} &= \frac{1}{10}(11 - 1.2) = 0.98 \\
+x_2^{(2)} &= \frac{1}{10}(12 - 2 \cdot 1.1) = 0.98
+\end{aligned}
+$$
+
+**Iterace 3:**
+$$
+\begin{aligned}
+x_1^{(3)} &= \frac{1}{10}(11 - 0.98) = 1.002 \\
+x_2^{(3)} &= \frac{1}{10}(12 - 2 \cdot 0.98) = 1.004
+\end{aligned}
+$$
+
+Řešení konverguje k $x_1 = 1, \, x_2 = 1$ ✓
+
+---
+
+## Gauss-Seidelova iterační metoda
+
+### Princip
+
+**Vylepšení** Jacobiho metody — používáme **nejnovější dostupné** hodnoty.
+
+$$
+x_i^{(k+1)} = \frac{1}{a_{ii}}\left(b_i - \sum_{j < i} a_{ij}x_j^{(k+1)} - \sum_{j > i} a_{ij}x_j^{(k)}\right)
+$$
+
+Jakmile vypočteme novou hodnotu $x_i^{(k+1)}$, okamžitě ji používáme pro další neznámé.
+
+### Algoritmus
+
+```
+1. Zvol počáteční odhad x⁽⁰⁾
+
+2. Opakuj dokud |x⁽ᵏ⁺¹⁾ - x⁽ᵏ⁾| < ε:
+   
+   Pro i = 1 až n:
+      x_i⁽ᵏ⁺¹⁾ = (1/a_ii) * [b_i - součet(a_ij*x_j⁽ᵏ⁺¹⁾ pro j<i) 
+                                 - součet(a_ij*x_j⁽ᵏ⁾ pro j>i)]
+```
+
+### Příklad: Gauss-Seidel
+
+Stejná soustava:
+$$
+\begin{aligned}
+10x_1 + x_2 &= 11 \\
+2x_1 + 10x_2 &= 12
+\end{aligned}
+$$
+
+**Počáteční odhad:** $x_1^{(0)} = 0, \, x_2^{(0)} = 0$
+
+**Iterace 1:**
+$$
+\begin{aligned}
+x_1^{(1)} &= \frac{1}{10}(11 - 0) = 1.1 \\
+x_2^{(1)} &= \frac{1}{10}(12 - 2 \cdot 1.1) = 0.98 \quad \text{(použili jsme nové } x_1^{(1)}\text{!)}
+\end{aligned}
+$$
+
+**Iterace 2:**
+$$
+\begin{aligned}
+x_1^{(2)} &= \frac{1}{10}(11 - 0.98) = 1.002 \\
+x_2^{(2)} &= \frac{1}{10}(12 - 2 \cdot 1.002) = 0.9996
+\end{aligned}
+$$
+
+**Pozorování:** Konverguje **rychleji** než Jacobiho metoda! ✓
+
+---
+
+## Konvergence iteračních metod
+
+::: {.callout-important}
+## Podmínky konvergence
+
+Metoda konverguje, pokud matice $\mathbf{A}$ splňuje jednu z podmínek:
+
+1. **Striktně diagonálně dominantní:**
+   $$
+   |a_{ii}| > \sum_{j \neq i} |a_{ij}| \quad \text{pro všechna } i
+   $$
+   
+   (Diagonální prvek je větší než součet absolutních hodnot ostatních prvků v řádku)
+
+2. **Symetrická pozitivně definitní** matice
+
+:::
+
+### Srovnání Jacobi vs Gauss-Seidel
+
+| Vlastnost | Jacobiho | Gauss-Seidel |
+|-----------|----------|--------------|
+| **Rychlost konvergence** | Pomalejší | Rychlejší (obvykle) |
+| **Paměťové nároky** | Vyšší (2 vektory) | Nižší (1 vektor) |
+| **Paralelizace** | Snadná | Obtížná |
+| **Stabilita** | Konverguje/diverguje podle matice | Konverguje/diverguje podle matice |
+
+---
+
+# Srovnání všech metod {#sec-srovnani}
+
+| Metoda | Typ | Složitost | Výhody | Nevýhody | Použití |
+|--------|-----|-----------|--------|----------|---------|
+| **Cramer** | Přímá | $O(n! \cdot n)$ | Jednoduchá teorie | Velmi pomalá | Malé soustavy (n ≤ 3) |
+| **Gauss** | Přímá | $O(n^3)$ | Univerzální, stabilní | — | Obecné soustavy |
+| **LU rozklad** | Přímá | $O(n^3)$ + $O(n^2)$ per řešení | Efektivní pro více pravých stran | Náročná na paměť | Více soustav, inverze |
+| **Jacobi** | Iterační | $O(kn^2)$ | Paralelizovatelná | Pomalá konvergence | Paralelní výpočty |
+| **Gauss-Seidel** | Iterační | $O(kn^2)$ | Rychlejší než Jacobi, menší paměť | Špatně paralelizovatelná | Řídké matice |
+
+kde $k$ = počet iterací do konvergence
+
+---

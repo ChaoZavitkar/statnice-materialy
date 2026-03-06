@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 3: Spojové datové struktury</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+    <link rel="stylesheet" href="../../css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <style>
+        pre code.hljs { border-radius: 0.375rem; }
+        pre { margin-bottom: 1rem; }
+        h2 { margin-top: 2rem; }
+        h3 { margin-top: 1.5rem; }
+
+        /* ── Shared viz styles ── */
+        .viz-box {
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            background: #fafafa;
+            overflow-x: auto;
+        }
+        .viz-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        .viz-btn {
+            padding: 0.4rem 1rem;
+            border: none;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            min-height: 42px;
+            transition: opacity 0.15s;
+        }
+        .viz-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+        .viz-btn-primary   { background: #0d6efd; color: #fff; }
+        .viz-btn-primary:hover:not(:disabled)   { background: #0b5ed7; }
+        .viz-btn-secondary { background: #6c757d; color: #fff; }
+        .viz-btn-secondary:hover:not(:disabled) { background: #5c636a; }
+        .viz-btn-danger    { background: #dc3545; color: #fff; }
+        .viz-btn-danger:hover:not(:disabled)    { background: #bb2d3b; }
+        .viz-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.75rem; align-items: center; }
+        .step-counter { font-size: 0.82rem; color: #6c757d; }
+        .viz-msg {
+            margin-top: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            background: #e9ecef;
+            border-radius: 0.375rem;
+            font-size: 0.9rem;
+            min-height: 2.5rem;
+        }
+        .viz-legend { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0.5rem 0 0; }
+        .viz-legend-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; }
+        .viz-legend-dot { width: 14px; height: 14px; border-radius: 3px; border: 1.5px solid; flex-shrink: 0; }
+
+        /* ── Linked list viz ── */
+        .ll-chain {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            min-height: 56px;
+            padding: 4px 0;
+        }
+        .ll-node {
+            display: flex;
+            border: 2px solid #6c757d;
+            border-radius: 5px;
+            overflow: hidden;
+            font-weight: 600;
+            background: #fff;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .ll-node.ll-new {
+            border-color: #198754;
+            background: #d1e7dd;
+            animation: llSlide 0.3s ease-out;
+        }
+        @keyframes llSlide {
+            from { opacity: 0; transform: translateX(-16px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        .ll-data {
+            padding: 8px 12px;
+            border-right: 1px solid #ced4da;
+            font-size: 0.95rem;
+        }
+        .ll-ptr {
+            padding: 8px 8px;
+            font-size: 0.8rem;
+            color: #0d6efd;
+            display: flex;
+            align-items: center;
+        }
+        .ll-sep {
+            font-size: 1.3rem;
+            color: #6c757d;
+            line-height: 1;
+        }
+        .ll-null {
+            font-size: 0.85rem;
+            color: #6c757d;
+            font-style: italic;
+        }
+        .ll-head-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #0d6efd;
+            text-align: center;
+            margin-top: 2px;
+        }
+
+        /* ── BST svg ── */
+        #bst-svg { max-width: 100%; height: auto; display: block; }
+        .bst-node-circle { transition: fill 0.25s, stroke 0.25s; }
+
+        /* Mobile */
+        @media (max-width: 576px) {
+            .viz-btn { min-height: 44px; font-size: 0.85rem; padding: 0.4rem 0.75rem; }
+            .ll-data { padding: 7px 9px; font-size: 0.88rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container py-4">
+
+    <h1>Okruh 3: Spojové datové struktury</h1>
+    <p><a href="../szztp.html" class="link-secondary link-opacity-50-hover link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">&larr; Zpět</a></p>
+
+    <h2>Co se naučíte</h2>
+    <ul>
+        <li>Jednosměrný spojový seznam (Linked List)</li>
+        <li>Základní operace: vkládání, výmaz, vyhledávání</li>
+        <li>Binární strom (Binary Tree)</li>
+        <li>Operace nad binárním stromem</li>
+        <li>Časová složitost všech operací</li>
+        <li>Kdy použít spojové struktury místo polí/seznamů</li>
+    </ul>
+
+    <hr>
+
+    <h2>Co jsou to spojové struktury</h2>
+
+    <h3>Problém s klasickými seznamy (pole)</h3>
+
+    <pre><code class="language-python"># Klasický Python seznam (interně pole)
+seznam = [10, 20, 30, 40, 50]
+
+# V paměti: [10][20][30][40][50] - vedle sebe, souvislý blok
+#            ↑   ↑   ↑   ↑   ↑
+#          index 0,1,2,3,4</code></pre>
+
+    <p><strong>Problém:</strong> Co když chcete vložit prvek doprostřed?</p>
+
+    <pre><code class="language-python">seznam.insert(2, 25)  # Vložit 25 na pozici 2
+
+# Musí se posunout všechny prvky doprava!
+# [10][20][  ][30][40][50]  ← udělat místo
+# [10][20][25][30][40][50]  ← vložit
+#              ↑   ↑   ↑
+#         Všechny se posunuly → O(n) - POMALÉ!</code></pre>
+
+    <h3>Řešení: Spojový seznam</h3>
+    <p><strong>Nápad:</strong> Prvky nemusí být vedle sebe – každý prvek "ukáže" na další.</p>
+
+    <pre><code>[10|→] → [20|→] → [30|→] → [40|→] → [50|×]
+  ↑
+data | odkaz</code></pre>
+
+    <p><strong>Výhoda:</strong> Vložení doprostřed = jen změna odkazů! O(1)</p>
+
+    <hr>
+
+    <h2>1. Jednosměrný spojový seznam</h2>
+
+    <h3>Struktura uzlu (Node)</h3>
+    <p>Každý prvek (uzel) obsahuje:</p>
+    <ol>
+        <li><strong>Data</strong> – hodnota, kterou ukládáme</li>
+        <li><strong>Odkaz (next)</strong> – ukazatel na další uzel</li>
+    </ol>
+
+    <pre><code class="language-python">class Node:
+    """Jeden uzel spojového seznamu"""
+    def __init__(self, data):
+        self.data = data      # Uložená hodnota
+        self.next = None      # Odkaz na další uzel
+
+uzel1 = Node(10)
+print(uzel1.data)   # 10
+print(uzel1.next)   # None</code></pre>
+
+    <h3>Propojení uzlů</h3>
+
+    <pre><code class="language-python">uzel1 = Node(10)
+uzel2 = Node(20)
+uzel3 = Node(30)
+
+uzel1.next = uzel2    # 10 ukazuje na 20
+uzel2.next = uzel3    # 20 ukazuje na 30
+# Máme: 10 → 20 → 30</code></pre>
+
+    <h3>Kompletní třída LinkedList</h3>
+
+    <pre><code class="language-python">class LinkedList:
+    def __init__(self):
+        self.head = None  # Začátek seznamu
+
+    def vypis(self):
+        aktualni = self.head
+        while aktualni is not None:
+            print(aktualni.data, end=" → ")
+            aktualni = aktualni.next
+        print("None")
+
+seznam = LinkedList()
+seznam.head = Node(10)
+seznam.head.next = Node(20)
+seznam.head.next.next = Node(30)
+
+seznam.vypis()  # 10 → 20 → 30 → None</code></pre>
+
+    <hr>
+
+    <h2>2. Vkládání do spojového seznamu</h2>
+
+    <h3>A) Vložení na ZAČÁTEK (prepend) – O(1)</h3>
+
+    <pre><code class="language-python">def vloz_na_zacatek(self, data):
+    novy_uzel = Node(data)
+    novy_uzel.next = self.head  # Nový ukazuje na starý head
+    self.head = novy_uzel       # Nový uzel je nový head</code></pre>
+
+    <pre><code>Před: head → [10|→] → [20|×]
+
+Krok 1: nový_uzel = Node(5)
+        [5|?]
+
+Krok 2: nový_uzel.next = head
+        [5|→] → [10|→] → [20|×]
+
+Krok 3: head = nový_uzel
+  head → [5|→] → [10|→] → [20|×]</code></pre>
+
+    <h3>B) Vložení na KONEC (append) – O(n)</h3>
+
+    <pre><code class="language-python">def vloz_na_konec(self, data):
+    novy_uzel = Node(data)
+    if self.head is None:
+        self.head = novy_uzel
+        return
+    aktualni = self.head
+    while aktualni.next is not None:
+        aktualni = aktualni.next
+    aktualni.next = novy_uzel</code></pre>
+
+    <h3>Interaktivní vizualizace spojového seznamu</h3>
+    <p>Zkoušej přidávat a odebírat uzly ze začátku.</p>
+
+    <div class="viz-box">
+        <div class="viz-label">Spojový seznam (head je vlevo)</div>
+        <div id="ll-head-label-wrap" style="display:none; margin-bottom:2px;">
+            <span class="ll-head-label">head</span>
+        </div>
+        <div class="ll-chain" id="ll-chain">
+            <!-- rendered by JS -->
+        </div>
+        <div class="viz-btns">
+            <button class="viz-btn viz-btn-primary" onclick="llPrepend()">Přidej na začátek</button>
+            <button class="viz-btn viz-btn-danger"  onclick="llRemoveFirst()" id="ll-rem-btn">Odstraň ze začátku</button>
+            <button class="viz-btn viz-btn-secondary" onclick="llReset()">Reset</button>
+        </div>
+        <div class="viz-msg" id="ll-msg">Klikni na tlačítka pro práci se seznamem.</div>
+    </div>
+
+    <h3>C) Vložení DOPROSTŘED (na konkrétní pozici) – O(n)</h3>
+
+    <pre><code class="language-python">def vloz_na_pozici(self, data, pozice):
+    if pozice == 0:
+        self.vloz_na_zacatek(data)
+        return
+    novy_uzel = Node(data)
+    aktualni = self.head
+    for i in range(pozice - 1):
+        if aktualni is None:
+            return
+        aktualni = aktualni.next
+    novy_uzel.next = aktualni.next
+    aktualni.next = novy_uzel</code></pre>
+
+    <hr>
+
+    <h2>3. Výmaz ze spojového seznamu</h2>
+
+    <h3>A) Výmaz ze ZAČÁTKU – O(1)</h3>
+
+    <pre><code class="language-python">def vymaz_zacatek(self):
+    if self.head is None:
+        return
+    self.head = self.head.next  # Head je teď druhý uzel</code></pre>
+
+    <h3>B) Výmaz z KONCE – O(n)</h3>
+
+    <pre><code class="language-python">def vymaz_konec(self):
+    if self.head is None or self.head.next is None:
+        self.head = None
+        return
+    aktualni = self.head
+    while aktualni.next.next is not None:
+        aktualni = aktualni.next
+    aktualni.next = None</code></pre>
+
+    <h3>C) Výmaz KONKRÉTNÍ HODNOTY – O(n)</h3>
+
+    <pre><code class="language-python">def vymaz_hodnotu(self, hodnota):
+    if self.head is None:
+        return
+    if self.head.data == hodnota:
+        self.head = self.head.next
+        return
+    aktualni = self.head
+    while aktualni.next is not None:
+        if aktualni.next.data == hodnota:
+            aktualni.next = aktualni.next.next  # Přeskoč uzel
+            return
+        aktualni = aktualni.next</code></pre>
+
+    <pre><code>Před: head → [10|→] → [20|→] → [30|→] → [40|×]
+                        ↑
+                   chceme vymazat 20
+
+Krok 1: Najdi uzel PŘED hodnotou 20 (je to uzel 10)
+Krok 2: Přesměruj: 10.next = 20.next = 30
+
+Po:   head → [10|→] → [30|→] → [40|×]
+               (20 je nedostupný, uvolní se z paměti)</code></pre>
+
+    <hr>
+
+    <h2>4. Vyhledávání ve spojovém seznamu – O(n)</h2>
+
+    <pre><code class="language-python">def vyhledej(self, hodnota):
+    aktualni = self.head
+    pozice = 0
+    while aktualni is not None:
+        if aktualni.data == hodnota:
+            return pozice
+        aktualni = aktualni.next
+        pozice += 1
+    return -1</code></pre>
+
+    <pre><code>head → [10|→] → [20|→] → [30|→] → [40|×]
+        |         |         |
+    10==30?   20==30?   30==30? ANO! Vrát pozici 2</code></pre>
+
+    <hr>
+
+    <h2>Srovnání: Pole vs Spojový seznam</h2>
+
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr>
+                <th>Operace</th>
+                <th>Pole (Python list)</th>
+                <th>Spojový seznam</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Přístup na index i</td><td><strong>O(1)</strong></td><td>O(n)</td></tr>
+            <tr><td>Vyhledávání</td><td>O(n)</td><td>O(n)</td></tr>
+            <tr><td>Vložení na začátek</td><td>O(n)</td><td><strong>O(1)</strong></td></tr>
+            <tr><td>Vložení na konec</td><td><strong>O(1)</strong></td><td>O(n)*</td></tr>
+            <tr><td>Vložení doprostřed</td><td>O(n)</td><td>O(n)</td></tr>
+            <tr><td>Výmaz ze začátku</td><td>O(n)</td><td><strong>O(1)</strong></td></tr>
+            <tr><td>Výmaz z konce</td><td><strong>O(1)</strong></td><td>O(n)</td></tr>
+            <tr><td>Výmaz doprostřed</td><td>O(n)</td><td>O(n)</td></tr>
+        </tbody>
+    </table>
+    </div>
+    <p><em>*Pokud si pamatujeme odkaz na konec (tail), je to O(1)</em></p>
+
+    <h3>Kdy použít spojový seznam?</h3>
+    <p><strong>Vhodný:</strong></p>
+    <ul>
+        <li>Často vkládáš nebo mažeš na začátku</li>
+        <li>Nevíš předem velikost dat</li>
+        <li>Nepotřebuješ přímý přístup k prvkům podle indexu</li>
+    </ul>
+    <p><strong>Nevhodný:</strong></p>
+    <ul>
+        <li>Potřebuješ rychlý přístup na index (<code>array[5]</code>)</li>
+        <li>Málo vkládáš/mažeš, hodně čteš</li>
+        <li>Paměť je omezená (spojový seznam má overhead – pointer navíc)</li>
+    </ul>
+
+    <hr>
+
+    <h2>Binární strom</h2>
+
+    <h3>Co je to binární strom?</h3>
+    <p>Strom = hierarchická struktura, kde každý uzel může mít maximálně <strong>2 děti</strong> (levé a pravé).</p>
+
+    <h3>Terminologie</h3>
+    <pre><code>           [50]        ← ROOT (kořen)
+          /    \
+       [30]    [70]    ← Vnitřní uzly
+       /  \      \
+    [20] [40]   [80]   ← LISTY (nemají děti)</code></pre>
+
+    <ul>
+        <li><strong>Root (kořen):</strong> Nejvyšší uzel (50)</li>
+        <li><strong>Parent (rodič):</strong> Uzel, který má děti</li>
+        <li><strong>Child (dítě):</strong> Uzel pod rodičem</li>
+        <li><strong>Leaf (list):</strong> Uzel bez dětí (20, 40, 80)</li>
+        <li><strong>Výška stromu:</strong> Nejdelší cesta od kořene k listu</li>
+    </ul>
+
+    <h3>Struktura uzlu stromu</h3>
+
+    <pre><code class="language-python">class TreeNode:
+    def __init__(self, data):
+        self.data  = data
+        self.left  = None   # Levé dítě
+        self.right = None   # Pravé dítě
+
+root = TreeNode(50)
+root.left  = TreeNode(30)
+root.right = TreeNode(70)
+root.left.left  = TreeNode(20)
+root.left.right = TreeNode(40)
+root.right.right = TreeNode(80)</code></pre>
+
+    <hr>
+
+    <h2>5. Operace nad binárním stromem</h2>
+
+    <h3>A) Vkládání do BST (Binárního Vyhledávacího Stromu)</h3>
+    <p><strong>Pravidlo BST:</strong> Levý podstrom &lt; rodič &lt; pravý podstrom</p>
+
+    <pre><code class="language-python">def vloz_do_bst(root, data):
+    if root is None:
+        return TreeNode(data)
+    if data &lt; root.data:
+        root.left  = vloz_do_bst(root.left,  data)
+    else:
+        root.right = vloz_do_bst(root.right, data)
+    return root</code></pre>
+
+    <h3>Interaktivní vizualizace vkládání do BST</h3>
+    <p>Sleduj, jak se strom buduje vložením hodnot 50, 30, 70, 20, 40, 80.</p>
+
+    <div class="viz-box">
+        <div class="viz-label">Binární vyhledávací strom – vkládání hodnot</div>
+        <svg id="bst-svg" width="440" height="265" viewBox="0 0 440 265">
+            <!-- Edges -->
+            <line id="bst-e-50-30" x1="220" y1="40" x2="110" y2="130" stroke="#6c757d" stroke-width="2" display="none"/>
+            <line id="bst-e-50-70" x1="220" y1="40" x2="330" y2="130" stroke="#6c757d" stroke-width="2" display="none"/>
+            <line id="bst-e-30-20" x1="110" y1="130" x2="55"  y2="222" stroke="#6c757d" stroke-width="2" display="none"/>
+            <line id="bst-e-30-40" x1="110" y1="130" x2="165" y2="222" stroke="#6c757d" stroke-width="2" display="none"/>
+            <line id="bst-e-70-80" x1="330" y1="130" x2="385" y2="222" stroke="#6c757d" stroke-width="2" display="none"/>
+            <!-- Nodes: circle + text, initially hidden -->
+            <!-- 50 -->
+            <circle id="bst-n-50" cx="220" cy="40"  r="24" fill="#cfe2ff" stroke="#0d6efd" stroke-width="2" class="bst-node-circle" display="none"/>
+            <text   id="bst-t-50" x="220"  y="45"  text-anchor="middle" font-size="14" font-weight="bold" display="none">50</text>
+            <!-- 30 -->
+            <circle id="bst-n-30" cx="110" cy="130" r="24" fill="#cfe2ff" stroke="#0d6efd" stroke-width="2" class="bst-node-circle" display="none"/>
+            <text   id="bst-t-30" x="110"  y="135" text-anchor="middle" font-size="14" font-weight="bold" display="none">30</text>
+            <!-- 70 -->
+            <circle id="bst-n-70" cx="330" cy="130" r="24" fill="#cfe2ff" stroke="#0d6efd" stroke-width="2" class="bst-node-circle" display="none"/>
+            <text   id="bst-t-70" x="330"  y="135" text-anchor="middle" font-size="14" font-weight="bold" display="none">70</text>
+            <!-- 20 -->
+            <circle id="bst-n-20" cx="55"  cy="222" r="24" fill="#cfe2ff" stroke="#0d6efd" stroke-width="2" class="bst-node-circle" display="none"/>
+            <text   id="bst-t-20" x="55"   y="227" text-anchor="middle" font-size="14" font-weight="bold" display="none">20</text>
+            <!-- 40 -->
+            <circle id="bst-n-40" cx="165" cy="222" r="24" fill="#cfe2ff" stroke="#0d6efd" stroke-width="2" class="bst-node-circle" display="none"/>
+            <text   id="bst-t-40" x="165"  y="227" text-anchor="middle" font-size="14" font-weight="bold" display="none">40</text>
+            <!-- 80 -->
+            <circle id="bst-n-80" cx="385" cy="222" r="24" fill="#cfe2ff" stroke="#0d6efd" stroke-width="2" class="bst-node-circle" display="none"/>
+            <text   id="bst-t-80" x="385"  y="227" text-anchor="middle" font-size="14" font-weight="bold" display="none">80</text>
+        </svg>
+        <div class="viz-legend">
+            <div class="viz-legend-item">
+                <div class="viz-legend-dot" style="background:#d1e7dd;border-color:#198754;"></div>
+                Právě vloženo
+            </div>
+            <div class="viz-legend-item">
+                <div class="viz-legend-dot" style="background:#fff3cd;border-color:#ffc107;"></div>
+                Cesta porovnání
+            </div>
+            <div class="viz-legend-item">
+                <div class="viz-legend-dot" style="background:#cfe2ff;border-color:#0d6efd;"></div>
+                Vloženo dříve
+            </div>
+        </div>
+        <div class="viz-btns">
+            <button class="viz-btn viz-btn-primary" id="bst-next" onclick="bstNext()">Vlož další</button>
+            <button class="viz-btn viz-btn-secondary" onclick="bstReset()">Reset</button>
+            <span class="step-counter" id="bst-step">Krok 0 / 6</span>
+        </div>
+        <div class="viz-msg" id="bst-msg">Strom je prázdný. Klikni "Vlož další" pro vkládání hodnot [50, 30, 70, 20, 40, 80].</div>
+    </div>
+
+    <h3>Časová složitost vkládání</h3>
+    <ul>
+        <li><strong>Vyvážený strom:</strong> O(log n) – půlíme prostor jako binární vyhledávání</li>
+        <li><strong>Nevyvážený strom:</strong> O(n) – může degenerovat na spojový seznam</li>
+    </ul>
+
+    <pre><code>Vyvážený:           Nevyvážený (degenerovaný):
+      [50]                  [10]
+     /    \                    \
+  [30]    [70]               [20]
+  /  \      \                   \
+[20][40]   [80]               [30]
+                                 \
+Výška: 2, O(log n)             [40]
+
+                              Výška: 3, O(n)</code></pre>
+
+    <h3>B) Vyhledávání v BST</h3>
+
+    <pre><code class="language-python">def vyhledej_v_bst(root, hodnota):
+    if root is None:
+        return False
+    if root.data == hodnota:
+        return True
+    if hodnota &lt; root.data:
+        return vyhledej_v_bst(root.left,  hodnota)
+    else:
+        return vyhledej_v_bst(root.right, hodnota)</code></pre>
+
+    <pre><code>Hledáme 40:
+    [50]    40 &lt; 50 → doleva
+    /  \
+  [30] [70]  40 &gt; 30 → doprava
+  /  \
+[20][40]    40 == 40 → NALEZENO!</code></pre>
+
+    <h3>C) Výmaz z BST – tři případy</h3>
+
+    <p><strong>Případ 1: Uzel je list (nemá děti)</strong> – prostě odstraníme.</p>
+    <p><strong>Případ 2: Uzel má jedno dítě</strong> – nahradíme ho jeho dítětem.</p>
+    <p><strong>Případ 3: Uzel má dvě děti</strong> – nahradíme nejmenší hodnotou z pravého podstromu.</p>
+
+    <pre><code class="language-python">def vymaz_z_bst(root, hodnota):
+    if root is None:
+        return None
+    if hodnota &lt; root.data:
+        root.left  = vymaz_z_bst(root.left,  hodnota)
+    elif hodnota &gt; root.data:
+        root.right = vymaz_z_bst(root.right, hodnota)
+    else:
+        # Případ 1: list
+        if root.left is None and root.right is None:
+            return None
+        # Případ 2: jedno dítě
+        if root.left  is None: return root.right
+        if root.right is None: return root.left
+        # Případ 3: dvě děti
+        min_uzel   = najdi_minimum(root.right)
+        root.data  = min_uzel.data
+        root.right = vymaz_z_bst(root.right, min_uzel.data)
+    return root
+
+def najdi_minimum(root):
+    while root.left is not None:
+        root = root.left
+    return root</code></pre>
+
+    <hr>
+
+    <h2>6. Průchody stromem</h2>
+
+    <h3>A) In-order (LDR) – Levý &rarr; Data &rarr; Pravý</h3>
+
+    <pre><code class="language-python">def inorder(root):
+    if root is not None:
+        inorder(root.left)
+        print(root.data, end=" ")
+        inorder(root.right)</code></pre>
+
+    <pre><code>       [50]
+       /  \
+     [30] [70]
+     /  \    \
+   [20][40]  [80]
+
+In-order: 20 30 40 50 70 80  ← seřazené!</code></pre>
+
+    <h3>B) Pre-order (DLR) – Data &rarr; Levý &rarr; Pravý</h3>
+
+    <pre><code class="language-python">def preorder(root):
+    if root is not None:
+        print(root.data, end=" ")
+        preorder(root.left)
+        preorder(root.right)</code></pre>
+
+    <pre><code>Pre-order: 50 30 20 40 70 80  ← rodič před dětmi</code></pre>
+
+    <h3>C) Post-order (LRD) – Levý &rarr; Pravý &rarr; Data</h3>
+
+    <pre><code class="language-python">def postorder(root):
+    if root is not None:
+        postorder(root.left)
+        postorder(root.right)
+        print(root.data, end=" ")</code></pre>
+
+    <pre><code>Post-order: 20 40 30 80 70 50  ← děti před rodičem</code></pre>
+
+    <p><strong>Použití průchodů:</strong></p>
+    <ul>
+        <li><strong>In-order:</strong> Získání seřazených dat z BST</li>
+        <li><strong>Pre-order:</strong> Kopírování stromu, prefixová notace</li>
+        <li><strong>Post-order:</strong> Mazání stromu (smažu nejdřív děti, pak rodiče)</li>
+    </ul>
+
+    <hr>
+
+    <h2>Shrnutí pro zkoušku</h2>
+
+    <h3>Spojový seznam – časová složitost</h3>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr><th>Operace</th><th>Složitost</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Vložení na začátek</td><td>O(1)</td></tr>
+            <tr><td>Vložení na konec</td><td>O(n)</td></tr>
+            <tr><td>Výmaz ze začátku</td><td>O(1)</td></tr>
+            <tr><td>Výmaz z konce</td><td>O(n)</td></tr>
+            <tr><td>Vyhledávání</td><td>O(n)</td></tr>
+            <tr><td>Přístup na index</td><td>O(n)</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Binární vyhledávací strom – časová složitost</h3>
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr><th>Operace</th><th>Vyvážený</th><th>Nevyvážený</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Vložení</td><td>O(log n)</td><td>O(n)</td></tr>
+            <tr><td>Vyhledávání</td><td>O(log n)</td><td>O(n)</td></tr>
+            <tr><td>Výmaz</td><td>O(log n)</td><td>O(n)</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <h3>Klíčové rozdíly</h3>
+    <p><strong>Spojový seznam:</strong> lineární struktura, každý uzel max 1 následník, rychlé operace na začátku.</p>
+    <p><strong>Binární strom:</strong> hierarchická struktura, každý uzel max 2 děti, rychlé vyhledávání (pokud vyvážený).</p>
+
+    <h3>Otázky ke zkoušce</h3>
+
+    <p><strong>1. Jaká je výhoda spojového seznamu oproti poli?</strong></p>
+    <ul><li>Vložení/výmaz na začátku je O(1); dynamická velikost bez realokace</li></ul>
+
+    <p><strong>2. Kdy je spojový seznam pomalejší než pole?</strong></p>
+    <ul><li>Přístup na index: O(n) vs O(1); pole má lepší cache lokalitu</li></ul>
+
+    <p><strong>3. Co je to BST a jaké má vlastnosti?</strong></p>
+    <ul><li>Levý podstrom &lt; rodič &lt; pravý podstrom; umožňuje rychlé vyhledávání O(log n)</li></ul>
+
+    <p><strong>4. Proč může BST degenerovat na O(n)?</strong></p>
+    <ul><li>Pokud vkládáme seřazená data, strom se stane nevyváženým (jako spojový seznam)</li></ul>
+
+    <p><strong>5. Jaké jsou průchody stromem a k čemu slouží?</strong></p>
+    <ul>
+        <li>In-order: seřazené hodnoty z BST</li>
+        <li>Pre-order: rodič před dětmi</li>
+        <li>Post-order: děti před rodičem (mazání stromu)</li>
+    </ul>
+
+    <hr>
+
+    <h2>Praktické příklady</h2>
+
+    <pre><code class="language-python">class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class LinkedList:
+    def __init__(self):
+        self.head = None
+
+    def vloz_na_zacatek(self, data):
+        novy = Node(data)
+        novy.next = self.head
+        self.head = novy
+
+    def vypis(self):
+        aktualni = self.head
+        while aktualni:
+            print(aktualni.data, end=" → ")
+            aktualni = aktualni.next
+        print("None")
+
+seznam = LinkedList()
+seznam.vloz_na_zacatek(30)
+seznam.vloz_na_zacatek(20)
+seznam.vloz_na_zacatek(10)
+seznam.vypis()  # 10 → 20 → 30 → None</code></pre>
+
+    <pre><code class="language-python">class TreeNode:
+    def __init__(self, data):
+        self.data  = data
+        self.left  = None
+        self.right = None
+
+def vloz(root, data):
+    if root is None:
+        return TreeNode(data)
+    if data &lt; root.data:
+        root.left  = vloz(root.left,  data)
+    else:
+        root.right = vloz(root.right, data)
+    return root
+
+def inorder(root):
+    if root:
+        inorder(root.left)
+        print(root.data, end=" ")
+        inorder(root.right)
+
+root = None
+for h in [50, 30, 70, 20, 40, 80]:
+    root = vloz(root, h)
+
+inorder(root)  # 20 30 40 50 70 80 (seřazené!)</code></pre>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+
+<script>
+/* ══════════════════════════════════════
+   LINKED LIST INTERACTIVE
+══════════════════════════════════════ */
+const LL_VALUES = [5, 15, 35, 45, 55, 65];
+let llState = [10, 20, 30];
+let llValIdx = 0;
+let llNewIdx = -1; // index of newly added node for animation
+
+function llPrepend() {
+    if (llState.length >= 7) {
+        document.getElementById('ll-msg').innerHTML = 'Seznam je plný (max 7 uzlů). Nejprve odstraň uzel.';
+        return;
+    }
+    const val = LL_VALUES[llValIdx % LL_VALUES.length];
+    llValIdx++;
+    llState.unshift(val);
+    llNewIdx = 0;
+    renderLL();
+    document.getElementById('ll-msg').innerHTML =
+        'Přidán uzel <strong>' + val + '</strong> na začátek. Nový head → složitost: <strong>O(1)</strong>.';
+}
+
+function llRemoveFirst() {
+    if (llState.length === 0) {
+        document.getElementById('ll-msg').innerHTML = 'Seznam je prázdný!';
+        return;
+    }
+    const removed = llState.shift();
+    llNewIdx = -1;
+    renderLL();
+    document.getElementById('ll-msg').innerHTML =
+        'Odstraněn uzel <strong>' + removed + '</strong> ze začátku. Head přesměrován → složitost: <strong>O(1)</strong>.';
+}
+
+function llReset() {
+    llState = [10, 20, 30];
+    llValIdx = 0;
+    llNewIdx = -1;
+    renderLL();
+    document.getElementById('ll-msg').textContent = 'Klikni na tlačítka pro práci se seznamem.';
+}
+
+function renderLL() {
+    const chain = document.getElementById('ll-chain');
+    chain.innerHTML = '';
+
+    const remBtn = document.getElementById('ll-rem-btn');
+    remBtn.disabled = (llState.length === 0);
+
+    if (llState.length === 0) {
+        const empty = document.createElement('span');
+        empty.className = 'text-muted fst-italic';
+        empty.textContent = 'Prázdný seznam';
+        chain.appendChild(empty);
+        return;
+    }
+
+    llState.forEach((val, i) => {
+        // Head label above first node
+        if (i === 0) {
+            const wrap = document.createElement('div');
+            wrap.style.display = 'flex';
+            wrap.style.flexDirection = 'column';
+            wrap.style.alignItems = 'center';
+
+            const lbl = document.createElement('div');
+            lbl.className = 'll-head-label';
+            lbl.textContent = 'head';
+            wrap.appendChild(lbl);
+
+            const node = document.createElement('div');
+            node.className = 'll-node' + (i === llNewIdx ? ' ll-new' : '');
+            node.innerHTML = '<span class="ll-data">' + val + '</span><span class="ll-ptr">&rarr;</span>';
+            wrap.appendChild(node);
+
+            chain.appendChild(wrap);
+        } else {
+            const sep = document.createElement('span');
+            sep.className = 'll-sep';
+            sep.textContent = '\u2192';
+            chain.appendChild(sep);
+
+            const node = document.createElement('div');
+            node.className = 'll-node' + (i === llNewIdx ? ' ll-new' : '');
+            node.innerHTML = '<span class="ll-data">' + val + '</span><span class="ll-ptr">&rarr;</span>';
+            chain.appendChild(node);
+        }
+    });
+
+    // "→ None" at end
+    const sep = document.createElement('span');
+    sep.className = 'll-sep';
+    sep.textContent = '\u2192';
+    chain.appendChild(sep);
+
+    const nullSpan = document.createElement('span');
+    nullSpan.className = 'll-null';
+    nullSpan.textContent = 'None';
+    chain.appendChild(nullSpan);
+}
+
+/* ══════════════════════════════════════
+   BST INSERT INTERACTIVE
+══════════════════════════════════════ */
+const BST_STEPS = [
+    { inserted: [],                  latest: null, path: [],
+      msg: 'Strom je prázdný. Klikni "Vlož další" pro vkládání hodnot [50, 30, 70, 20, 40, 80].' },
+    { inserted: [50],                latest: 50,   path: [],
+      msg: 'Vkládáme <strong>50</strong>: strom je prázdný &rarr; 50 se stane kořenem.' },
+    { inserted: [50, 30],            latest: 30,   path: [50],
+      msg: 'Vkládáme <strong>30</strong>: 30 &lt; 50 &rarr; jdeme doleva. 30 vloženo jako levé dítě 50.' },
+    { inserted: [50, 30, 70],        latest: 70,   path: [50],
+      msg: 'Vkládáme <strong>70</strong>: 70 &gt; 50 &rarr; jdeme doprava. 70 vloženo jako pravé dítě 50.' },
+    { inserted: [50, 30, 70, 20],    latest: 20,   path: [50, 30],
+      msg: 'Vkládáme <strong>20</strong>: 20 &lt; 50 &rarr; doleva (k 30), 20 &lt; 30 &rarr; doleva. 20 vloženo.' },
+    { inserted: [50, 30, 70, 20, 40], latest: 40,  path: [50, 30],
+      msg: 'Vkládáme <strong>40</strong>: 40 &lt; 50 &rarr; doleva (k 30), 40 &gt; 30 &rarr; doprava. 40 vloženo.' },
+    { inserted: [50, 30, 70, 20, 40, 80], latest: 80, path: [50, 70],
+      msg: 'Vkládáme <strong>80</strong>: 80 &gt; 50 &rarr; doprava (k 70), 80 &gt; 70 &rarr; doprava. 80 vloženo. Strom je kompletní.' },
+];
+
+const BST_EDGES = [
+    { id:'bst-e-50-30', from:50, to:30 },
+    { id:'bst-e-50-70', from:50, to:70 },
+    { id:'bst-e-30-20', from:30, to:20 },
+    { id:'bst-e-30-40', from:30, to:40 },
+    { id:'bst-e-70-80', from:70, to:80 },
+];
+const BST_NODES_LIST = [50, 30, 70, 20, 40, 80];
+
+let bstStep = 0;
+
+function bstNext() { if (bstStep < BST_STEPS.length - 1) { bstStep++; renderBST(); } }
+function bstReset() { bstStep = 0; renderBST(); }
+
+function renderBST() {
+    const s = BST_STEPS[bstStep];
+
+    // Update nodes
+    BST_NODES_LIST.forEach(val => {
+        const circ = document.getElementById('bst-n-' + val);
+        const text = document.getElementById('bst-t-' + val);
+        const visible = s.inserted.includes(val);
+        circ.setAttribute('display', visible ? 'block' : 'none');
+        text.setAttribute('display', visible ? 'block' : 'none');
+        if (visible) {
+            if (val === s.latest) {
+                circ.setAttribute('fill', '#d1e7dd');
+                circ.setAttribute('stroke', '#198754');
+            } else if (s.path.includes(val)) {
+                circ.setAttribute('fill', '#fff3cd');
+                circ.setAttribute('stroke', '#ffc107');
+            } else {
+                circ.setAttribute('fill', '#cfe2ff');
+                circ.setAttribute('stroke', '#0d6efd');
+            }
+        }
+    });
+
+    // Update edges
+    BST_EDGES.forEach(e => {
+        const el = document.getElementById(e.id);
+        const visible = s.inserted.includes(e.from) && s.inserted.includes(e.to);
+        el.setAttribute('display', visible ? 'block' : 'none');
+        // Highlight edge if it leads to the newly inserted node
+        const isPathEdge = s.path.includes(e.from) && e.to === s.latest;
+        el.setAttribute('stroke', isPathEdge ? '#ffc107' : '#6c757d');
+        el.setAttribute('stroke-width', isPathEdge ? '3' : '2');
+    });
+
+    document.getElementById('bst-msg').innerHTML = s.msg;
+    document.getElementById('bst-next').disabled = (bstStep === BST_STEPS.length - 1);
+    document.getElementById('bst-step').textContent = 'Krok ' + bstStep + ' / ' + (BST_STEPS.length - 1);
+}
+
+// Init on load
+renderLL();
+renderBST();
+</script>
+</body>
+</html>

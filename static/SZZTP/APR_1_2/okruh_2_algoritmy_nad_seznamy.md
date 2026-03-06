@@ -1,6 +1,6 @@
 # Okruh 2: Komplexní algoritmy nad seznamy
 
-## 📚 Co se naučíte
+## Co se naučíte
 - Filtrování a vyhledávání v seznamech
 - Jednoduché třídění (selection sort, insertion sort)
 - Binární vyhledávání (rychlé vyhledávání v seřazeném seznamu)
@@ -9,7 +9,7 @@
 
 ---
 
-## 1️⃣ FILTROVÁNÍ
+## 1. Filtrování
 
 ### Praktický příklad
 
@@ -62,7 +62,7 @@ prospeli = list(filter(ma_50_bodu, studenti))
 prospeli = list(filter(lambda s: s["body"] >= 50, studenti))
 ```
 
-### ⏱️ Časová složitost filtrování
+### Časová složitost filtrování
 
 **O(n)** - lineární
 
@@ -78,7 +78,7 @@ Seznam 1000 studentů → 1000 kontrol
 
 ---
 
-## 2️⃣ VYHLEDÁVÁNÍ
+## 2. Vyhledávání
 
 ### Lineární vyhledávání (Sequential Search)
 
@@ -127,7 +127,7 @@ Krok 5: [64, 34, 25, 12, 22, 11, 90]
                          22 == 22? ANO! Vrať index 4
 ```
 
-### ⏱️ Časová složitost lineárního vyhledávání
+### Časová složitost lineárního vyhledávání
 
 **O(n)** - lineární
 
@@ -137,7 +137,7 @@ Krok 5: [64, 34, 25, 12, 22, 11, 90]
 
 ---
 
-## 3️⃣ BINÁRNÍ VYHLEDÁVÁNÍ
+## 3. Binární vyhledávání
 
 ### Podmínka: SEZNAM MUSÍ BÝT SEŘAZENÝ!
 
@@ -231,7 +231,7 @@ Krok 2: [34, 64, 90]
          64 == 64? ANO! Našli jsme na indexu 5
 ```
 
-### ⏱️ Časová složitost binárního vyhledávání
+### Časová složitost binárního vyhledávání
 
 **O(log n)** - logaritmická
 
@@ -261,7 +261,7 @@ Binární hledání: 20 kroků!
 
 ---
 
-## 4️⃣ TŘÍDĚNÍ VÝBĚREM (Selection Sort)
+## 4. Selection Sort (Třídění výběrem)
 
 ### Princip
 
@@ -339,7 +339,7 @@ Krok 6: [11, 12, 22, 25, 34, 64, 90]
 Seřazené: [11, 12, 22, 25, 34, 64, 90]
 ```
 
-### ⏱️ Časová složitost Selection Sort
+### Časová složitost Selection Sort
 
 **O(n²)** - kvadratická
 
@@ -363,7 +363,7 @@ Obecně: n(n-1)/2 ≈ n²/2 = O(n²)
 
 ---
 
-## 5️⃣ TŘÍDĚNÍ VKLÁDÁNÍM (Insertion Sort)
+## 5. Insertion Sort (Třídění vkládáním)
 
 ### Princip
 
@@ -461,7 +461,7 @@ Krok 6: Vkládám 90
          ✓   ✓   ✓   ✓   ✓   ✓   ✓
 ```
 
-### ⏱️ Časová složitost Insertion Sort
+### Časová složitost Insertion Sort
 
 **O(n²)** - kvadratická (v nejhorším případě)
 
@@ -473,7 +473,7 @@ Krok 6: Vkládám 90
 
 ---
 
-## 6️⃣ MERGE SORT (Třídění slučováním)
+## 6. Merge sort (Třídění slučováním)
 
 ### Princip: Rozděl a panuj (Divide and Conquer)
 
@@ -622,7 +622,7 @@ Obecně: log n úrovní × n operací = n log n
 
 ---
 
-## 📊 SROVNÁNÍ ALGORITMŮ
+## Srovnání algoritmů
 
 ### Třídící algoritmy
 
@@ -654,7 +654,7 @@ O(2ⁿ):       2¹⁰⁰⁰ operací     → nemožné!
 
 ---
 
-## 📋 SHRNUTÍ PRO ZKOUŠKU
+## Shrnutí pro zkoušku
 
 ### Klíčové body
 

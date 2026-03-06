@@ -1,0 +1,869 @@
+---
+title: "Okruh 7 – Funkce více proměnných a metoda nejmenších čtverců"
+subtitle: "KI/SZZTP – Teoretické základy informatiky"
+format: 
+  html:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    theme: cosmo
+---
+
+# Reálná funkce více reálných proměnných
+
+## Definice
+
+**Funkce dvou proměnných** je pravidlo, které každé uspořádané dvojici $(x, y) \in D$ přiřadí právě jedno číslo $z \in \mathbb{R}$:
+
+$$
+z = f(x, y)
+$$
+
+**Funkce více proměnných** (obecně):
+
+$$
+w = f(x_1, x_2, \ldots, x_n)
+$$
+
+kde:
+
+- $(x_1, x_2, \ldots, x_n)$ jsou **nezávislé proměnné** (argumenty)
+- $w$ je **funkční hodnota** (závislá proměnná)
+
+::: {.callout-note}
+## Příklady z praxe
+
+- **Teplo v místnosti:** $T(x, y, z)$ — teplota v bodě $(x, y, z)$
+- **Nadmořská výška:** $h(x, y)$ — výška v bodě na mapě
+- **Produkční funkce:** $Q(K, L)$ — output závisí na kapitálu a práci
+- **Elektrické pole:** $E(x, y, z)$ — intenzita pole v prostoru
+:::
+
+---
+
+## Definiční obor a obor hodnot
+
+### Definiční obor
+
+**Definiční obor** $D(f)$ je množina všech bodů, kde je funkce definována.
+
+Pro funkci $f(x, y)$ je to množina v rovině $\mathbb{R}^2$, pro $f(x, y, z)$ v prostoru $\mathbb{R}^3$.
+
+#### Jak najít definiční obor?
+
+Stejná pravidla jako u funkcí jedné proměnné:
+
+1. **Zlomek:** jmenovatel $\neq 0$
+2. **Sudá odmocnina:** výraz pod odmocninou $\geq 0$
+3. **Logaritmus:** argument $> 0$
+
+#### Příklad 1: Zlomek
+
+$$
+f(x, y) = \frac{1}{x^2 + y^2 - 1}
+$$
+
+**Podmínka:** $x^2 + y^2 - 1 \neq 0$
+
+$$
+D(f) = \{(x, y) \in \mathbb{R}^2 : x^2 + y^2 \neq 1\}
+$$
+
+Geometricky: celá rovina **kromě** kružnice o poloměru 1.
+
+#### Příklad 2: Odmocnina
+
+$$
+f(x, y) = \sqrt{9 - x^2 - y^2}
+$$
+
+**Podmínka:** $9 - x^2 - y^2 \geq 0$
+
+$$
+x^2 + y^2 \leq 9
+$$
+
+$$
+D(f) = \{(x, y) \in \mathbb{R}^2 : x^2 + y^2 \leq 9\}
+$$
+
+Geometricky: **kruh** o poloměru 3 (včetně hranice).
+
+### Obor hodnot
+
+**Obor hodnot** $H(f)$ je množina všech hodnot, které funkce nabývá:
+
+$$
+H(f) = \{z \in \mathbb{R} : \exists (x, y) \in D(f), z = f(x, y)\}
+$$
+
+#### Příklad
+
+Pro $f(x, y) = x^2 + y^2$:
+
+- $D(f) = \mathbb{R}^2$ (celá rovina)
+- $H(f) = \langle 0, +\infty)$ (všechna nezáporná čísla)
+
+---
+
+## Graf funkce dvou proměnných
+
+Graf funkce $z = f(x, y)$ je **plocha v prostoru** $\mathbb{R}^3$.
+
+Sestává ze všech bodů $[x, y, f(x, y)]$, kde $(x, y) \in D(f)$.
+
+### Vizualizace základních ploch
+
+#### 1. Rovina
+
+$$
+z = ax + by + c
+$$
+
+Příklad: $z = 2x + 3y - 1$
+
+```
+         z
+         ↑
+         │  /
+         │ /  ← rovina
+         │/
+    ─────┼───────→ y
+        /│
+       / │
+      x  
+```
+
+#### 2. Paraboloid
+
+$$
+z = x^2 + y^2
+$$
+
+```
+         z
+         ↑
+        ╱│╲
+       ╱ │ ╲   ← miska (konvexní)
+      ╱  │  ╲
+     ╱___│___╲
+    ─────┼───────→ y
+        /│
+       / │
+      x  
+```
+
+#### 3. Hyperbolický paraboloid (sedlo)
+
+$$
+z = x^2 - y^2
+$$
+
+```
+         z
+         ↑
+      ╱╲ │ ╱╲
+     ╱  ╲│╱  ╲  ← sedlo
+    ╱____╳____╲
+    ─────┼───────→ y
+        /│
+       / │
+      x  
+```
+
+---
+
+## Vrstevnice (level curves)
+
+**Vrstevnice** pro úroveň $c$ je křivka definovaná rovnicí:
+
+$$
+f(x, y) = c
+$$
+
+Všechny body na vrstevnici mají **stejnou funkční hodnotu**.
+
+::: {.callout-tip}
+## Praktické použití
+
+- **Topografické mapy:** vrstevnice = výškové kontury
+- **Meteorologie:** izotermy (stejná teplota), izobary (stejný tlak)
+- **Ekonomie:** indiferenční křivky
+:::
+
+### Příklad: Vrstevnice paraboloidu
+
+$$
+z = x^2 + y^2
+$$
+
+Pro různé hodnoty $c$:
+
+- $c = 0$: bod $(0, 0)$
+- $c = 1$: kružnice $x^2 + y^2 = 1$ (poloměr 1)
+- $c = 4$: kružnice $x^2 + y^2 = 4$ (poloměr 2)
+- $c = 9$: kružnice $x^2 + y^2 = 9$ (poloměr 3)
+
+```
+      y
+      │    ○ c=9
+      │  ○ c=4
+      │ ○ c=1
+      │● (0,0) c=0
+    ──┼────────── x
+      │
+```
+
+---
+
+# Parciální derivace {#sec-parcialni}
+
+## Definice
+
+**Parciální derivace** podle proměnné $x$ je derivace, když **ostatní proměnné považujeme za konstanty**.
+
+Pro funkci $z = f(x, y)$:
+
+$$
+\frac{\partial f}{\partial x} = \lim_{h \to 0} \frac{f(x+h, y) - f(x, y)}{h}
+$$
+
+$$
+\frac{\partial f}{\partial y} = \lim_{h \to 0} \frac{f(x, y+h) - f(x, y)}{h}
+$$
+
+### Alternativní značení
+
+$$
+\frac{\partial f}{\partial x} = f_x = f'_x = \partial_x f
+$$
+
+::: {.callout-important}
+## Geometrický význam
+
+$\frac{\partial f}{\partial x}$ je **směrnice řezu** plochy $z = f(x, y)$ rovinou $y = \text{konst}$.
+
+Udává, jak rychle se mění $z$ při změně $x$, když $y$ držíme konstantní.
+:::
+
+---
+
+## Výpočet parciálních derivací
+
+**Pravidlo:** Derivuj podle jedné proměnné, ostatní považuj za **konstanty**.
+
+### Příklad 1: Polynom
+
+$$
+f(x, y) = x^3 + 2xy^2 + y^4
+$$
+
+**Derivace podle $x$:**
+$$
+\frac{\partial f}{\partial x} = 3x^2 + 2y^2 \quad \text{(} y^2 \text{ je konstanta, } y^4 \text{ zmizí)}
+$$
+
+**Derivace podle $y$:**
+$$
+\frac{\partial f}{\partial y} = 4xy + 4y^3 \quad \text{(} x^3 \text{ zmizí, } xy^2 \rightarrow x \cdot 2y\text{)}
+$$
+
+### Příklad 2: Exponenciální funkce
+
+$$
+f(x, y) = e^{xy}
+$$
+
+**Derivace podle $x$:**
+$$
+\frac{\partial f}{\partial x} = y \cdot e^{xy} \quad \text{(řetízkové pravidlo, derivace } xy \text{ je } y\text{)}
+$$
+
+**Derivace podle $y$:**
+$$
+\frac{\partial f}{\partial y} = x \cdot e^{xy}
+$$
+
+### Příklad 3: Složitější funkce
+
+$$
+f(x, y) = \sin(x^2y) + \ln(x + y)
+$$
+
+**Derivace podle $x$:**
+$$
+\begin{aligned}
+\frac{\partial f}{\partial x} &= \cos(x^2y) \cdot 2xy + \frac{1}{x+y} \\
+&= 2xy\cos(x^2y) + \frac{1}{x+y}
+\end{aligned}
+$$
+
+**Derivace podle $y$:**
+$$
+\begin{aligned}
+\frac{\partial f}{\partial y} &= \cos(x^2y) \cdot x^2 + \frac{1}{x+y} \\
+&= x^2\cos(x^2y) + \frac{1}{x+y}
+\end{aligned}
+$$
+
+---
+
+## Vyšší parciální derivace
+
+Můžeme derivovat vícekrát:
+
+$$
+\frac{\partial^2 f}{\partial x^2} = f_{xx} \quad \text{(dvakrát podle } x\text{)}
+$$
+
+$$
+\frac{\partial^2 f}{\partial y^2} = f_{yy} \quad \text{(dvakrát podle } y\text{)}
+$$
+
+$$
+\frac{\partial^2 f}{\partial x \partial y} = f_{xy} \quad \text{(podle } y\text{, pak podle } x\text{)}
+$$
+
+$$
+\frac{\partial^2 f}{\partial y \partial x} = f_{yx} \quad \text{(podle } x\text{, pak podle } y\text{)}
+$$
+
+::: {.callout-note}
+## Schwarzova věta
+
+Pro "hezké" funkce platí:
+$$
+f_{xy} = f_{yx}
+$$
+
+Pořadí derivování **nezáleží**.
+:::
+
+### Příklad: Smíšené derivace
+
+$$
+f(x, y) = x^2y^3
+$$
+
+$$
+f_x = 2xy^3
+$$
+
+$$
+f_{xy} = \frac{\partial}{\partial y}(2xy^3) = 6xy^2
+$$
+
+$$
+f_y = 3x^2y^2
+$$
+
+$$
+f_{yx} = \frac{\partial}{\partial x}(3x^2y^2) = 6xy^2
+$$
+
+$$
+f_{xy} = f_{yx} = 6xy^2 \quad ✓
+$$
+
+---
+
+# Extrémy funkcí více proměnných {#sec-extremy}
+
+## Lokální extrémy
+
+### Definice
+
+Funkce $f(x, y)$ má v bodě $(x_0, y_0)$:
+
+- **Lokální maximum**, pokud $f(x_0, y_0) \geq f(x, y)$ v okolí
+- **Lokální minimum**, pokud $f(x_0, y_0) \leq f(x, y)$ v okolí
+- **Sedlový bod**, pokud není ani maximum ani minimum
+
+### Nutná podmínka pro lokální extrém
+
+**Fermatova věta (zobecněná):**
+
+Pokud má $f$ v bodě $(x_0, y_0)$ lokální extrém a existují parciální derivace, pak:
+
+$$
+\frac{\partial f}{\partial x}(x_0, y_0) = 0 \quad \text{a} \quad \frac{\partial f}{\partial y}(x_0, y_0) = 0
+$$
+
+Takovému bodu říkáme **stacionární bod** nebo **kritický bod**.
+
+::: {.callout-warning}
+Stacionární bod **nemusí být** extrém — může to být sedlo!
+:::
+
+---
+
+## Postačující podmínka — test druhých derivací
+
+Pro stacionární bod $(x_0, y_0)$ vypočteme **Hessián** (matici druhých derivací):
+
+$$
+H = \begin{pmatrix}
+f_{xx} & f_{xy} \\
+f_{yx} & f_{yy}
+\end{pmatrix}
+$$
+
+**Determinant Hessiánu:**
+
+$$
+D = \det(H) = f_{xx} \cdot f_{yy} - (f_{xy})^2
+$$
+
+### Rozhodovací pravidlo
+
+V bodě $(x_0, y_0)$:
+
+| Podmínka | Typ bodu |
+|----------|----------|
+| $D > 0$ a $f_{xx} > 0$ | **Lokální minimum** |
+| $D > 0$ a $f_{xx} < 0$ | **Lokální maximum** |
+| $D < 0$ | **Sedlový bod** |
+| $D = 0$ | **Test selhává** (nutná další analýza) |
+
+---
+
+## Algoritmus hledání lokálních extrémů
+
+```
+1. Najdi stacionární body:
+   Řeš soustavu:
+   ∂f/∂x = 0
+   ∂f/∂y = 0
+
+2. Pro každý stacionární bod (x₀, y₀):
+   a. Vypočti druhé derivace: f_xx, f_yy, f_xy
+   b. Vypočti D = f_xx · f_yy - (f_xy)²
+   c. Urči typ bodu podle tabulky
+
+3. Vyhodnoť funkční hodnoty v extrémech
+```
+
+---
+
+## Příklad: Hledání extrémů
+
+$$
+f(x, y) = x^2 + y^2 - 2x + 4y + 5
+$$
+
+### Krok 1: Stacionární body
+
+$$
+\frac{\partial f}{\partial x} = 2x - 2 = 0 \quad \Rightarrow \quad x = 1
+$$
+
+$$
+\frac{\partial f}{\partial y} = 2y + 4 = 0 \quad \Rightarrow \quad y = -2
+$$
+
+**Stacionární bod:** $(1, -2)$
+
+### Krok 2: Druhé derivace
+
+$$
+f_{xx} = 2, \quad f_{yy} = 2, \quad f_{xy} = 0
+$$
+
+$$
+D = 2 \cdot 2 - 0^2 = 4 > 0
+$$
+
+$$
+f_{xx} = 2 > 0
+$$
+
+**Závěr:** $(1, -2)$ je **lokální minimum** ✓
+
+### Krok 3: Funkční hodnota
+
+$$
+f(1, -2) = 1 + 4 - 2 - 8 + 5 = 0
+$$
+
+**Minimum funkce:** $f_{\min} = 0$ v bodě $(1, -2)$
+
+---
+
+## Příklad se sedlovým bodem
+
+$$
+f(x, y) = x^2 - y^2
+$$
+
+### Stacionární body
+
+$$
+f_x = 2x = 0 \quad \Rightarrow \quad x = 0
+$$
+
+$$
+f_y = -2y = 0 \quad \Rightarrow \quad y = 0
+$$
+
+**Stacionární bod:** $(0, 0)$
+
+### Test druhých derivací
+
+$$
+f_{xx} = 2, \quad f_{yy} = -2, \quad f_{xy} = 0
+$$
+
+$$
+D = 2 \cdot (-2) - 0^2 = -4 < 0
+$$
+
+**Závěr:** $(0, 0)$ je **sedlový bod** ✓
+
+Geometricky: hyperbolický paraboloid (tvar sedla).
+
+---
+
+# Vázané extrémy {#sec-vazane}
+
+## Problém
+
+Najít **extrém funkce** $f(x, y)$ při **omezující podmínce** (vazbě) $g(x, y) = 0$.
+
+**Příklad z praxe:**
+
+- Minimalizuj náklady $f(K, L)$ při výstupním omezení $g(K, L) = Q_0$
+- Minimalizuj plochu $f(x, y)$ při daném objemu $g(x, y) = V_0$
+
+---
+
+## Metoda Lagrangeových multiplikátorů
+
+### Princip
+
+Zavedeme **pomocnou funkci** (Lagrangeovu funkci):
+
+$$
+\mathcal{L}(x, y, \lambda) = f(x, y) - \lambda \cdot g(x, y)
+$$
+
+kde $\lambda$ je **Lagrangeův multiplikátor**.
+
+### Algoritmus
+
+```
+1. Sestav Lagrangeovu funkci:
+   ℒ(x, y, λ) = f(x, y) - λ · g(x, y)
+
+2. Najdi stacionární body ℒ:
+   ∂ℒ/∂x = 0
+   ∂ℒ/∂y = 0
+   ∂ℒ/∂λ = 0  (což je vazba g(x,y) = 0)
+
+3. Vyřeš soustavu 3 rovnic o 3 neznámých
+
+4. Testuj typ extrému (obvykle z kontextu úlohy)
+```
+
+---
+
+## Příklad: Vázaný extrém
+
+**Úloha:** Najdi extrém funkce $f(x, y) = xy$ při podmínce $x + y = 10$.
+
+### Řešení
+
+**Vazba:** $g(x, y) = x + y - 10 = 0$
+
+**Lagrangeova funkce:**
+$$
+\mathcal{L}(x, y, \lambda) = xy - \lambda(x + y - 10)
+$$
+
+**Stacionární body:**
+
+$$
+\frac{\partial \mathcal{L}}{\partial x} = y - \lambda = 0 \quad \Rightarrow \quad y = \lambda
+$$
+
+$$
+\frac{\partial \mathcal{L}}{\partial y} = x - \lambda = 0 \quad \Rightarrow \quad x = \lambda
+$$
+
+$$
+\frac{\partial \mathcal{L}}{\partial \lambda} = -(x + y - 10) = 0 \quad \Rightarrow \quad x + y = 10
+$$
+
+Z prvních dvou rovnic: $x = y = \lambda$
+
+Dosadíme do třetí: $x + x = 10 \Rightarrow x = 5$
+
+**Řešení:** $x = 5, \, y = 5$
+
+**Funkční hodnota:** $f(5, 5) = 25$
+
+**Závěr:** Maximum funkce $xy$ při podmínce $x + y = 10$ je **25** v bodě $(5, 5)$ ✓
+
+---
+
+# Globální extrémy
+
+## Definice
+
+- **Globální maximum:** $f(x_0, y_0) \geq f(x, y)$ pro **všechna** $(x, y) \in D$
+- **Globální minimum:** $f(x_0, y_0) \leq f(x, y)$ pro **všechna** $(x, y) \in D$
+
+## Postup hledání na uzavřené omezené oblasti
+
+```
+1. Najdi všechny lokální extrémy UVNITŘ oblasti
+   (stacionární body)
+
+2. Vyšetři hranici oblasti
+   (použij parametrizaci nebo Lagrangeovy multiplikátory)
+
+3. Porovnej všechny funkční hodnoty
+   → největší = globální maximum
+   → nejmenší = globální minimum
+```
+
+---
+
+# Aproximace metodou nejmenších čtverců {#sec-mnc}
+
+## Motivace a geometrický význam
+
+**Problém:** Máme naměřená data $(x_i, y_i)$, $i = 1, 2, \ldots, n$, a chceme najít funkci $f(x)$, která data **co nejlépe aproximuje**.
+
+**"Co nejlépe"** znamená: minimalizovat **součet čtverců odchylek**:
+
+$$
+S = \sum_{i=1}^{n} [y_i - f(x_i)]^2
+$$
+
+::: {.callout-note}
+## Proč čtverce?
+
+- Velké chyby se **trestají více** než malé
+- Matematicky **snazší** než absolutní hodnoty
+- Vede k **lineárním rovnicům** pro parametry
+:::
+
+### Geometrický význam
+
+Minimalizujeme **celkovou vertikální vzdálenost** měřených bodů od aproximační křivky.
+
+```
+      y
+      │     ● (x₃, y₃)
+      │    /
+      │   ● (x₂, y₂)
+      │  /
+      │ /  ← aproximační přímka
+      │/
+      ●─────────────── x
+    (x₁, y₁)
+```
+
+---
+
+## Lineární regrese (přímka)
+
+### Formulace úlohy
+
+Hledáme **přímku** $y = ax + b$, která nejlépe aproximuje data.
+
+**Minimalizujeme:**
+$$
+S(a, b) = \sum_{i=1}^{n} (y_i - ax_i - b)^2
+$$
+
+### Řešení
+
+Derivujeme podle $a$ a $b$ a položíme rovny nule:
+
+$$
+\frac{\partial S}{\partial a} = -2\sum_{i=1}^{n} x_i(y_i - ax_i - b) = 0
+$$
+
+$$
+\frac{\partial S}{\partial b} = -2\sum_{i=1}^{n} (y_i - ax_i - b) = 0
+$$
+
+Po úpravě dostaneme **normální rovnice**:
+
+$$
+\begin{aligned}
+a\sum_{i=1}^{n} x_i^2 + b\sum_{i=1}^{n} x_i &= \sum_{i=1}^{n} x_i y_i \\
+a\sum_{i=1}^{n} x_i + bn &= \sum_{i=1}^{n} y_i
+\end{aligned}
+$$
+
+---
+
+### Explicitní vzorce
+
+$$
+a = \frac{n\sum x_i y_i - \sum x_i \sum y_i}{n\sum x_i^2 - (\sum x_i)^2}
+$$
+
+$$
+b = \frac{\sum y_i - a\sum x_i}{n} = \bar{y} - a\bar{x}
+$$
+
+kde $\bar{x} = \frac{1}{n}\sum x_i$ a $\bar{y} = \frac{1}{n}\sum y_i$ jsou průměry.
+
+---
+
+### Příklad: Lineární regrese
+
+**Data:**
+
+| $x_i$ | 1 | 2 | 3 | 4 | 5 |
+|-------|---|---|---|---|---|
+| $y_i$ | 2 | 4 | 5 | 4 | 5 |
+
+Hledáme $y = ax + b$.
+
+**Vypočteme součty:**
+
+$$
+\begin{aligned}
+n &= 5 \\
+\sum x_i &= 1 + 2 + 3 + 4 + 5 = 15 \\
+\sum y_i &= 2 + 4 + 5 + 4 + 5 = 20 \\
+\sum x_i^2 &= 1 + 4 + 9 + 16 + 25 = 55 \\
+\sum x_i y_i &= 2 + 8 + 15 + 16 + 25 = 66
+\end{aligned}
+$$
+
+**Výpočet koeficientů:**
+
+$$
+a = \frac{5 \cdot 66 - 15 \cdot 20}{5 \cdot 55 - 15^2} = \frac{330 - 300}{275 - 225} = \frac{30}{50} = 0.6
+$$
+
+$$
+b = \frac{20 - 0.6 \cdot 15}{5} = \frac{20 - 9}{5} = \frac{11}{5} = 2.2
+$$
+
+**Výsledná přímka:**
+$$
+y = 0.6x + 2.2
+$$
+
+---
+
+## Polynomiální regrese
+
+Pro aproximaci **polynomem stupně $m$**:
+
+$$
+y = a_0 + a_1 x + a_2 x^2 + \cdots + a_m x^m
+$$
+
+**Minimalizujeme:**
+$$
+S = \sum_{i=1}^{n} \left(y_i - \sum_{j=0}^{m} a_j x_i^j\right)^2
+$$
+
+**Normální rovnice** (soustava $(m+1) \times (m+1)$):
+
+$$
+\begin{pmatrix}
+n & \sum x_i & \sum x_i^2 & \cdots & \sum x_i^m \\
+\sum x_i & \sum x_i^2 & \sum x_i^3 & \cdots & \sum x_i^{m+1} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+\sum x_i^m & \sum x_i^{m+1} & \sum x_i^{m+2} & \cdots & \sum x_i^{2m}
+\end{pmatrix}
+\begin{pmatrix}
+a_0 \\ a_1 \\ \vdots \\ a_m
+\end{pmatrix}
+=
+\begin{pmatrix}
+\sum y_i \\ \sum x_i y_i \\ \vdots \\ \sum x_i^m y_i
+\end{pmatrix}
+$$
+
+Řešíme metodami ze [Okruhu 3](#sec-prime).
+
+---
+
+## Aplikace na nelineární funkce
+
+### Exponenciální regrese
+
+**Model:** $y = ae^{bx}$
+
+**Linearizace:** Zlogaritmujeme:
+$$
+\ln(y) = \ln(a) + bx
+$$
+
+Položíme $Y = \ln(y)$, $A = \ln(a)$:
+$$
+Y = A + bx
+$$
+
+Aplikujeme lineární regresi na data $(x_i, Y_i) = (x_i, \ln(y_i))$.
+
+Po nalezení $A$ a $b$:
+$$
+a = e^A
+$$
+
+---
+
+### Mocninná regrese
+
+**Model:** $y = ax^b$
+
+**Linearizace:**
+$$
+\ln(y) = \ln(a) + b\ln(x)
+$$
+
+Položíme $Y = \ln(y)$, $X = \ln(x)$, $A = \ln(a)$:
+$$
+Y = A + bX
+$$
+
+Aplikujeme lineární regresi na data $(X_i, Y_i) = (\ln(x_i), \ln(y_i))$.
+
+---
+
+### Příklad: Exponenciální regrese
+
+**Data** (měření rozpadu radioaktivní látky):
+
+| $t$ (čas) | 0 | 1 | 2 | 3 | 4 |
+|-----------|---|---|---|---|---|
+| $N$ (počet atomů) | 100 | 82 | 67 | 55 | 45 |
+
+**Model:** $N = N_0 e^{-\lambda t}$
+
+**Linearizace:** $\ln(N) = \ln(N_0) - \lambda t$
+
+**Transformovaná data:**
+
+| $t$ | 0 | 1 | 2 | 3 | 4 |
+|-----|---|---|---|---|---|
+| $\ln(N)$ | 4.605 | 4.407 | 4.205 | 4.007 | 3.807 |
+
+**Lineární regrese** na $(t, \ln(N))$:
+
+Po výpočtu (použijeme vzorce výše):
+$$
+\ln(N_0) \approx 4.605, \quad -\lambda \approx -0.20
+$$
+
+$$
+N_0 \approx e^{4.605} \approx 100, \quad \lambda \approx 0.20
+$$
+
+**Výsledný model:**
+$$
+N(t) = 100 \cdot e^{-0.20t}
+$$
+
+---
