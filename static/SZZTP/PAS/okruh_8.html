@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 8 – Náhodná veličina a její charakteristiky</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+
+    <!-- Bootstrap CSS (first) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Custom Styles (must be last to override Bootstrap) -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- MathJax for mathematical equations -->
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+    <!-- Plotly for interactive plots -->
+    <script defer src="../../lib/plotly.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Syntax Highlighting Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+    <div class="page-container">
+        <a href="../szztp.html" class="back-link">← Zpět na SZZTP</a>
+
+        <h1>Okruh 8 – Náhodná veličina a její charakteristiky</h1>
+        <p class="subtitle">KI/SZZTP – Pravděpodobnost a statistika</p>
+
+        <h2>1. Náhodná veličina – Základní pojmy</h2>
+
+        <h3>Co je náhodná veličina?</h3>
+        <p><strong>Náhodná veličina</strong> (také nazývána <em>náhodná proměnná</em>) je <strong>funkce, která přiřazuje číselné hodnoty náhodným jevům</strong>.</p>
+
+        <div class="note-box">
+            <strong>Příklady z reálného světa:</strong>
+            <ul>
+                <li><strong>Hod kostkou:</strong> Náhodná veličina X = počet ok (1, 2, 3, 4, 5, nebo 6)</li>
+                <li><strong>Výška člověka:</strong> Náhodná veličina X = výška v cm (170.5, 175.3, 182.1, ...)</li>
+                <li><strong>Počet poruch serveru za měsíc:</strong> Náhodná veličina X = 0, 1, 2, 3, ...</li>
+                <li><strong>Doba čekání v bance:</strong> Náhodná veličina X = čas v minutách (0.5, 2.3, 5.7, ...)</li>
+            </ul>
+        </div>
+
+        <h3>Formální definice</h3>
+        <div class="formula">
+            <strong>Náhodná veličina</strong> je funkce $X: \Omega \to \mathbb{R}$, která každému elementárnímu jevu $\omega \in \Omega$ přiřadí reálné číslo $X(\omega)$.
+        </div>
+
+        <p><em style="color: #666;">💡 Česky: Náhodná veličina bere náhodný jev a převádí ho na číslo, které se dá měřit a analyzovat.</em></p>
+
+        <h2>2. Typy náhodných veličin</h2>
+
+        <h3>2.1 Diskrétní náhodná veličina</h3>
+
+        <div class="math-box">
+            <p><strong>Diskrétní náhodná veličina</strong> nabývá <strong>jednotlivých, oddělených hodnot</strong> (celých čísel nebo konečné/spočetné množiny).</p>
+            <p><strong>Příklady:</strong></p>
+            <ul>
+                <li>Hod kostkou: $X \in \{1, 2, 3, 4, 5, 6\}$</li>
+                <li>Počet chyb v textu: $X \in \{0, 1, 2, 3, ...\}$</li>
+                <li>Počet zákazníků za hodinu: $X \in \{0, 1, 2, ...\}$</li>
+            </ul>
+        </div>
+
+        <h3>2.2 Spojitá náhodná veličina</h3>
+
+        <div class="math-box">
+            <p><strong>Spojitá náhodná veličina</strong> nabývá <strong>všech hodnot z určitého intervalu</strong> (nekonečně mnoho možných hodnot).</p>
+            <p><strong>Příklady:</strong></p>
+            <ul>
+                <li>Výška člověka: $X \in [140, 220]$ cm (jakákoli hodnota je možná)</li>
+                <li>Teplota: $X \in [-40, 50]$ °C</li>
+                <li>Doba trvání hovoru: $X \in [0, \infty)$ minut</li>
+                <li>Hmotnost produktu: $X \in [99, 101]$ g</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Důležitý rozdíl:</strong>
+            <ul>
+                <li>U <strong>diskrétní</strong> veličiny: $P(X = 1.5)$ má smysl (může se rovnat něčemu)</li>
+                <li>U <strong>spojité</strong> veličiny: $P(X = 1.5) = 0$ (přesná hodnota je prakticky nula)</li>
+            </ul>
+        </div>
+
+        <h2>3. Distribuční funkce</h2>
+
+        <h3>Co to je?</h3>
+        <p><strong>Distribuční funkce</strong> (také nazývána <em>kumulativní distribuční funkce</em>) popisuje, <strong>jaká je pravděpodobnost, že náhodná veličina bude menší nebo rovna určité hodnotě</strong>.</p>
+
+        <div class="formula">
+            $$F(x) = P(X \leq x)$$
+        </div>
+
+        <p><strong>Vlastnosti distribuční funkce:</strong></p>
+        <ul>
+            <li>Hodnoty se pohybují od 0 do 1: $0 \leq F(x) \leq 1$</li>
+            <li>Je <strong>neklesající</strong>: když x roste, $F(x)$ neklesá</li>
+            <li>$F(-\infty) = 0$ (nemůže být menší než minus nekonečno)</li>
+            <li>$F(+\infty) = 1$ (všechno je menší než plus nekonečno)</li>
+        </ul>
+
+        <div class="note-box">
+            <p><strong>Příklad – Hod kostkou:</strong></p>
+            <table>
+                <tr><th>x</th><th>F(x) = P(X ≤ x)</th><th>Interpretace</th></tr>
+                <tr><td>0.5</td><td>0</td><td>Padne číslo ≤ 0.5? Nikdy!</td></tr>
+                <tr><td>2.5</td><td>1/3</td><td>Padne 1 nebo 2? Šance 1/3</td></tr>
+                <tr><td>4.5</td><td>2/3</td><td>Padne 1, 2, 3 nebo 4? Šance 2/3</td></tr>
+                <tr><td>6.5</td><td>1</td><td>Padne číslo ≤ 6.5? Určitě!</td></tr>
+            </table>
+        </div>
+
+        <h2>4. Pravděpodobnostní funkce a hustota pravděpodobnosti</h2>
+
+        <h3>4.1 Pravděpodobnostní funkce (pro diskrétní veličiny)</h3>
+
+        <div class="math-box">
+            <p><strong>Pravděpodobnostní funkce</strong> $p(x)$ dává <strong>pravděpodobnost, že diskrétní náhodná veličina nabude přesně určité hodnoty</strong>.</p>
+            <div class="formula">
+                $$p(x) = P(X = x)$$
+            </div>
+            <p><strong>Vlastnosti:</strong></p>
+            <ul>
+                <li>$p(x) \geq 0$ pro všechna x</li>
+                <li>Suma všech pravděpodobností = 1: $\sum p(x) = 1$</li>
+            </ul>
+        </div>
+
+        <div class="note-box">
+            <p><strong>Příklad – Hod kostkou:</strong></p>
+            <table>
+                <tr><th>x</th><th>p(x)</th></tr>
+                <tr><td>1</td><td>1/6 ≈ 0.167</td></tr>
+                <tr><td>2</td><td>1/6 ≈ 0.167</td></tr>
+                <tr><td>3</td><td>1/6 ≈ 0.167</td></tr>
+                <tr><td>4</td><td>1/6 ≈ 0.167</td></tr>
+                <tr><td>5</td><td>1/6 ≈ 0.167</td></tr>
+                <tr><td>6</td><td>1/6 ≈ 0.167</td></tr>
+                <tr><th colspan="2">Součet = 1 ✓</th></tr>
+            </table>
+        </div>
+
+        <h3>4.2 Hustota pravděpodobnosti (pro spojité veličiny)</h3>
+
+        <div class="math-box">
+            <p><strong>Hustota pravděpodobnosti</strong> $f(x)$ popisuje, <strong>jak je pravděpodobnost "rozlita" po jednotlivých hodnotách</strong>.</p>
+            <p>Použijeme ji k nalezení pravděpodobnosti intervalu:</p>
+            <div class="formula">
+                $$P(a \leq X \leq b) = \int_a^b f(x) \, dx$$
+            </div>
+            <p><strong>Vlastnosti:</strong></p>
+            <ul>
+                <li>$f(x) \geq 0$ pro všechna x</li>
+                <li>Integrál přes všechny hodnoty = 1: $\int_{-\infty}^{\infty} f(x) \, dx = 1$</li>
+                <li>Pravděpodobnost jedné přesné hodnoty = 0: $P(X = a) = 0$</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Rozdíl mezi pravděpodobnostní funkcí a hustotou:</strong>
+            <ul>
+                <li><strong>Diskrétní</strong> (kostka): $P(X = 3) = 1/6$ (konkrétní hodnota)</li>
+                <li><strong>Spojitá</strong> (výška): $P(X = 175) = 0$ (ale $P(174.5 \leq X \leq 175.5)$ má smysl)</li>
+            </ul>
+        </div>
+
+        <h2>5. Číselné charakteristiky náhodných veličin</h2>
+
+        <h3>5.1 Střední hodnota (Expected Value)</h3>
+
+        <p><strong>Střední hodnota</strong> $E(X)$ nebo $\mu$ je <strong>průměrná hodnota, kterou náhodná veličina nabývá na dlouhodobě</strong>.</p>
+
+        <div class="formula">
+            <strong>Pro diskrétní veličinu:</strong>
+            $$E(X) = \sum x \cdot p(x)$$
+
+            <strong>Pro spojitou veličinu:</strong>
+            $$E(X) = \int_{-\infty}^{\infty} x \cdot f(x) \, dx$$
+        </div>
+
+        <div class="note-box">
+            <p><strong>Příklad – Hod kostkou:</strong></p>
+            <p>$E(X) = 1 \cdot \frac{1}{6} + 2 \cdot \frac{1}{6} + 3 \cdot \frac{1}{6} + 4 \cdot \frac{1}{6} + 5 \cdot \frac{1}{6} + 6 \cdot \frac{1}{6}$</p>
+            <p>$E(X) = \frac{1+2+3+4+5+6}{6} = \frac{21}{6} = 3.5$</p>
+            <p><em>Když hodíte kostkou mnohokrát, průměr bude kolem 3.5.</em></p>
+        </div>
+
+        <div class="math-box">
+            <p><strong>Praktická interpretace:</strong></p>
+            <ul>
+                <li>Střední hodnota hodu kostkou = 3.5 (očekávaná průměrná hodnota)</li>
+                <li>Střední výška dospělého muže = 175 cm</li>
+                <li>Střední počet poruch serveru za měsíc = 2.3 poruch</li>
+            </ul>
+        </div>
+
+        <h3>5.2 Rozptyl (Variance)</h3>
+
+        <p><strong>Rozptyl</strong> $\text{Var}(X)$ nebo $\sigma^2$ měří, <strong>jak moc se hodnoty náhodné veličiny rozptylují okolo střední hodnoty</strong>.</p>
+
+        <div class="formula">
+            $$\text{Var}(X) = E[(X - E(X))^2] = E(X^2) - [E(X)]^2$$
+        </div>
+
+        <p><strong>Vlastnosti:</strong></p>
+        <ul>
+            <li>Rozptyl je vždy $\geq 0$</li>
+            <li>Menší rozptyl = hodnoty se koncentrují blízko průměru</li>
+            <li>Větší rozptyl = hodnoty jsou roztroušené daleko od průměru</li>
+        </ul>
+
+        <h3>5.3 Směrodatná odchylka (Standard Deviation)</h3>
+
+        <p><strong>Směrodatná odchylka</strong> $\sigma$ je <strong>druhá odmocnina rozptylu</strong> – má stejné jednotky jako původní veličina.</p>
+
+        <div class="formula">
+            $$\sigma = \sqrt{\text{Var}(X)}$$
+        </div>
+
+        <div class="note-box">
+            <p><strong>Příklad – normální rozdělení:</strong></p>
+            <ul>
+                <li>Průměr výšky = 175 cm</li>
+                <li>Směrodatná odchylka = 5 cm</li>
+                <li>Interpretace: ~68% lidí má výšku v rozmezí 170-180 cm (175 ± 5)</li>
+                <li>Interpretace: ~95% lidí má výšku v rozmezí 165-185 cm (175 ± 2×5)</li>
+            </ul>
+        </div>
+
+        <h3>5.4 Kvantily</h3>
+
+        <p><strong>Kvantil řádu p</strong> (také percentil) je <strong>hodnota, pod kterou leží právě p% dat</strong>.</p>
+
+        <div class="formula">
+            $$x_p: P(X \leq x_p) = p$$
+        </div>
+
+        <p><strong>Speciální kvantily:</strong></p>
+        <ul>
+            <li><strong>Medián</strong> = 50. percentil ($x_{0.5}$) – polovina dat pod ní, polovina nad</li>
+            <li><strong>Dolní kvartil</strong> = 25. percentil ($x_{0.25}$)</li>
+            <li><strong>Horní kvartil</strong> = 75. percentil ($x_{0.75}$)</li>
+        </ul>
+
+        <div class="note-box">
+            <p><strong>Příklad – výšky lidí:</strong></p>
+            <ul>
+                <li>Medián = 175 cm (polovina lidí je vyšší, polovina nižší)</li>
+                <li>25. percentil = 170 cm (25% lidí je nižších)</li>
+                <li>75. percentil = 180 cm (75% lidí je nižších)</li>
+            </ul>
+        </div>
+
+        <h2>6. Vybraná rozdělení</h2>
+
+        <h3>6.1 Normální rozdělení (Gaussovo)</h3>
+
+        <div class="math-box">
+            <p><strong>Normální rozdělení</strong> je <strong>nejdůležitější a nejčastější rozdělení</strong> – mnoho přírodních jevů se jím řídí.</p>
+            <p><strong>Hustota pravděpodobnosti:</strong></p>
+            <div class="formula">
+                $$f(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$$
+            </div>
+            <p><strong>Vlastnosti:</strong></p>
+            <ul>
+                <li>Symetrické kolem střední hodnoty $\mu$</li>
+                <li>Tvar: zvonová křivka (bell curve)</li>
+                <li>Definováno dvěma parametry: $\mu$ (střední hodnota) a $\sigma$ (směrodatná odchylka)</li>
+            </ul>
+        </div>
+
+        <div class="note-box">
+            <p><strong>Empirické pravidlo (68-95-99.7):</strong></p>
+            <ul>
+                <li>~68% dat leží v rozmezí $[\mu - \sigma, \mu + \sigma]$</li>
+                <li>~95% dat leží v rozmezí $[\mu - 2\sigma, \mu + 2\sigma]$</li>
+                <li>~99.7% dat leží v rozmezí $[\mu - 3\sigma, \mu + 3\sigma]$</li>
+            </ul>
+        </div>
+
+        <h3>6.2 Binomické rozdělení</h3>
+
+        <div class="math-box">
+            <p><strong>Binomické rozdělení</strong> modeluje <strong>počet úspěchů v $n$ nezávislých pokusech</strong>, kde každý pokus má pravděpodobnost úspěchu $p$.</p>
+            <p><strong>Pravděpodobnostní funkce:</strong></p>
+            <div class="formula">
+                $$P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}$$
+            </div>
+            <p><strong>Příklady:</strong></p>
+            <ul>
+                <li>Počet orlů v 10 hodech mincí (n=10, p=0.5)</li>
+                <li>Počet vadných součástek ve 100 testovaných (n=100, p=pravděpodobnost vady)</li>
+                <li>Počet správných odpovědí v testu (n=počet otázek, p=pravděpodobnost správné odpovědi)</li>
+            </ul>
+        </div>
+
+        <h3>6.3 Poissonovo rozdělení</h3>
+
+        <div class="math-box">
+            <p><strong>Poissonovo rozdělení</strong> modeluje <strong>počet jevů, která nastanou v určitém čase/prostoru</strong>.</p>
+            <p><strong>Pravděpodobnostní funkce:</strong></p>
+            <div class="formula">
+                $$P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
+            </div>
+            <p><strong>Příklady:</strong></p>
+            <ul>
+                <li>Počet poruch serveru za měsíc</li>
+                <li>Počet příchozích e-mailů za hodinu</li>
+                <li>Počet nehod na dálnici za týden</li>
+            </ul>
+        </div>
+
+        <h3>6.4 Exponenciální rozdělení</h3>
+
+        <div class="math-box">
+            <p><strong>Exponenciální rozdělení</strong> modeluje <strong>čas mezi po sobě jdoucími jevy</strong> (např. doba do příští poruchy).</p>
+            <p><strong>Hustota pravděpodobnosti:</strong></p>
+            <div class="formula">
+                $$f(x) = \lambda e^{-\lambda x}, \quad x \geq 0$$
+            </div>
+            <p><strong>Příklady:</strong></p>
+            <ul>
+                <li>Doba čekání na příští zákazníka v obchodě</li>
+                <li>Čas do příští poruchy zařízení</li>
+                <li>Trvání telefonního hovoru</li>
+            </ul>
+        </div>
+
+        <h2>Interaktivní příklady</h2>
+
+        <div class="interactive-section">
+            <h3>Výpočet střední hodnoty a rozptylu</h3>
+            <p>Zadej hodnoty a jejich pravděpodobnosti (diskrétní náhodná veličina):</p>
+
+            <label for="values" style="display: block; margin-bottom: 10px;">
+                Hodnoty (oddělené čárkou, např. 1,2,3,4,5,6):
+                <input type="text" id="values" value="1,2,3,4,5,6" style="width: 300px;">
+            </label>
+
+            <label for="probabilities" style="display: block; margin-bottom: 10px;">
+                Pravděpodobnosti (oddělené čárkou, např. 0.1667,0.1667,0.1667,0.1667,0.1667,0.1667):
+                <input type="text" id="probabilities" value="0.1667,0.1667,0.1667,0.1667,0.1667,0.1667" style="width: 300px;">
+            </label>
+
+            <button onclick="calculateMoments()">Vypočítej E(X), Var(X), σ</button>
+
+            <div class="result-box" id="result" style="display: none;">
+                <p><strong>Střední hodnota E(X):</strong> <span id="expectedValue"></span></p>
+                <p><strong>Rozptyl Var(X):</strong> <span id="variance"></span></p>
+                <p><strong>Směrodatná odchylka σ:</strong> <span id="stdDev"></span></p>
+            </div>
+        </div>
+
+        <div class="interactive-section">
+            <h3>Normální rozdělení – Pravděpodobnosti</h3>
+            <p>Spočítej pravděpodobnost pro normální rozdělení N(μ, σ²):</p>
+
+            <label for="mu" style="display: block; margin-bottom: 10px;">
+                Střední hodnota (μ):
+                <input type="number" id="mu" value="100" style="width: 100px;">
+            </label>
+
+            <label for="sigma" style="display: block; margin-bottom: 10px;">
+                Směrodatná odchylka (σ):
+                <input type="number" id="sigma" value="15" style="width: 100px;">
+            </label>
+
+            <label for="xValue" style="display: block; margin-bottom: 10px;">
+                Hodnota (x):
+                <input type="number" id="xValue" value="110" style="width: 100px;">
+            </label>
+
+            <button onclick="calculateNormal()">Vypočítej P(X ≤ x) a P(X > x)</button>
+
+            <div class="result-box" id="normalResult" style="display: none;">
+                <p><strong>P(X ≤ <span id="displayX"></span>):</strong> <span id="probLessEqual" style="color: #0d6efd; font-weight: bold;"></span></p>
+                <p><strong>P(X > <span id="displayX2"></span>):</strong> <span id="probGreater" style="color: #28a745; font-weight: bold;"></span></p>
+            </div>
+        </div>
+
+        <hr style="margin-top: 40px;">
+        <p style="text-align: center; color: #6c757d; font-size: 0.9em;">
+            Okruh KI/SZZTP – Pravděpodobnost a statistika<br>
+            Poslední aktualizace: 2026-03-25
+        </p>
+    </div>
+
+    <script>
+        function calculateMoments() {
+            const valuesStr = document.getElementById('values').value;
+            const probsStr = document.getElementById('probabilities').value;
+
+            const values = valuesStr.split(',').map(v => parseFloat(v.trim()));
+            const probs = probsStr.split(',').map(p => parseFloat(p.trim()));
+
+            if (values.length !== probs.length) {
+                alert('Počet hodnot a pravděpodobností se musí shodovat!');
+                return;
+            }
+
+            // Check probabilities sum to 1
+            const probSum = probs.reduce((a, b) => a + b, 0);
+            if (Math.abs(probSum - 1) > 0.001) {
+                alert('Suma pravděpodobností by měla být 1 (je ' + probSum.toFixed(4) + ')');
+                return;
+            }
+
+            // E(X)
+            const expectedValue = values.reduce((sum, x, i) => sum + x * probs[i], 0);
+
+            // E(X²)
+            const expectedValueSquared = values.reduce((sum, x, i) => sum + x * x * probs[i], 0);
+
+            // Var(X) = E(X²) - [E(X)]²
+            const variance = expectedValueSquared - expectedValue * expectedValue;
+            const stdDev = Math.sqrt(variance);
+
+            document.getElementById('expectedValue').textContent = expectedValue.toFixed(4);
+            document.getElementById('variance').textContent = variance.toFixed(4);
+            document.getElementById('stdDev').textContent = stdDev.toFixed(4);
+            document.getElementById('result').style.display = 'block';
+        }
+
+        // Approximation of cumulative normal distribution
+        function normalCDF(x) {
+            const a1 =  0.254829592;
+            const a2 = -0.284496736;
+            const a3 =  1.421413741;
+            const a4 = -1.453152027;
+            const a5 =  1.061405429;
+            const p  =  0.3275911;
+
+            const sign = x < 0 ? -1 : 1;
+            x = Math.abs(x) / Math.sqrt(2);
+
+            const t = 1.0 / (1.0 + p * x);
+            const y = 1.0 - (((((a5 * t + a4) * t + a3) * t + a2) * t + a1) * t) * Math.exp(-x * x);
+
+            return 0.5 * (1.0 + sign * y);
+        }
+
+        function calculateNormal() {
+            const mu = parseFloat(document.getElementById('mu').value);
+            const sigma = parseFloat(document.getElementById('sigma').value);
+            const x = parseFloat(document.getElementById('xValue').value);
+
+            if (sigma <= 0) {
+                alert('Směrodatná odchylka musí být kladná!');
+                return;
+            }
+
+            // Standardizace: Z = (X - μ) / σ
+            const z = (x - mu) / sigma;
+
+            // P(X ≤ x) = Φ(z)
+            const probLessEqual = normalCDF(z);
+            const probGreater = 1 - probLessEqual;
+
+            document.getElementById('displayX').textContent = x.toFixed(2);
+            document.getElementById('displayX2').textContent = x.toFixed(2);
+            document.getElementById('probLessEqual').textContent = probLessEqual.toFixed(4) + ' (' + (probLessEqual * 100).toFixed(2) + '%)';
+            document.getElementById('probGreater').textContent = probGreater.toFixed(4) + ' (' + (probGreater * 100).toFixed(2) + '%)';
+            document.getElementById('normalResult').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

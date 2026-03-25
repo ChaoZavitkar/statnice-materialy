@@ -1,0 +1,31 @@
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.classpath
+
+# Claude Code files
+.claude/
+.project-reports/
+
+# Temporary/helper files
+*.pyc
+__pycache__/
+*.log
+*.tmp
+*.bak
+
+# Large PDF files (textbook references)
+*.pdf
+
+# Node modules (if applicable)
+node_modules/
+package-lock.json
+
+# OS files
+Thumbs.db
+.directory
