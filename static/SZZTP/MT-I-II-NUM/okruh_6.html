@@ -156,10 +156,76 @@
             <p><strong>Formálně (pro pokročilé):</strong> Počet řešení určuje <strong>hodnost matice</strong> (rank) — počet nezávislých rovnic. Pokud je hodnost matice koeficientů stejná jako hodnost rozšířené matice (s pravými stranami), pak má soustava řešení.</p>
         </div>
 
+        <h3>Frobeniova věta (řešitelnost soustav)</h3>
+        <p><strong>Věta:</strong> Soustava $\mathbf{Ax} = \mathbf{b}$ má řešení právě když:</p>
+        <div class="formula">$$\text{rank}(\mathbf{A}) = \text{rank}(\mathbf{A}|\mathbf{b})$$</div>
+        <p>kde $(\mathbf{A}|\mathbf{b})$ je <strong>rozšířená matice</strong> (matice $\mathbf{A}$ rozšířená o vektor $\mathbf{b}$).</p>
+
+        <div class="math-box">
+            <strong>Co to znamená v praxi:</strong>
+            <ul>
+                <li><strong>Stejné hodnosti:</strong> Všechny informace v $\mathbf{b}$ jsou již obsaženy v $\mathbf{A}$ → řešení existuje</li>
+                <li><strong>Různé hodnosti:</strong> Vektor $\mathbf{b}$ přidává nové informace, kterou $\mathbf{A}$ nemůže reprezentovat → spor, žádné řešení</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <p><strong>Navíc:</strong> Pokud má soustava řešení a $\text{rank}(\mathbf{A}) = n$ (počet neznámých), pak má <strong>jediné řešení</strong>. Pokud $\text{rank}(\mathbf{A}) < n$, pak má <strong>nekonečně mnoho řešení</strong> (se $n - \text{rank}(\mathbf{A})$ volnými parametry).</p>
+        </div>
+
+        <h3>Co SPLŇUJE Definici Řešitelnosti – Co Ne?</h3>
+        <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
+            <p><strong style="color: #2e7d32;">✓ Správně: Soustava má 1 řešení</strong></p>
+            <p>Soustava:</p>
+            <div class="formula">$$\begin{aligned}
+            2x + 3y &= 7 \\
+            x - y &= 1
+            \end{aligned}$$</div>
+            <p>Matice $\mathbf{A} = \begin{pmatrix} 2 & 3 \\ 1 & -1 \end{pmatrix}$, $\text{rank}(\mathbf{A}) = 2$<br>
+            Rozšířená matice $(\mathbf{A}|\mathbf{b}) = \begin{pmatrix} 2 & 3 & 7 \\ 1 & -1 & 1 \end{pmatrix}$, $\text{rank}(\mathbf{A}|\mathbf{b}) = 2$<br>
+            <strong>Kriterium Frobeniovy věty:</strong> $\text{rank}(\mathbf{A}) = \text{rank}(\mathbf{A}|\mathbf{b}) = 2 = n$ → jediné řešení $(x, y) = (2, 1)$ ✓
+            </p>
+        </div>
+
+        <div class="math-box" style="background-color: #fff3cd; border-left: 4px solid #ff9800;">
+            <p><strong style="color: #e65100;">⚠ Nebezpečí: Nekonečně mnoho řešení (závislé rovnice)</strong></p>
+            <p>Soustava:</p>
+            <div class="formula">$$\begin{aligned}
+            2x + 3y &= 7 \\
+            4x + 6y &= 14 \quad \text{(Druhá rovnice je 2× první)}
+            \end{aligned}$$</div>
+            <p>Matice $\mathbf{A} = \begin{pmatrix} 2 & 3 \\ 4 & 6 \end{pmatrix}$, $\text{rank}(\mathbf{A}) = 1$ (druhý řádek je lineárně závislý)<br>
+            Rozšířená matice $(\mathbf{A}|\mathbf{b}) = \begin{pmatrix} 2 & 3 & 7 \\ 4 & 6 & 14 \end{pmatrix}$, $\text{rank}(\mathbf{A}|\mathbf{b}) = 1$<br>
+            <strong>Kriterium Frobeniovy věty:</strong> $\text{rank}(\mathbf{A}) = \text{rank}(\mathbf{A}|\mathbf{b}) = 1 < 2 = n$ → nekonečně mnoho řešení (všechny body na přímce $2x + 3y = 7$) ✓
+            </p>
+        </div>
+
+        <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
+            <p><strong style="color: #c62828;">✗ Chyba: Žádné řešení (spor)</strong></p>
+            <p>Soustava:</p>
+            <div class="formula">$$\begin{aligned}
+            2x + 3y &= 7 \\
+            2x + 3y &= 10 \quad \text{(Stejná levá strana, různé pravé strany!)}
+            \end{aligned}$$</div>
+            <p>Matice $\mathbf{A} = \begin{pmatrix} 2 & 3 \\ 2 & 3 \end{pmatrix}$, $\text{rank}(\mathbf{A}) = 1$<br>
+            Rozšířená matice $(\mathbf{A}|\mathbf{b}) = \begin{pmatrix} 2 & 3 & 7 \\ 2 & 3 & 10 \end{pmatrix}$, $\text{rank}(\mathbf{A}|\mathbf{b}) = 2$<br>
+            <strong>Kriterium Frobeniovy věty:</strong> $\text{rank}(\mathbf{A}) = 1 \neq 2 = \text{rank}(\mathbf{A}|\mathbf{b})$ → ŽÁDNÉ ŘEŠENÍ! ✗
+            </p>
+        </div>
+
         <hr>
 
-        <h2>Geometrická interpretace v 3D</h2>
-        <p>Soustava 3 rovnic o 3 neznámých: Každá rovnice představuje <strong>rovinu v 3D prostoru</strong>. Řešení je průsečík těchto rovin.</p>
+        <h2>Geometrická interpretace v 2D a 3D</h2>
+
+        <h3>V 2D: Soustava 2 rovnic o 2 neznámých</h3>
+        <p>Každá rovnice představuje <strong>přímku v 2D rovině</strong>. Řešení je průsečík těchto přímek:</p>
+
+        <div id="plot2d" class="plot-container"></div>
+
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Dvě přímky se protínají v jednom bodě (2, 1) — soustava má právě jedno řešení.</p>
+
+        <h3>V 3D: Soustava 3 rovnic o 3 neznámých</h3>
+        <p>Každá rovnice představuje <strong>rovinu v 3D prostoru</strong>. Řešení je průsečík těchto rovin.</p>
 
         <div id="plot3d" class="plot-container"></div>
 
@@ -200,6 +266,33 @@
 
         <p>kde $\mathbf{A}_i$ vznikne z $\mathbf{A}$ <strong>nahrazením</strong> $i$-tého sloupce vektorem pravých stran $\mathbf{b}$.</p>
 
+        <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
+            <p><strong style="color: #2e7d32;">✓ Správně: Cramerovo pravidlo pro 2×2 soustavu</strong></p>
+            <p>Soustava:</p>
+            <div class="formula">$$\begin{aligned}
+            2x + 3y &= 7 \\
+            x - y &= 1
+            \end{aligned}$$</div>
+            <p>Matice $\mathbf{A} = \begin{pmatrix} 2 & 3 \\ 1 & -1 \end{pmatrix}$, $\det(\mathbf{A}) = -2 - 3 = -5 \neq 0$ ✓<br>
+            $\mathbf{A}_x = \begin{pmatrix} 7 & 3 \\ 1 & -1 \end{pmatrix}$, $\det(\mathbf{A}_x) = -7 - 3 = -10$<br>
+            $\mathbf{A}_y = \begin{pmatrix} 2 & 7 \\ 1 & 1 \end{pmatrix}$, $\det(\mathbf{A}_y) = 2 - 7 = -5$<br>
+            <strong>Řešení:</strong> $x = \frac{-10}{-5} = 2$, $y = \frac{-5}{-5} = 1$ ✓
+            </p>
+        </div>
+
+        <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
+            <p><strong style="color: #c62828;">✗ Chyba: Cramerovo pravidlo kdy det(A) = 0</strong></p>
+            <p>Soustava:</p>
+            <div class="formula">$$\begin{aligned}
+            2x + 3y &= 7 \\
+            4x + 6y &= 14 \quad \text{(2× první řádek)}
+            \end{aligned}$$</div>
+            <p>Matice $\mathbf{A} = \begin{pmatrix} 2 & 3 \\ 4 & 6 \end{pmatrix}$, $\det(\mathbf{A}) = 12 - 12 = 0$ ✗<br>
+            <strong>NESMÍME používat Cramerovo pravidlo!</strong> Nemůžeme dělit nulou.<br>
+            Ale soustava má NEKONEČNĚ MNOHO řešení (závislé rovnice), ne nula!
+            </p>
+        </div>
+
         <div class="warning-box">
             <strong>Nevýhody Cramerova pravidla:</strong>
             <ul>
@@ -207,6 +300,33 @@
                 <li><strong>Numericky nestabilní</strong> pro větší soustavy</li>
                 <li><strong>Používá se pouze</strong> pro malé soustavy (max 3-4 neznámé) nebo teoretické účely</li>
             </ul>
+        </div>
+
+        <h3>Co SPLŇUJE Definici Gaussovy Eliminace – Co Ne?</h3>
+        <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
+            <p><strong style="color: #2e7d32;">✓ Správně: Elementární řádkové operace zachovávají řešení</strong></p>
+            <p>Soustava:</p>
+            <div class="formula">$$\begin{pmatrix} 2 & 3 & | & 7 \\ 1 & -1 & | & 1 \end{pmatrix}$$</div>
+            <p><strong>Krok 1:</strong> Vyměnit řádky (permutace)</p>
+            <div class="formula">$$\begin{pmatrix} 1 & -1 & | & 1 \\ 2 & 3 & | & 7 \end{pmatrix}$$</div>
+            <p><strong>Krok 2:</strong> Přičíst k řádku 2 násobek řádku 1: $R_2 \leftarrow R_2 - 2R_1$</p>
+            <div class="formula">$$\begin{pmatrix} 1 & -1 & | & 1 \\ 0 & 5 & | & 5 \end{pmatrix}$$</div>
+            <p><strong>Výsledek:</strong> Schodovitý tvar! Řešení se nezmění: $y = 1, x = 2$ ✓
+            </p>
+        </div>
+
+        <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
+            <p><strong style="color: #c62828;">✗ Chyba: Operace, která NENÍ elementární řádková operace</strong></p>
+            <p>NESMÍME:</p>
+            <ul>
+                <li>❌ Vynásobit řádek nulou (ztrácíme informaci)</li>
+                <li>❌ Přičíst stejný řádek k sobě (nic se nezmění, marný krok)</li>
+                <li>❌ Zamenšit řádek o řádek stejného řádku (chyba v logice)</li>
+                <li>❌ Provádět operace s SLOUPCI (mění se proměnné!)</li>
+            </ul>
+            <p><strong>Příklad chyby:</strong> Pokud bychom připočítali řádek 1 k řádku 2 DVAKRÁT, dostaneme:</p>
+            <div class="formula">$$\begin{pmatrix} 2 & 3 & | & 7 \\ 1+2+2 & -1+3+3 & | & 1+7+7 \end{pmatrix} = \begin{pmatrix} 2 & 3 & | & 7 \\ 5 & 5 & | & 15 \end{pmatrix}$$</div>
+            <p>To není elementární operace — provádíme ji DVAKRÁT! ✗</p>
         </div>
 
         <h4>Gaussova eliminační metoda</h4>
@@ -223,7 +343,7 @@
         <h5>Algoritmus (dopředný chod)</h5>
         <p>Cíl: převést rozšířenou matici (A|b) na schodovitý tvar</p>
         <pre><code class="language-plaintext">1. Pro i = 1 až n:
-   a. Najdi pivot (ненулový prvek) v i-tém sloupci
+   a. Najdi pivot (nenulový prvek) v i-tém sloupci
    b. Pokud je pivot 0, vyměň řádky
    c. Vynuluj všechny prvky POD pivotem:
       - Pro každý řádek j > i:
@@ -298,6 +418,31 @@
                 </li>
                 <li><strong>Symetrická pozitivně definitní</strong> matice</li>
             </ol>
+        </div>
+
+        <h3>Co SPLŇUJE Definici Iteračních Metod – Co Ne?</h3>
+        <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
+            <p><strong style="color: #2e7d32;">✓ Správně: Jacobiho iterační metoda pro diagonálně dominantní matici</strong></p>
+            <p>Soustava:</p>
+            <div class="formula">$$\begin{aligned}
+            5x + y &= 6 \quad \text{(diagonální prvek 5 > |1| = 1 ✓)} \\
+            x + 4y &= 7 \quad \text{(diagonální prvek 4 > |1| = 1 ✓)}
+            \end{aligned}$$</div>
+            <p>Matica je striktně diagonálně dominantní → Jacobiho metoda <strong>konverguje</strong>! ✓<br>
+            Iterační vzorec: $x^{(k+1)} = \frac{6 - y^{(k)}}{5}$, $y^{(k+1)} = \frac{7 - x^{(k)}}{4}$
+            </p>
+        </div>
+
+        <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
+            <p><strong style="color: #c62828;">✗ Chyba: Iterační metoda bez zaručené konvergence</strong></p>
+            <p>Soustava:</p>
+            <div class="formula">$$\begin{aligned}
+            x + 5y &= 6 \quad \text{(diagonální prvek 1 < |5| ✗)} \\
+            4x + y &= 7 \quad \text{(diagonální prvek 1 < |4| ✗)}
+            \end{aligned}$$</div>
+            <p>Matica NENÍ diagonálně dominantní → Jacobiho metoda <strong>nemusí konvergovat</strong>! ✗<br>
+            Výsledek: Iterace se divergují (hodnoty rostou bez kontroly), nedostaneme řešení.
+            </p>
         </div>
 
         <h3>Srovnění metod</h3>
@@ -457,7 +602,51 @@
         }
 
         waitForPlotly(function() {
-            // 3D plot: Three planes intersecting at point (3, 2, -1)
+            // ===== 2D PLOT: Two lines intersecting =====
+            // Line 1: 2x + 3y = 7 → y = (7 - 2x) / 3
+            // Line 2: x - y = 1 → y = x - 1
+            // Intersection: (2, 1)
+
+            const x2d = linspace(-1, 5, 100);
+            const y1 = x2d.map(x => (7 - 2*x) / 3);  // From 2x + 3y = 7
+            const y2 = x2d.map(x => x - 1);            // From x - y = 1
+
+            const trace1_2d = {
+                x: x2d,
+                y: y1,
+                mode: 'lines',
+                name: '2x + 3y = 7',
+                line: { color: '#e74c3c', width: 3 }
+            };
+
+            const trace2_2d = {
+                x: x2d,
+                y: y2,
+                mode: 'lines',
+                name: 'x - y = 1',
+                line: { color: '#3498db', width: 3 }
+            };
+
+            const intersection_2d = {
+                x: [2],
+                y: [1],
+                mode: 'markers',
+                name: 'Řešení (2, 1)',
+                marker: { size: 12, color: '#2ecc71', symbol: 'circle' }
+            };
+
+            const layout2d = {
+                title: 'Geometrická interpretace: 2D soustava jako průsečík přímek',
+                xaxis: { title: 'x', zeroline: true, showgrid: true },
+                yaxis: { title: 'y', zeroline: true, showgrid: true },
+                hovermode: 'closest',
+                height: 450,
+                margin: { l: 60, r: 50, b: 50, t: 50 }
+            };
+
+            Plotly.newPlot('plot2d', [trace1_2d, trace2_2d, intersection_2d], layout2d, {responsive: true});
+
+            // ===== 3D PLOT: Three planes intersecting =====
             // Plane 1: x + 2y + z = 8
             // Plane 2: 3x + z = 10
             // Plane 3: x - y + 2z = 3

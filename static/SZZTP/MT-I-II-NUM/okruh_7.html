@@ -114,6 +114,26 @@
         <h3>Geometrické vysvětlení</h3>
         <p>Představte si krajinu (horu). Parciální derivace podle X = jak moc stoupá/klesá v směru Východ-Západ. Parciální derivace podle Y = jak moc stoupá/klesá v směru Sever-Jih.</p>
 
+        <h3>Co SPLŇUJE Definici Parciální Derivace – Co Ne?</h3>
+        <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
+            <p><strong style="color: #2e7d32;">✓ Správně: Parciální derivace podle x (y je konstanta)</strong></p>
+            <p>Funkce: $f(x, y) = x^2 y + 3xy^2 + 5$</p>
+            <p><strong>Parciální derivace podle x:</strong> Derivujeme x² a xy², ale y traktujeme jako číslo:</p>
+            <div class="formula">$$\frac{\partial f}{\partial x} = 2xy + 3y^2 + 0 = 2xy + 3y^2$$</div>
+            <p><strong>Parciální derivace podle y:</strong> Derivujeme y a y², ale x traktujeme jako číslo:</p>
+            <div class="formula">$$\frac{\partial f}{\partial y} = x^2 + 6xy + 0 = x^2 + 6xy$$</div>
+            <p>✓ Oba výsledky jsou správné. V bodě $(x=1, y=2)$: $\frac{\partial f}{\partial x}\big|_{(1,2)} = 2(1)(2) + 3(4) = 16$</p>
+        </div>
+
+        <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
+            <p><strong style="color: #c62828;">✗ Chyba: Zapomenutí, že druhá proměnná je konstanta</strong></p>
+            <p>Funkce: $f(x, y) = x^2 y + 3xy^2 + 5$</p>
+            <p><strong style="color: #c62828;">ŠPATNĚ:</strong> "Parciální derivace podle x je..."</p>
+            <div class="formula">$$\frac{\partial f}{\partial x} = 2xy + 3y + 0 \quad ✗ \text{ (ŠPATNĚ! Zapomněli jsme na }y^2\text{)}$$</div>
+            <p><strong>Proč je to chyba:</strong> Při derivaci členu $3xy^2$ podle $x$ dostaneme $3y^2$ (ne $3y$), protože $y^2$ je konstanta!</p>
+            <p><strong style="color: #2e7d32;">Správně:</strong> $\frac{\partial f}{\partial x} = 2xy + 3y^2$ ✓</p>
+        </div>
+
         <h2>3. Extrémy funkcí více proměnných</h2>
 
         <h3>Jak najít maximum a minimum?</h3>
@@ -123,14 +143,85 @@
 
         <p><strong>Takovéto body se nazývají "kritické body".</strong></p>
 
-        <p><strong>Aby jsme věděli, jestli je to maximum, minimum, nebo sedlo, použijeme druhou derivaci (Hessovu matici):</strong></p>
+        <h3>Hessova matice (druhé derivace)</h3>
+        <p><strong>Aby jsme věděli, jestli je to maximum, minimum, nebo sedlo, použijeme druhé derivace (Hessovu matici):</strong></p>
+
+        <p>Hessova matice je matice druhých derivací:</p>
+        <div class="formula">$$\mathbf{H} = \begin{pmatrix}
+        \frac{\partial^2 f}{\partial x^2} & \frac{\partial^2 f}{\partial x \partial y} \\
+        \frac{\partial^2 f}{\partial y \partial x} & \frac{\partial^2 f}{\partial y^2}
+        \end{pmatrix}$$</div>
+
+        <p><strong>Interpretace podle vlastních hodnot $\lambda_1, \lambda_2$ Hessovy matice:</strong></p>
         <ul>
-            <li><strong>∪ tvar (konkávní):</strong> Lokální minimum (dno údolí)</li>
-            <li><strong>∩ tvar (konvexní):</strong> Lokální maximum (vrchol hory)</li>
-            <li><strong>Sedlovitý tvar:</strong> Sedlový bod (vrchol v jednom směru, údolí v druhém)</li>
+            <li><strong>$\lambda_1 > 0$ a $\lambda_2 > 0$:</strong> Lokální MINIMUM (dno údolí, ∪ tvar)</li>
+            <li><strong>$\lambda_1 < 0$ a $\lambda_2 < 0$:</strong> Lokální MAXIMUM (vrchol hory, ∩ tvar)</li>
+            <li><strong>$\lambda_1$ a $\lambda_2$ opačných znamének:</strong> Sedlový bod (vrchol v jednom směru, údolí v druhém)</li>
+            <li><strong>$\lambda_1 = 0$ nebo $\lambda_2 = 0$:</strong> Test je nedecizivní (potřebujeme vyšší derivace)</li>
         </ul>
 
-        <h2>4. Metoda nejmenších čtverců</h2>
+        <h3>Co SPLŇUJE Definici Extrému – Co Ne?</h3>
+        <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
+            <p><strong style="color: #2e7d32;">✓ Správně: Paraboloid má minimum</strong></p>
+            <p>Funkce: $f(x, y) = x^2 + y^2$ (paraboloid)</p>
+            <p>Kritické body: $\frac{\partial f}{\partial x} = 2x = 0$ a $\frac{\partial f}{\partial y} = 2y = 0$ → bod $(0, 0)$ ✓</p>
+            <p>Hessova matice: $\mathbf{H} = \begin{pmatrix} 2 & 0 \\ 0 & 2 \end{pmatrix}$</p>
+            <p>Vlastní hodnoty: $\lambda_1 = 2 > 0$, $\lambda_2 = 2 > 0$ → <strong>MINIMUM v bodě (0, 0)</strong> ✓</p>
+        </div>
+
+        <div class="math-box" style="background-color: #fff3cd; border-left: 4px solid #ff9800;">
+            <p><strong style="color: #e65100;">⚠ Nebezpečí: Sedlový bod (vypadá jako extrém, ale není!)</strong></p>
+            <p>Funkce: $f(x, y) = x^2 - y^2$ (sedlo)</p>
+            <p>Kritické body: $\frac{\partial f}{\partial x} = 2x = 0$ a $\frac{\partial f}{\partial y} = -2y = 0$ → bod $(0, 0)$</p>
+            <p>Hessova matice: $\mathbf{H} = \begin{pmatrix} 2 & 0 \\ 0 & -2 \end{pmatrix}$</p>
+            <p>Vlastní hodnoty: $\lambda_1 = 2 > 0$, $\lambda_2 = -2 < 0$ → <strong>SEDLOVÝ BOD (nikoliv extrém!)</strong> ⚠</p>
+            <p>V bodě (0,0) se funkce stoupá ve směru x, ale klesá ve směru y!</p>
+        </div>
+
+        <h2>4. Vázané extrémy (Lagrangeovy multiplikátory)</h2>
+
+        <h3>Jaký je problém?</h3>
+        <p><strong>Máme funkci $f(x, y)$ a hledáme její maximum/minimum, ALE s podmínkou!</strong> Např. bod musí ležet na křivce.</p>
+
+        <p><strong>Příklad:</strong> Maximalizuj $f(x, y) = xy$ tak, aby platilo $x^2 + y^2 = 1$ (bod leží na jednotkové kružnici).</p>
+
+        <h3>Metoda Lagrangeových multiplikátorů</h3>
+        <p><strong>Myšlenka:</strong> Místo volného optima hledáme bod, kde se funkce $f$ "shoduje" s vazbou (gradient $f$ je rovnoběžný s gradientem vazbové podmínky).</p>
+
+        <div class="formula">$$\nabla f = \lambda \nabla g$$</div>
+
+        <p>kde $g(x, y) = 0$ je vazbová podmínka (v příkladu $g(x, y) = x^2 + y^2 - 1$) a $\lambda$ je <strong>Lagrangův multiplikátor</strong>.</p>
+
+        <div class="math-box">
+            <strong>Algoritmus:</strong>
+            <ol>
+                <li>Napíšeme soustavu: $\frac{\partial f}{\partial x} = \lambda \frac{\partial g}{\partial x}$, $\frac{\partial f}{\partial y} = \lambda \frac{\partial g}{\partial y}$, a $g(x,y) = 0$</li>
+                <li>Vyřešíme soustavu (3 rovnice, 3 neznámé: $x, y, \lambda$)</li>
+                <li>Vyhodnotíme $f$ v každém kritickém bodě</li>
+                <li>Největší hodnota = maximum, nejmenší = minimum</li>
+            </ol>
+        </div>
+
+        <h3>Co SPLŇUJE Definici Vázaného Extrému – Co Ne?</h3>
+        <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
+            <p><strong style="color: #2e7d32;">✓ Správně: Hledáme extrém s vazbou</strong></p>
+            <p>Maximalizuj $f(x, y) = xy$ s podmínkou $x + y = 2$ (bod leží na přímce)</p>
+            <p>Vazbová podmínka: $g(x, y) = x + y - 2 = 0$</p>
+            <p><strong>Gradienty:</strong> $\nabla f = (y, x)$, $\nabla g = (1, 1)$</p>
+            <p><strong>Lagrangeova podmínka:</strong> $(y, x) = \lambda(1, 1)$ → $y = \lambda$ a $x = \lambda$ → $x = y$</p>
+            <p><strong>Vazba:</strong> $x + y = 2$ a $x = y$ → $x = y = 1$ ✓</p>
+            <p><strong>Řešení:</strong> Maximum je $f(1, 1) = 1$ na přímce $x + y = 2$</p>
+        </div>
+
+        <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
+            <p><strong style="color: #c62828;">✗ Chyba: Zapomenutí na vazbu</strong></p>
+            <p><strong style="color: #c62828;">ŠPATNĚ:</strong> "Maximum $xy$ je neomezené (jde k nekonečnu)"</p>
+            <p><strong>Problém:</strong> Bez vazbové podmínky je $xy$ skutečně neomezené. MUSÍME počítat s vazbou!</p>
+            <p><strong>Správně:</strong> Maximální hodnota $xy$ NA PŘÍMCE $x + y = 2$ je $f(1,1) = 1$</p>
+            <p><strong>Varianta chyby:</strong> Zapomenutí na podmínku $g(x,y) = 0$ v soustavě. To vede k nesprávným kritickým bodům.</p>
+        </div>
+
+        <h2>5. Metoda nejmenších čtverců</h2>
 
         <h3>Jaký je problém?</h3>
         <p><strong>Máme datové body a chceme jimi proložit nejlepší přímku!</strong> Např. data o ceně domu (velikost vs cena) a chceme najít trend.</p>
@@ -152,6 +243,24 @@
         <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\approx$ znamená "přibližně rovno" – není přesné, ale blízké správné hodnotě.</em></p>
 
         <p><strong>Minimalizujeme $E$ podle $a$ a $b$ (sklon a průsečík)!</strong></p>
+
+        <h3>Co SPLŇUJE Definici Metody Nejmenších Čtverců – Co Ne?</h3>
+        <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
+            <p><strong style="color: #2e7d32;">✓ Správně: Lineární regrese je vhodná</strong></p>
+            <p><strong>Případ 1:</strong> Data mají zhruba lineární trend s normálním šumem</p>
+            <p>Např. cena domu vs. jeho velikost: čím větší dům, tím dražší (lineární vztah) ✓</p>
+            <p><strong>Případ 2:</strong> Výsledný $R^2 \approx 0.8$ nebo vyšší → přímka dobře vysvětluje data ✓</p>
+            <p><strong>Podmínky:</strong> Data mají homogenní rozptyl, neobsahují drastické outliers, chyby mají normální rozdělení</p>
+        </div>
+
+        <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
+            <p><strong style="color: #c62828;">✗ Chyba: Lineární regrese je NEVhodná</strong></p>
+            <p><strong>Případ 1:</strong> Data mají nelineární trend (např. kvadratický, exponenciální)</p>
+            <p>Např. výška skokanů vs. jejich věk — není lineární (rostou, pak jsou v maximu, pak stárnou)</p>
+            <p><strong>Případ 2:</strong> Výsledný $R^2 \approx 0.2$ — přímka málo vysvětluje variabilitu dat ✗</p>
+            <p><strong>Případ 3:</strong> Data obsahují velké outliers (chybné měření) — metoda nejmenších čtverců je velmi citlivá na outliers ✗</p>
+            <p><strong>Řešení:</strong> Použít nelineární regresní model (polynomické, exponenciální), robustnější metody (kvantilová regrese) nebo odstranit outliers</p>
+        </div>
 
         <h3>Řešení (Výsledné formule)</h3>
 
