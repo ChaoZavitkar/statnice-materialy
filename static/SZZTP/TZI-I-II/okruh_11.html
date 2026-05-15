@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 11: Rekurence, speciální funkce a asymptotická analýza</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+
+    <!-- Bootstrap CSS (first) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Custom Styles (must be last to override Bootstrap) -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- MathJax for mathematical equations -->
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Syntax Highlighting Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szztp.html" class="back-link">← Zpět na SZZTP</a>
+
+    <h1>Okruh 11 – Rekurence, speciální funkce a asymptotická analýza</h1>
+    <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
+
+
+    <h2>Rekurence</h2>
+
+    <h3>Co je rekurence?</h3>
+
+    <p><strong>Rekurentní vztah (recurrence relation):</strong> Rovnice, která definuje posloupnost tím, že vyjadřuje každý člen jako funkci předchozích členů.</p>
+
+    <p><strong>Příklady:</strong></p>
+    <ul>
+        <li><strong>Fibonacciho posloupnost:</strong> $F(n) = F(n-1) + F(n-2)$ s $F(0)=0, F(1)=1$</li>
+        <li><strong>Faktoriál:</strong> $n! = n \cdot (n-1)!$ s $0!=1$</li>
+        <li><strong>Věž z Hanoje:</strong> $T(n) = 2 \cdot T(n-1) + 1$ s $T(1)=1$</li>
+    </ul>
+
+    <p><strong>Klíčové prvky rekurence:</strong></p>
+    <ul>
+        <li><strong>Báze (initial condition):</strong> Hodnoty pro malé n (např. $F(0)=0$)</li>
+        <li><strong>Rekurzivní krok:</strong> Jak se vypočítá $F(n)$ z menších hodnot</li>
+    </ul>
+
+    <h3>Metoda 1: Iterační metoda</h3>
+
+    <p><strong>Princip:</strong> Postupně nahrazuj rekurzivní volání, dokud nedosáhneš báze. Pak sečti všechny členy.</p>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> $T(n) = T(n-1) + n$ s $T(1) = 1$<br>
+        <br>
+        $T(n) = T(n-1) + n$<br>
+        $= T(n-2) + (n-1) + n$<br>
+        $= T(n-3) + (n-2) + (n-1) + n$<br>
+        $= \ldots = T(1) + 2 + 3 + \ldots + n$<br>
+        $= 1 + 2 + 3 + \ldots + n = \frac{n(n+1)}{2}$<br>
+        <br>
+        <strong>Výsledek:</strong> $T(n) = O(n^2)$
+    </div>
+
+    <h3>Metoda 2: Substituční metoda</h3>
+
+    <p><strong>Princip:</strong> Uhádni řešení (tvar funkce) a dokaž jeho správnost indukcí.</p>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> $T(n) = 2T(n-1) + 1$ s $T(1) = 1$<br>
+        <br>
+        <strong>Domněnka:</strong> $T(n) = 2^n - 1$<br>
+        <br>
+        <strong>Indukční důkaz:</strong><br>
+        • Báze: $T(1) = 2^1 - 1 = 1$ ✓<br>
+        • Krok: Předpokládáme $T(n) = 2^n - 1$<br>
+        $T(n+1) = 2T(n) + 1 = 2(2^n - 1) + 1 = 2^{n+1} - 2 + 1 = 2^{n+1} - 1$ ✓
+    </div>
+
+    <h3>Metoda 3: Master theorem</h3>
+
+    <p><strong>Master theorem:</strong> Řeší rekurence tvaru $T(n) = a \cdot T(n/b) + f(n)$</p>
+
+    <p>Existují tři případy (podrobnější formulace):</p>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Případ</th>
+                    <th>Podmínka</th>
+                    <th>Řešení</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>1</strong></td>
+                    <td>$f(n) = O(n^{\log_b a - \epsilon})$ pro nějaké $\epsilon > 0$</td>
+                    <td>$T(n) = \Theta(n^{\log_b a})$</td>
+                </tr>
+                <tr>
+                    <td><strong>2</strong></td>
+                    <td>$f(n) = \Theta(n^{\log_b a} \log^k n)$</td>
+                    <td>$T(n) = \Theta(n^{\log_b a} \log^{k+1} n)$</td>
+                </tr>
+                <tr>
+                    <td><strong>3</strong></td>
+                    <td>$f(n) = \Omega(n^{\log_b a + \epsilon})$ a $a \cdot f(n/b) \leq c \cdot f(n)$</td>
+                    <td>$T(n) = \Theta(f(n))$</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> $T(n) = 4T(n/2) + n$<br>
+        <br>
+        • $a = 4, b = 2$, tak $\log_b a = \log_2 4 = 2$<br>
+        • $f(n) = n = O(n^{2-\epsilon})$ pro $\epsilon = 1$ → <strong>Případ 1</strong><br>
+        • $T(n) = \Theta(n^2)$
+    </div>
+
+    <h3>Řešení převodem na algebraické rovnice</h3>
+
+    <p><strong>Generující funkce:</strong> Sečti všechny členy formální řady a vyřeš algebraicky.</p>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> $F(n) = F(n-1) + F(n-2)$ (Fibonacciho posloupnost)<br>
+        <br>
+        Definuj $G(x) = \sum_{n=0}^{\infty} F(n) x^n$<br>
+        <br>
+        Pak lze ukázat, že $G(x) = \frac{x}{1 - x - x^2}$<br>
+        <br>
+        Pomocí parciálních zlomků lze získat explicitní formuli (Binetův vzorec)
+    </div>
+
+    <hr>
+
+    <h2>Speciální funkce</h2>
+
+    <h3>Dolní a horní celá část</h3>
+
+    <p><strong>Dolní celá část (floor):</strong> $\lfloor x \rfloor$ — největší celé číslo $\leq x$</p>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong><br>
+        • $\lfloor 3.7 \rfloor = 3$<br>
+        • $\lfloor 5 \rfloor = 5$<br>
+        • $\lfloor -2.3 \rfloor = -3$ (ne -2!)
+    </div>
+
+    <p><strong>Horní celá část (ceiling):</strong> $\lceil x \rceil$ — nejmenší celé číslo $\geq x$</p>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong><br>
+        • $\lceil 3.2 \rceil = 4$<br>
+        • $\lceil 5 \rceil = 5$<br>
+        • $\lceil -2.3 \rceil = -2$
+    </div>
+
+    <p><strong>Vztah mezi nimi:</strong></p>
+    <ul>
+        <li>$\lfloor x \rfloor + 1 = \lceil x \rceil$ když $x \notin \mathbb{Z}$</li>
+        <li>$\lfloor x \rfloor = \lceil x \rceil$ když $x \in \mathbb{Z}$</li>
+        <li>$\lfloor -x \rfloor = -\lceil x \rceil$</li>
+    </ul>
+
+    <h3>Logaritmy</h3>
+
+    <p><strong>Logaritmus:</strong> Inverzní funkce k exponenciále. $\log_b x = y$ znamená $b^y = x$</p>
+
+    <p><strong>Základní vlastnosti:</strong></p>
+    <ul>
+        <li>$\log_b (x \cdot y) = \log_b x + \log_b y$</li>
+        <li>$\log_b (x / y) = \log_b x - \log_b y$</li>
+        <li>$\log_b (x^k) = k \cdot \log_b x$</li>
+        <li>$\log_b b = 1$</li>
+        <li>$\log_b 1 = 0$</li>
+        <li>Změna základu: $\log_b x = \frac{\log_a x}{\log_a b}$</li>
+    </ul>
+
+    <p><strong>Speciální logaritmy:</strong></p>
+    <ul>
+        <li>$\log_2 x$ — binární logaritmus (informatika)</li>
+        <li>$\log_{10} x$ — dekadický logaritmus</li>
+        <li>$\ln x$ — přirozený logaritmus (základ $e$)</li>
+    </ul>
+
+    <div class="note-box">
+        <strong>Důležité:</strong> V analýze algoritmů se obvykle píše $\log n$ bez základu — znamená to $\log_2 n$ (binární logaritmus), protože závisí na počtu bitů a dělení na poloviny.
+    </div>
+
+    <hr>
+
+    <h2>Asymptotická notace</h2>
+
+    <h3>Velké O notace (O-notace)</h3>
+
+    <p><strong>Definice:</strong> $f(n) = O(g(n))$ znamená, že existují konstanty $c > 0$ a $n_0$ takové, že:
+    $$f(n) \leq c \cdot g(n) \text{ pro všechna } n \geq n_0$$</p>
+
+    <p><strong>Intuice:</strong> $f(n)$ roste nejvíce tak rychle jako $g(n)$ (horní mez).</p>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong><br>
+        • $3n^2 + 5n + 7 = O(n^2)$ (kvadratická)<br>
+        • $100n = O(n)$ (lineární)<br>
+        • $\log n = O(n)$ (logaritmus je menší než lineární)<br>
+        • $n^2 \neq O(n)$ (kvadratická není menší než lineární)
+    </div>
+
+    <h3>Theta notace (Θ-notace)</h3>
+
+    <p><strong>Definice:</strong> $f(n) = \Theta(g(n))$ znamená, že existují konstanty $c_1 > 0, c_2 > 0$ a $n_0$ takové, že:
+    $$c_1 \cdot g(n) \leq f(n) \leq c_2 \cdot g(n) \text{ pro všechna } n \geq n_0$$</p>
+
+    <p><strong>Intuice:</strong> $f(n)$ roste právě tak rychle jako $g(n)$ (těsný odhad).</p>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong><br>
+        • $3n^2 + 5n + 7 = \Theta(n^2)$<br>
+        • $n \log n + 2n = \Theta(n \log n)$<br>
+        • $2^n + n^{100} = \Theta(2^n)$ (exponenciála dominuje)
+    </div>
+
+    <h3>Omega notace (Ω-notace)</h3>
+
+    <p><strong>Definice:</strong> $f(n) = \Omega(g(n))$ znamená, že existují konstanty $c > 0$ a $n_0$ takové, že:
+    $$f(n) \geq c \cdot g(n) \text{ pro všechna } n \geq n_0$$</p>
+
+    <p><strong>Intuice:</strong> $f(n)$ roste nejméně tak rychle jako $g(n)$ (dolní mez).</p>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong><br>
+        • $3n^2 + 5n + 7 = \Omega(n^2)$<br>
+        • $3n^2 + 5n + 7 = \Omega(n)$ (také, protože dominuje $n^2$)<br>
+        • $n \log n = \Omega(n)$<br>
+        • $n = \Omega(\log n)$ (lineární je větší než logaritmus)
+    </div>
+
+    <h3>Vztahy mezi notacemi</h3>
+
+    <p><strong>Klíčová věta:</strong> $f(n) = \Theta(g(n))$ právě když $f(n) = O(g(n))$ AND $f(n) = \Omega(g(n))$</p>
+
+    <div class="math-box">
+        $\Theta(g(n))$ je "správná" třída funkce — není příliš volná (jako O) ani příliš těsná (jako Ω).
+    </div>
+
+    <h3>Manipulace s asymptotickou notací</h3>
+
+    <p><strong>Tranzitivita:</strong></p>
+    <ul>
+        <li>$f = O(g)$ a $g = O(h)$ $\Rightarrow$ $f = O(h)$</li>
+        <li>$f = \Theta(g)$ a $g = \Theta(h)$ $\Rightarrow$ $f = \Theta(h)$</li>
+    </ul>
+
+    <p><strong>Sčítání:</strong></p>
+    <ul>
+        <li>$O(f(n)) + O(g(n)) = O(\max(f(n), g(n)))$</li>
+        <li>Např. $O(n^2) + O(n) = O(n^2)$</li>
+    </ul>
+
+    <p><strong>Násobení:</strong></p>
+    <ul>
+        <li>$O(f(n)) \cdot O(g(n)) = O(f(n) \cdot g(n))$</li>
+        <li>Např. $O(n) \cdot O(n) = O(n^2)$</li>
+    </ul>
+
+    <p><strong>Logaritmická hierarchie:</strong></p>
+    <div class="highlight-box">
+        $O(1) \subset O(\log n) \subset O(n) \subset O(n \log n) \subset O(n^2) \subset O(n^3) \subset O(2^n) \subset O(n!)$
+    </div>
+
+    <hr>
+
+    <h2>Algoritmy</h2>
+
+    <h3>Co je algoritmus?</h3>
+
+    <p><strong>Algoritmus:</strong> Přesný postup (soupis kroků) k vyřešení problému v konečném čase.</p>
+
+    <p><strong>Vlastnosti algoritmu:</strong></p>
+    <ul>
+        <li><strong>Konečnost (finiteness):</strong> Algoritmus musí skončit pro jakýkoliv vstup</li>
+        <li><strong>Determiniovanost:</strong> Každý krok je jasně definován, bez dvojznačnosti</li>
+        <li><strong>Efektivnost:</strong> Každý krok je elementární (lze jej prakticky vykonat)</li>
+        <li><strong>Vstup/Výstup:</strong> Algoritmus přijímá vstup a produkuje výstup</li>
+    </ul>
+
+    <p><strong>Jak měřit efektivitu algoritmů:</strong></p>
+    <ul>
+        <li><strong>Časová složitost:</strong> Kolik elementárních operací provede? (funkcí délky vstupu $n$)</li>
+        <li><strong>Prostorová složitost:</strong> Kolik paměti potřebuje?</li>
+    </ul>
+
+    <h3>Euklidův algoritmus</h3>
+
+    <p><strong>Problém:</strong> Najít největší společný dělitel (GCD) dvou čísel $a$ a $b$.</p>
+
+    <p><strong>Princip:</strong> Opakovaně nahrazuj větší číslo zbytkem dělení.</p>
+
+    <pre><code class="language-python">def gcd(a, b):
+    while b != 0:
+        temp = b
+        b = a % b
+        a = temp
+    return a
+
+# Příklad: gcd(48, 18)
+# 48 % 18 = 12
+# 18 % 12 = 6
+# 12 % 6 = 0 → gcd = 6</code></pre>
+
+    <div class="highlight-box">
+        <strong>Důkaz správnosti:</strong> $\gcd(a, b) = \gcd(b, a \bmod b)$ protože:
+        <ul>
+            <li>Každý společný dělitel $(a, b)$ je také dělitelem $(b, a \bmod b)$</li>
+            <li>Obráceně, každý společný dělitel $(b, a \bmod b)$ je také dělitelem $(a, b)$</li>
+        </ul>
+    </div>
+
+    <p><strong>Časová složitost:</strong> $O(\log \min(a, b))$ — velmi efektivní!</p>
+
+    <h3>Nejmenší společný násobek (LCM)</h3>
+
+    <p><strong>Definice:</strong> Nejmenší číslo, které je dělitelné oběma $a$ i $b$.</p>
+
+    <p><strong>Vztah s GCD:</strong> $\text{lcm}(a, b) = \frac{a \cdot b}{\gcd(a, b)}$</p>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> $a = 12, b = 18$<br>
+        $\gcd(12, 18) = 6$<br>
+        $\text{lcm}(12, 18) = \frac{12 \cdot 18}{6} = \frac{216}{6} = 36$<br>
+        <br>
+        Ověření: $12 = 2^2 \cdot 3$, $18 = 2 \cdot 3^2$<br>
+        $\text{lcm} = 2^2 \cdot 3^2 = 36$ ✓
+    </div>
+
+    <h3>Prvočísla</h3>
+
+    <p><strong>Definice:</strong> Přirozené číslo $p > 1$, které má právě dva dělitele: 1 a sebe sama.</p>
+
+    <p><strong>Základní věta aritmetiky:</strong> Každé přirozené číslo $n > 1$ lze jedinečně rozepsat jako součin prvočísel (až na pořadí).
+    $$n = p_1^{a_1} \cdot p_2^{a_2} \cdot \ldots \cdot p_k^{a_k}$$
+    </p>
+
+    <h3>Test primality</h3>
+
+    <p><strong>Naivní test:</strong> Je $n$ prvočíslo? Zkontroluj, zda je dělitelné některým číslem od 2 do $\sqrt{n}$.</p>
+
+    <pre><code class="language-python">def is_prime(n):
+    if n < 2:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5) + 1, 2):
+        if n % i == 0:
+            return False
+    return True</code></pre>
+
+    <p><strong>Časová složitost:</strong> $O(\sqrt{n})$ — postačující pro středně velká čísla</p>
+
+    <div class="note-box">
+        <strong>Poznámka:</strong> Pro velmi velká čísla existují pokročilejší testy (Miller-Rabin), které jsou randomizované a polynomu rychlejší.
+    </div>
+
+    <h3>Faktorizace</h3>
+
+    <p><strong>Problém:</strong> Rozlož číslo $n$ na prvočísla.</p>
+
+    <p><strong>Naivní přístup:</strong> Postupně dělíme nejmenšími prvočísly.</p>
+
+    <pre><code class="language-python">def factorize(n):
+    factors = []
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            factors.append(d)
+            n //= d
+        d += 1
+    if n > 1:
+        factors.append(n)
+    return factors
+
+# Příklad: factorize(60)
+# → [2, 2, 3, 5]  (protože 60 = 2² × 3 × 5)</code></pre>
+
+    <p><strong>Časová složitost:</strong> $O(\sqrt{n})$ v nejhorším případě</p>
+
+    <div class="math-box">
+        <strong>Důležité:</strong> Faktorizace velkých čísel je velmi těžký problém (základ RSA šifrování). Není znám polynomiální algoritmus. Kvantové počítače by ho mohly řešit exponenciálně rychleji (Shorův algoritmus).
+    </div>
+
+    <h3>Vztah GCD, LCM a prvočísel</h3>
+
+    <p><strong>Věta:</strong> Pokud víme prvočíselný rozklad obou čísel, lze snadno najít GCD a LCM:</p>
+    <ul>
+        <li><strong>GCD:</strong> Vezmi nejmenší mocniny všech prvočíselů</li>
+        <li><strong>LCM:</strong> Vezmi největší mocniny všech prvočíselů</li>
+    </ul>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> $a = 2^3 \cdot 3^2 \cdot 5 = 360$, $b = 2^2 \cdot 3 \cdot 5^2 = 300$<br>
+        <br>
+        $\gcd(a, b) = 2^2 \cdot 3^1 \cdot 5^1 = 60$<br>
+        $\text{lcm}(a, b) = 2^3 \cdot 3^2 \cdot 5^2 = 1800$<br>
+        <br>
+        Ověření: $60 \cdot 1800 = 108000 = 360 \cdot 300$ ✓
+    </div>
+
+    <hr>
+
+    <h2>Propojení témat v okruhu</h2>
+
+    <p><strong>Jak se témata navazují:</strong></p>
+    <ol>
+        <li><strong>Rekurence</strong> — přesný matematický model pro algoritmy s větvením a opakováním</li>
+        <li><strong>Speciální funkce</strong> — nástroje pro popis a zjednodušení rekurzivních vztahů</li>
+        <li><strong>Asymptotická notace</strong> — jazyk pro popis chování algoritmů (bez konkrétních konstant)</li>
+        <li><strong>Algoritmy</strong> — konkrétní postupy, jejichž efektivitu měříme pomocí výše uvedených nástrojů</li>
+    </ol>
+
+    <p><strong>Praktické aplikace:</strong> Při návrhu algoritmu vytváříme rekurentní vztahy pro jeho čas běhu, řešíme je (a používáme speciální funkce), a výsledek vyjadřujeme asymptotickou notací, aby byl čitelný a porovnatelný s jinými algoritmy.</p>
+
+
+</div>
+</body>
+</html>

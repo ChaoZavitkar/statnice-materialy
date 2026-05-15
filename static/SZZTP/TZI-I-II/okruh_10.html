@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 10: Základy logiky a matematiky</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+
+    <!-- Bootstrap CSS (first) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Custom Styles (must be last to override Bootstrap) -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- MathJax for mathematical equations -->
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Syntax Highlighting Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <!-- Interactive Relation Diagrams -->
+    <script>
+        class RelationDiagram {
+            constructor(svgId, nodes, initialRelations = []) {
+                this.svgId = svgId;
+                this.nodes = nodes;
+                this.relations = initialRelations;
+                this.width = 280;
+                this.height = 220;
+                this.nodeRadius = 15;
+                this.padding = 30;
+                this.draw();
+            }
+
+            getNodePositions() {
+                const positions = {};
+                const centerX = this.width / 2;
+                const centerY = this.height / 2;
+                const radius = Math.min(this.width, this.height) / 2 - this.padding;
+
+                this.nodes.forEach((node, i) => {
+                    const angle = (i / this.nodes.length) * 2 * Math.PI - Math.PI / 2;
+                    positions[node] = {
+                        x: centerX + radius * Math.cos(angle),
+                        y: centerY + radius * Math.sin(angle)
+                    };
+                });
+                return positions;
+            }
+
+            drawArrow(svg, x1, y1, x2, y2, isBidirectional = false) {
+                const dx = x2 - x1;
+                const dy = y2 - y1;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx);
+
+                // Adjust start/end points to circle edges
+                const startX = x1 + this.nodeRadius * Math.cos(angle);
+                const startY = y1 + this.nodeRadius * Math.sin(angle);
+                const endX = x2 - this.nodeRadius * Math.cos(angle);
+                const endY = y2 - this.nodeRadius * Math.sin(angle);
+
+                // Line
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', startX);
+                line.setAttribute('y1', startY);
+                line.setAttribute('x2', endX);
+                line.setAttribute('y2', endY);
+                line.setAttribute('stroke', '#3498db');
+                line.setAttribute('stroke-width', '2');
+                line.setAttribute('marker-end', 'url(#arrowhead)');
+                svg.appendChild(line);
+
+                // Bidirectional arrow
+                if (isBidirectional && (x1 !== x2 || y1 !== y2)) {
+                    line.setAttribute('marker-start', 'url(#arrowhead-back)');
+                }
+            }
+
+            drawLoop(svg, x, y) {
+                const loopPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                loopPath.setAttribute('d', `M ${x} ${y - this.nodeRadius} Q ${x + 40} ${y - 40} ${x} ${y - this.nodeRadius}`);
+                loopPath.setAttribute('stroke', '#e74c3c');
+                loopPath.setAttribute('stroke-width', '2');
+                loopPath.setAttribute('fill', 'none');
+                loopPath.setAttribute('marker-end', 'url(#arrowhead-red)');
+                svg.appendChild(loopPath);
+            }
+
+            draw() {
+                const svg = document.getElementById(this.svgId);
+                svg.innerHTML = ''; // Clear
+
+                // Define arrowheads
+                const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+
+                const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+                marker.setAttribute('id', 'arrowhead');
+                marker.setAttribute('markerWidth', '10');
+                marker.setAttribute('markerHeight', '10');
+                marker.setAttribute('refX', '9');
+                marker.setAttribute('refY', '3');
+                marker.setAttribute('orient', 'auto');
+                marker.innerHTML = '<polygon points="0 0, 10 3, 0 6" fill="#3498db" />';
+                defs.appendChild(marker);
+
+                const markerBack = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+                markerBack.setAttribute('id', 'arrowhead-back');
+                markerBack.setAttribute('markerWidth', '10');
+                markerBack.setAttribute('markerHeight', '10');
+                markerBack.setAttribute('refX', '1');
+                markerBack.setAttribute('refY', '3');
+                markerBack.setAttribute('orient', 'auto');
+                markerBack.innerHTML = '<polygon points="10 0, 0 3, 10 6" fill="#3498db" />';
+                defs.appendChild(markerBack);
+
+                const markerRed = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+                markerRed.setAttribute('id', 'arrowhead-red');
+                markerRed.setAttribute('markerWidth', '10');
+                markerRed.setAttribute('markerHeight', '10');
+                markerRed.setAttribute('refX', '9');
+                markerRed.setAttribute('refY', '3');
+                markerRed.setAttribute('orient', 'auto');
+                markerRed.innerHTML = '<polygon points="0 0, 10 3, 0 6" fill="#e74c3c" />';
+                defs.appendChild(markerRed);
+
+                svg.setAttribute('viewBox', `0 0 ${this.width} ${this.height}`);
+                svg.setAttribute('style', 'border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9;');
+                svg.appendChild(defs);
+
+                const positions = this.getNodePositions();
+
+                // Draw edges
+                this.relations.forEach(rel => {
+                    const [from, to] = rel.split('→');
+                    const fromPos = positions[from];
+                    const toPos = positions[to];
+
+                    if (from === to) {
+                        this.drawLoop(svg, fromPos.x, fromPos.y);
+                    } else if (this.relations.includes(`${to}→${from}`)) {
+                        // Bidirectional
+                        this.drawArrow(svg, fromPos.x, fromPos.y, toPos.x, toPos.y, true);
+                    } else if (!this.relations.includes(`${to}→${from}`)) {
+                        // Unidirectional
+                        this.drawArrow(svg, fromPos.x, fromPos.y, toPos.x, toPos.y, false);
+                    }
+                });
+
+                // Draw nodes
+                Object.entries(positions).forEach(([node, pos]) => {
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', pos.x);
+                    circle.setAttribute('cy', pos.y);
+                    circle.setAttribute('r', this.nodeRadius);
+                    circle.setAttribute('fill', '#3498db');
+                    circle.setAttribute('stroke', '#2980b9');
+                    circle.setAttribute('stroke-width', '2');
+                    svg.appendChild(circle);
+
+                    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    text.setAttribute('x', pos.x);
+                    text.setAttribute('y', pos.y);
+                    text.setAttribute('text-anchor', 'middle');
+                    text.setAttribute('dominant-baseline', 'middle');
+                    text.setAttribute('fill', 'white');
+                    text.setAttribute('font-weight', 'bold');
+                    text.setAttribute('font-size', '13');
+                    text.textContent = node;
+                    svg.appendChild(text);
+                });
+            }
+
+            addRelation(rel) {
+                if (!this.relations.includes(rel)) {
+                    this.relations.push(rel);
+                    this.draw();
+                }
+            }
+
+            removeRelation(rel) {
+                this.relations = this.relations.filter(r => r !== rel);
+                this.draw();
+            }
+
+            clear() {
+                this.relations = [];
+                this.draw();
+            }
+        }
+    </script>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szztp.html" class="back-link">← Zpět na SZZTP</a>
+
+    <h1>Okruh 10 – Základy logiky a matematiky</h1>
+    <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
+
+    <h2>Výrokový počet</h2>
+    <p><strong>Logické spojky, jejich úplný systém, odvozovací pravidla, splnitelnost, aplikace v logických obvodech</strong></p>
+
+    <h3>Co je výrokový počet?</h3>
+    <p>Výrokový počet je formální systém pro práci s <strong>výroky</strong> (tvrzeními, která jsou buď pravdivá, nebo nepravdivá). Umožňuje nám:</p>
+    <ul>
+        <li>Pracovat s logikou systematicky a bez nejednoznačnosti</li>
+        <li>Zjistit, zda je výrok splnitelný (lze ho učinit pravdivým)</li>
+        <li>Aplikovat logiku v praxi (počítače, elektronické obvody, AI)</li>
+    </ul>
+
+    <h3>Základní pojmy</h3>
+    <p><strong>Výrok (statement):</strong> Tvrzení, které je buď pravdivé (1, T) nebo nepravdivé (0, F)</p>
+    <p><strong>Atomární výrok:</strong> Jednoduché tvrzení bez logických spojek (např. "prší")</p>
+    <p><strong>Složený výrok:</strong> Kombinace výroků pomocí logických spojek</p>
+    <p><strong>Ohodnocení (valuation):</strong> Přiřazení hodnoty (0 nebo 1) každému atomárnímu výroku</p>
+
+    <h3>Logické spojky</h3>
+
+    <p><strong>Negace (¬)</strong> — NOT</p>
+    <p>Obrátí pravdivostní hodnotu. Je to unární spojka (pracuje jen s jedním výrokem).</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 300px;">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>¬A</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p style="margin-top: 20px;"><strong>Konjunkce (∧)</strong> — AND</p>
+    <p>Pravdivá jen když oba výroky jsou pravdivé. Je to binární spojka.</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 350px;">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>A ∧ B</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p style="margin-top: 20px;"><strong>Disjunkce (∨)</strong> — OR</p>
+    <p>Pravdivá když alespoň jeden výrok je pravdivý. Je to binární spojka.</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 350px;">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>A ∨ B</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p style="margin-top: 20px;"><strong>Implikace (→)</strong> — IMPL</p>
+    <p>Nepravdivá jen když je první pravdivý a druhý nepravdivý. Je to binární spojka. (Čti: "A implikuje B" nebo "když A, pak B")</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 350px;">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>A → B</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <p style="margin-top: 20px;"><strong>Ekvivalence (↔)</strong> — EQU</p>
+    <p>Pravdivá když oba výroky mají stejnou pravdivostní hodnotu. Je to binární spojka. (Čti: "A je ekvivalentní s B" nebo "A právě když B")</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 350px;">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>A ↔ B</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="note-box">
+        <strong>Pamatuj:</strong> Implikace $A \to B$ je ekvivalentní $\neg A \lor B$. To se používá při převodech.
+    </div>
+
+    <h3>Úplný systém spojek</h3>
+
+    <p><strong>Úplný (funkčně úplný) systém:</strong> Sada spojek, pomocí nichž lze vyjádřit všechny ostatní logické funkce.</p>
+
+    <p><strong>Příklady úplných systémů:</strong></p>
+    <ul>
+        <li>${\{\neg, \land\}}$ — negace a konjunkce (stačí k vyjádření všeho)</li>
+        <li>${\{\neg, \lor\}}$ — negace a disjunkce (také stačí)</li>
+        <li>${\{\neg, \to\}}$ — negace a implikace</li>
+        <li>$\{\text{NAND}\}$ — pouze NAND (A NAND B = $\neg(A \land B)$)</li>
+        <li>$\{\text{NOR}\}$ — pouze NOR (A NOR B = $\neg(A \lor B)$)</li>
+        <li>${\{\neg, \land, \lor\}}$ — klasická úplná sada</li>
+    </ul>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> Jak vytvořit OR pouze z NAND?<br>
+        $A \lor B = (A \text{ NAND } A) \text{ NAND } (B \text{ NAND } B)$<br>
+        <strong>Proč?</strong> Protože NAND pracuje jako negace AND, a De Morganovým zákonem se OR převede na AND.
+    </div>
+
+    <h3>Odvozovací pravidla</h3>
+
+    <p><strong>Odvozovací pravidla (inference rules):</strong> Pravidla, která nám umožňují z existujících tvrzení odvodit nová tvrzení bez nutnosti ověřovat jejich pravdivost.</p>
+
+    <p><strong>Klíčová pravidla:</strong></p>
+    <ul>
+        <li><strong>Modus Ponens:</strong> Máme A a $A \to B$, pak odvodíme B</li>
+        <li><strong>Modus Tollens:</strong> Máme $\neg B$ a $A \to B$, pak odvodíme $\neg A$</li>
+        <li><strong>De Morganovy zákony:</strong>
+            <ul>
+                <li>$\neg(A \land B) = \neg A \lor \neg B$</li>
+                <li>$\neg(A \lor B) = \neg A \land \neg B$</li>
+            </ul>
+        </li>
+        <li><strong>Tranzitivita:</strong> $A \to B$ a $B \to C$, pak $A \to C$</li>
+        <li><strong>Spor (Proof by contradiction):</strong> Chceme-li dokazat A, předpokládáme $\neg A$ a ukážeme spor</li>
+    </ul>
+
+    <h3>Splnitelnost (SAT)</h3>
+
+    <p><strong>Splnitelný výraz:</strong> Existuje alespoň jedno ohodnocení, pro které je výraz pravdivý.</p>
+    <p><strong>Tautologie:</strong> Výraz, který je vždy pravdivý (splnitelný pro všechna ohodnocení) — např. $A \lor \neg A$</p>
+    <p><strong>Kontradikce:</strong> Výraz, který je vždy nepravdivý (není splnitelný) — např. $A \land \neg A$</p>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong>
+        <ul>
+            <li>$A \lor B$ — splnitelné, ale ne tautologie (když A=0 a B=0, je nepravdivé)</li>
+            <li>$A \lor \neg A$ — tautologie (vždy pravdivé)</li>
+            <li>$A \land \neg A$ — kontradikce (nikdy pravdivé)</li>
+        </ul>
+    </div>
+
+    <div class="math-box">
+        <strong>SAT problém:</strong> Rozhodovací problém, zda je daná formule splnitelná. Je to NP-úplný problém! To znamená, že neznáme rychlý algoritmus na jeho řešení, ale jeho řešení lze rychle ověřit.
+    </div>
+
+    <h3>Aplikace v logických obvodech</h3>
+
+    <p>Logické obvody pracují přesně se stejnými principy jako výrokový počet — fyzické napětí reprezentují 0 a 1.</p>
+
+    <p><strong>Základní logické brány (gates):</strong></p>
+    <ul>
+        <li><strong>AND gate:</strong> Má výstup 1 jen když všechny vstupy jsou 1</li>
+        <li><strong>OR gate:</strong> Má výstup 1 když alespoň jeden vstup je 1</li>
+        <li><strong>NOT gate:</strong> Obrátí vstup</li>
+        <li><strong>NAND gate:</strong> AND následovaný NOT (velmi důležitý — lze z něj vybudovat cokoliv)</li>
+        <li><strong>NOR gate:</strong> OR následovaný NOT</li>
+        <li><strong>XOR gate:</strong> Exkluzivní OR (výstup 1 když se vstupy liší)</li>
+    </ul>
+
+    <div class="highlight-box">
+        <strong>Praktický příklad:</strong> Obvod pro sčítání dvou bitů (Half Adder)
+        <ul>
+            <li>XOR pro výpočet součtu ($S = A \oplus B$)</li>
+            <li>AND pro výpočet přenosu ($C = A \land B$)</li>
+        </ul>
+    </div>
+
+    <p><strong>Normální formy:</strong> Logické výrazy se zapisují v normalizovaných formách pro efektivní implementaci:</p>
+    <ul>
+        <li><strong>DNF (Disjunktivní normální forma):</strong> OR disjunkcí AND termů — $(A \land B) \lor (C \land D)$</li>
+        <li><strong>KNF (Konjunktivní normální forma):</strong> AND konjunkcí OR termů — $(A \lor B) \land (C \lor D)$</li>
+    </ul>
+
+    <div class="note-box">
+        <strong>Návaznost:</strong> Výrokový počet je základem pro predikátový počet (který přidává proměnné a kvantifikátory). Také slouží jako základ pro formální ověřování v informatice.
+    </div>
+
+    <hr>
+
+    <h2>Predikátový počet (First-order logic)</h2>
+
+    <h3>Co je predikátový počet?</h3>
+
+    <p>Predikátový počet (také logika prvního řádu) je rozšíření výrokového počtu, které přidává:</p>
+    <ul>
+        <li><strong>Proměnné</strong> (x, y, z) — reprezentují objekty</li>
+        <li><strong>Predikáty</strong> — funkce, které vrací pravda/nepravda (např. "být sudý", "být větší než")</li>
+        <li><strong>Kvantifikátory</strong> — "pro všechny" a "existuje"</li>
+    </ul>
+    <p>Umožňuje nám pracovat s tvrzeními o objektech a jejich vztazích.</p>
+
+    <h3>Abeceda predikátového počtu</h3>
+
+    <p><strong>Abeceda se skládá z:</strong></p>
+
+    <p><strong>1. Logické symboly (stejné jako ve výrokovém počtu):</strong></p>
+    <ul>
+        <li>Logické spojky: $\neg, \land, \lor, \to, \leftrightarrow$</li>
+        <li>Závorky: $($, $)$</li>
+        <li>Proměnné: $x, y, z, x_1, x_2, \ldots$ (nekonečně mnoho)</li>
+        <li>Kvantifikátory: $\forall$ (pro všechny), $\exists$ (existuje)</li>
+    </ul>
+
+    <p><strong>2. Mimologické symboly (závisí na konkrétním jazyce):</strong></p>
+    <ul>
+        <li><strong>Konstanty:</strong> $a, b, c$ (konkrétní objekty)</li>
+        <li><strong>Funktory:</strong> $f, g, h$ (funkce, které kombinují objekty)</li>
+        <li><strong>Predikáty:</strong> $P, Q, R$ (vlastnosti nebo vztahy)</li>
+    </ul>
+
+    <div class="highlight-box">
+        <strong>Příklad abecedy pro teorii přirozených čísel:</strong>
+        <ul>
+            <li>Konstanta: $0$</li>
+            <li>Funktor: $S$ (successor — následující číslo)</li>
+            <li>Predikáty: $=$ (rovnost), $<$ (menší než)</li>
+        </ul>
+    </div>
+
+    <h3>Konstrukce jazyka (Well-formed formulas)</h3>
+
+    <p><strong>Termy:</strong> Objekty, o kterých mluvíme</p>
+    <ul>
+        <li>Proměnná $x$ je term</li>
+        <li>Konstanta $a$ je term</li>
+        <li>Když $t_1, \ldots, t_n$ jsou termy a $f$ je funktor, pak $f(t_1,\ldots,t_n)$ je term</li>
+    </ul>
+
+    <p><strong>Formule:</strong> Tvrzení o termech</p>
+    <ul>
+        <li>Když $P$ je predikát a $t_1, \ldots, t_n$ jsou termy, pak $P(t_1,\ldots,t_n)$ je <strong>atomická formule</strong></li>
+        <li>Pomocí spojek a kvantifikátorů lze tvořit složitější formule</li>
+    </ul>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong>
+        <ul>
+            <li>$P(x)$ — "x má vlastnost P"</li>
+            <li>$\forall x. P(x)$ — "pro všechna x platí P(x)"</li>
+            <li>$\exists x. P(x)$ — "existuje x, pro které platí P(x)"</li>
+            <li>$\forall x. \exists y. R(x,y)$ — "pro každé x existuje y takové, že je x a y v relaci R"</li>
+            <li>$\forall x. (P(x) \to Q(x))$ — "jestliže x má vlastnost P, pak má vlastnost Q"</li>
+        </ul>
+    </div>
+
+    <h3>Volné a vázané proměnné</h3>
+
+    <p><strong>Vázaná proměnná:</strong> Proměnná, která je "pod" kvantifikátorem</p>
+    <p><strong>Volná proměnná:</strong> Proměnná, která není vázaná</p>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong>
+        <ul>
+            <li>$\forall x. P(x, y)$ — $x$ je vázaná, $y$ je volná</li>
+            <li>$\forall x. \exists y. R(x, y)$ — obě jsou vázané</li>
+            <li>$P(x) \land Q(y)$ — obě jsou volné</li>
+        </ul>
+    </div>
+
+    <p><strong>Sentence (věta):</strong> Formule bez volných proměnných — ta, která má určitou pravdivostní hodnotu</p>
+
+    <div class="note-box">
+        <strong>Návaznost:</strong> Predikátový počet je výkonnější než výrokový počet — umožňuje nám formálně reprezentovat matematické tvrzení. Binární relace jsou konkrétní aplikací predikátů se dvěma proměnnými.
+    </div>
+
+    <hr>
+
+    <h2>Naivní teorie množin</h2>
+
+    <h3>Co je množina?</h3>
+
+    <p><strong>Množina:</strong> Kolekce objektů (prvků), které jsou jasně určeny. Dva prvky nemohou být stejné (bez duplikátů).</p>
+
+    <p><strong>Notace:</strong></p>
+    <ul>
+        <li>$\{1, 2, 3\}$ — explicitní výčet</li>
+        <li>$\{x \mid P(x)\}$ — prvky, které splňují vlastnost $P$ (comprehension)</li>
+        <li>$\in$ — "je prvkem"</li>
+        <li>$\notin$ — "není prvkem"</li>
+    </ul>
+
+    <div class="math-box">
+        <strong>Naivní teorie:</strong> Jednoduché chápání bez složitých axiomů. Obsahuje paradox (Russellův paradox), ale pro praktické účely je užitečná.
+    </div>
+
+    <h3>Potenční množina (Power set)</h3>
+
+    <p><strong>Potenční množina $\mathcal{P}(A)$:</strong> Množina všech podmnožin množiny A.</p>
+
+    <p><strong>Vlastnosti:</strong></p>
+    <ul>
+        <li>Pokud $|A| = n$, pak $|\mathcal{P}(A)| = 2^n$</li>
+        <li>Prázdná množina $\emptyset$ je vždy prvkem $\mathcal{P}(A)$</li>
+        <li>Sama množina A je vždy prvkem $\mathcal{P}(A)$</li>
+    </ul>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> $A = \{1, 2\}$<br>
+        $\mathcal{P}(A) = \{\emptyset, \{1\}, \{2\}, \{1,2\}\}$<br>
+        $|\mathcal{P}(A)| = 4 = 2^2$
+    </div>
+
+    <h3>Systém množin</h3>
+
+    <p><strong>Systém množin (soustava množin):</strong> Kolekce množin. Často se označuje jako $S = \{A_1, A_2, \ldots\}$</p>
+
+    <p><strong>Speciální případy:</strong></p>
+    <ul>
+        <li><strong>Prázdná množina $\emptyset$:</strong> Množina bez prvků</li>
+        <li><strong>Universum U:</strong> "Všechna" uvažovaná data</li>
+        <li><strong>Rodina množin:</strong> Systém s určitou strukturou</li>
+    </ul>
+
+    <h3>Operace na množinách</h3>
+
+    <p><strong>Základní operace:</strong></p>
+
+    <p><strong>Sjednocení (union) $A \cup B$:</strong> Prvky patřící do A nebo B (nebo obojího)</p>
+    <div class="highlight-box">
+        Příklad: $A = \{1,2\}, B = \{2,3\}$ → $A \cup B = \{1,2,3\}$
+    </div>
+
+    <p><strong>Průnik (intersection) $A \cap B$:</strong> Prvky patřící do obou A i B</p>
+    <div class="highlight-box">
+        Příklad: $A = \{1,2\}, B = \{2,3\}$ → $A \cap B = \{2\}$
+    </div>
+
+    <p><strong>Rozdíl (difference) $A \setminus B$:</strong> Prvky v A, které nejsou v B</p>
+    <div class="highlight-box">
+        Příklad: $A = \{1,2\}, B = \{2,3\}$ → $A \setminus B = \{1\}$
+    </div>
+
+    <p><strong>Doplněk (complement) $A'$:</strong> Prvky z univerza U, které nejsou v A</p>
+    <div class="highlight-box">
+        Příklad: $U = \{1,2,3,4\}, A = \{1,2\}$ → $A' = \{3,4\}$
+    </div>
+
+    <p><strong>Kartézský součin $A \times B$:</strong> Všechny uspořádané dvojice $(a,b)$ kde $a \in A, b \in B$</p>
+    <div class="highlight-box">
+        Příklad: $A = \{1,2\}, B = \{a,b\}$ → $A \times B = \{(1,a), (1,b), (2,a), (2,b)\}$
+    </div>
+
+    <p><strong>Zákony:</strong></p>
+    <ul>
+        <li>De Morganovy zákony: $(A \cup B)' = A' \cap B'$, $(A \cap B)' = A' \cup B'$</li>
+        <li>Distributivita: $A \cap (B \cup C) = (A \cap B) \cup (A \cap C)$</li>
+        <li>Idempotence: $A \cup A = A$, $A \cap A = A$</li>
+        <li>Absorbce: $A \cup (A \cap B) = A$, $A \cap (A \cup B) = A$</li>
+    </ul>
+
+    <h3>Relace mezi množinami</h3>
+
+    <p><strong>Podmnožina $A \subseteq B$:</strong> Všechny prvky A jsou prvky B (A je součástí B)</p>
+    <p><strong>Vlastní podmnožina $A \subset B$:</strong> $A \subseteq B$ a $A \neq B$</p>
+    <p><strong>Rovnost $A = B$:</strong> $A \subseteq B$ a $B \subseteq A$ (mají stejné prvky)</p>
+    <p><strong>Disjunktní množiny:</strong> $A \cap B = \emptyset$ (nemají společné prvky)</p>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong>
+        <ul>
+            <li>$\{1\} \subset \{1,2\}$ (vlastní podmnožina)</li>
+            <li>$\{1,2\} \subseteq \{1,2\}$ (podmnožina, ale ne vlastní)</li>
+            <li>$\{1,2\} = \{2,1\}$ (pořadí nezáleží)</li>
+        </ul>
+    </div>
+
+    <div class="note-box">
+        <strong>Návaznost:</strong> Binární relace jsou součástmi kartézského součinu. Speciální typy relací (ekvivalence, uspořádání) umožňují strukturovat množiny novým způsobem. Teorie množin je také základem pro predikátový počet — formálně definujeme universum.
+    </div>
+
+    <hr>
+
+    <h2>Binární relace</h2>
+
+    <h3>Co je binární relace?</h3>
+
+    <p><strong>Binární relace R na množinách A a B:</strong> Podmnožina kartézského součinu $A \times B$.</p>
+    <p>Zapisujeme $(a,b) \in R$ nebo $aRb$, což znamená "a je v relaci s b".</p>
+
+    <p><strong>Relace na jedné množině:</strong> Když $A = B$, relace $R \subseteq A \times A$ se nazývá "relace na A"</p>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong>
+        <ul>
+            <li>Relace "být menší než" na číslech: $\{(1,2), (1,3), (2,3), \ldots\}$</li>
+            <li>Relace "být příbuzný" na lidech</li>
+            <li>Relace "se rozváží" mezi balíčky a místy doručení</li>
+        </ul>
+    </div>
+
+    <h3>Základní vlastnosti relací</h3>
+
+    <p><strong>1. Reflexivita:</strong> $\forall a \in A: (a,a) \in R$</p>
+    <p>Relace obsahuje všechny "diagonální" prvky (každý prvek je v relaci sám se sebou). <strong>Příklad:</strong> "být stejně starý" — každý člověk je stejně starý jako sám se sebou.</p>
+
+    <div class="interactive-section">
+        <p><strong>Interaktivní příklad:</strong> Relace na $\{1, 2, 3, 4, 5\}$</p>
+        <svg id="diagram-reflexive" style="width: 100%; height: 200px;"></svg>
+        <div style="margin-top: 15px;">
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="reflexive-loops" onchange="reflexiveDemo()">
+                ✓ Smyčky (1→1, 2→2, ... všechny prvky na sebe)
+            </label>
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="reflexive-edges" onchange="reflexiveDemo()">
+                Přidat další vztahy
+            </label>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.95em; color: #555;">
+            <strong>Vysvětlení:</strong> Reflexivní relace má smyčky (1→1, 2→2, 3→3, 4→4, 5→5) na každém prvku. Každý prvek je v relaci sám se sebou.
+        </p>
+    </div>
+
+    <script>
+        let reflexiveDiagram = new RelationDiagram('diagram-reflexive', ['1', '2', '3', '4', '5'], []);
+
+        function reflexiveDemo() {
+            reflexiveDiagram.clear();
+            if (document.getElementById('reflexive-loops').checked) {
+                // Reflexivní relace: smyčky na všech prvcích
+                reflexiveDiagram.addRelation('1→1');
+                reflexiveDiagram.addRelation('2→2');
+                reflexiveDiagram.addRelation('3→3');
+                reflexiveDiagram.addRelation('4→4');
+                reflexiveDiagram.addRelation('5→5');
+            }
+            if (document.getElementById('reflexive-edges').checked) {
+                // Další šipky (např. dělitelnost)
+                reflexiveDiagram.addRelation('1→2');
+                reflexiveDiagram.addRelation('1→3');
+                reflexiveDiagram.addRelation('1→4');
+                reflexiveDiagram.addRelation('1→5');
+            }
+        }
+    </script>
+
+    <hr style="margin: 20px 0;">
+
+    <p><strong>2. Ireflexivita:</strong> $\forall a \in A: (a,a) \notin R$</p>
+    <p>Relace neobsahuje žádné "diagonální" prvky (ani jeden prvek není v relaci sám se sebou). <strong>Příklad:</strong> "být ostře menší než" — číslo nemůže být menší samo než sebe.</p>
+
+    <div class="interactive-section">
+        <p><strong>Interaktivní příklad:</strong> Relace na $\{1, 2, 3, 4, 5\}$</p>
+        <svg id="diagram-irreflexive" style="width: 100%; height: 200px;"></svg>
+        <div style="margin-top: 15px;">
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="irreflexive-edges" onchange="irreflexiveDemo()">
+                ✓ Zobrazit jednosměrné šipky (bez smyček)
+            </label>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.95em; color: #555;">
+            <strong>Vysvětlení:</strong> Ireflexivní relace nemá smyčky — žádný prvek se neukazuje sám na sebe (chybí 1→1, 2→2, 3→3, atd.).
+        </p>
+    </div>
+
+    <script>
+        let irreflexiveDiagram = new RelationDiagram('diagram-irreflexive', ['1', '2', '3', '4', '5']);
+        function irreflexiveDemo() {
+            irreflexiveDiagram.clear();
+            if (document.getElementById('irreflexive-edges').checked) {
+                // Ireflexivní relace: "být menší než" (bez smyček)
+                irreflexiveDiagram.addRelation('1→2');
+                irreflexiveDiagram.addRelation('2→3');
+                irreflexiveDiagram.addRelation('3→4');
+                irreflexiveDiagram.addRelation('4→5');
+                irreflexiveDiagram.addRelation('1→3');
+                irreflexiveDiagram.addRelation('2→4');
+                irreflexiveDiagram.addRelation('3→5');
+            }
+        }
+    </script>
+
+    <hr style="margin: 20px 0;">
+
+    <p><strong>3. Symetrie:</strong> $\forall a,b \in A: (a,b) \in R \Rightarrow (b,a) \in R$</p>
+    <p>Když $a$ je v relaci s $b$, pak $b$ je také v relaci s $a$ (všechny šipky jdou oběma směry). <strong>Příklad:</strong> "být příbuzný" — když je Anna příbuzná Petrovi, pak je Petr příbuzný Anně.</p>
+
+    <div class="interactive-section">
+        <p><strong>Interaktivní příklad:</strong> Relace na $\{1, 2, 3, 4, 5\}$</p>
+        <svg id="diagram-symmetric" style="width: 100%; height: 200px;"></svg>
+        <div style="margin-top: 15px;">
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="symmetric-a-b" onchange="symmetricDemo()">
+                ✓ Obousměrné šipky 1 ↔ 2
+            </label>
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="symmetric-b-c" onchange="symmetricDemo()">
+                ✓ Obousměrné šipky 3 ↔ 4
+            </label>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.95em; color: #555;">
+            <strong>Vysvětlení:</strong> Symetrická relace má šipky vždy v obou směrech — pokud existuje $1 → 2$, musí existovat i $2 → 1$ (obousměrné vazby).
+        </p>
+    </div>
+
+    <script>
+        let symmetricDiagram = new RelationDiagram('diagram-symmetric', ['1', '2', '3', '4', '5']);
+        function symmetricDemo() {
+            symmetricDiagram.clear();
+            if (document.getElementById('symmetric-a-b').checked) {
+                symmetricDiagram.addRelation('1→2');
+                symmetricDiagram.addRelation('2→1');
+            }
+            if (document.getElementById('symmetric-b-c').checked) {
+                symmetricDiagram.addRelation('3→4');
+                symmetricDiagram.addRelation('4→3');
+            }
+        }
+    </script>
+
+    <hr style="margin: 20px 0;">
+
+    <p><strong>4. Asymetrie:</strong> $\forall a,b \in A: (a,b) \in R \Rightarrow (b,a) \notin R$</p>
+    <p>Když $a$ je v relaci s $b$ (a $a \neq b$), pak $b$ není v relaci s $a$ (šipky jen jedním směrem). <strong>Příklad:</strong> "být otcem" — když je Petr otcem Anny, pak Anna určitě není otcem Petra.</p>
+
+    <div class="interactive-section">
+        <p><strong>Interaktivní příklad:</strong> Relace na $\{1, 2, 3, 4, 5\}$</p>
+        <svg id="diagram-asymmetric" style="width: 100%; height: 200px;"></svg>
+        <div style="margin-top: 15px;">
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="asymmetric-a-b" onchange="asymmetricDemo()">
+                ✓ Jednosměrná šipka 1 → 2
+            </label>
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="asymmetric-b-c" onchange="asymmetricDemo()">
+                ✓ Jednosměrná šipka 3 → 4
+            </label>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.95em; color: #555;">
+            <strong>Vysvětlení:</strong> Asymetrická relace má šipky vždy jen jedním směrem — pokud existuje $1 → 2$, pak $2 → 1$ určitě neexistuje (bez obousměrných vazeb).
+        </p>
+    </div>
+
+    <script>
+        let asymmetricDiagram = new RelationDiagram('diagram-asymmetric', ['1', '2', '3', '4', '5']);
+        function asymmetricDemo() {
+            asymmetricDiagram.clear();
+            if (document.getElementById('asymmetric-a-b').checked) {
+                asymmetricDiagram.addRelation('1→2');
+            }
+            if (document.getElementById('asymmetric-b-c').checked) {
+                asymmetricDiagram.addRelation('3→4');
+            }
+        }
+    </script>
+
+    <hr style="margin: 20px 0;">
+
+    <p><strong>5. Antisymetrie:</strong> $\forall a,b \in A: (a,b) \in R \land (b,a) \in R \Rightarrow a = b$</p>
+    <p>Pokud jsou dva <strong>různé</strong> prvky v relaci v obou směrech, je relace porušena. Obousměrné šipky mohou být jen mezi stejnými prvky (smyčky). <strong>Příklad:</strong> "≤" na číslech — $1 \leq 2$ a $2 \leq 1$ jen když $1=2$.</p>
+
+    <div class="interactive-section">
+        <p><strong>Interaktivní příklad:</strong> Relace na $\{1, 2, 3, 4, 5\}$</p>
+        <svg id="diagram-antisymmetric" style="width: 100%; height: 200px;"></svg>
+        <div style="margin-top: 15px;">
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="antisymmetric-loops" onchange="antisymmetricDemo()">
+                ✓ Smyčky (1→1, 2→2, ...)
+            </label>
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="antisymmetric-one-way" onchange="antisymmetricDemo()">
+                ✓ Jednosměrné šipky (1→2, 2→3, ...)
+            </label>
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="antisymmetric-bad" onchange="antisymmetricDemo()" style="color: #e74c3c;">
+                ✗ Obousměrné 1↔2 (porušuje antisymetrii)
+            </label>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.95em; color: #555;">
+            <strong>Vysvětlení:</strong> Antisymetrická relace dovoluje obousměrné šipky jen mezi stejnými prvky (1→1, 2→2). Mezi různými prvky (1 a 2) může být max. jednosměrná šipka.
+        </p>
+    </div>
+
+    <script>
+        let antisymmetricDiagram = new RelationDiagram('diagram-antisymmetric', ['1', '2', '3', '4', '5']);
+        function antisymmetricDemo() {
+            antisymmetricDiagram.clear();
+            if (document.getElementById('antisymmetric-loops').checked) {
+                // Smyčky jsou OK (a,a) ↔ (a,a) není porušení
+                antisymmetricDiagram.addRelation('1→1');
+                antisymmetricDiagram.addRelation('2→2');
+                antisymmetricDiagram.addRelation('3→3');
+                antisymmetricDiagram.addRelation('4→4');
+                antisymmetricDiagram.addRelation('5→5');
+            }
+            if (document.getElementById('antisymmetric-one-way').checked) {
+                // Jednosměrné šipky (≤ relace)
+                antisymmetricDiagram.addRelation('1→2');
+                antisymmetricDiagram.addRelation('2→3');
+                antisymmetricDiagram.addRelation('3→4');
+                antisymmetricDiagram.addRelation('4→5');
+            }
+            if (document.getElementById('antisymmetric-bad').checked) {
+                // Přidej obousměrnou šipku - porušení antisymetrie
+                antisymmetricDiagram.addRelation('1→2');
+                antisymmetricDiagram.addRelation('2→1');
+            }
+        }
+    </script>
+
+    <hr style="margin: 20px 0;">
+
+    <p><strong>6. Tranzitivita:</strong> $\forall a,b,c \in A: (a,b) \in R \land (b,c) \in R \Rightarrow (a,c) \in R$</p>
+    <p>Relace se "šíří" přes střední prvek — když existuje řetězec, musí existovat i přímá šipka. <strong>Příklad:</strong> "být předkem" — je-li Anna matka Petra a Petr otec Evy, pak je Anna babička Evy.</p>
+
+    <div class="interactive-section">
+        <p><strong>Interaktivní příklad:</strong> Relace na $\{1, 2, 3, 4, 5\}$</p>
+        <svg id="diagram-transitive" style="width: 100%; height: 200px;"></svg>
+        <div style="margin-top: 15px;">
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="transitive-chain" onchange="transitiveDemo()">
+                ✓ Řetězec: 1→2→3→4
+            </label>
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="transitive-direct" onchange="transitiveDemo()">
+                ✓ Přímé šipky (1→3, 1→4, 2→4)
+            </label>
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="transitive-bad" onchange="transitiveDemo()" style="color: #e74c3c;">
+                ✗ Bez přímých šipek (porušení tranzitivity)
+            </label>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.95em; color: #555;">
+            <strong>Vysvětlení:</strong> Tranzitivní relace musí mít všechny "přímé" šipky, kterých lze dosáhnout řetězením. Pokud máte 1→2 a 2→3, musíte mít i 1→3 (a také 1→4 a 2→4 ze zbytku řetězce).
+        </p>
+    </div>
+
+    <script>
+        let transitiveDiagram = new RelationDiagram('diagram-transitive', ['1', '2', '3', '4', '5']);
+
+        function transitiveDemo() {
+            transitiveDiagram.clear();
+            if (document.getElementById('transitive-chain').checked) {
+                // Řetězec: 1→2→3→4
+                transitiveDiagram.addRelation('1→2');
+                transitiveDiagram.addRelation('2→3');
+                transitiveDiagram.addRelation('3→4');
+            }
+            if (document.getElementById('transitive-direct').checked) {
+                // Tranzitivita: všechny přímé šipky z řetězce
+                transitiveDiagram.addRelation('1→3');
+                transitiveDiagram.addRelation('2→4');
+                transitiveDiagram.addRelation('1→4');
+            }
+            if (document.getElementById('transitive-bad').checked && document.getElementById('transitive-chain').checked) {
+                // Remove přímé šipky - porušení tranzitivity
+                transitiveDiagram.relations = transitiveDiagram.relations.filter(r => !['1→3', '1→4', '2→4'].includes(r));
+                transitiveDiagram.draw();
+            }
+        }
+    </script>
+
+    <hr style="margin: 20px 0;">
+
+    <p><strong>7. Konektivita (spojitost):</strong> $\forall a,b \in A: a \neq b \Rightarrow [(a,b) \in R \lor (b,a) \in R]$</p>
+    <p>Jakékoliv dva různé prvky jsou porovnatelné — mezi každou dvojicí existuje šipka aspoň jedním směrem. <strong>Příklad:</strong> "≤" na číslech — jakákoliv dvě čísla jsou porovnatelná ($1 \leq 2$ nebo $2 \leq 1$).</p>
+
+    <div class="interactive-section">
+        <p><strong>Interaktivní příklad:</strong> Relace na $\{1, 2, 3, 4, 5\}$</p>
+        <svg id="diagram-connected" style="width: 100%; height: 200px;"></svg>
+        <div style="margin-top: 15px;">
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="connected-full" onchange="connectedDemo()">
+                ✓ Spojitá (všechny páry porovnatelné)
+            </label>
+            <label style="display: block; margin: 8px 0;">
+                <input type="checkbox" id="connected-partial" onchange="connectedDemo()" style="color: #e74c3c;">
+                ✗ Nesouvislá (některé páry chybí)
+            </label>
+        </div>
+        <p style="margin-top: 10px; font-size: 0.95em; color: #555;">
+            <strong>Vysvětlení:</strong> Spojitá relace má mezi každou dvojicí prvků (např. 1 a 2, 3 a 4) šipku aspoň jedním směrem. Pokud chybí šipka mezi některými prvky (oběma směry), relace není spojitá.
+        </p>
+    </div>
+
+    <script>
+        let connectedDiagram = new RelationDiagram('diagram-connected', ['1', '2', '3', '4', '5']);
+        function connectedDemo() {
+            connectedDiagram.clear();
+            if (document.getElementById('connected-partial').checked) {
+                // Nesouvislá: některé páry chybí
+                connectedDiagram.addRelation('1→2');
+                connectedDiagram.addRelation('1→3');
+                connectedDiagram.addRelation('2→4');
+                // Chybí např. vztah mezi 3 a 4, 3 a 5 atd.
+            } else if (document.getElementById('connected-full').checked) {
+                // Spojitá relace: všechny páry jsou porovnatelné
+                connectedDiagram.addRelation('1→2');
+                connectedDiagram.addRelation('1→3');
+                connectedDiagram.addRelation('1→4');
+                connectedDiagram.addRelation('1→5');
+                connectedDiagram.addRelation('2→3');
+                connectedDiagram.addRelation('2→4');
+                connectedDiagram.addRelation('2→5');
+                connectedDiagram.addRelation('3→4');
+                connectedDiagram.addRelation('3→5');
+                connectedDiagram.addRelation('4→5');
+            }
+        }
+    </script>
+
+    <h3>Ekvivalence</h3>
+
+    <p><strong>Relace ekvivalence:</strong> Relace, která je reflexivní, symetrická a tranzitivní.</p>
+
+    <p><strong>Hlavní vlastnost:</strong> Ekvivalence dělí množinu na třídy ekvivalence — disjunktní podmnožiny, kde prvky v jedné třídě jsou si "ekvivalentní".</p>
+
+    <div class="highlight-box">
+        <strong>Příklady ekvivalencí:</strong>
+        <ul>
+            <li>"Být stejný věk" — lidi se dělí do skupin podle věku</li>
+            <li>"Má stejný zbytek po dělení n" — na celých číslech</li>
+            <li>"Mít stejný počet prvků" — na konečných množinách</li>
+            <li>"Být kongruentní" — v geometrii</li>
+        </ul>
+    </div>
+
+    <p><strong>Partition (rozklad):</strong> Soubor tříd ekvivalence tvoří partition — jejich sjednocení je celá množina, jsou disjunktní a žádná není prázdná.</p>
+
+    <h3>Uspořádání (Poset)</h3>
+
+    <p><strong>Částečné uspořádání (partial order):</strong> Relace, která je reflexivní, antisymetrická a tranzitivní.</p>
+
+    <p><strong>Lineární (totální) uspořádání (total order):</strong> Částečné uspořádání, které je navíc spojité (porovnatelné).</p>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong>
+        <ul>
+            <li>"$\leq$" na číslech — lineární uspořádání (všechna čísla jsou porovnatelná)</li>
+            <li>"$\subseteq$" na podmnožinách — částečné uspořádání (ne všechny množiny jsou porovnatelné, např. $\{1,2\}$ a $\{2,3\}$)</li>
+            <li>"Být dělitelem" — částečné uspořádání na číslech</li>
+        </ul>
+    </div>
+
+    <p><strong>Minimální a maximální prvky:</strong></p>
+    <ul>
+        <li><strong>Minimální:</strong> Prvek, pod kterým není nic (ale nemusí být nejmenší)</li>
+        <li><strong>Maximální:</strong> Prvek, nad kterým není nic (ale nemusí být největší)</li>
+        <li><strong>Nejmenší/Největší:</strong> Jsou vůči všem prvkům porovnatelné</li>
+    </ul>
+
+    <h3>Zobrazení (Funkce)</h3>
+
+    <p><strong>Zobrazení $f: A \to B$:</strong> Relace, kde každý prvek z A je spárován s právě jedním prvkem z B.</p>
+
+    <p><strong>Vlastnosti zobrazení:</strong></p>
+
+    <p><strong>Injektivní (prosté):</strong> Různé prvky z A jdou na různé prvky v B</p>
+    <div class="highlight-box">
+        $f(x_1) = f(x_2) \Rightarrow x_1 = x_2$
+    </div>
+
+    <p><strong>Surjektivní (na):</strong> Každý prvek z B je obrazem nějakého prvku z A</p>
+    <div class="highlight-box">
+        $\forall b \in B: \exists a \in A: f(a) = b$
+    </div>
+
+    <p><strong>Bijektivní:</strong> Zároveň injektivní i surjektivní — Perfect párování A s B</p>
+    <div class="highlight-box">
+        Existuje inverzní zobrazení $f^{-1}$
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklady:</strong>
+        <ul>
+            <li>$f(x) = 2x$ na $\mathbb{N} \to \mathbb{N}$ — injektivní, ne surjektivní (lichá čísla chybějí)</li>
+            <li>$f(x) = x \bmod 2$ na $\mathbb{N} \to \{0,1\}$ — surjektivní, ne injektivní (více čísel se mapuje na 0)</li>
+            <li>$f(x) = x$ na $\mathbb{R} \to \mathbb{R}$ — bijektivní (identita)</li>
+        </ul>
+    </div>
+
+    <p><strong>Inverzní zobrazení:</strong> Když $f$ je bijektivní, $f^{-1}$ "vrací" prvky zpět. Máme $f(f^{-1}(b)) = b$ a $f^{-1}(f(a)) = a$.</p>
+
+    <h3>Vztah mezi ekvivalencí a zobrazením</h3>
+
+    <p><strong>Důležitá věta:</strong> Ekvivalence na A odpovídá bijektivnímu zobrazení na partition množiny A.</p>
+
+    <p><strong>Prakticky:</strong> Máme-li ekvivalenci $\sim$ na A, můžeme si ji představit jako "zamlžovače" — elementy ve stejné třídě ekvivalence si "vypadají stejně".</p>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> Ekvivalence "stejný zbytek mod 3" na $\{0,1,2,3,4,5\}$
+        <ul>
+            <li>Třída 0: $\{0, 3\}$</li>
+            <li>Třída 1: $\{1, 4\}$</li>
+            <li>Třída 2: $\{2, 5\}$</li>
+        </ul>
+        Zobrazení $f(x) = x \bmod 3$ vytváří bijekci mezi $\{\{0,3\}, \{1,4\}, \{2,5\}\}$ a $\{0,1,2\}$.
+    </div>
+
+    <div class="note-box">
+        <strong>Návaznost na předchozí témata:</strong>
+        <ul>
+            <li>Binární relace jsou odvozeny z <strong>kartézského součinu</strong> (teorie množin)</li>
+            <li>Předikátové výroky s dvěma argumenty ($R(x,y)$) reprezentují binární relace</li>
+            <li>Ekvivalence mají hluboké spojení s logikou — odpovídají jistému typu logických ekvivalencí</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>Propojení témat v okruhu</h2>
+
+    <p><strong>Jak se témata navazují:</strong></p>
+    <ol>
+        <li><strong>Výrokový počet</strong> — jednoduché tvrzení (pravda/nepravda)</li>
+        <li><strong>Predikátový počet</strong> — tvrzení o objektech (s proměnnými a kvantifikátory)</li>
+        <li><strong>Teorie množin</strong> — objekty a jejich kolekce (universum pro predikáty)</li>
+        <li><strong>Binární relace</strong> — vztahy mezi objekty (konkrétní aplikace predikátů)</li>
+    </ol>
+
+    <p><strong>Co se člení:</strong> Výrokový počet → teorie množin → binární relace jsou lineární posloupnost abstrakce a konkretizace.</p>
+    <p><strong>Křížové conexe:</strong> Predikátový počet propojuje všechno — lze s ním formálně reprezentovat jakoukoliv z ostatních tří oblastí.</p>
+
+
+</div>
+</body>
+</html>
