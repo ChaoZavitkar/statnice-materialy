@@ -30,16 +30,6 @@
     <h1>Okruh 3 – Spojové datové struktury</h1>
     <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
 
-    <h2>Co se naučíte</h2>
-    <ul>
-        <li>Jednosměrný spojový seznam (Linked List)</li>
-        <li>Základní operace: vkládání, výmaz, vyhledávání</li>
-        <li>Binární strom (Binary Tree)</li>
-        <li>Operace nad binárním stromem</li>
-        <li>Časová složitost všech operací</li>
-        <li>Kdy použít spojové struktury místo polí/seznamů</li>
-    </ul>
-
     <hr>
 
     <h2>Co jsou to spojové struktury</h2>
@@ -74,7 +64,7 @@ data | odkaz</code></pre>
 
     <hr>
 
-    <h2>1. Jednosměrný spojový seznam</h2>
+    <h2>Jednosměrný spojový seznam</h2>
 
     <h3>Struktura uzlu (Node)</h3>
     <p>Každý prvek (uzel) obsahuje:</p>
@@ -125,7 +115,7 @@ seznam.vypis()  # 10 → 20 → 30 → None</code></pre>
 
     <hr>
 
-    <h2>2. Vkládání do spojového seznamu</h2>
+    <h2>Vkládání do spojového seznamu</h2>
 
     <h3>A) Vložení na ZAČÁTEK (prepend) – O(1)</h3>
 
@@ -193,7 +183,7 @@ Krok 3: head = nový_uzel
 
     <hr>
 
-    <h2>3. Výmaz ze spojového seznamu</h2>
+    <h2>Výmaz ze spojového seznamu</h2>
 
     <h3>A) Výmaz ze ZAČÁTKU – O(1)</h3>
 
@@ -240,7 +230,7 @@ Po:   head → [10|→] → [30|→] → [40|×]
 
     <hr>
 
-    <h2>4. Vyhledávání ve spojovém seznamu – O(n)</h2>
+    <h2>Vyhledávání ve spojovém seznamu</h2>
 
     <pre><code class="language-python">def vyhledej(self, hodnota):
     aktualni = self.head
@@ -336,7 +326,7 @@ root.right.right = TreeNode(80)</code></pre>
 
     <hr>
 
-    <h2>5. Operace nad binárním stromem</h2>
+    <h2>Operace nad binárním stromem</h2>
 
     <h3>A) Vkládání do BST (Binárního Vyhledávacího Stromu)</h3>
     <p><strong>Pravidlo BST:</strong> Levý podstrom &lt; rodič &lt; pravý podstrom</p>
@@ -473,7 +463,7 @@ def najdi_minimum(root):
 
     <hr>
 
-    <h2>6. Průchody stromem</h2>
+    <h2>Průchody stromem</h2>
 
     <h3>A) In-order (LDR) – Levý &rarr; Data &rarr; Pravý</h3>
 

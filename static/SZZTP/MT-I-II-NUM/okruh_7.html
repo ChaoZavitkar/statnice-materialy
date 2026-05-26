@@ -41,9 +41,9 @@
         <h1>Okruh 7 – Funkce více proměnných a metoda nejmenších čtverců</h1>
         <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
 
-        <h2>1. Funkce více proměnných</h2>
+        <h2>Funkce více proměnných</h2>
 
-        <h3>Co je funkce více proměnných?</h3>
+        <h3>Definice</h3>
         <p><strong>Zatímco funkce jedné proměnné má jeden vstup, funkce více proměnných má VÍCE vstupů!</strong></p>
 
         <div class="math-box">
@@ -92,7 +92,7 @@
 
         <hr>
 
-        <h2>2. Parciální derivace</h2>
+        <h2>Parciální derivace</h2>
 
         <h3>Myšlenka</h3>
         <p><strong>Parciální derivace = derivace, ale jenom v JEDNOM směru (ostatní proměnné ignorujeme!).</strong></p>
@@ -134,19 +134,28 @@
             <p><strong style="color: #2e7d32;">Správně:</strong> $\frac{\partial f}{\partial x} = 2xy + 3y^2$ ✓</p>
         </div>
 
-        <h2>3. Extrémy funkcí více proměnných</h2>
+        <h2>Extrémy funkcí více proměnných</h2>
 
-        <h3>Jak najít maximum a minimum?</h3>
+        <h3>Princip — Kritické body</h3>
         <p><strong>Na vrcholu hory:</strong> Všechny směry jsou "vodorovné" → všechny parciální derivace jsou 0!</p>
 
         <div class="formula">$$\frac{\partial f}{\partial x} = 0 \quad \text{a} \quad \frac{\partial f}{\partial y} = 0$$</div>
 
-        <p><strong>Takovéto body se nazývají "kritické body".</strong></p>
+        <p><strong>Takovéto body se nazývají "kritické body".</strong> Ale ne všechny jsou extrémy — některé mohou být sedlové body!</p>
+
+        <h3>Algoritmus — Hledání lokálních extrémů</h3>
+
+        <p><strong>Postup krok za krokem:</strong></p>
+        <ol>
+            <li><strong>Spočítej parciální derivace:</strong> Najdi $\frac{\partial f}{\partial x}$ a $\frac{\partial f}{\partial y}$</li>
+            <li><strong>Najdi kritické body:</strong> Vyřeš soustavu $\frac{\partial f}{\partial x} = 0$ a $\frac{\partial f}{\partial y} = 0$</li>
+            <li><strong>Spočítej druhé derivace:</strong> Najdi $\frac{\partial^2 f}{\partial x^2}$, $\frac{\partial^2 f}{\partial y^2}$, $\frac{\partial^2 f}{\partial x \partial y}$</li>
+            <li><strong>Sestav Hessovu matici:</strong> V každém kritickém bodě spočítej H</li>
+            <li><strong>Ověř pomocí vlastních hodnot H:</strong> Rozhodni, zda je to minimum, maximum, nebo sedlo</li>
+        </ol>
 
         <h3>Hessova matice (druhé derivace)</h3>
-        <p><strong>Aby jsme věděli, jestli je to maximum, minimum, nebo sedlo, použijeme druhé derivace (Hessovu matici):</strong></p>
 
-        <p>Hessova matice je matice druhých derivací:</p>
         <div class="formula">$$\mathbf{H} = \begin{pmatrix}
         \frac{\partial^2 f}{\partial x^2} & \frac{\partial^2 f}{\partial x \partial y} \\
         \frac{\partial^2 f}{\partial y \partial x} & \frac{\partial^2 f}{\partial y^2}
@@ -154,11 +163,73 @@
 
         <p><strong>Interpretace podle vlastních hodnot $\lambda_1, \lambda_2$ Hessovy matice:</strong></p>
         <ul>
-            <li><strong>$\lambda_1 > 0$ a $\lambda_2 > 0$:</strong> Lokální MINIMUM (dno údolí, ∪ tvar)</li>
-            <li><strong>$\lambda_1 < 0$ a $\lambda_2 < 0$:</strong> Lokální MAXIMUM (vrchol hory, ∩ tvar)</li>
-            <li><strong>$\lambda_1$ a $\lambda_2$ opačných znamének:</strong> Sedlový bod (vrchol v jednom směru, údolí v druhém)</li>
-            <li><strong>$\lambda_1 = 0$ nebo $\lambda_2 = 0$:</strong> Test je nedecizivní (potřebujeme vyšší derivace)</li>
+            <li>✓ <strong>$\lambda_1 > 0$ a $\lambda_2 > 0$:</strong> Lokální MINIMUM (dno údolí, ∪ tvar)</li>
+            <li>✓ <strong>$\lambda_1 < 0$ a $\lambda_2 < 0$:</strong> Lokální MAXIMUM (vrchol hory, ∩ tvar)</li>
+            <li>⚠️ <strong>$\lambda_1$ a $\lambda_2$ opačných znamének:</strong> Sedlový bod (nikoliv extrém!)</li>
+            <li>❓ <strong>$\lambda_1 = 0$ nebo $\lambda_2 = 0$:</strong> Test je nedecizivní (potřebujeme vyšší derivace)</li>
         </ul>
+
+        <h3>Příklad: Hledání extrémů konkrétní funkce</h3>
+
+        <p><strong>Úloha:</strong> Najdi lokální extrémy funkce $f(x, y) = x^3 + y^3 - 3xy$</p>
+
+        <p><strong>KROK 1: Parciální derivace</strong></p>
+        <div class="formula">
+            $$\frac{\partial f}{\partial x} = 3x^2 - 3y, \quad \frac{\partial f}{\partial y} = 3y^2 - 3x$$
+        </div>
+
+        <p><strong>KROK 2: Kritické body</strong></p>
+        <div class="formula">
+            $$\begin{aligned}
+            3x^2 - 3y &= 0 \quad \Rightarrow \quad y = x^2 \\
+            3y^2 - 3x &= 0 \quad \Rightarrow \quad y^2 = x
+            \end{aligned}$$
+        </div>
+        <p>Dosadíme $y = x^2$ do druhé rovnice: $(x^2)^2 = x$ → $x^4 = x$ → $x(x^3 - 1) = 0$</p>
+        <ul>
+            <li>$x = 0$ → $y = 0$ → Bod $(0, 0)$</li>
+            <li>$x = 1$ → $y = 1$ → Bod $(1, 1)$</li>
+        </ul>
+
+        <p><strong>KROK 3: Druhé derivace</strong></p>
+        <div class="formula">
+            $$\frac{\partial^2 f}{\partial x^2} = 6x, \quad \frac{\partial^2 f}{\partial y^2} = 6y, \quad \frac{\partial^2 f}{\partial x \partial y} = -3$$
+        </div>
+
+        <p><strong>KROK 4: Hessova matice v bodě $(0, 0)$</strong></p>
+        <div class="formula">
+            $$\mathbf{H}_{(0,0)} = \begin{pmatrix} 0 & -3 \\ -3 & 0 \end{pmatrix}$$
+        </div>
+        <p>Vlastní hodnoty: $\det(\mathbf{H} - \lambda I) = 0$ → $(0-\lambda)(0-\lambda) - 9 = 0$ → $\lambda^2 = 9$ → $\lambda_1 = 3, \lambda_2 = -3$</p>
+        <p>Protože vlastní hodnoty mají <strong>opačné znaménko</strong> → <strong>SEDLOVÝ BOD (nikoliv extrém!)</strong></p>
+
+        <p><strong>KROK 5: Hessova matice v bodě $(1, 1)$</strong></p>
+        <div class="formula">
+            $$\mathbf{H}_{(1,1)} = \begin{pmatrix} 6 & -3 \\ -3 & 6 \end{pmatrix}$$
+        </div>
+        <p>Vlastní hodnoty: $\det(\mathbf{H} - \lambda I) = 0$ → $(6-\lambda)^2 - 9 = 0$ → $(6-\lambda)^2 = 9$ → $\lambda_1 = 9, \lambda_2 = 3$</p>
+        <p>Všechny vlastní hodnoty <strong>kladné</strong> → <strong>LOKÁLNÍ MINIMUM v bodě (1, 1)</strong> ✓</p>
+        <p>Hodnota minima: $f(1, 1) = 1 + 1 - 3 = -1$</p>
+
+        <h3>Lokální vs. Globální extrémy</h3>
+
+        <p><strong>Rozdíl:</strong></p>
+        <ul>
+            <li><strong>Lokální minimum:</strong> Nejmenší hodnota v BLÍZKÉM okolí bodu (může existovat menší minimum někde jinde)</li>
+            <li><strong>Globální minimum:</strong> Nejmenší hodnota VŠUDE v celé definiční oblasti</li>
+        </ul>
+
+        <p><strong>Praktická ilustrace:</strong> Představte si hornatou krajinu s více údolími. Každé údolí je lokální minimum. Nejhlubší údolí na celé mapě je globální minimum.</p>
+
+        <div class="note-box">
+            <p><strong>Jak najít globální extrém:</strong></p>
+            <ol>
+                <li>Najdi všechny lokální extrémy (pomocí kritických bodů a Hessovy matice)</li>
+                <li>Vyhodnoť funkci v každém lokálním extrému</li>
+                <li>Ověř chování funkce na hranicích definiční oblasti (pokud existují)</li>
+                <li>Největší/nejmenší hodnota ze všech = globální extrém</li>
+            </ol>
+        </div>
 
         <h3>Co SPLŇUJE Definici Extrému – Co Ne?</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
@@ -178,7 +249,7 @@
             <p>V bodě (0,0) se funkce stoupá ve směru x, ale klesá ve směru y!</p>
         </div>
 
-        <h2>4. Vázané extrémy (Lagrangeovy multiplikátory)</h2>
+        <h2>Vázané extrémy (Lagrangeovy multiplikátory)</h2>
 
         <h3>Jaký je problém?</h3>
         <p><strong>Máme funkci $f(x, y)$ a hledáme její maximum/minimum, ALE s podmínkou!</strong> Např. bod musí ležet na křivce.</p>
@@ -221,28 +292,39 @@
             <p><strong>Varianta chyby:</strong> Zapomenutí na podmínku $g(x,y) = 0$ v soustavě. To vede k nesprávným kritickým bodům.</p>
         </div>
 
-        <h2>5. Metoda nejmenších čtverců</h2>
+        <h2>Metoda nejmenších čtverců (MNČ)</h2>
 
-        <h3>Jaký je problém?</h3>
-        <p><strong>Máme datové body a chceme jimi proložit nejlepší přímku!</strong> Např. data o ceně domu (velikost vs cena) a chceme najít trend.</p>
+        <h3>Motivace — Reálný problém</h3>
+        <p><strong>Máme datové body a chceme jimi proložit nejlepší model!</strong> Např. data o ceně domu (velikost vs cena) a chceme najít vztah cena ≈ a·velikost + b.</p>
 
         <div class="math-box">
             <strong>Praktický příklad:</strong>
             <ul>
-                <li>5 domů s rozměry a cenami: (100m², 2M), (120m², 2.3M), (150m², 3M), (180m², 3.5M), (200m², 4M)</li>
-                <li>Chceme najít přímku: Cena ≈ a × (Velikost) + b</li>
-                <li>Která přímka je "nejlepší"?</li>
+                <li>5 domů s rozměry a cenami: (100m², 2M Kč), (120m², 2.3M), (150m², 3M), (180m², 3.5M), (200m², 4M)</li>
+                <li><strong>Otázka:</strong> Kolik Kč stojí 1m² domu? (Zjistíme parametr $a$)</li>
+                <li><strong>Otázka:</strong> Jaká je "základní cena" domu bez ohledu na velikost? (Zjistíme parametr $b$)</li>
             </ul>
         </div>
 
-        <h3>Myšlenka — "Minimalizuj chyby"</h3>
-        <p><strong>Chyba = vzdálenost bodů od přímky (čtverec chyby).</strong> Hledáme přímku s nejmenší sumou těchto chyb.</p>
+        <h3>Geometrický význam — Minimalizace chyby</h3>
 
-        <div class="formula">$$E(a, b) = \sum_{i=1}^{n} (\text{skutečná}_i - \text{předpověď}_i)^2 = \sum_{i=1}^{n} (y_i - (ax_i + b))^2$$</div>
+        <p><strong>Myšlenka:</strong> Každý datový bod má skutečnou hodnotu $y_i$ a predikovanou hodnotu (z přímky) $\hat{y}_i = ax_i + b$.</p>
 
-        <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\approx$ znamená "přibližně rovno" – není přesné, ale blízké správné hodnotě.</em></p>
+        <p><strong>Chyba v bodě $i$:</strong> $e_i = y_i - \hat{y}_i$ (vertikální vzdálenost bodu od přímky)</p>
 
-        <p><strong>Minimalizujeme $E$ podle $a$ a $b$ (sklon a průsečík)!</strong></p>
+        <p><strong>Součet čtvercových chyb (error function):</strong></p>
+        <div class="formula">$$E(a, b) = \sum_{i=1}^{n} e_i^2 = \sum_{i=1}^{n} (y_i - (ax_i + b))^2$$</div>
+
+        <p><strong>Cíl:</strong> Najít parametry $a$ a $b$ tak, aby $E(a, b)$ byla <strong>minimální</strong>. To znamená najít přímku, která je nejblíže všem datům v součtu čtvercových odchylek.</p>
+
+        <div class="highlight-box">
+            <p><strong>Proč čtverce a ne absolutní hodnoty?</strong></p>
+            <ul>
+                <li>Čtverce penalizují velké chyby více než malé (kvadratická funkce)</li>
+                <li>Matematicky jsou derivace čtverců jednodušší (hladká funkce)</li>
+                <li>Čtverce mají schéma "suma absolutních chyb" je robustnější vůči malým chybám, ale MNČ je citlivější na outliers</li>
+            </ul>
+        </div>
 
         <h3>Co SPLŇUJE Definici Metody Nejmenších Čtverců – Co Ne?</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
@@ -320,6 +402,281 @@
             <p style="font-size: 0.9em; color: #666; margin-top: 10px;">
                 💡 Zkus měnit data! Když jsou body lépe rozptýleny kolem přímky, R² je blíž 1.
             </p>
+        </div>
+
+        <hr>
+
+        <h2>Aplikace: Nelineární fitování na webu a optimalizace</h2>
+
+        <h3>Motivace — Webové metriky nejsou lineární!</h3>
+
+        <p><strong>Problém:</strong> V reálném světě webů a aplikací jsou vztahy mezi proměnnými často nelineární. Prostá přímka je nedostatečná!</p>
+
+        <div class="note-box">
+            <p><strong>Praktické příklady nelineárních vztahů na webu:</strong></p>
+            <ul>
+                <li>📊 <strong>A/B testování:</strong> Konverzní poměr vs. počet uživatelů — S-křivka (logistická funkce)</li>
+                <li>⚡ <strong>Výkon webu:</strong> Latence (ms) vs. počet připojených uživatelů — polynomiální nebo exponenciální růst</li>
+                <li>📈 <strong>Růst uživatelů:</strong> Počet aktivních uživatelů vs. čas — exponenciální nebo logistický model</li>
+                <li>💰 <strong>Zisk vs. marketing:</strong> Zisk vs. investice do reklamy — má zlom (bod nasycení)</li>
+                <li>🔍 <strong>Relevance vyhledávání:</strong> Skóre relevance dokumentu vs. počet klíčových slov</li>
+            </ul>
+        </div>
+
+        <h3>Slovník webových a optimalizačních metrik</h3>
+
+        <div class="highlight-box">
+            <p><strong>Základní veličiny:</strong></p>
+            <ul>
+                <li>$x$ = <strong>Nezávislá proměnná</strong> — to, co měníme/kontrolujeme. Např. počet uživatelů, investice v CZK, procento změny UI.</li>
+                <li>$y$ = <strong>Závislá proměnná</strong> — to, co měříme. Např. konverzní poměr (%), latence (ms), zisk (Kč).</li>
+                <li>$n$ = <strong>Počet datových bodů</strong> — kolik měření máme (kolik A/B testů, kolik dnů, apod.).</li>
+                <li>$\epsilon$ = <strong>Chyba/šum</strong> — rozdíl mezi teoretickou a skutečnou hodnotou. V reálných datech vždy existuje.</li>
+            </ul>
+
+            <p><strong>Parametry modelu (získáme z regrese):</strong></p>
+            <ul>
+                <li>$a, b$ = <strong>Koeficienty lineárního modelu</strong> — sklon a průsečík přímky $y = ax + b$</li>
+                <li>$a_0, a_1, a_2$ = <strong>Koeficienty polynomiálního modelu</strong> — pro kvadratickou funkci $y = a_0 + a_1 x + a_2 x^2$</li>
+                <li>$k, L$ = <strong>Parametry logistické funkce</strong> — $k$ = maximální hodnota (horní limit), $L$ = posunutí</li>
+                <li>$\lambda$ = <strong>Rychlost exponenciálního růstu</strong> — pro model $y = y_0 e^{\lambda x}$ (jak rychle roste)</li>
+            </ul>
+
+            <p><strong>Kvalitativní metriky:</strong></p>
+            <ul>
+                <li>$R^2$ = <strong>Koeficient determinace</strong> — jak dobře model vysvětluje data (0 = špatně, 1 = dokonale)</li>
+                <li>MSE = <strong>Střední kvadratická chyba</strong> — průměr čtverců chyb (menší = lépe)</li>
+                <li>RMSE = <strong>Kvadratický průměr chyb</strong> — $\sqrt{\text{MSE}}$ (ve stejných jednotkách jako $y$)</li>
+            </ul>
+        </div>
+
+        <h3>Příklad 1: A/B testování — Fitování konverzního poměru (Logistická funkce)</h3>
+
+        <p><strong>Webová situace:</strong> Váš e-shop má vylepšenou verzi checkout stránky. Testujete ji postupně — z 100 uživatelů vidí novou verzi 10, pak 20, pak 50 atd. Měříte, kolik z nich se rozhodne koupit (konverzní poměr).</p>
+
+        <p><strong>Problém:</strong> Konverzní poměr neroste lineárně! Nejdřív roste pomalu (uživatelé jsou skeptičtí), pak prudce (word-of-mouth efekt), pak zase pomalu (nasycení).</p>
+
+        <p><strong>Model — Logistická S-křivka (Sigmoid):</strong></p>
+        <div class="formula">$$p(x) = \frac{L}{1 + e^{-k(x-x_0)}}$$</div>
+
+        <p><strong>Vysvětlení parametrů:</strong></p>
+        <ul>
+            <li>$p(x)$ = <strong>konverzní poměr</strong> (0 až 100% nebo 0 až 1)</li>
+            <li>$x$ = <strong>počet uživatelů</strong> vidících novou verzi</li>
+            <li>$L$ = <strong>maximální konverzní poměr</strong> (horní limit, typicky kolem 5–15% pro e-shop)</li>
+            <li>$k$ = <strong>strmost křivky</strong> — jak rychle narůstá (větší $k$ = ostřejší přechod)</li>
+            <li>$x_0$ = <strong>midpoint</strong> — počet uživatelů, kde je konverzní poměr = $L/2$</li>
+        </ul>
+
+        <p><strong>Linearizace — Logit transformace:</strong></p>
+        <div class="formula">$$\ln\left(\frac{p}{1-p}\right) = k(x - x_0)$$</div>
+
+        <p>Pokud vynesete $\ln(p/(1-p))$ vs. $x$, dostanete přímku! Sklon = $k$, průsečík = $-kx_0$.</p>
+
+        <p><strong>Datová tabulka (naměřeno v testu):</strong></p>
+        <table class="table table-sm" style="max-width: 450px;">
+            <thead>
+                <tr><th>Uživatelů (x)</th><th>Konverzí</th><th>Poměr p</th><th>ln(p/(1-p))</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>100</td><td>2</td><td>0.020</td><td>-3.89</td></tr>
+                <tr><td>200</td><td>8</td><td>0.040</td><td>-3.18</td></tr>
+                <tr><td>500</td><td>35</td><td>0.070</td><td>-2.58</td></tr>
+                <tr><td>1000</td><td>100</td><td>0.100</td><td>-2.20</td></tr>
+                <tr><td>2000</td><td>200</td><td>0.100</td><td>-2.20</td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>Interpretace výsledků:</strong> Ze skluzu přímky získáte, jak rychle se konverzní poměr zlepšuje. Vysoký sklon = nová verze je VELMI efektivní!</p>
+
+        <p><strong>Praktické využití:</strong> Když znáte model, můžete předpovědět: "Při 5000 uživatelích bude konverzní poměr kolem X%". To pomáhá s rozhodováním, jestli novou verzi zavést všem.</p>
+
+        <p><strong>Datová tabulka (naměřeno):</strong></p>
+        <table class="table table-sm" style="max-width: 400px;">
+            <thead>
+                <tr><th>$V$ (V)</th><th>$I$ (mA)</th><th>$\ln(I)$</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>0.4</td><td>0.01</td><td>-4.605</td></tr>
+                <tr><td>0.5</td><td>0.1</td><td>-2.303</td></tr>
+                <tr><td>0.6</td><td>1.0</td><td>0.000</td></tr>
+                <tr><td>0.7</td><td>10.0</td><td>2.303</td></tr>
+                <tr><td>0.8</td><td>100.0</td><td>4.605</td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>Lineární regrese na transformovaných datech:</strong> $\ln(I) = a \cdot V + b$</p>
+        <ul>
+            <li>Ze skalárního součinu: $a \approx 23.03$ (= $1/V_T$, takže $V_T \approx 0.0434$ V)</li>
+            <li>$b \approx -13.41$ (= $\ln(I_s)$, takže $I_s \approx 1.3 \times 10^{-6}$ A)</li>
+        </ul>
+
+        <p><strong>Výsledný model:</strong> $I \approx 1.3 \times 10^{-6} \cdot e^{23.03 \cdot V}$ mA</p>
+
+        <h3>Příklad 2: Optimalizace výkonu webu — Latence vs. Počet uživatelů (Polynomiální model)</h3>
+
+        <p><strong>Webová situace:</strong> Provozujete server a měříte, jak se mění doba odezvy (latence) s počtem připojených uživatelů. Data ukazují, že latence neroste lineárně — nejdřív pomalu, pak prudce!</p>
+
+        <p><strong>Problém:</strong> Přímka by byla předobraz — realita je horší. Latence se chová polynomiálně (kvadraticky nebo kubicky).</p>
+
+        <p><strong>Model — Polynomiální (kvadratická) funkce:</strong></p>
+        <div class="formula">$$L(n) = a_0 + a_1 n + a_2 n^2$$</div>
+
+        <p><strong>Vysvětlení parametrů:</strong></p>
+        <ul>
+            <li>$L(n)$ = <strong>latence</strong> (čas odezvy v ms)</li>
+            <li>$n$ = <strong>počet připojených uživatelů</strong></li>
+            <li>$a_0$ = <strong>baseline latence</strong> — bez uživatelů (overhead serveru)</li>
+            <li>$a_1$ = <strong>lineární koeficient</strong> — latence na uživatele při nízkém zatížení</li>
+            <li>$a_2$ = <strong>kvadratický koeficient</strong> — efekt nasycení (když je hodně uživatelů, roste latence velmi prudce!)</li>
+        </ul>
+
+        <p><strong>Praktický příklad — Logaritmická transformace (za předpokladu exponenciálního modelu):</strong></p>
+        <p>Pokud se latence chová exponenciálně: $L = L_0 e^{\alpha n}$, pak:</p>
+        <div class="formula">$$\ln(L) = \ln(L_0) + \alpha n$$</div>
+
+        <p>Opět lineární vztah! Sklon = $\alpha$ (koeficient exponenciálního růstu).</p>
+
+        <p><strong>Datová tabulka (naměřeno na produkčním serveru):</strong></p>
+        <table class="table table-sm" style="max-width: 500px;">
+            <thead>
+                <tr><th>Uživatelů (n)</th><th>Latence L (ms)</th><th>ln(L)</th><th>Poznámka</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>10</td><td>50</td><td>3.91</td><td>Normální</td></tr>
+                <tr><td>50</td><td>100</td><td>4.61</td><td>Přijatelné</td></tr>
+                <tr><td>100</td><td>200</td><td>5.30</td><td>Pomalu se zhoršuje</td></tr>
+                <tr><td>200</td><td>500</td><td>6.21</td><td>Slabý výkon</td></tr>
+                <tr><td>500</td><td>2000</td><td>7.60</td><td>Kritický stav!</td></tr>
+                <tr><td>1000</td><td>8000</td><td>8.99</td><td>Timeout!</td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>Interpretace výsledků:</strong> Sklon $\alpha$ v $\ln(L)$ vs. $n$ vám řekne, jak rychle se latence exponenciálně zhoršuje. Vysoký sklon = server se rychle saturuje!</p>
+
+        <p><strong>Praktické využití:</strong> Z regrese zjistíte:
+            <ul>
+                <li>**Kritický bod** — při kolika uživatelích latence překročí limit (např. 500 ms)</li>
+                <li>**Kapacita serveru** — maximální počet uživatelů, které server zvládne</li>
+                <li>**Potřeba škálování** — když se blížíte kritickému bodu, je čas přidat servery nebo optimalizovat kód</li>
+            </ul>
+        </p>
+
+        <h3>Obecný postup — Nelineární fitování transformací</h3>
+
+        <div class="highlight-box">
+            <p><strong>Algoritmus:</strong></p>
+            <ol>
+                <li><strong>Identifikuj model:</strong> Jaká je teoretická funkce? (exponenciální, mocninná, atd.)</li>
+                <li><strong>Linearizuj:</strong> Logaritmuj nebo jinak transformuj, aby byla lineární</li>
+                <li><strong>Transformuj data:</strong> Vypočítej transformované hodnoty (např. $\ln(I)$, $1/T$)</li>
+                <li><strong>Aplikuj lineární regresi:</strong> Na transformovaných datech</li>
+                <li><strong>Inverzní transformace:</strong> Vrať se k původním parametrům modelu</li>
+                <li><strong>Ověř kvalitu:</strong> Spočítej $R^2$ a vizuálně zkontroluj fit</li>
+            </ol>
+        </div>
+
+        <p><strong>Příklady transformací (relevantní pro web & optimalizaci):</strong></p>
+        <table class="table table-sm" style="max-width: 700px;">
+            <thead>
+                <tr><th>Aplikace</th><th>Model</th><th>Transformace</th><th>Příklad</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Exponenciální růst (latence, čas)</strong></td>
+                    <td>$y = ae^{bx}$</td>
+                    <td>$\ln(y) = \ln(a) + bx$</td>
+                    <td>Latence vs. počet uživatelů</td>
+                </tr>
+                <tr>
+                    <td><strong>Mocninný vztah (škálování)</strong></td>
+                    <td>$y = ax^b$</td>
+                    <td>$\ln(y) = \ln(a) + b\ln(x)$</td>
+                    <td>Výkon vs. velikost cache (cache hit rate)</td>
+                </tr>
+                <tr>
+                    <td><strong>Logistická (S-křivka, konverze)</strong></td>
+                    <td>$p = \frac{L}{1+e^{-k(x-x_0)}}$</td>
+                    <td>$\ln(p/(1-p)) = k(x-x_0)$</td>
+                    <td>Konverzní poměr vs. uživatelé</td>
+                </tr>
+                <tr>
+                    <td><strong>Saturační model (zisk, ROI)</strong></td>
+                    <td>$y = L(1-e^{-kx})$</td>
+                    <td>$\ln(L-y) = \ln(L) - kx$</td>
+                    <td>Zisk vs. investice do marketingu</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><strong>Praktické doporučení pro web:</strong></p>
+        <ul>
+            <li>**Exponenciální**: Server se zhoršuje exponenciálně → brzy potřebujete upgrade!</li>
+            <li>**Mocninný**: Skálování částečně funguje (lepší než exponenciální)</li>
+            <li>**Logistická**: Optimální pro konverzi (má přirozený horní limit)</li>
+            <li>**Saturační**: Ideální pro marketing — investice má snižující se efekt</li>
+        </ul>
+
+        <hr>
+
+        <h2>7. Shrnutí a praktické doporučení</h2>
+
+        <div class="highlight-box">
+            <p><strong>Klíčové pojmy a jejich vztahy:</strong></p>
+            <ul>
+                <li><strong>Parciální derivace:</strong> Změna funkce v jednom směru (zatímco ostatní jsou konstanty)</li>
+                <li><strong>Kritické body:</strong> Místa, kde jsou všechny parciální derivace nula (kandidáti na extrémy)</li>
+                <li><strong>Hessova matice:</strong> Matice druhých derivací — určuje typ kritického bodu</li>
+                <li><strong>Lokální extrém:</strong> Největší/nejmenší v blízkém okolí (může být více takových bodů)</li>
+                <li><strong>Globální extrém:</strong> Největší/nejmenší v celé doméně (je jen jeden)</li>
+                <li><strong>Vázaný extrém:</strong> Extrém s podmínkou (Lagrangeovy multiplikátory)</li>
+                <li><strong>Metoda nejmenších čtverců:</strong> Fitování dat minimalizací sumy čtvercových chyb</li>
+            </ul>
+        </div>
+
+        <div class="note-box">
+            <p><strong>Praktické doporučení — Co dělat v praxi na webu:</strong></p>
+
+            <p><strong>📊 Pro analýzu dat a predikci (A/B testy, analytics):</strong></p>
+            <ul>
+                <li>**Lineární vztah** → Lineární regrese (jednoduché, ale řídko se vyskytuje)</li>
+                <li>**Konverzní metriky** → Logistická funkce (S-křivka) — modeluje nasycení</li>
+                <li>**Exponenciální růst** (latence, chyby) → Logaritmuj a aplikuj lineární regresi</li>
+                <li>**Mocninný vztah** (cache, paralelizace) → Dvojitý logaritmus (log-log regrese)</li>
+            </ul>
+
+            <p><strong>⚡ Pro optimalizaci a performance:</strong></p>
+            <ul>
+                <li>**Měříte latenci s rostoucím počtem uživatelů?** → Fituj exponenciální nebo kvadratickou funkci</li>
+                <li>**Chcete znát kritickou kapacitu?** → Najdi bod, kde latence > limit (např. 500 ms)</li>
+                <li>**Rozhodujete o škálování?** → Porovnej náklady škálování vs. ztrátu uživatelů</li>
+            </ul>
+
+            <p><strong>💰 Pro business metriky (ROI, zisk, growth):</strong></p>
+            <ul>
+                <li>**Věříte v lineární růst?** → Kontroluj data! Realita je obvykle nelineární</li>
+                <li>**Marketing s klesajícím efektem?** → Saturační model $y = L(1-e^{-kx})$</li>
+                <li>**Predikce budoucího zisku?** → Fituj historická data, pak extrapoluj (opatrně!)</li>
+            </ul>
+
+            <p><strong>🛠️ Pro hledání extrémů (max. zisk, min. chyba):</strong></p>
+            <ul>
+                <li>Bez podmínek → Hessova matice (pro jednoduché funkce)</li>
+                <li>S podmínkou (např. rozpočet) → Lagrangeovy multiplikátory</li>
+                <li>V praxi → Numerické metody, gradient descent, nebo brute force search (pro web je často dobry!)</li>
+            </ul>
+        </div>
+
+        <h3>Cvičení pro porozumění</h3>
+
+        <div class="note-box">
+            <p><strong>Ověř si pochopení — zkus vyřešit:</strong></p>
+            <ol>
+                <li>Najdi kritické body funkce $f(x, y) = x^2 - 2xy + 2y^2 - 2x + 3y$. Jsou to minima, maxima, nebo sedlové body?</li>
+                <li>Data: (1, 1), (2, 3), (3, 5), (4, 7). Fituj přímku $y = ax + b$ metodou nejmenších čtverců.</li>
+                <li>Máš data o diodě (V, I). Chceš fitovat exponenciální model $I = I_s e^{V/V_T}$. Jak bys postupoval?</li>
+                <li>Maximalizuj $f(x, y) = xy$ s podmínkou $x + 2y = 4$ (použij Lagrangeovy multiplikátory).</li>
+            </ol>
         </div>
 
     </div>

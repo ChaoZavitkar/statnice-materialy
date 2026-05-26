@@ -214,7 +214,7 @@
     <h2>Výrokový počet</h2>
     <p><strong>Logické spojky, jejich úplný systém, odvozovací pravidla, splnitelnost, aplikace v logických obvodech</strong></p>
 
-    <h3>Co je výrokový počet?</h3>
+    <h3>Úvod</h3>
     <p>Výrokový počet je formální systém pro práci s <strong>výroky</strong> (tvrzeními, která jsou buď pravdivá, nebo nepravdivá). Umožňuje nám:</p>
     <ul>
         <li>Pracovat s logikou systematicky a bez nejednoznačnosti</li>
@@ -230,7 +230,7 @@
 
     <h3>Logické spojky</h3>
 
-    <p><strong>Negace (¬)</strong> — NOT</p>
+    <h4>1. Negace (¬) — NOT</h4>
     <p>Obrátí pravdivostní hodnotu. Je to unární spojka (pracuje jen s jedním výrokem).</p>
     <div class="table-responsive">
         <table class="table table-striped table-bordered" style="max-width: 300px;">
@@ -253,7 +253,7 @@
         </table>
     </div>
 
-    <p style="margin-top: 20px;"><strong>Konjunkce (∧)</strong> — AND</p>
+    <h4 style="margin-top: 20px;">2. Konjunkce (∧) — AND</h4>
     <p>Pravdivá jen když oba výroky jsou pravdivé. Je to binární spojka.</p>
     <div class="table-responsive">
         <table class="table table-striped table-bordered" style="max-width: 350px;">
@@ -289,7 +289,7 @@
         </table>
     </div>
 
-    <p style="margin-top: 20px;"><strong>Disjunkce (∨)</strong> — OR</p>
+    <h4 style="margin-top: 20px;">3. Disjunkce (∨) — OR</h4>
     <p>Pravdivá když alespoň jeden výrok je pravdivý. Je to binární spojka.</p>
     <div class="table-responsive">
         <table class="table table-striped table-bordered" style="max-width: 350px;">
@@ -401,6 +401,196 @@
         <strong>Pamatuj:</strong> Implikace $A \to B$ je ekvivalentní $\neg A \lor B$. To se používá při převodech.
     </div>
 
+    <h3>Pravdivostní tabulky logických spojek</h3>
+
+    <p>Logické spojky lze interpretovat pomocí pravděpodobností pomocí stejných operací jako u jejich pravdivostních hodnot (0 a 1).</p>
+
+    <p style="margin-top: 20px;"><strong>Negace (¬)</strong></p>
+    <p>Když $P(A)$ je pravděpodobnost výroku A, pak pravděpodobnost negace je:</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 400px;">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>¬A</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="highlight-box" style="margin-top: 10px;">
+        <strong>Interpretace:</strong> Když $P(A) = p$, pak $P(\neg A) = 1 - p$
+    </div>
+
+    <p style="margin-top: 20px;"><strong>Konjunkce (∧)</strong> — AND</p>
+    <p>Pravděpodobnost, že nastanou oba jevy zároveň (pro nezávislé jevy):</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 500px;">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>A ∧ B</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="highlight-box" style="margin-top: 10px;">
+        <strong>Interpretace:</strong> Když $P(A) = p_1$ a $P(B) = p_2$ (nezávislé), pak $P(A \land B) = p_1 \times p_2$
+    </div>
+
+    <h4 style="margin-top: 20px;">3. Disjunkce (∨) — OR</h4>
+    <p>Pravděpodobnost, že nastane alespoň jeden jev (pro nezávislé jevy):</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 500px;">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>A ∨ B</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="highlight-box" style="margin-top: 10px;">
+        <strong>Interpretace:</strong> Když $P(A) = p_1$ a $P(B) = p_2$ (nezávislé), pak $P(A \lor B) = p_1 + p_2 - p_1 \times p_2$
+    </div>
+
+    <h4 style="margin-top: 20px;">4. Implikace (→)</h4>
+    <p>Implikace $A \to B$ je nepravdivá jen když $A$ je pravdivý a $B$ je nepravdivý:</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 500px;">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>A → B</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="highlight-box" style="margin-top: 10px;">
+        <strong>Interpretace:</strong> Když $P(A) = p_1$ a $P(B) = p_2$ (nezávislé), pak $P(A \to B) = 1 - p_1(1 - p_2)$
+    </div>
+
+    <h4 style="margin-top: 20px;">5. Ekvivalence (↔)</h4>
+    <p>Ekvivalence $A \leftrightarrow B$ je pravdivá když mají $A$ a $B$ stejnou pravdivostní hodnotu:</p>
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 500px;">
+            <thead>
+                <tr>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>A ↔ B</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+                <tr>
+                    <td>0</td>
+                    <td>1</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td style="background-color: #f8d7da;"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1</td>
+                    <td style="background-color: #d4edda;"><strong>1</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="highlight-box" style="margin-top: 10px;">
+        <strong>Interpretace:</strong> Když $P(A) = p_1$ a $P(B) = p_2$ (nezávislé), pak $P(A \leftrightarrow B) = p_1 \times p_2 + (1-p_1)(1-p_2)$
+    </div>
+
+    <div class="math-box" style="margin-top: 15px;">
+        <strong>Poznámka:</strong> Tyto interpretace předpokládají <strong>nezávislé jevy</strong>. Vzorce pro pravděpodobnosti odpovídají stejným pravidlům jako pro pravdivostní hodnoty (0, 1).
+    </div>
+
     <h3>Úplný systém spojek</h3>
 
     <p><strong>Úplný (funkčně úplný) systém:</strong> Sada spojek, pomocí nichž lze vyjádřit všechny ostatní logické funkce.</p>
@@ -494,7 +684,7 @@
 
     <h2>Predikátový počet (First-order logic)</h2>
 
-    <h3>Co je predikátový počet?</h3>
+    <h3>Definice</h3>
 
     <p>Predikátový počet (také logika prvního řádu) je rozšíření výrokového počtu, které přidává:</p>
     <ul>
@@ -582,7 +772,7 @@
 
     <h2>Naivní teorie množin</h2>
 
-    <h3>Co je množina?</h3>
+    <h3>Definice</h3>
 
     <p><strong>Množina:</strong> Kolekce objektů (prvků), které jsou jasně určeny. Dva prvky nemohou být stejné (bez duplikátů).</p>
 
@@ -687,7 +877,7 @@
 
     <h2>Binární relace</h2>
 
-    <h3>Co je binární relace?</h3>
+    <h3>Definice</h3>
 
     <p><strong>Binární relace R na množinách A a B:</strong> Podmnožina kartézského součinu $A \times B$.</p>
     <p>Zapisujeme $(a,b) \in R$ nebo $aRb$, což znamená "a je v relaci s b".</p>

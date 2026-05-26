@@ -42,7 +42,7 @@
 
     <h2>Rekurence</h2>
 
-    <h3>Co je rekurence?</h3>
+    <h3>Definice</h3>
 
     <p><strong>Rekurentní vztah (recurrence relation):</strong> Rovnice, která definuje posloupnost tím, že vyjadřuje každý člen jako funkci předchozích členů.</p>
 
@@ -147,7 +147,25 @@
         Pomocí parciálních zlomků lze získat explicitní formuli (Binetův vzorec)
     </div>
 
-    <hr>
+    <h3>Příklady</h3>
+
+    <p><strong>Příklady, které SPLŇUJÍ definici rekurentního vztahu:</strong></p>
+    <ul>
+        <li>$F(n) = F(n-1) + F(n-2)$ — Fibonacciho posloupnost (každý člen je součet dvou předchozích)</li>
+        <li>$T(n) = 2 \cdot T(n/2) + n$ — Merge sort (rozděluj a panuj)</li>
+        <li>$n! = n \cdot (n-1)!$ — Faktoriál</li>
+        <li>$H(n) = 2 \cdot H(n-1) + 1$ — Věž z Hanoje</li>
+    </ul>
+
+    <p><strong>Příklady, které NESPLŇUJÍ definici rekurentního vztahu:</strong></p>
+    <ul>
+        <li>$F(n) = 1$ pro všechna $n$ — nemá žádný rekurzivní odkaz</li>
+        <li>$F(n) = \sin(n)$ — není definován rekurzivně</li>
+        <li>Relace bez базе: $F(n) = F(n-1) + 1$ bez $F(0)$ — není jasné, jak začít</li>
+        <li>Nekonečný spád: $F(n) = F(n+1)$ — nikdy se nedosáhne báze</li>
+    </ul>
+
+    <hr style="margin: 20px 0;">
 
     <h2>Speciální funkce</h2>
 
@@ -222,6 +240,33 @@
         • $n^2 \neq O(n)$ (kvadratická není menší než lineární)
     </div>
 
+    <h3>Příklady</h3>
+
+    <p><strong>Příklady, které SPLŇUJÍ $O(n^2)$:</strong></p>
+    <ul>
+        <li>$3n^2 + 5n + 7$ ✓ (dominuje kvadratický člen)</li>
+        <li>$n^2$ ✓ (přesně kvadratická)</li>
+        <li>$5n + 100$ — NESPLŇUJE! (lineární je menší, ale není kvadratická)</li>
+        <li>$n^3$ — NESPLŇUJE! (kubická je větší než kvadratická)</li>
+    </ul>
+
+    <p><strong>Příklady, které SPLŇUJÍ $\Theta(n \log n)$:</strong></p>
+    <ul>
+        <li>$n \log n + 5n$ ✓ (dominuje člen $n \log n$)</li>
+        <li>$100 n \log n$ ✓ (konstanta před není důležitá)</li>
+        <li>$n \log n + n^2$ — NESPLŇUJE! (dominuje $n^2$, ne $n \log n$)</li>
+        <li>$n^2$ — NESPLŇUJE! (kvadratická je větší než $n \log n$)</li>
+    </ul>
+
+    <p><strong>Praktická pamatování:</strong></p>
+    <ul>
+        <li>$O(g(n))$ — horní mez (v nejhorším případě)</li>
+        <li>$\Omega(g(n))$ — dolní mez (v nejlepším případě)</li>
+        <li>$\Theta(g(n))$ — přesná složitost (vázaná z obou stran)</li>
+    </ul>
+
+    <hr style="margin: 20px 0;">
+
     <h3>Theta notace (Θ-notace)</h3>
 
     <p><strong>Definice:</strong> $f(n) = \Theta(g(n))$ znamená, že existují konstanty $c_1 > 0, c_2 > 0$ a $n_0$ takové, že:
@@ -288,7 +333,7 @@
 
     <h2>Algoritmy</h2>
 
-    <h3>Co je algoritmus?</h3>
+    <h3>Definice</h3>
 
     <p><strong>Algoritmus:</strong> Přesný postup (soupis kroků) k vyřešení problému v konečném čase.</p>
 
@@ -300,11 +345,56 @@
         <li><strong>Vstup/Výstup:</strong> Algoritmus přijímá vstup a produkuje výstup</li>
     </ul>
 
+    <h3>Příklady</h3>
+
+    <p><strong>Příklady, které SPLŇUJÍ definici algoritmu:</strong></p>
+    <ul>
+        <li><strong>Binární vyhledávání:</strong> Daný tříděný seznam, najdi prvek nebo řekni, že tam není ✓</li>
+        <li><strong>Třídění (Quicksort, Mergesort):</strong> Daný seznam, seřaď jej ✓</li>
+        <li><strong>GCD (Euklidův algoritmus):</strong> Daná dvě čísla, najdi jejich největší společný dělitel ✓</li>
+        <li><strong>Ověření primality:</strong> Dáno číslo, rozhodněte, zda je prvočíslo ✓</li>
+    </ul>
+
+    <p><strong>Příklady, které NESPLŇUJÍ definici algoritmu:</strong></p>
+    <ul>
+        <li><strong>Nekonečný cyklus:</strong> <code>while True: pass</code> — NESPLŇUJE! (nemá konečnost)</li>
+        <li><strong>Neurčitý postup:</strong> "Najdi největší číslo v seznamu" bez specifikace, jak to dělat — NESPLŇUJE! (není determinován)</li>
+        <li><strong>Heuristika bez záruky:</strong> "Hádej faktory náhodně" — NESPLŇUJE! (nefunguje na všechny vstupy)</li>
+        <li><strong>NP-tvrdý problém bez řešení:</strong> "Najdi optimální řešení TSP" bez konkrétního postupu — NESPLŇUJE! (není znám polynomiální postup)</li>
+    </ul>
+
+    <hr style="margin: 20px 0;">
+
     <p><strong>Jak měřit efektivitu algoritmů:</strong></p>
     <ul>
         <li><strong>Časová složitost:</strong> Kolik elementárních operací provede? (funkcí délky vstupu $n$)</li>
         <li><strong>Prostorová složitost:</strong> Kolik paměti potřebuje?</li>
     </ul>
+
+    <h3>Praktická doporučení pro analýzu algoritmů</h3>
+
+    <p><strong>Jak si rychle zjistit složitost algoritmu:</strong></p>
+    <ul>
+        <li><strong>Jednoduchá smyčka:</strong> $O(n)$
+            <pre><code class="language-python">for i in range(n):
+    # Něco trvá O(1)</code></pre>
+        </li>
+        <li><strong>Vnořené smyčky:</strong> $O(n^2)$
+            <pre><code class="language-python">for i in range(n):
+    for j in range(n):
+        # Něco trvá O(1)</code></pre>
+        </li>
+        <li><strong>Rozdělování na poloviny:</strong> $O(\log n)$
+            <pre><code class="language-python">while n > 1:
+    n = n // 2  # dělíme dvěma</code></pre>
+        </li>
+        <li><strong>Kombinace — smyčka s dělením:</strong> $O(n \log n)$
+            <pre><code class="language-python">for i in range(n):           # O(n)
+    search_sorted(arr, i)    # O(log n)</code></pre>
+        </li>
+    </ul>
+
+    <hr style="margin: 20px 0;">
 
     <h3>Euklidův algoritmus</h3>
 

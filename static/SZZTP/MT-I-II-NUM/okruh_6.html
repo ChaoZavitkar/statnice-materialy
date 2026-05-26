@@ -41,9 +41,9 @@
         <h1>Okruh 6 – Soustavy lineárních rovnic</h1>
         <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
 
-        <h2>1. Soustavy lineárních rovnic</h2>
+        <h2>Soustavy lineárních rovnic</h2>
 
-        <h3>Co je soustava lineárních rovnic?</h3>
+        <h3>Definice</h3>
         <p><strong>Soustava lineárních rovnic = více rovnic s více neznámými, které se řeší dohromady.</strong></p>
 
         <div class="note-box">
@@ -117,7 +117,7 @@
 
         <hr>
 
-        <h2>2. Řešitelnost soustavy</h2>
+        <h2>Řešitelnost soustavy</h2>
 
         <h3>Kolik může být řešení?</h3>
         <p><strong>Soustava lineárních rovnic může mít tři případy:</strong></p>
@@ -235,7 +235,7 @@
 
         <h2>Metody řešení soustav lineárních rovnic</h2>
 
-        <h3>3. Gaussova eliminace</h3>
+        <h3>Gaussova eliminace</h3>
 
         <h4>Myšlenka — "Převedeme rovnice na jednoduchou formu"</h4>
         <p><strong>Princip:</strong> Pomocí jednoduchých operací (jako u řešení rovnic v ZŠ) převedeme soustavu na jednodušší tvar, kterou už umíme řešit.</p>
@@ -304,59 +304,134 @@
 
         <h3>Co SPLŇUJE Definici Gaussovy Eliminace – Co Ne?</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
-            <p><strong style="color: #2e7d32;">✓ Správně: Elementární řádkové operace zachovávají řešení</strong></p>
+            <p><strong style="color: #2e7d32;">✓ Správně: Elementární řádkové operace na 2×2 soustavě</strong></p>
             <p>Soustava:</p>
             <div class="formula">$$\begin{pmatrix} 2 & 3 & | & 7 \\ 1 & -1 & | & 1 \end{pmatrix}$$</div>
-            <p><strong>Krok 1:</strong> Vyměnit řádky (permutace)</p>
+            <p><strong>Operace 1:</strong> Výměna řádků (SWAP)</p>
             <div class="formula">$$\begin{pmatrix} 1 & -1 & | & 1 \\ 2 & 3 & | & 7 \end{pmatrix}$$</div>
-            <p><strong>Krok 2:</strong> Přičíst k řádku 2 násobek řádku 1: $R_2 \leftarrow R_2 - 2R_1$</p>
-            <div class="formula">$$\begin{pmatrix} 1 & -1 & | & 1 \\ 0 & 5 & | & 5 \end{pmatrix}$$</div>
-            <p><strong>Výsledek:</strong> Schodovitý tvar! Řešení se nezmění: $y = 1, x = 2$ ✓
-            </p>
+            <p><strong>Operace 2:</strong> Eliminace — přičíst k $R_2$ násobek $R_1$: $R_2 := R_2 - 2R_1$</p>
+            <div class="formula">$$\begin{pmatrix} 1 & -1 & | & 1 \\ 0 & 5 & | & 5 \end{pmatrix} \quad \text{← SCHODOVITÝ TVAR}$$</div>
+            <p><strong>Zpětný chod:</strong> $y = 5/5 = 1$, $x = 1 + y = 2$</p>
+            <p><strong>Řešení se zachovalo:</strong> $(x, y) = (2, 1)$ ✓</p>
+        </div>
+
+        <div class="math-box" style="background-color: #fff3cd; border-left: 4px solid #ff9800;">
+            <p><strong style="color: #e65100;">⚠️ Varování: Numerická stabilita a pivotace</strong></p>
+            <p>Pokud by pivot $a_{ii}$ byl velmi malý (blízký nule), operace</p>
+            <div class="formula">$$\text{factor} = \frac{a_{ji}}{a_{ii}} \quad \text{(dělení malým číslem)}$$</div>
+            <p>by vedla k <strong>numerické nestabilitě</strong> — chyby zaokrouhlení by se amplifikovaly.</p>
+            <p><strong>Řešení: Částečná pivotace</strong> — vybrat řádek s největším absolutním hodnotou v daném sloupci:</p>
+            <div class="formula">$$|a_{ji}| = \max_{k \geq i} |a_{ki}|$$</div>
+            <p>To zajistí, že factor $\approx$ řádu 1 (nemůžeme dělit čísly blížícími se nule).</p>
         </div>
 
         <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
             <p><strong style="color: #c62828;">✗ Chyba: Operace, která NENÍ elementární řádková operace</strong></p>
             <p>NESMÍME:</p>
             <ul>
-                <li>❌ Vynásobit řádek nulou (ztrácíme informaci)</li>
-                <li>❌ Přičíst stejný řádek k sobě (nic se nezmění, marný krok)</li>
-                <li>❌ Zamenšit řádek o řádek stejného řádku (chyba v logice)</li>
-                <li>❌ Provádět operace s SLOUPCI (mění se proměnné!)</li>
+                <li>❌ <strong>Vynásobit řádek nulou:</strong> Ztrácíme informaci, rovnice zmizí</li>
+                <li>❌ <strong>Provádět operace se SLOUPCI:</strong> Mění se proměnné a řešení!</li>
+                <li>❌ <strong>Skládat operace tak, aby se jednala o více-kroků:</strong> Musíme aplikovat jednu operaci najednou</li>
             </ul>
-            <p><strong>Příklad chyby:</strong> Pokud bychom připočítali řádek 1 k řádku 2 DVAKRÁT, dostaneme:</p>
-            <div class="formula">$$\begin{pmatrix} 2 & 3 & | & 7 \\ 1+2+2 & -1+3+3 & | & 1+7+7 \end{pmatrix} = \begin{pmatrix} 2 & 3 & | & 7 \\ 5 & 5 & | & 15 \end{pmatrix}$$</div>
-            <p>To není elementární operace — provádíme ji DVAKRÁT! ✗</p>
+            <p><strong>Příklad chyby — špatná aplikace pivotace:</strong></p>
+            <p>Pokud máte systém a změníte pořadí dvou sloupců bez tracking, získáte řešení v jiném pořadí!</p>
+            <div class="formula">
+                \text{Sloupce jsou PROMĚNNÉ — manipulace se sloupci = změna proměnných!}
+            </div>
         </div>
 
-        <h4>Gaussova eliminační metoda</h4>
-        <p><strong>Nejpoužívanější metoda</strong> pro ruční i počítačové řešení. Založena na <strong>elementárních řádkových operacích</strong>.</p>
+        <h4>Gaussova eliminační metoda (nejpoužívanější)</h4>
+        <p><strong>Nejpoužívanější metoda</strong> pro ruční i počítačové řešení. Založena na <strong>elementárních řádkových operacích</strong>, které nemění řešení.</p>
 
         <h5>Elementární řádkové operace</h5>
         <ol>
-            <li><strong>Výměna</strong> dvou řádků</li>
-            <li><strong>Vynásobení</strong> řádku nenulovým číslem</li>
-            <li><strong>Přičtení</strong> násobku jednoho řádku k jinému řádku</li>
+            <li><strong>Výměna (Swap):</strong> Vyměnit si pořadí dvou řádků</li>
+            <li><strong>Škálování (Scale):</strong> Vynásobit řádek nenulovým číslem $c \neq 0$</li>
+            <li><strong>Eliminace (Eliminate):</strong> Přičíst k jedné řádku násobek jiné řádky</li>
         </ol>
-        <p>Tyto operace <strong>nemění řešení</strong> soustavy!</p>
+        <p><strong>Klíč:</strong> Tyto operace <strong>nemění řešení</strong> soustavy, jen ji transformují do jednoduššího tvaru!</p>
 
-        <h5>Algoritmus (dopředný chod)</h5>
-        <p>Cíl: převést rozšířenou matici (A|b) na schodovitý tvar</p>
-        <pre><code class="language-plaintext">1. Pro i = 1 až n:
-   a. Najdi pivot (nenulový prvek) v i-tém sloupci
-   b. Pokud je pivot 0, vyměň řádky
-   c. Vynuluj všechny prvky POD pivotem:
-      - Pro každý řádek j > i:
-        řádek_j = řádek_j - (a_ji / a_ii) * řádek_i</code></pre>
+        <h5>Algoritmus – Dopředný chod (Forward elimination)</h5>
+        <p><strong>Cíl:</strong> Převést rozšířenou matici (A|b) na <strong>schodovitý tvar</strong> (horní trojúhelníková matice)</p>
+        <pre><code class="language-plaintext">Pro i = 1 až n:
+   1. Najdi PIVOT: Najdi řádek j ≥ i s největším |a_ji| v i-tém sloupci
+   2. Vyměň řádky: Přesunout řádek j na pozici i (částečná pivotace)
+   3. Eliminace: Pro každý řádek k > i:
+      - Vypočítej faktor: factor = a_ki / a_ii
+      - Vytvoř nulu: Řádek_k := Řádek_k - factor * Řádek_i</code></pre>
 
-        <h5>Algoritmus (zpětný chod)</h5>
+        <h5>Algoritmus – Zpětný chod (Back substitution)</h5>
+        <p><strong>Cíl:</strong> Vyřešit soustavu z již získaného schodovitého tvaru</p>
         <pre><code class="language-plaintext">Po dopředném chodu máme schodovitý tvar.
 
-1. Řeš od posledního řádku:
-   x_n = b_n / a_nn
+1. Poslední řádek: x_n = b_n / a_nn
 
-2. Pro i = n-1 až 1:
-   x_i = (b_i - součet(a_ij * x_j pro j > i)) / a_ii</code></pre>
+2. Pro i = n-1 až 1 (zpět):
+   x_i = (b_i - sum(a_ij * x_j pro j > i)) / a_ii</code></pre>
+
+        <h3>Příklad: Řešení 3×3 soustavy Gaussovou eliminací</h3>
+
+        <p><strong>Úloha:</strong> Vyřeš soustavu:</p>
+        <div class="formula">
+            $$\begin{aligned}
+            2x + 3y - z &= 8 \\
+            4x + 7y + 2z &= 20 \\
+            -2x + y + 3z &= 2
+            \end{aligned}$$
+        </div>
+
+        <p><strong>Řešení – krok za krokem:</strong></p>
+
+        <p><strong>KROK 1: Příprava rozšířené matice</strong></p>
+        <div class="formula">
+            $$(\mathbf{A}|\mathbf{b}) = \left(\begin{array}{ccc|c}
+            2 & 3 & -1 & 8 \\
+            4 & 7 & 2 & 20 \\
+            -2 & 1 & 3 & 2
+            \end{array}\right)$$
+        </div>
+
+        <p><strong>KROK 2: Dopředný chod – Eliminace v 1. sloupci</strong></p>
+        <ul>
+            <li>Pivot: $a_{11} = 2$ (již je nenulový, není potřeba výměna)</li>
+            <li>Řádek 2: $R_2 := R_2 - \frac{4}{2} \cdot R_1 = R_2 - 2R_1$
+                <br>→ $(4-2\cdot 2, 7-2\cdot 3, 2-2\cdot(-1), 20-2\cdot 8) = (0, 1, 4, 4)$</li>
+            <li>Řádek 3: $R_3 := R_3 - \frac{-2}{2} \cdot R_1 = R_3 + R_1$
+                <br>→ $(-2+2, 1+3, 3-1, 2+8) = (0, 4, 2, 10)$</li>
+        </ul>
+        <div class="formula">
+            $$\left(\begin{array}{ccc|c}
+            2 & 3 & -1 & 8 \\
+            0 & 1 & 4 & 4 \\
+            0 & 4 & 2 & 10
+            \end{array}\right)$$
+        </div>
+
+        <p><strong>KROK 3: Eliminace v 2. sloupci (zbývající řádky)</strong></p>
+        <ul>
+            <li>Pivot: $a_{22} = 1$ (nenulový ✓)</li>
+            <li>Řádek 3: $R_3 := R_3 - \frac{4}{1} \cdot R_2 = R_3 - 4R_2$
+                <br>→ $(0, 4-4\cdot 1, 2-4\cdot 4, 10-4\cdot 4) = (0, 0, -14, -6)$</li>
+        </ul>
+        <div class="formula">
+            $$\left(\begin{array}{ccc|c}
+            2 & 3 & -1 & 8 \\
+            0 & 1 & 4 & 4 \\
+            0 & 0 & -14 & -6
+            \end{array}\right) \quad \text{← Schodovitý tvar!}$$
+        </div>
+
+        <p><strong>KROK 4: Zpětný chod (Back substitution)</strong></p>
+        <ul>
+            <li><strong>Z řádku 3:</strong> $-14z = -6$ → $z = \frac{-6}{-14} = \frac{3}{7}$</li>
+            <li><strong>Z řádku 2:</strong> $y + 4z = 4$ → $y + 4 \cdot \frac{3}{7} = 4$ → $y = 4 - \frac{12}{7} = \frac{28-12}{7} = \frac{16}{7}$</li>
+            <li><strong>Z řádku 1:</strong> $2x + 3y - z = 8$ → $2x + 3 \cdot \frac{16}{7} - \frac{3}{7} = 8$
+                <br>→ $2x + \frac{48}{7} - \frac{3}{7} = 8$ → $2x + \frac{45}{7} = 8$ → $2x = 8 - \frac{45}{7} = \frac{56-45}{7} = \frac{11}{7}$ → $x = \frac{11}{14}$</li>
+        </ul>
+
+        <p><strong>Řešení:</strong> $$\boxed{x = \frac{11}{14}, \quad y = \frac{16}{7}, \quad z = \frac{3}{7}}$$</p>
+
+        <p><em>Ověření (do 1. rovnice): $2 \cdot \frac{11}{14} + 3 \cdot \frac{16}{7} - \frac{3}{7} = \frac{22}{14} + \frac{48}{7} - \frac{3}{7} = \frac{11}{7} + \frac{45}{7} = \frac{56}{7} = 8$ ✓</em></p>
 
         <div class="highlight-box">
             <strong>Výhody Gaussovy eliminace:</strong>
@@ -369,80 +444,242 @@
         </div>
 
         <h4>Metoda LU rozkladu</h4>
-        <p><strong>Idea:</strong> Rozložit matici $\mathbf{A}$ na součin <strong>dolní trojúhelníkové</strong> (L) a <strong>horní trojúhelníkové</strong> (U) matice.</p>
+        <p><strong>Idea:</strong> Rozložit matici $\mathbf{A}$ na součin <strong>dolní trojúhelníkové</strong> matice $\mathbf{L}$ a <strong>horní trojúhelníkové</strong> matice $\mathbf{U}$.</p>
 
         <div class="formula">$$\mathbf{A} = \mathbf{LU}$$</div>
 
-        <p>kde:</p>
+        <p><strong>Struktury matic:</strong></p>
+        <div class="formula">
+            $$\mathbf{L} = \begin{pmatrix} 1 & 0 & 0 \\ l_{21} & 1 & 0 \\ l_{31} & l_{32} & 1 \end{pmatrix}, \quad
+            \mathbf{U} = \begin{pmatrix} u_{11} & u_{12} & u_{13} \\ 0 & u_{22} & u_{23} \\ 0 & 0 & u_{33} \end{pmatrix}$$
+        </div>
+
+        <p><strong>Princip:</strong> Matice $\mathbf{L}$ obsahuje faktory z eliminace, matice $\mathbf{U}$ je schodovitý tvar po Gaussově eliminaci.</p>
+
+        <h5>Algoritmus LU rozkladu</h5>
+        <p><strong>Během Gaussovy eliminace si zaznamenáme faktory:</strong></p>
+        <pre><code class="language-plaintext">Pro i = 1 až n:
+   Pro j = i+1 až n:
+      factor = a_ji / a_ii
+      l_ji = factor  ← Zaznamenej faktor do L
+      Řádek_j := Řádek_j - factor * Řádek_i
+
+Výsledek: U = výsledek po eliminaci, L = zaznamenané faktory (s jedničkami na diagonále)</code></pre>
+
+        <h5>Výhoda LU rozkladu</h5>
+        <p><strong>Situace:</strong> Máte stejnou matici $\mathbf{A}$ ale různé pravé strany $\mathbf{b}_1, \mathbf{b}_2, \ldots, \mathbf{b}_k$</p>
         <ul>
-            <li>$\mathbf{L}$ je <strong>dolní trojúhelníková</strong> matice (Lower) — pod diagonálou nenulové prvky</li>
-            <li>$\mathbf{U}$ je <strong>horní trojúhelníková</strong> matice (Upper) — nad diagonálou nenulové prvky</li>
+            <li>Bez LU: Každou soustavu řešte zvlášť pomocí Gaussovy eliminace → $k \times O(n^3)$ operací</li>
+            <li>S LU: Rozložte $\mathbf{A}$ jednou → $O(n^3)$ operací, pak pro každé $\mathbf{b}_i$ řešte pomocí substituce → $k \times O(n^2)$ operací</li>
+            <li><strong>Úspora:</strong> Při více pravých stranách je LU mnohonásobně rychlejší!</li>
         </ul>
 
-        <p><strong>Výhoda:</strong> Pokud máme stejnou matici $\mathbf{A}$ ale různé pravé strany $\mathbf{b}$, LU rozklad <strong>počítáme jen jednou</strong>!</p>
+        <h3>Příklad: LU rozklad konkrétní matice</h3>
+
+        <p><strong>Úloha:</strong> Najdi LU rozklad matice $\mathbf{A} = \begin{pmatrix} 2 & 3 & -1 \\ 4 & 7 & 2 \\ -2 & 1 & 3 \end{pmatrix}$</p>
+
+        <p><strong>Řešení:</strong> (Během Gaussovy eliminace si zaznamenáme faktory)</p>
+
+        <p><strong>Eliminace v 1. sloupci:</strong></p>
+        <ul>
+            <li>Faktor pro řádek 2: $l_{21} = \frac{4}{2} = 2$</li>
+            <li>Faktor pro řádek 3: $l_{31} = \frac{-2}{2} = -1$</li>
+        </ul>
+
+        <p><strong>Eliminace v 2. sloupci:</strong></p>
+        <ul>
+            <li>Po 1. kroku: druhý sloupec řádku 3 je 4 (původně 1 + 3 z eliminace)</li>
+            <li>Faktor pro řádek 3: $l_{32} = \frac{4}{1} = 4$</li>
+        </ul>
+
+        <p><strong>Matice L (faktory + jedničky na diagonále):</strong></p>
+        <div class="formula">
+            $$\mathbf{L} = \begin{pmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ -1 & 4 & 1 \end{pmatrix}$$
+        </div>
+
+        <p><strong>Matice U (schodovitý tvar):</strong></p>
+        <div class="formula">
+            $$\mathbf{U} = \begin{pmatrix} 2 & 3 & -1 \\ 0 & 1 & 4 \\ 0 & 0 & -14 \end{pmatrix}$$
+        </div>
+
+        <p><strong>Ověření: $\mathbf{LU} = \mathbf{A}$?</strong></p>
+        <div class="formula">
+            $$\begin{pmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ -1 & 4 & 1 \end{pmatrix} \begin{pmatrix} 2 & 3 & -1 \\ 0 & 1 & 4 \\ 0 & 0 & -14 \end{pmatrix} = \begin{pmatrix} 2 & 3 & -1 \\ 4 & 7 & 2 \\ -2 & 1 & 3 \end{pmatrix} \checkmark$$
+        </div>
+
+        <p><strong>Nyní — řešení původní soustavy $\mathbf{Ax} = \mathbf{b}$:</strong></p>
+
+        <p>Namísto řešení $\mathbf{Ax} = \mathbf{b}$ přímo řešíme dvě jednodušší soustavy:</p>
+        <ol>
+            <li><strong>$\mathbf{Ly} = \mathbf{b}$</strong> (dopředná substituce — L je dolní trojúhelníková)</li>
+            <li><strong>$\mathbf{Ux} = \mathbf{y}$</strong> (zpětná substituce — U je horní trojúhelníková)</li>
+        </ol>
+
+        <p><strong>Příklad s $\mathbf{b} = (8, 20, 2)^T$:</strong></p>
+
+        <p><strong>Krok 1: Řeš $\mathbf{Ly} = \mathbf{b}$</strong></p>
+        <div class="formula">
+            $$\begin{pmatrix} 1 & 0 & 0 \\ 2 & 1 & 0 \\ -1 & 4 & 1 \end{pmatrix} \begin{pmatrix} y_1 \\ y_2 \\ y_3 \end{pmatrix} = \begin{pmatrix} 8 \\ 20 \\ 2 \end{pmatrix}$$
+        </div>
+        <ul>
+            <li>$y_1 = 8$</li>
+            <li>$2y_1 + y_2 = 20$ → $y_2 = 20 - 16 = 4$</li>
+            <li>$-y_1 + 4y_2 + y_3 = 2$ → $y_3 = 2 + 8 - 16 = -6$</li>
+        </ul>
+
+        <p><strong>Krok 2: Řeš $\mathbf{Ux} = \mathbf{y}$</strong></p>
+        <div class="formula">
+            $$\begin{pmatrix} 2 & 3 & -1 \\ 0 & 1 & 4 \\ 0 & 0 & -14 \end{pmatrix} \begin{pmatrix} x \\ y \\ z \end{pmatrix} = \begin{pmatrix} 8 \\ 4 \\ -6 \end{pmatrix}$$
+        </div>
+        <ul>
+            <li>$-14z = -6$ → $z = \frac{3}{7}$</li>
+            <li>$y + 4z = 4$ → $y = 4 - \frac{12}{7} = \frac{16}{7}$</li>
+            <li>$2x + 3y - z = 8$ → (viz předchozí příklad) → $x = \frac{11}{14}$</li>
+        </ul>
 
         <h3>Iterační metody</h3>
-        <p>Iterační metody generují <strong>posloupnost přibližných řešení</strong>, která konverguje k přesnému řešení.</p>
+        <p>Iterační metody generují <strong>posloupnost přibližných řešení</strong> $\mathbf{x}^{(0)}, \mathbf{x}^{(1)}, \mathbf{x}^{(2)}, \ldots$, které postupně konvergují k přesnému řešení.</p>
 
-        <p><strong>Výhody:</strong></p>
+        <p><strong>Myšlenka:</strong> Místo přímého výpočtu řešení (jako Gaussova eliminace) začneme s odhadem a iterativně ho vylepšujeme.</p>
+
+        <p><strong>Výhody iteračních metod:</strong></p>
         <ul>
-            <li>Efektivní pro <strong>řídké matice</strong> (hodně nulových prvků)</li>
-            <li>Menší paměťové nároky</li>
-            <li>Odolné vůči zaokrouhlovacím chybám</li>
+            <li>✓ <strong>Efektivní pro řídké matice</strong> (hodně nulových prvků) — nefunguje přímá eliminace, která by obsazení matici</li>
+            <li>✓ <strong>Menší paměťové nároky</strong> — nemusíme uchovávat celou matici</li>
+            <li>✓ <strong>Paralelizovatelné</strong> — jednotlivé iterace se dají počítat na různých procesorech</li>
+            <li>✓ <strong>Robustní vůči zaokrouhlovacím chybám</strong> — chyby se "vyhlazují" iteracemi</li>
         </ul>
 
-        <p><strong>Nevýhody:</strong></p>
+        <p><strong>Nevýhody iteračních metod:</strong></p>
         <ul>
-            <li>Nemusí konvergovat (závisí na vlastnostech matice)</li>
-            <li>Dávají pouze <strong>přibližné</strong> řešení</li>
+            <li>✗ <strong>Nemusí konvergovat</strong> — závisí na vlastnostech matice (viz podmínky níže)</li>
+            <li>✗ Dávají pouze <strong>přibližné</strong> řešení (musíme zastavit po určitém kritériu)</li>
+            <li>✗ <strong>Pomalejší konvergence</strong> pro špatně podmíněné matice</li>
         </ul>
 
-        <h4>Jacobiho iterační metoda</h4>
-        <p>Z každé rovnice vyjádříme jednu neznámou:</p>
+        <h4>Jacobiho iterační metoda (Simultánní)</h4>
+
+        <p><strong>Princip:</strong> Z každé rovnice vyjádříme jednu neznámou a iterujeme.</p>
+
         <div class="formula">$$x_i^{(k+1)} = \frac{1}{a_{ii}}\left(b_i - \sum_{j \neq i} a_{ij}x_j^{(k)}\right)$$</div>
 
-        <p>Všechny neznámé se aktualizují <strong>současně</strong> (používáme hodnoty z předchozí iterace).</p>
+        <p><strong>Charakteristika:</strong> Všechny neznámé se aktualizují <strong>současně</strong> — pro výpočet $x_i^{(k+1)}$ používáme staré hodnoty $x_j^{(k)}$.</p>
 
-        <h4>Gauss-Seidelova iterační metoda</h4>
-        <p><strong>Vylepšení</strong> Jacobiho metody — používáme <strong>nejnovější dostupné</strong> hodnoty.</p>
+        <h4>Gauss-Seidelova iterační metoda (Sekvenční)</h4>
+
+        <p><strong>Vylepšení Jacobiho metody</strong> — používáme <strong>nejnovější dostupné</strong> hodnoty.</p>
+
         <div class="formula">$$x_i^{(k+1)} = \frac{1}{a_{ii}}\left(b_i - \sum_{j < i} a_{ij}x_j^{(k+1)} - \sum_{j > i} a_{ij}x_j^{(k)}\right)$$</div>
 
-        <p>Jakmile vypočteme novou hodnotu $x_i^{(k+1)}$, okamžitě ji používáme pro další neznámé.</p>
+        <p><strong>Charakteristika:</strong> Jakmile vypočteme $x_i^{(k+1)}$, okamžitě ji používáme pro výpočet $x_{i+1}^{(k+1)}$. Obvykle <strong>konverguje rychleji</strong> než Jacobi.</p>
+
+        <h5>Podmínky konvergence</h5>
 
         <div class="highlight-box">
-            <strong>Podmínky konvergence:</strong><br>
-            Metoda konverguje, pokud matice $\mathbf{A}$ splňuje jednu z podmínek:
+            <strong>Věta:</strong> Jacobiho a Gauss-Seidelova metoda konvergují, pokud matice $\mathbf{A}$ splňuje jednu z podmínek:
             <ol>
                 <li><strong>Striktně diagonálně dominantní:</strong>
                     $$|a_{ii}| > \sum_{j \neq i} |a_{ij}| \quad \text{pro všechna } i$$
+                    <br><em>Slovy: diagonální prvky jsou větší než součet absolutních hodnot ostatních prvků v řádku.</em>
                 </li>
-                <li><strong>Symetrická pozitivně definitní</strong> matice</li>
+                <li><strong>Symetrická pozitivně definitní matice</strong></li>
             </ol>
         </div>
 
+        <h3>Příklad: Jacobiho a Gauss-Seidelova metoda porovnání</h3>
+
+        <p><strong>Úloha:</strong> Vyřeš soustavu:</p>
+        <div class="formula">
+            $$\begin{aligned}
+            5x + y &= 6 \\
+            x + 4y &= 7
+            \end{aligned}$$
+        </div>
+
+        <p><em>Poznámka: Matice je diagonálně dominantní ($5 > 1$ a $4 > 1$), takže obě metody konvergují! ✓</em></p>
+
+        <p><strong>Iniciální odhad:</strong> $x^{(0)} = 0, y^{(0)} = 0$</p>
+
+        <h5>Jacobiho metoda</h5>
+
+        <p><strong>Vzorce:</strong> $x^{(k+1)} = \frac{6 - y^{(k)}}{5}$, $y^{(k+1)} = \frac{7 - x^{(k)}}{4}$</p>
+
+        <table class="table table-sm table-bordered" style="max-width: 500px;">
+            <thead>
+                <tr><th>$k$</th><th>$x^{(k)}$</th><th>$y^{(k)}$</th><th>Chyba</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>0</td><td>0.0000</td><td>0.0000</td><td>—</td></tr>
+                <tr><td>1</td><td>1.2000</td><td>1.7500</td><td>|0.8|</td></tr>
+                <tr><td>2</td><td>0.6500</td><td>1.3500</td><td>|0.55|</td></tr>
+                <tr><td>3</td><td>0.8300</td><td>1.4375</td><td>|0.18|</td></tr>
+                <tr><td>4</td><td>0.7875</td><td>1.4042</td><td>|0.043|</td></tr>
+                <tr><td>∞</td><td><strong>~0.8</strong></td><td><strong>~1.4</strong></td><td>0</td></tr>
+            </tbody>
+        </table>
+
+        <h5>Gauss-Seidelova metoda</h5>
+
+        <p><strong>Vzorce:</strong> $x^{(k+1)} = \frac{6 - y^{(k)}}{5}$, $y^{(k+1)} = \frac{7 - x^{(k+1)}}{4}$ (všimni si: používáme NOVÝ $x^{(k+1)}$!)</p>
+
+        <table class="table table-sm table-bordered" style="max-width: 500px;">
+            <thead>
+                <tr><th>$k$</th><th>$x^{(k)}$</th><th>$y^{(k)}$</th><th>Chyba</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>0</td><td>0.0000</td><td>0.0000</td><td>—</td></tr>
+                <tr><td>1</td><td>1.2000</td><td>1.3500</td><td>|0.55|</td></tr>
+                <tr><td>2</td><td>0.7300</td><td>1.4425</td><td>|0.11|</td></tr>
+                <tr><td>3</td><td>0.8115</td><td>1.3971</td><td>|0.028|</td></tr>
+                <tr><td>∞</td><td><strong>~0.8</strong></td><td><strong>~1.4</strong></td><td>0</td></tr>
+            </tbody>
+        </table>
+
+        <p><strong>Pozorování:</strong> Gauss-Seidelova metoda konverguje <strong>rychleji</strong> (dosahuje nižší chyby po 3 krocích) díky použití novějších hodnot.</p>
+
         <h3>Co SPLŇUJE Definici Iteračních Metod – Co Ne?</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
-            <p><strong style="color: #2e7d32;">✓ Správně: Jacobiho iterační metoda pro diagonálně dominantní matici</strong></p>
-            <p>Soustava:</p>
+            <p><strong style="color: #2e7d32;">✓ Správně: Iterační metoda s konvergencí</strong></p>
+            <p>Soustava (diagonálně dominantní):</p>
             <div class="formula">$$\begin{aligned}
-            5x + y &= 6 \quad \text{(diagonální prvek 5 > |1| = 1 ✓)} \\
-            x + 4y &= 7 \quad \text{(diagonální prvek 4 > |1| = 1 ✓)}
+            5x + y &= 6 \quad \text{($|5| > |1|$ ✓)} \\
+            x + 4y &= 7 \quad \text{($|4| > |1|$ ✓)}
             \end{aligned}$$</div>
-            <p>Matica je striktně diagonálně dominantní → Jacobiho metoda <strong>konverguje</strong>! ✓<br>
-            Iterační vzorec: $x^{(k+1)} = \frac{6 - y^{(k)}}{5}$, $y^{(k+1)} = \frac{7 - x^{(k)}}{4}$
-            </p>
+            <p><strong>Ověření diagonální dominance:</strong></p>
+            <ul>
+                <li>Řádek 1: $5 > 1$ ✓</li>
+                <li>Řádek 2: $4 > 1$ ✓</li>
+            </ul>
+            <p><strong>Závěr:</strong> Matice je striktně diagonálně dominantní → <strong>VŠECHNY</strong> iterační metody (Jacobi, Gauss-Seidel) <strong>konvergují</strong> k řešení! ✓</p>
+        </div>
+
+        <div class="math-box" style="background-color: #fff3cd; border-left: 4px solid #ff9800;">
+            <p><strong style="color: #e65100;">⚠️ Varování: Medlená konvergence (špatně podmíněná matice)</strong></p>
+            <p>Soustava (diagonálně dominantní, ale jen tak tak):</p>
+            <div class="formula">$$\begin{aligned}
+            1.01x + y &= 2 \quad \text{($1.01 > 1$, ale těsně)} \\
+            x + 1.01y &= 2 \quad \text{($1.01 > 1$, ale těsně)}
+            \end{aligned}$$</div>
+            <p><strong>Problém:</strong> Iterační metody SICE konvergují (je splněna podmínka), ale <strong>velmi pomalu</strong>!</p>
+            <p><strong>Počet iterací potřebný pro přesnost $10^{-6}$:</strong> Zatímco pro předchozí soustavu stačily 4 iterace, zde bychom potřebovali stovky!</p>
+            <p><strong>Řešení:</strong> Použít <strong>preconditioning</strong> (předpodmínění) — transformace matice tak, aby se lépe chovala. Nebo switch na přímé metody (Gauss).</p>
         </div>
 
         <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
-            <p><strong style="color: #c62828;">✗ Chyba: Iterační metoda bez zaručené konvergence</strong></p>
-            <p>Soustava:</p>
+            <p><strong style="color: #c62828;">✗ Chyba: Iterační metoda bez konvergence</strong></p>
+            <p>Soustava (NENÍ diagonálně dominantní):</p>
             <div class="formula">$$\begin{aligned}
-            x + 5y &= 6 \quad \text{(diagonální prvek 1 < |5| ✗)} \\
-            4x + y &= 7 \quad \text{(diagonální prvek 1 < |4| ✗)}
+            x + 5y &= 6 \quad \text{($1 \not> 5$ ✗)} \\
+            4x + y &= 7 \quad \text{($1 \not> 4$ ✗)}
             \end{aligned}$$</div>
-            <p>Matica NENÍ diagonálně dominantní → Jacobiho metoda <strong>nemusí konvergovat</strong>! ✗<br>
-            Výsledek: Iterace se divergují (hodnoty rostou bez kontroly), nedostaneme řešení.
-            </p>
+            <p><strong>Ověření diagonální dominance:</strong></p>
+            <ul>
+                <li>Řádek 1: $1 < 5$ ✗ (porušuje podmínku)</li>
+                <li>Řádek 2: $1 < 4$ ✗ (porušuje podmínku)</li>
+            </ul>
+            <p><strong>Závěr:</strong> Matice NENÍ diagonálně dominantní → Iterační metody <strong>NEMUSÍ konvergovat</strong> ✗</p>
+            <p><strong>Co se stane v praxi:</strong> Iterace se divergují — chyba roste s každou iterací, nakonec dostaneme "Not a Number" (NaN) nebo infinity.</p>
+            <p><strong>Řešení:</strong> Permutovat řádky tak, aby se dostaly „velké" prvky na diagonálu (pokud je to možné), nebo použít přímou metodu (Gauss).</p>
         </div>
 
         <h3>Srovnění metod</h3>
@@ -467,29 +704,127 @@
                         <td><strong>Gaussova eliminace</strong></td>
                         <td>Přímá</td>
                         <td>$O(n^3)$</td>
-                        <td>Obecné soustavy</td>
+                        <td>Obecné soustavy (n ≤ 10000)</td>
                     </tr>
                     <tr>
                         <td><strong>LU rozklad</strong></td>
                         <td>Přímá</td>
                         <td>$O(n^3)$ + $O(n^2)$ per řešení</td>
-                        <td>Více soustav, inverze</td>
+                        <td>Více soustav se stejnou maticí</td>
                     </tr>
                     <tr>
                         <td><strong>Jacobi</strong></td>
                         <td>Iterační</td>
                         <td>$O(kn^2)$</td>
-                        <td>Paralelní výpočty</td>
+                        <td>Velké řídké matice, paralelní</td>
                     </tr>
                     <tr>
                         <td><strong>Gauss-Seidel</strong></td>
                         <td>Iterační</td>
                         <td>$O(kn^2)$</td>
-                        <td>Řídké matice</td>
+                        <td>Velké řídké matice, rychlejší</td>
                     </tr>
                 </tbody>
             </table>
         </div>
+
+        <hr>
+
+        <h2>Praktické aplikace soustav lineárních rovnic</h2>
+
+        <p><strong>Soustavy lineárních rovnic jsou všudypřítomné v reálném světě!</strong> Zde uvádíme tři klasické příklady.</p>
+
+        <h3>Aplikace 1: Analýza elektrickým obvodů (Kirchhoffovy zákony)</h3>
+
+        <p><strong>Problém:</strong> Máte elektrický obvod se třemi smyčkami a chcete znát proudy v každé větvi.</p>
+
+        <p><strong>Obvod:</strong></p>
+        <ul>
+            <li>Zdroj napětí: 12V a 8V</li>
+            <li>Odpory: $R_1 = 2\Omega$, $R_2 = 3\Omega$, $R_3 = 4\Omega$</li>
+            <li>Hledáme: Proudy $I_1, I_2, I_3$ v jednotlivých větvích</li>
+        </ul>
+
+        <p><strong>Kirchhoffovy zákony (základní fyzika):</strong></p>
+        <ol>
+            <li><strong>Zákon uzlu:</strong> Součet proudů vstupujících do uzlu = součet proudů opouštějících uzel</li>
+            <li><strong>Zákon smyčky:</strong> Součet napětí v uzavřené smyčce = 0</li>
+        </ol>
+
+        <p><strong>Řešení — aplikace Kirchhoffových zákonů na konkrétní obvod:</strong></p>
+
+        <div class="formula">
+            $$\begin{aligned}
+            2I_1 + 3(I_1 - I_2) &= 12 \quad \text{(Smyčka 1: napětí zdroje = suma úbytků)} \\
+            3(I_2 - I_1) + 4I_2 &= 8 \quad \text{(Smyčka 2)} \\
+            I_1 - I_2 - I_3 &= 0 \quad \text{(Zákon uzlu: součet proudů)}
+            \end{aligned}$$
+        </div>
+
+        <p><strong>Zjednodušení:</strong></p>
+        <div class="formula">
+            $$\begin{aligned}
+            5I_1 - 3I_2 &= 12 \\
+            -3I_1 + 7I_2 &= 8 \\
+            I_1 - I_2 - I_3 &= 0
+            \end{aligned}$$
+        </div>
+
+        <p><strong>Řešení Gaussovou eliminací:</strong></p>
+        <ul>
+            <li>$I_1 = 2.4\text{A}$, $I_2 = 0.4\text{A}$, $I_3 = 2.0\text{A}$</li>
+        </ul>
+
+        <p><em>Interpretace: Proud 2.4A teče první smyčkou, 0.4A druhou smyčkou, a jejich rozdíl (2A) teče třetí větví.</em></p>
+
+        <h3>Aplikace 2: Chemické rovnice (Vyvažování molů)</h3>
+
+        <p><strong>Problém:</strong> Vyvážit chemickou rovnici pro spalování etanu.</p>
+
+        <p><strong>Neznámou rovnice:</strong> $aC_2H_6 + bO_2 \to cCO_2 + dH_2O$</p>
+
+        <p><strong>Omezení (bilance prvků):</strong></p>
+        <ul>
+            <li><strong>Uhlík (C):</strong> $2a = c$ (2 atomy v etanu, 1 v CO₂)</li>
+            <li><strong>Vodík (H):</strong> $6a = 2d$ (6 atomů v etanu, 2 v H₂O)</li>
+            <li><strong>Kyslík (O):</strong> $2b = 2c + d$ (2 atomy v O₂, 2 v CO₂ a 1 v H₂O)</li>
+        </ul>
+
+        <p><strong>Soustava lineárních rovnic:</strong></p>
+        <div class="formula">
+            $$\begin{aligned}
+            2a - c &= 0 \\
+            6a - 2d &= 0 \\
+            2b - 2c - d &= 0
+            \end{aligned}$$
+        </div>
+
+        <p><strong>Řešení (s normalizací na nejmenší celočíselné hodnoty):</strong> $a=1, b=3, c=2, d=3$</p>
+
+        <p><strong>Vyvážená rovnice:</strong> $$C_2H_6 + 3O_2 \to 2CO_2 + 3H_2O$$</p>
+
+        <h3>Aplikace 3: Teplota ustáleného stavu (Difúzní rovnice)</h3>
+
+        <p><strong>Problém:</strong> Máte tenkou tyč rozdělenu na 4 body. Krajní body mají pevné teploty (0°C a 100°C). Jaké jsou teploty v interních bodech v ustáleném stavu?</p>
+
+        <p><strong>Fyzika:</strong> V ustáleném stavu je teplota v každém interním bodě průměrem teplot jeho sousedů.</p>
+
+        <div class="formula">$$T_i = \frac{T_{i-1} + T_{i+1}}{2}$$</div>
+
+        <p><strong>Konkrétní příklad:</strong> Tyč s body 0, 1, 2, 3, 4 (kraje: $T_0 = 0°C$, $T_4 = 100°C$)</p>
+
+        <p><strong>Rovnice pro interní body:</strong></p>
+        <div class="formula">
+            $$\begin{aligned}
+            2T_1 - T_2 &= 0 \\
+            -T_1 + 2T_2 - T_3 &= 0 \\
+            -T_2 + 2T_3 &= 100
+            \end{aligned}$$
+        </div>
+
+        <p><strong>Řešení:</strong> $T_1 = 25°C$, $T_2 = 50°C$, $T_3 = 75°C$</p>
+
+        <p><em>Fyzické vysvětlení: Teplota lineárně roste od 0°C na jedné straně k 100°C na druhé straně (exponenciální ústav vede na lineární rozložení v ustáleném stavu).</em></p>
 
         <h3>Interaktivní řešitel soustav</h3>
 
@@ -528,6 +863,57 @@
         </div>
 
         <hr>
+
+        <h2>Shrnutí a klíčové pozorování</h2>
+
+        <div class="highlight-box">
+            <p><strong>Klíčové pozorování:</strong> Soustavy lineárních rovnic jsou <strong>VŠUDE</strong> v moderním světě!</p>
+            <ul>
+                <li>🔌 <strong>Elektrotechnika:</strong> Analýza obvodů (Kirchhoff)</li>
+                <li>🏗️ <strong>Stavebnictví:</strong> Statika konstrukcí (silnice, mosty)</li>
+                <li>🌡️ <strong>Fyzika/Inženýrství:</strong> Přenos tepla, difúze, dynamika tekutin</li>
+                <li>🧪 <strong>Chemie:</strong> Vyvažování rovnic, kinetika</li>
+                <li>📊 <strong>Ekonomie/Statistika:</strong> Regrese, pronózování</li>
+                <li>🖥️ <strong>Počítačová grafika:</strong> Transformace souřadnic, rendering</li>
+                <li>🤖 <strong>Umělá inteligence:</strong> Trénování neuronových sítí</li>
+            </ul>
+        </div>
+
+        <h3>Volba metody — rozhodovací strom</h3>
+
+        <div class="math-box">
+            <p><strong>Jak si vybrat správnou metodu?</strong></p>
+            <pre><code class="language-plaintext">Je matice velmi MALÁ (n ≤ 3)?
+├─ ANO → Použij CRAMEROVO PRAVIDLO (výpočet determinantu)
+└─ NE → Je matice ŘÍDKÁ (hodně nul)?
+        ├─ ANO → Použij ITERAČNÍ METODU (Gauss-Seidel)
+        │        (ale ověř diagonální dominanci!)
+        └─ NE → Má potřebu řešit více soustav SE STEJNOU maticí?
+                ├─ ANO → Použij LU ROZKLAD (počítej L,U jednou)
+                └─ NE → Použij GAUSSOVU ELIMINACI (obecná metoda)
+
+Dodatečné tipy:
+• Vždy používej ČÁSTEČNOU PIVOTACI (numerical stability)
+• Iterační metody vyžadují DIAGONÁLNÍ DOMINANCI
+• Pro velmi velké matice (n > 10000) používej iterační metody
+            </code></pre>
+        </div>
+
+        <h3>Cvičení pro porozumění</h3>
+
+        <div class="note-box">
+            <p><strong>Ověř si pochopení — zkus vyřešit:</strong></p>
+            <ol>
+                <li>Vyřeš soustavu $\begin{pmatrix} 3 & 1 \\ 1 & 2 \end{pmatrix} \begin{pmatrix} x \\ y \end{pmatrix} = \begin{pmatrix} 5 \\ 4 \end{pmatrix}$ pomocí:
+                    <ul>
+                        <li>a) Cramerova pravidla</li>
+                        <li>b) Gaussovy eliminace</li>
+                    </ul>
+                </li>
+                <li>Rozloži matici $\begin{pmatrix} 2 & 1 \\ 1 & 3 \end{pmatrix}$ na LU tvar a ověř!</li>
+                <li>Je matice $\begin{pmatrix} 10 & 1 \\ 1 & 5 \end{pmatrix}$ diagonálně dominantní? Konverguje na ní Jacobi?</li>
+            </ol>
+        </div>
 
     </div>
 

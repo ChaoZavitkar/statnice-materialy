@@ -63,8 +63,6 @@
     <h1>Okruh 12 – Grafy, stromy a prohledávání</h1>
     <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
 
-    <hr>
-
     <h2>Grafy</h2>
 
     <h3>Definice grafu</h3>
@@ -90,6 +88,26 @@
         $V = \{A, P, K, J\}$<br>
         $E = \{\{A,P\}, \{A,K\}, \{P,J\}, \{K,J\}\}$
     </div>
+
+    <h3>Příklady</h3>
+
+    <p><strong>Příklady, které SPLŇUJÍ definici neorientovaného grafu:</strong></p>
+    <ul>
+        <li>Sociální síť (přátelství je oboustranné)</li>
+        <li>Silniční síť mezi městy (silnice jsou průjezdné oběma směry)</li>
+        <li>Molekulární struktura (vazby mezi atomy)</li>
+        <li>Neorientovaný graf s 5 vrcholy a 4 hranami (strom)</li>
+    </ul>
+
+    <p><strong>Příklady, které NESPLŇUJÍ definici neorientovaného grafu:</strong></p>
+    <ul>
+        <li>Orientovaný graf (Twitter – sledování je jednosměrné)</li>
+        <li>Struktura se smyčkou pouze pro některé vrcholy (pokud není konzistentní)</li>
+        <li>Neúplně definované hrany (není jasné, zda jsou oboustranné)</li>
+        <li>Hypergraf (hrana spojuje více než 2 vrcholy najednou) — to není běžný graf</li>
+    </ul>
+
+    <hr style="margin: 20px 0;">
 
     <h3>Orientovaný graf</h3>
 
@@ -254,6 +272,24 @@
         <li><strong>Hustý (dense):</strong> Mnoho hran, $|E| \approx |V|^2$</li>
     </ul>
 
+    <h3>Příklady</h3>
+
+    <p><strong>Příklady, které SPLŇUJÍ definici orientovaného grafu:</strong></p>
+    <ul>
+        <li>World Wide Web (odkaz ze stránky A na stránku B je jednosměrný)</li>
+        <li>Twitter (sledování je jednosměrné)</li>
+        <li>Závislosti v projektu (úkol A musí být hotov před úkolem B)</li>
+        <li>Silniční síť s jednosměrnými ulicemi</li>
+        <li>Stavový diagram automatu (přechody mezi stavy)</li>
+    </ul>
+
+    <p><strong>Příklady, které NESPLŇUJÍ definici orientovaného grafu:</strong></p>
+    <ul>
+        <li>Neorientovaný graf (nelze rozlišit směr hrany)</li>
+        <li>Multigraf se dvěma hranami mezi stejnou dvojicí vrcholů (pokud by měl různé směry, musely by se počítat zvlášť)</li>
+        <li>Graf bez jasného směru na hranách (hrany bez šipek)</li>
+    </ul>
+
     <hr>
 
     <h2>Stromy</h2>
@@ -270,6 +306,28 @@
         <li>Mezi každými dvěma vrcholy existuje právě jedna cesta</li>
     </ul>
     </p>
+
+    <h3>Příklady</h3>
+
+    <p><strong>Příklady, které SPLŇUJÍ definici stromu:</strong></p>
+    <ul>
+        <li>Rodokmen (každý člověk má právě jednoho otce/matku)</li>
+        <li>Hierarchická struktura firmy (CEO → manažeři → zaměstnanci)</li>
+        <li>Adresářová struktura počítače (jednotná cesta z rootů k jednotlivým souborům)</li>
+        <li>Syntaktický strom programu (jak se parsuje kod)</li>
+        <li>Minimální kostry v grafu (spojuje všechny vrcholy bez cyklů)</li>
+    </ul>
+
+    <p><strong>Příklady, které NESPLŇUJÍ definici stromu:</strong></p>
+    <ul>
+        <li>Graf s cyklem (např. A→B→C→A) — strom nesmí mít cykly</li>
+        <li>Nesouvislý graf (více odděleného komponent) — strom musí být souvislý</li>
+        <li>Úplný graf $K_n$ pro $n \geq 3$ — obsahuje příliš mnoho hran ($\binom{n}{2}$ místo $n-1$)</li>
+        <li>Graf s $n$ vrcholy a méně než $n-1$ hranami — nemůže být souvislý</li>
+        <li>Rodokmen se společným předkem (diamantový vzor: jeden člověk v roli obou rodičů) — technicky není strom, je to DAG</li>
+    </ul>
+
+    <hr style="margin: 20px 0;">
 
     <h3>Základní pojmy</h3>
 
@@ -746,6 +804,46 @@ def bfs(graph, start):
     <div class="highlight-box">
         <strong>Příklad:</strong> BFS strom vs DFS strom pro stejný graf mohou vypadat velmi odlišně.
     </div>
+
+    <h3>Porovnání DFS a BFS — Kdy použít který?</h3>
+
+    <p><strong>Praktický návod:</strong></p>
+    <ul>
+        <li><strong>Použij DFS když:</strong>
+            <ul>
+                <li>Potřebuješ najít všechny cesty (backtracking, N-královen)</li>
+                <li>Hledáš spojitost nebo silně souvislé komponenty</li>
+                <li>Potřebuješ topologické třídění (DAG)</li>
+                <li>Máš hlubší graf a malou paměť</li>
+            </ul>
+        </li>
+        <li><strong>Použij BFS když:</strong>
+            <ul>
+                <li>Hledáš nejkratší cestu v neohodnoceném grafu</li>
+                <li>Chceš objevit vrcholy po vrstvách (vzdálenosti)</li>
+                <li>Potřebuješ zjistit, zda je graf bipartitní</li>
+                <li>Chceš prohledávat sociální síť po "stupních separace"</li>
+            </ul>
+        </li>
+    </ul>
+
+    <p><strong>Příklady z praxe:</strong></p>
+    <ul>
+        <li><strong>DFS v real-world:</strong>
+            <ul>
+                <li>Labyrint (najít cestu od vstupu k výstupu)</li>
+                <li>Detekce mrtvých smyček v kódu</li>
+                <li>Linkrot detektory (najít všechny neplatné odkazy)</li>
+            </ul>
+        </li>
+        <li><strong>BFS v real-world:</strong>
+            <ul>
+                <li>GPS navigace (nejkratší trasa)</li>
+                <li>Sociální sítě (najít přátelé přátel)</li>
+                <li>Robotika (plánování cesty robota)</li>
+            </ul>
+        </li>
+    </ul>
 
     <hr>
 

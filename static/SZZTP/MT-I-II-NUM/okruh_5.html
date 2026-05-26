@@ -41,7 +41,7 @@
         <h1>Okruh 5 – Diferenciální a integrální počet</h1>
         <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
 
-        <h2>1. Derivace funkce</h2>
+        <h2>Derivace funkce</h2>
 
         <h3>Intuitivní vysvětlení</h3>
         <p><strong>Derivace je "okamžitá rychlost změny".</strong> Stejně jako když jedete autom a tachometr ukazuje "teď jedu 80 km/h", derivace funkce říká "v tomto bodě se funkce mění touto rychlostí".</p>
@@ -229,11 +229,28 @@
             <p style="font-size: 0.9em; color: #666; margin-top: 10px;">💡 Pozoruj, jak se derivace mění s x! Když je x=0, derivace $2x$ je 0 (plochý bod).</p>
         </div>
 
+        <h3>Praktická aplikace: Optimalizace nákladů (Reálný příklad)</h3>
+
+        <p><strong>Problém:</strong> Továrna vyrábí čtvercové krabice o straně $x$ cm. Výroba jedné krabice stojí $C(x) = 0.1x^2 - 2x + 50$ Kč. Při jaké velikosti je náklad na jednu krabici nejmenší?</p>
+
+        <p><strong>Řešení – Krok za krokem:</strong></p>
+        <ol>
+            <li><strong>Najdi derivaci:</strong> $C'(x) = 0.2x - 2$</li>
+            <li><strong>Nastav derivaci na nulu:</strong> $0.2x - 2 = 0$ ⟹ $x = 10$ cm</li>
+            <li><strong>Ověř, že to je minimum:</strong> Druhá derivace $C''(x) = 0.2 > 0$ ✓ (je to minimum)</li>
+            <li><strong>Spočítej minimální náklad:</strong> $C(10) = 0.1(10)^2 - 2(10) + 50 = 10 - 20 + 50 = 40$ Kč</li>
+        </ol>
+
+        <div class="note-box">
+            <p><strong>Závěr:</strong> Optimální velikost je 10 cm, s minimálním nákladem 40 Kč na krabici.</p>
+            <p><em>Tento typ problému má obrovský praktický dopad — společnosti ušetří miliony korun optimalizací výroby!</em></p>
+        </div>
+
         <hr>
 
-        <h2>2. Extrémy funkce</h2>
+        <h2>Extrémy funkce</h2>
 
-        <h3>Co je extrém?</h3>
+        <h3>Definice</h3>
         <p><strong>Extrém = maximum nebo minimum.</strong> To je bod, kde má funkce "hřeben" (vrchol) nebo "jámu" (dno).</p>
 
         <div class="note-box">
@@ -254,17 +271,27 @@
             <p><strong>Body, kde $f'(x) = 0$, se nazývají "kritické body".</strong> V nich by mohly být extrémy.</p>
         </div>
 
+        <h3>Algoritmus hledání extrémů</h3>
+
+        <p><strong>Postup – krok za krokem:</strong></p>
+        <ol>
+            <li><strong>Spočítej derivaci:</strong> Najdi $f'(x)$</li>
+            <li><strong>Nastav derivaci na nulu:</strong> Vyřeš rovnici $f'(x) = 0$ → získáš kritické body</li>
+            <li><strong>Ověř typ extrému:</strong> Použij jednu z metod níže</li>
+            <li><strong>Spočítej hodnotu:</strong> $f(c)$ = hodnota funkce v extrému</li>
+        </ol>
+
         <h3>Jak poznat, co to je?</h3>
 
-        <h4>Metoda 1: Druhá derivace</h4>
-        <p>Druhá derivace $f''(x)$ vám říká, jak se "Zakřivení" grafu v bodě. Je-li $f'(c) = 0$:</p>
+        <h4>Metoda 1: Druhá derivace (Rychlejší)</h4>
+        <p>Druhá derivace $f''(x)$ vám říká, jak se "zakřivení" grafu v bodě. Je-li $f'(c) = 0$:</p>
         <ul>
             <li>Pokud $f''(c) > 0$ (druhá derivace kladná) → $c$ je <strong>minimum</strong> (konkávní, "happy face" ∪)</li>
             <li>Pokud $f''(c) < 0$ (druhá derivace záporná) → $c$ je <strong>maximum</strong> (konvexní, "sad face" ∩)</li>
             <li>Pokud $f''(c) = 0$ → test nerozhoduje (inflexní bod, změna zakřivení)</li>
         </ul>
 
-        <h4>Metoda 2: Znak derivace (Jednodušší)</h4>
+        <h4>Metoda 2: Znak derivace kolem kritického bodu (Spolehlivější)</h4>
         <p>Podívejte se, jak se znaménko derivace změní kolem kritického bodu:</p>
         <ul>
             <li><strong>$-$ na $+$</strong> (derivace změní ze záporné na kladnou) → <strong>minimum</strong> (dno)</li>
@@ -272,12 +299,37 @@
             <li><strong>Znaménko se nezmění</strong> → <strong>inflexní bod</strong> (jen zmena v zakřivení)</li>
         </ul>
 
+        <h3>Příklad: Hledání extrémů konkrétní funkce</h3>
+
+        <p><strong>Úloha:</strong> Najdi extrémy funkce $f(x) = x^3 - 3x^2 - 9x + 5$</p>
+
+        <p><strong>Řešení:</strong></p>
+        <ol>
+            <li><strong>Derivace:</strong> $f'(x) = 3x^2 - 6x - 9$</li>
+            <li><strong>Kritické body:</strong> $3x^2 - 6x - 9 = 0$ ÷ 3 ⟹ $x^2 - 2x - 3 = 0$ ⟹ $(x-3)(x+1) = 0$
+                <br>⟹ $x = -1$ nebo $x = 3$</li>
+            <li><strong>Druhá derivace:</strong> $f''(x) = 6x - 6$
+                <ul>
+                    <li>V bodě $x = -1$: $f''(-1) = -6 - 6 = -12 < 0$ → <strong>MAXIMUM</strong></li>
+                    <li>V bodě $x = 3$: $f''(3) = 18 - 6 = 12 > 0$ → <strong>MINIMUM</strong></li>
+                </ul>
+            </li>
+            <li><strong>Hodnoty extrémů:</strong>
+                <ul>
+                    <li>Maximum: $f(-1) = (-1)^3 - 3(-1)^2 - 9(-1) + 5 = -1 - 3 + 9 + 5 = 10$</li>
+                    <li>Minimum: $f(3) = 27 - 27 - 27 + 5 = -22$</li>
+                </ul>
+            </li>
+        </ol>
+
+        <p><strong>Výsledek:</strong> Funkce má <strong>lokální maximum</strong> v bodě $(-1, 10)$ a <strong>lokální minimum</strong> v bodě $(3, -22)$.</p>
+
         <div id="plotExtrema" class="plot-container"></div>
         <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Funkce s vyznačenými extrémy — zelená = maximum, červená = minimum</p>
 
         <hr>
 
-        <h2>3. Integrál funkce</h2>
+        <h2>Integrál funkce</h2>
 
         <h3>Intuitivní vysvětlení: Co je integrál?</h3>
         <p><strong>Integrál je "opis" (inverzní funkce) derivace.</strong> Pokud víte, jak se funkce mění (derivace), integrál vám řekne, jakou "práci" už funktionalita "nastřídala".</p>
@@ -298,9 +350,33 @@
 
         <div class="formula">$$F'(x) = f(x) \quad \Rightarrow \quad \int f(x) \, dx = F(x) + C$$</div>
 
-        <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\int$ znamená "integrál" (součet nekonečně mnoha nekonečně malých částí). Symbol $dx$ znamená "malý kus x". Symbol $\Rightarrow$ znamená "znamená" nebo "vede na".</em></p>
+        <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\int$ znamená "integrál" (součet nekonečně mnoha nekonečně malých částí). Symbol $dx$ znamená "malý kus x". Konstanta $C$ je "libovolná integrační konstanta".</em></p>
 
-        <p><strong>Příklad:</strong> Víte, že derivace $x^2$ je $2x$. Takže $\int 2x \, dx = x^2 + C$</p>
+        <h3>Algoritmus hledání primitivní funkce</h3>
+
+        <p><strong>Postup – krok za krokem:</strong></p>
+        <ol>
+            <li><strong>Poznej typ funkce:</strong> Je to mocnina, sinus, exponenciála, atd.?</li>
+            <li><strong>Aplikuj vzorec:</strong> Použij tabulku základních integrálů (viz níže)</li>
+            <li><strong>Přidej konstantu:</strong> Na konec vždy přidej $+ C$</li>
+            <li><strong>Ověř derivací:</strong> Spočítej derivaci výsledku – měla by se rovnat původní funkci</li>
+        </ol>
+
+        <h3>Příklady neurčitého integrálu</h3>
+
+        <p><strong>Příklad 1:</strong> $\int 2x \, dx$</p>
+        <ul>
+            <li>Víme, že derivace $x^2$ je $2x$ (nebo použijeme vzorec: $\int x^n dx = \frac{x^{n+1}}{n+1} + C$ s $n=1$)</li>
+            <li>Výsledek: $\int 2x \, dx = x^2 + C$ ✓</li>
+            <li>Ověření: $(x^2 + C)' = 2x$ ✓</li>
+        </ul>
+
+        <p><strong>Příklad 2:</strong> $\int (3x^2 + 2x + 1) \, dx$</p>
+        <ul>
+            <li>Integrujeme člen po členu: $\int 3x^2 \, dx + \int 2x \, dx + \int 1 \, dx$</li>
+            <li>Aplikujeme vzorce: $3 \cdot \frac{x^3}{3} + 2 \cdot \frac{x^2}{2} + 1 \cdot x + C = x^3 + x^2 + x + C$</li>
+            <li>Ověření: $(x^3 + x^2 + x + C)' = 3x^2 + 2x + 1$ ✓</li>
+        </ul>
 
         <p><strong>Proč $+ C$?</strong> Protože derivace konstanty je 0, takže všechny funkce tvaru $F(x) + 5$, $F(x) + 100$, atd. mají stejnou derivaci. Konstanta $C$ je "libovolná integrační konstanta".</p>
 
@@ -328,13 +404,35 @@
 
         <div class="formula">$$\int_a^b f(x) \, dx = F(b) - F(a)$$</div>
 
-        <p><strong>Co se  stane:</strong></p>
+        <p><em style="color: #666; font-size: 0.9em;">💡 Toto je <strong>Fundamentální věta kalkulu</strong> — nejdůležitější věta matematické analýzy!</em></p>
+
+        <h3>Algoritmus výpočtu určitého integrálu</h3>
+
+        <p><strong>Postup – krok za krokem:</strong></p>
         <ol>
-            <li>Najdete "antiderivaci" $F(x)$ (neurčitý integrál bez $C$)</li>
-            <li>Spočítáte $F(b)$ (funkce v bodě $b$)</li>
-            <li>Spočítáte $F(a)$ (funkce v bodě $a$)</li>
-            <li>Odečtete: $F(b) - F(a)$ = plocha pod křivkou!</li>
+            <li><strong>Najdi primitivní funkci:</strong> Najdi $F(x)$ takovou, že $F'(x) = f(x)$ (neurčitý integrál bez $C$)</li>
+            <li><strong>Spočítej v horní hranici:</strong> Vypočítej $F(b)$</li>
+            <li><strong>Spočítej v dolní hranici:</strong> Vypočítej $F(a)$</li>
+            <li><strong>Odečti:</strong> Výsledek = $F(b) - F(a)$ (plocha pod křivkou!)</li>
         </ol>
+
+        <h3>Příklady určitého integrálu</h3>
+
+        <p><strong>Příklad 1:</strong> $\int_0^2 x^2 \, dx$</p>
+        <ul>
+            <li><strong>Primitivní funkce:</strong> $\int x^2 \, dx = \frac{x^3}{3} + C$, takže $F(x) = \frac{x^3}{3}$</li>
+            <li><strong>Horní hranice:</strong> $F(2) = \frac{2^3}{3} = \frac{8}{3}$</li>
+            <li><strong>Dolní hranice:</strong> $F(0) = \frac{0^3}{3} = 0$</li>
+            <li><strong>Výsledek:</strong> $\int_0^2 x^2 \, dx = \frac{8}{3} - 0 = \frac{8}{3} \approx 2.67$ (jednotky plochy)</li>
+        </ul>
+
+        <p><strong>Příklad 2:</strong> $\int_0^{\pi} \sin(x) \, dx$</p>
+        <ul>
+            <li><strong>Primitivní funkce:</strong> $\int \sin(x) \, dx = -\cos(x) + C$, takže $F(x) = -\cos(x)$</li>
+            <li><strong>Horní hranice:</strong> $F(\pi) = -\cos(\pi) = -(-1) = 1$</li>
+            <li><strong>Dolní hranice:</strong> $F(0) = -\cos(0) = -1$</li>
+            <li><strong>Výsledek:</strong> $\int_0^{\pi} \sin(x) \, dx = 1 - (-1) = 2$ (celá plocha pod sinusovkou!)</li>
+        </ul>
 
         <div id="plotIntegral" class="plot-container"></div>
         <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Určitý integrál = plocha pod křivkou (stínovaná oblast)</p>
@@ -409,56 +507,157 @@
 
         <hr>
 
-        <h2>4. Numerické integrační metody</h2>
+        <h2>Numerické integrační metody</h2>
 
         <h3>Proč máme numerické metody?</h3>
-        <p><strong>Problém:</strong> Ne všechny funkce se dají integrovat algebraicky (žádný vzorec neexistuje).</p>
 
-        <p><strong>Řešení:</strong> Přibližujeme plochu pod křivkou pomocí jednoduchých tvarů (obdélníky, lichoběžníky, atd.)</p>
+        <p><strong>Matematický problém:</strong> Ne všechny funkce mají "pěkný" integrál (analytické řešení).</p>
+
+        <ul>
+            <li>$\int_0^1 e^x \, dx$ → máme vzorec ✓</li>
+            <li>$\int_0^1 \sin(x^2) \, dx$ → žádný vzorec ✗</li>
+            <li>$\int_0^1 \frac{\sin(x)}{x} \, dx$ → žádný vzorec ✗</li>
+            <li>$\int_0^5 \sqrt{1 + x^4} \, dx$ → žádný vzorec ✗</li>
+        </ul>
+
+        <p><strong>Řešení:</strong> Přibližujeme integrál (plochu pod křivkou) pomocí <strong>jednoduchých tvarů</strong> – obdélníky, lichoběžníky, paraboly.</p>
 
         <div class="note-box">
-            <strong>Princip všech metod:</strong>
+            <strong>Obecný princip všech numerických integrační metod:</strong>
             <ol>
-                <li>Interval $[a, b]$ rozdělíme na $n$ malých kúsků</li>
-                <li>V každém kúsku aproximujeme plochu jednoduchou formou (obdélník, lichoběžník, parabola)</li>
-                <li>Sečteme všechny aproximace</li>
-                <li>Čím víc kúsků, tím přesnější!</li>
+                <li><strong>Rozdělení:</strong> Interval $[a, b]$ rozdělíme na $n$ malých kúsků šířky $\Delta x = \frac{b-a}{n}$</li>
+                <li><strong>Aproximace:</strong> V každém kúsku aproximujeme plochu jednoduchou formou (obdélník, lichoběžník, parabola)</li>
+                <li><strong>Sečtení:</strong> Sečteme všechny aproximace (plochy všech tvarů)</li>
+                <li><strong>Konvergence:</strong> Čím více kúsků ($n \to \infty$), tím přesnější aproximace</li>
             </ol>
         </div>
 
-        <h3>Obdélníková metoda</h3>
+        <h3>Obdélníková metoda (Rectangle Rule)</h3>
 
-        <p><strong>Myšlenka:</strong> Rozdělte interval na kúsky a aproximujte každý obdélníkem.</p>
+        <p><strong>Geometrická idea:</strong> Aproximujeme plochu pod funkcí pomocí <strong>vysokých obdélníků</strong>.</p>
 
-        <div class="formula">$$\int_a^b f(x) \, dx \approx \sum_{i=1}^{n} f(x_i^*) \cdot \Delta x$$</div>
+        <div class="formula">
+            $$\int_a^b f(x) \, dx \approx \sum_{i=1}^{n} f(x_i^*) \cdot \Delta x = \Delta x \sum_{i=1}^{n} f(x_i^*)$$
+            <br><br>
+            kde $\Delta x = \frac{b-a}{n}$ a $x_i^*$ je vybraný bod v kúsku $i$
+        </div>
 
-        <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\sum$ (velké sigma) znamená "suma" (sečtení). Zápis $\sum_{i=1}^{n}$ znamená "sečti pro i od 1 do n".</em></p>
+        <p><strong>Algoritmus – krok za krokem:</strong></p>
+        <ol>
+            <li>Zvolíme počet dělení $n$ (čím více, tím lépe)</li>
+            <li>Vypočítáme šířku jednoho kúsku: $\Delta x = \frac{b-a}{n}$</li>
+            <li>Pro $i = 1$ až $n$: vypočítáme $x_i$ (hranice kúsku) a $f(x_i^*)$ (výška – levý, středový nebo pravý bod)</li>
+            <li>Plocha jednoho obdélníku: $A_i = f(x_i^*) \cdot \Delta x$</li>
+            <li>Celková aproximace: $I \approx \sum_{i=1}^{n} A_i$</li>
+        </ol>
 
-        <p>kde:</p>
+        <p><strong>Vlastnosti:</strong></p>
         <ul>
-            <li>$\Delta x = \frac{b-a}{n}$ = velikost jednoho kúsku</li>
-            <li>$f(x_i^*)$ = výška obdélníku v kúsku $i$ (můžete vzít levý, pravý nebo střední bod)</li>
-            <li>Plocha obdélníku = výška × šírka = $f(x_i^*) \cdot \Delta x$</li>
+            <li>✓ <strong>Výhoda:</strong> Velmi jednoduchá, snadné pochopit a implementovat</li>
+            <li>✗ <strong>Nevýhoda:</strong> Poměrně nepřesná – chyba $\approx O(\frac{1}{n})$ (lineární konvergence)</li>
+            <li><strong>Kdy se selhává:</strong> Pro velmi "zubatou" funkci (s prudkými změnami) je nepřesná</li>
         </ul>
 
-        <p><strong>Výhody:</strong> Jednoduchá, snadné pochopit</p>
-        <p><strong>Nevýhody:</strong> Málo přesná (pokud není funkce hladká)</p>
+        <h3>Lichoběžníková metoda (Trapezoidal Rule)</h3>
 
-        <h3>Lichoběžníková metoda</h3>
+        <p><strong>Geometrická idea:</strong> Místo obdélníků používáme <strong>lichoběžníky</strong> (horní čára není vodorovná, ale šikmá).</p>
 
-        <p><strong>Myšlenka:</strong> Místo obdélníků použijeme lichoběžníky (to je přesnější!).</p>
+        <div class="formula">
+            $$\int_a^b f(x) \, dx \approx \sum_{i=1}^{n} \frac{f(x_{i-1}) + f(x_i)}{2} \cdot \Delta x$$
+            <br><br>
+            Plocha lichoběžníku: $\frac{\text{suma základen}}{2} \times \text{výška} = \frac{f(x_{i-1}) + f(x_i)}{2} \cdot \Delta x$
+        </div>
 
-        <div class="formula">$$\int_a^b f(x) \, dx \approx \sum_{i=1}^{n} \frac{f(x_{i-1}) + f(x_i)}{2} \cdot \Delta x$$</div>
+        <p><strong>Algoritmus – krok za krokem:</strong></p>
+        <ol>
+            <li>Rozdělíme interval: $\Delta x = \frac{b-a}{n}$, $x_i = a + i \cdot \Delta x$</li>
+            <li>Vypočítáme: $\sum_{i=1}^{n} \frac{f(x_{i-1}) + f(x_i)}{2} \cdot \Delta x$</li>
+            <li>Ekvivalentní zápis: $\Delta x \left[ \frac{f(a)}{2} + f(x_1) + f(x_2) + \cdots + f(x_{n-1}) + \frac{f(b)}{2} \right]$</li>
+        </ol>
 
-        <p><strong>Čím je to lepší?</strong> Lichoběžník se "přimyká" křivce lépe než obdélník.</p>
+        <p><strong>Vlastnosti:</strong></p>
+        <ul>
+            <li>✓ <strong>Výhoda:</strong> Přesnější než obdélníková metoda – chyba $\approx O(\frac{1}{n^2})$ (kvadratická konvergence)</li>
+            <li>✓ <strong>Výhoda:</strong> Lichoběžník "přimyká" křivku lépe než obdélník</li>
+            <li>✗ <strong>Nevýhoda:</strong> Stále ne ideální pro velmi zakřivené funkce</li>
+        </ul>
 
-        <h3>Simpsonovo pravidlo</h3>
+        <h3>Simpsonovo pravidlo (Simpson's Rule)</h3>
 
-        <p><strong>Myšlenka:</strong> Místo přímých čar používáme malé paraboly (zakřivené čáry). Jsou to nejlepší aproximace!</p>
+        <p><strong>Geometrická idea:</strong> Místo přímek (obdélníky, lichoběžníky) používáme <strong>malé paraboly</strong> (zakřivené čáry druhého řádu).</p>
 
-        <div class="formula">$$\int_a^b f(x) \, dx \approx \frac{\Delta x}{3} \sum_{i=0}^{n/2} [f(x_{2i}) + 4f(x_{2i+1}) + f(x_{2i+2})]$$</div>
+        <div class="formula">
+            $$\int_a^b f(x) \, dx \approx \frac{\Delta x}{3} \sum_{i=0}^{n/2-1} [f(x_{2i}) + 4f(x_{2i+1}) + f(x_{2i+2})]$$
+            <br><br>
+            <strong>Poznámka:</strong> $n$ musí být SUDÉ číslo! (dělíme na dvojice)
+        </div>
 
-        <p><strong>Výsledek:</strong> Velmi přesná (funguje prakticky dokonale pro polynomy a hladké funkce)</p>
+        <p><strong>Algoritmus – krok za krokem:</strong></p>
+        <ol>
+            <li>Zvolíme $n$ (SUDÉ číslo!): čím větší, tím lépe</li>
+            <li>$\Delta x = \frac{b-a}{n}$</li>
+            <li>Vypočítáme body: $x_i = a + i \cdot \Delta x$ pro $i = 0, 1, \ldots, n$</li>
+            <li>Aplikujeme Simpson vzorec: sečteme funkční hodnoty s váhami 1, 4, 2, 4, 2, ..., 4, 1</li>
+        </ol>
+
+        <p><strong>Vlastnosti:</strong></p>
+        <ul>
+            <li>✓ <strong>Výhoda:</strong> Velmi přesná – chyba $\approx O(\frac{1}{n^4})$ (kvartická konvergence!)</li>
+            <li>✓ <strong>Výhoda:</strong> Prakticky ideální pro polynomy až do stupně 3</li>
+            <li>✓ <strong>Výhoda:</strong> Málo iterací potřeba (n = 4-10 stačí pro výbornou přesnost)</li>
+            <li>✗ <strong>Nevýhoda:</strong> Složitější na pochopení (vzorec s váhami)</li>
+            <li>⚠️ <strong>Podmínka:</strong> $n$ musí být SUDÉ (důležité!)</li>
+        </ul>
+
+        <h3>Porovnání přesnosti metod</h3>
+
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered" style="max-width: 700px;">
+                <thead>
+                    <tr>
+                        <th>Kritérium</th>
+                        <th>Obdélníková</th>
+                        <th>Lichoběžníková</th>
+                        <th>Simpson</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Řád chyby</strong></td>
+                        <td>$O(1/n)$</td>
+                        <td>$O(1/n^2)$</td>
+                        <td>$O(1/n^4)$</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Počet bodů pro přesnost 10⁻⁶</strong></td>
+                        <td>~10⁶</td>
+                        <td>~1000</td>
+                        <td>~10</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ideální pro polynomy</strong></td>
+                        <td>Stupně 0</td>
+                        <td>Stupně 1</td>
+                        <td>Stupně ≤ 3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Implementace</strong></td>
+                        <td>Velmi jednoduchá</td>
+                        <td>Jednoduchá</td>
+                        <td>Středně složitá</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="math-box">
+            <strong>Praktické doporučení:</strong>
+            <ul style="margin: 10px 0;">
+                <li><strong>Simpson:</strong> Preferovaná volba – velmi přesná a efektivní pro hladké funkce</li>
+                <li><strong>Lichoběžník:</strong> Dobrá alternativa, když chceš jednodušší kód</li>
+                <li><strong>Obdélníky:</strong> Jen pro vzdělávací účely – příliš nepřesná pro praktické použití</li>
+            </ul>
+        </div>
 
         <div class="plot-row">
             <div id="plotRectangle" class="plot-container"></div>
@@ -493,40 +692,97 @@
 
         <hr>
 
-        <h2>5. Aplikace Derivací a Integrálů</h2>
+        <h2>Aplikace Derivací a Integrálů</h2>
 
-        <h3>Lokalní Extrémy (Už Zmíněno)</h3>
+        <h3>Lokální Extrémy — Optimalizační Problémy</h3>
         <p><strong>Kde jsou největší zisky? Kde je cena nejnižší?</strong> Derivace $f'(x) = 0$ nám říká kritické body, a test znaménka derivace nám řekne, zda to je maximum či minimum.</p>
 
-        <h3>Objem Rotačního Tělesa</h3>
+        <div class="note-box">
+            <p><strong>Aplikační oblasti:</strong></p>
+            <ul>
+                <li><strong>Ekonomie:</strong> Maximalizace zisku, minimalizace nákladů</li>
+                <li><strong>Inženýrství:</strong> Optimalizace rozměrů, minimalizace materiálu</li>
+                <li><strong>Medicína:</strong> Minimalizace dávky léku s maximálním účinkem</li>
+                <li><strong>Logistika:</strong> Optimální velikost skladu, plánování distribuce</li>
+            </ul>
+        </div>
+
+        <h3>Objem Rotačního Tělesa — Disk Metoda</h3>
 
         <p><strong>Problém:</strong> Máme funkci $f(x)$ a chceme vědět, jaký objem má těleso, když funkci otočíme kolem osy x.</p>
 
         <p><strong>Řešení – Disk Metoda:</strong></p>
         <div class="formula">$$V = \pi \int_a^b [f(x)]^2 \, dx$$</div>
 
-        <p><strong>Myšlenka:</strong> Když otočíme funkci kolem osy x, vytvoříme disky o poloměru $f(x)$. Objem každého disku je $\pi r^2 h = \pi [f(x)]^2 dx$. Sečteme (integrujeme) všechny disky.</p>
+        <p><strong>Princip – krok za krokem:</strong></p>
+        <ol>
+            <li>Rozdělíme interval $[a, b]$ na nekonečně malé kusy šířky $dx$</li>
+            <li>V každém místě $x$ vytvoříme disk o poloměru $r = f(x)$ a tloušťce $dx$</li>
+            <li>Objem jednoho disku: $dV = \pi r^2 \cdot dx = \pi [f(x)]^2 dx$</li>
+            <li>Celkový objem: sečteme (integrujeme) všechny disky: $V = \int_a^b \pi [f(x)]^2 dx$</li>
+        </ol>
 
-        <div class="note-box">
-            <p><strong>Příklad:</strong> Objem válce vzniklý rotací $f(x) = 2$ od $x=0$ do $x=5$:</p>
-            <p>$V = \pi \int_0^5 2^2 \, dx = \pi \int_0^5 4 \, dx = \pi \cdot 4 \cdot 5 = 20\pi$ ✓</p>
-        </div>
+        <h3>Příklad 1: Objem válce</h3>
+
+        <p><strong>Úloha:</strong> Objem válce vzniklý rotací $f(x) = 2$ od $x=0$ do $x=5$ kolem osy x.</p>
+
+        <p><strong>Řešení:</strong></p>
+        <ul>
+            <li>$V = \pi \int_0^5 2^2 \, dx = \pi \int_0^5 4 \, dx = 4\pi \cdot x \big|_0^5 = 4\pi \cdot 5 = 20\pi \approx 62.83$ jednotek³</li>
+        </ul>
+
+        <h3>Příklad 2: Objem kuželu (Praktičtější)</h3>
+
+        <p><strong>Úloha:</strong> Objem kuželu vzniklý rotací $f(x) = x$ (přímka skrz počátek) od $x=0$ do $x=3$ kolem osy x.</p>
+
+        <p><strong>Řešení:</strong></p>
+        <ol>
+            <li>$V = \pi \int_0^3 x^2 \, dx$</li>
+            <li>Primitivní funkce: $\int x^2 dx = \frac{x^3}{3}$</li>
+            <li>$V = \pi \left[ \frac{x^3}{3} \right]_0^3 = \pi \left( \frac{27}{3} - 0 \right) = 9\pi \approx 28.27$ jednotek³</li>
+        </ol>
+
+        <p><em>Poznámka: Skutečný kužel se základnou $r=3$ a výškou $h=3$ má objem $\frac{1}{3}\pi r^2 h = \frac{1}{3}\pi \cdot 9 \cdot 3 = 9\pi$ — skvělá shoda! ✓</em></p>
+
+        <h3>Střední Hodnota Funkce — Průměrný Efekt</h3>
+
+        <p><strong>Problém:</strong> Jaká je průměrná hodnota teploty během dne? Průměrný příjem společnosti za období?</p>
+
+        <p><strong>Vzorec:</strong></p>
+        <div class="formula">$$\bar{f} = \frac{1}{b-a} \int_a^b f(x) \, dx$$</div>
+
+        <p><strong>Intuice:</strong> Spočítáme "celkový obsah" (integrál), pak jej vydělíme délkou intervalu — jako průměr!</p>
+
+        <h3>Příklad: Průměrná teplota</h3>
+
+        <p><strong>Úloha:</strong> Teplota během dne je popsána jako $T(t) = 20 + 10\sin\left(\frac{\pi t}{12}\right)$, kde $t$ je čas v hodinách (0–24). Jaká je průměrná teplota?</p>
+
+        <p><strong>Řešení:</strong></p>
+        <ol>
+            <li>$\bar{T} = \frac{1}{24-0} \int_0^{24} \left[20 + 10\sin\left(\frac{\pi t}{12}\right)\right] dt$</li>
+            <li>$= \frac{1}{24} \left[ 20t - 10 \cdot \frac{12}{\pi}\cos\left(\frac{\pi t}{12}\right) \right]_0^{24}$</li>
+            <li>$= \frac{1}{24} \left[ (480 - \frac{120}{\pi}\cos(2\pi)) - (0 - \frac{120}{\pi}\cos(0)) \right]$</li>
+            <li>$= \frac{1}{24} \left[ 480 - \frac{120}{\pi} + \frac{120}{\pi} \right] = \frac{480}{24} = 20°C$</li>
+        </ol>
+
+        <p><em>Průměrná teplota je 20°C — to dává smysl, protože sinus osciluje symetricky kolem nuly!</em></p>
 
         <h3>Navazování Křivek (Hermitova Interpolace)</h3>
 
-        <p><strong>Problém:</strong> Máme dva body a chceme je spojit křivkou tak, aby byla hladká (bez ostrých rohů).</p>
+        <p><strong>Problém:</strong> Máme dva body a chceme je spojit křivkou tak, aby byla hladká (bez ostrých rohů). Navíc chceme kontrolovat sklon v koncových bodech.</p>
 
         <p><strong>Řešení:</strong> Hermitova kubická interpolace – používáme data o bodech i jejich sklonech (derivacích):</p>
         <div class="formula">$$P(x) = y_0 H_0(t) + y_1 H_1(t) + m_0 H_2(t) + m_1 H_3(t)$$</div>
 
-        <p>Kde $H_i(t)$ jsou Hermitovy bázové funkce a $m_0, m_1$ jsou sklony (derivace) v koncových bodech.</p>
+        <p>Kde $H_i(t)$ jsou Hermitovy bázové funkce (kubické polynomy) a $m_0, m_1$ jsou sklony (derivace) v koncových bodech.</p>
 
         <div class="note-box">
             <p><strong>Praktická použití:</strong></p>
             <ul>
-                <li>Kreslení hladkých křivek v počítačové grafice</li>
-                <li>CAD programy (AutoCAD, SolidWorks) – B-spline křivky</li>
-                <li>Animace – hladký přechod mezi pozicemi objektů</li>
+                <li>🎮 Kreslení hladkých křivek v počítačové grafice a hrách</li>
+                <li>🏗️ CAD programy (AutoCAD, SolidWorks) – B-spline a Bézierovy křivky</li>
+                <li>🎬 Animace – hladký přechod mezi pozicemi objektů, trajektorie pohybu</li>
+                <li>📐 Konstruktérství – návrh hladkých přechodů v konstrukcích</li>
             </ul>
         </div>
 

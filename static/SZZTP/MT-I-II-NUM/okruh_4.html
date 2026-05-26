@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Okruh 4 – Funkce, polynomy a numerické metody</title>
+    <title>Okruh 4: Funkce, polynomy a numerické metody</title>
     <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
 
     <!-- Bootstrap CSS (first) -->
@@ -35,698 +35,1615 @@
     <script>hljs.highlightAll();</script>
 </head>
 <body>
-    <div class="page-container">
-        <a href="../szztp.html" class="back-link">← Zpět na SZZTP</a>
+<div class="page-container">
 
-        <h1>Okruh 4 – Funkce, polynomy a numerické metody</h1>
-        <p class="subtitle">KI/SZZTP – Teoretické základy informatiky</p>
+    <a href="../szztp.html" class="back-link">← Zpět na SZZTP</a>
 
-        <h2>1. Funkce</h2>
+    <h1>Okruh 4 – Funkce, polynomy a numerické metody</h1>
+    <p class="subtitle">KI/SZZTP – Matematika</p>
 
-        <h3>Co je funkce?</h3>
-        <p><strong>Funkce je jednoduše pravidlo</strong>, které pro každý vstup dá právě jeden výstup.</p>
+    <hr>
 
-        <div class="note-box">
-            <strong>Příklady z reálného světa:</strong>
-            <ul>
-                <li><strong>Teplota v čase:</strong> Když znáte čas dne, můžete určit teplotu venku. Čas → Teplota</li>
-                <li><strong>Plat po pracovní době:</strong> Kolik hodin jste pracovali → Kolik dostanete zaplaceno</li>
-                <li><strong>Vzorec na obsah kruhu:</strong> Poloměr → Obsah: $A = \pi r^2$</li>
-                <li><strong>Cena za benzín:</strong> Počet litrů → Cena v Kč</li>
-            </ul>
-        </div>
+    <h2>Reálná funkce jedné reálné proměnné</h2>
 
-        <h3>Formální definice</h3>
-        <p><strong>Funkce</strong> je matematické zobrazení, které každému prvku z <strong>definičního oboru</strong> přiřadí právě jeden prvek z <strong>oboru hodnot</strong>.</p>
+    <h3>Definice</h3>
 
-        <div class="formula">$$f: D \to H, \quad f(x) = y$$</div>
-
-        <p><em style="color: #666; font-size: 0.9em;">💡 Symbol $\to$ (šipka) znamená "mapuje na" – funkce bere prvky z D a dává je do H. Symbol : znamená "je definováno jako".</em></p>
-
-        <p><strong>Co znamená zápis:</strong></p>
-        <ul>
-            <li>$D$ je <strong>definiční obor</strong> — všechny dovolené vstupy (např. všechny kladné čísla, všechny reálné čísla atd.)</li>
-            <li>$H$ je <strong>obor hodnot</strong> — možné výstupy (čemu se může funkce rovnat)</li>
-            <li>$x$ je <strong>vstup</strong> (nezávislá proměnná) — co do funkce dáváme</li>
-            <li>$y = f(x)$ je <strong>výstup</strong> (závislá proměnná) — co funkce vrátí</li>
+    <div class="math-box">
+        <strong>Funkce $f: D \to H$</strong> je předpis, který každému prvku $x \in D$ přiřadí právě jeden prvek $f(x) \in H$.
+        <ul style="margin-top: 10px;">
+            <li>$D$ — <strong>definiční obor</strong> (kde je funkce definovaná)</li>
+            <li>$H$ — <strong>kodomain</strong> (kam funkce „míří")</li>
+            <li>$\text{Im}(f) = \{f(x) : x \in D\}$ — <strong>obraz funkce</strong> (co se skutečně dosáhne)</li>
         </ul>
+    </div>
 
-        <div class="math-box">
-            <strong>Příklad:</strong> Pro funkci $f(x) = \sqrt{x}$ (druhá odmocnina):
-            <ul>
-                <li>Definiční obor: $x \geq 0$ <em style="font-size: 0.85em;">(Symbol $\geq$ znamená "větší nebo rovno")</em> (odmocninu můžeme počítat jen z nezáporných čísel)</li>
-                <li>Obor hodnot: $y \geq 0$ (výsledek odmocniny je vždycky nezáporný)</li>
-                <li>Příklad: $f(4) = 2$ (když dáme 4, dostaneme 2)</li>
-            </ul>
-        </div>
+    <p><strong>Zásadní vlastnost:</strong> Každému $x$ přiřazujeme <strong>právě jeden</strong> $f(x)$. Pokud by měl jeden vstup více výstupů, není to funkce.</p>
 
-        <h3>Vlastnosti funkcí</h3>
+    <h3>Definiční obor a obor hodnot</h3>
 
-        <h4>1. Rostoucí a klesající funkce</h4>
-        <p><strong>Rostoucí funkce:</strong> Čím větší vstup, tím větší výstup.</p>
+    <p><strong>Definiční obor $D$:</strong> Where je funkce matematicky definovaná? (Omezení: bez dělení nulou, bez odmocniny ze záporného, logaritmus jen kladných čísel, atd.)</p>
+
+    <p><strong>Obraz $\text{Im}(f)$:</strong> Jaké hodnoty se skutečně dosáhnou?</p>
+
+    <table class="table table-sm" style="max-width: 500px;">
+        <tr><td>$f(x) = \sqrt{x}$</td><td>$D = [0, +\infty)$</td><td>$\text{Im}(f) = [0, +\infty)$</td></tr>
+        <tr><td>$f(x) = \frac{1}{x}$</td><td>$D = \mathbb{R} \setminus \{0\}$</td><td>$\text{Im}(f) = \mathbb{R} \setminus \{0\}$</td></tr>
+        <tr><td>$f(x) = x^2$</td><td>$D = \mathbb{R}$</td><td>$\text{Im}(f) = [0, +\infty)$</td></tr>
+    </table>
+
+    <h3>Vlastnosti funkcí</h3>
+
+    <p><strong>Injektivita (prostá funkce):</strong> Různé vstupy dávají různé výstupy. Formálně: $x_1 \neq x_2 \Rightarrow f(x_1) \neq f(x_2)$</p>
+
+    <p><strong>Surjektivita (na):</strong> Každý prvek z kodomenu je obrazem nějakého prvku. Formálně: $\text{Im}(f) = H$</p>
+
+    <p><strong>Bijektivita:</strong> Funkce je zároveň injektivní a surjektivní. Má inverzní funkci $f^{-1}$.</p>
+
+    <p><strong>Příklady:</strong></p>
+    <ul>
+        <li>$f(x) = x^2$ na $\mathbb{R}$ — <strong>není injektivní</strong> ($f(-1) = f(1) = 1$), <strong>není surjektivní</strong> (záporná čísla nejsou obrazem)</li>
+        <li>$f(x) = 2x + 1$ — <strong>injektivní</strong> (různé $x$ → různé $f(x)$), <strong>surjektivní</strong> (každé $y$ je obrazem), tedy <strong>bijektivní</strong> ✓</li>
+        <li>$f(x) = e^x$ — <strong>injektivní</strong>, ale <strong>není surjektivní</strong> na $\mathbb{R}$ (záporné výstupy nejsou možné)</li>
+    </ul>
+
+    <h3>Asymptoty funkce</h3>
+
+    <p><strong>Asymptota:</strong> Přímka, ke které se graf funkce "blíží v nekonečnu" (nebo v bodě s nespojitostí), ale nikdy ji nedosáhne.</p>
+
+    <p><strong>Matematická definice:</strong> Přímka $y = ax + b$ (nebo $x = c$) je asymptotou funkce $f$, když:</p>
+    <div class="math-box">
+        $$\lim_{x \to \infty} [f(x) - (ax + b)] = 0 \quad \text{nebo} \quad \lim_{x \to -\infty} [f(x) - (ax + b)] = 0$$
+        <br>
+        (Funkce se "liší o stále méně" od přímky, když jdeme do nekonečna)
+    </div>
+
+    <h4>1. Vertikální asymptota</h4>
+
+    <p><strong>Definice:</strong> Přímka $x = a$ je vertikální asymptotou, když:</p>
+    <div class="math-box">
+        $$\lim_{x \to a^+} f(x) = \pm\infty \quad \text{nebo} \quad \lim_{x \to a^-} f(x) = \pm\infty$$
+    </div>
+
+    <p><strong>Příklad:</strong> $f(x) = \frac{1}{x}$ má vertikální asymptotu $x = 0$ (kde je děleno nulou)</p>
+
+    <div id="verticalAsymptote" style="margin: 20px 0;"></div>
+
+    <script>
+        // Vertikální asymptota: f(x) = 1/x
+        const xVert = [];
+        const yVert = [];
+        // Levá část (x < 0)
+        for (let x = -3; x < -0.05; x += 0.05) {
+            xVert.push(x);
+            yVert.push(1/x);
+        }
+        // Pravá část (x > 0)
+        for (let x = 0.05; x <= 3; x += 0.05) {
+            xVert.push(x);
+            yVert.push(1/x);
+        }
+
+        const traceVert = {
+            x: xVert,
+            y: yVert,
+            mode: 'lines',
+            line: { color: '#3498db', width: 2.5 },
+            name: 'f(x) = 1/x'
+        };
+
+        const traceVertAsymptote = {
+            x: [0, 0],
+            y: [-10, 10],
+            mode: 'lines',
+            line: { color: '#e74c3c', width: 2, dash: 'dash' },
+            name: 'Vertikální asymptota: x = 0'
+        };
+
+        Plotly.newPlot('verticalAsymptote', [traceVert, traceVertAsymptote],
+            {
+                title: 'Vertikální asymptota: f(x) = 1/x',
+                xaxis: { title: 'x', zeroline: false },
+                yaxis: { title: 'f(x)', range: [-10, 10], zeroline: false },
+                margin: { l: 60, r: 30, b: 50, t: 60 }
+            },
+            { responsive: true }
+        );
+    </script>
+
+    <h4>2. Horizontální asymptota</h4>
+
+    <p><strong>Definice:</strong> Přímka $y = L$ je horizontální asymptotou, když:</p>
+    <div class="math-box">
+        $$\lim_{x \to \infty} f(x) = L \quad \text{nebo} \quad \lim_{x \to -\infty} f(x) = L$$
+    </div>
+
+    <p><strong>Příklad:</strong> $f(x) = \frac{1}{x}$ má horizontální asymptotu $y = 0$ (když $x \to \infty$, hodnota se blíží k 0)</p>
+
+    <div id="horizontalAsymptote" style="margin: 20px 0;"></div>
+
+    <script>
+        // Horizontální asymptota: f(x) = 1/x
+        const xHoriz = [];
+        const yHoriz = [];
+        for (let x = -5; x < -0.1; x += 0.05) {
+            xHoriz.push(x);
+            yHoriz.push(1/x);
+        }
+        for (let x = 0.1; x <= 5; x += 0.05) {
+            xHoriz.push(x);
+            yHoriz.push(1/x);
+        }
+
+        const traceHoriz = {
+            x: xHoriz,
+            y: yHoriz,
+            mode: 'lines',
+            line: { color: '#3498db', width: 2.5 },
+            name: 'f(x) = 1/x'
+        };
+
+        const traceHorizAsymptote = {
+            x: [-5, 5],
+            y: [0, 0],
+            mode: 'lines',
+            line: { color: '#27ae60', width: 2, dash: 'dash' },
+            name: 'Horizontální asymptota: y = 0'
+        };
+
+        Plotly.newPlot('horizontalAsymptote', [traceHoriz, traceHorizAsymptote],
+            {
+                title: 'Horizontální asymptota: f(x) = 1/x',
+                xaxis: { title: 'x', zeroline: false },
+                yaxis: { title: 'f(x)', range: [-3, 3], zeroline: false },
+                margin: { l: 60, r: 30, b: 50, t: 60 }
+            },
+            { responsive: true }
+        );
+    </script>
+
+    <h4>3. Šikmá (oblique) asymptota</h4>
+
+    <p><strong>Definice:</strong> Přímka $y = ax + b$ (kde $a \neq 0$) je šikmou asymptotou, když:</p>
+    <div class="math-box">
+        $$\lim_{x \to \infty} [f(x) - (ax + b)] = 0$$
+    </div>
+
+    <p><strong>Příklad:</strong> $f(x) = \frac{x^2 + 1}{x}$ má šikmou asymptotu $y = x$ (dělíme: $\frac{x^2+1}{x} = x + \frac{1}{x}$, člen $\frac{1}{x} \to 0$)</p>
+
+    <div id="obliqueAsymptote" style="margin: 20px 0;"></div>
+
+    <script>
+        // Šikmá asymptota: f(x) = (x² + 1) / x = x + 1/x
+        const xOblique = [];
+        const yOblique = [];
+        for (let x = -5; x < -0.1; x += 0.05) {
+            xOblique.push(x);
+            yOblique.push((x*x + 1) / x);
+        }
+        for (let x = 0.1; x <= 5; x += 0.05) {
+            xOblique.push(x);
+            yOblique.push((x*x + 1) / x);
+        }
+
+        const traceOblique = {
+            x: xOblique,
+            y: yOblique,
+            mode: 'lines',
+            line: { color: '#3498db', width: 2.5 },
+            name: 'f(x) = (x² + 1)/x'
+        };
+
+        const xAsymp = [-5, 5];
+        const yAsymp = [-5, 5];
+        const traceObliqueAsymptote = {
+            x: xAsymp,
+            y: yAsymp,
+            mode: 'lines',
+            line: { color: '#9b59b6', width: 2, dash: 'dash' },
+            name: 'Šikmá asymptota: y = x'
+        };
+
+        Plotly.newPlot('obliqueAsymptote', [traceOblique, traceObliqueAsymptote],
+            {
+                title: 'Šikmá asymptota: f(x) = (x² + 1)/x',
+                xaxis: { title: 'x', zeroline: false },
+                yaxis: { title: 'f(x)', zeroline: false },
+                margin: { l: 60, r: 30, b: 50, t: 60 }
+            },
+            { responsive: true }
+        );
+    </script>
+
+    <div class="highlight-box">
+        <strong>Prakticky – jak najít asymptoty:</strong>
         <ul>
-            <li><strong>Formálně:</strong> Jestliže $x_1 < x_2$ pak $f(x_1) < f(x_2)$</li>
-            <li><strong>Příklad:</strong> $f(x) = 2x$ — když se x zvětší, výstup se také zvětší</li>
+            <li><strong>Vertikální:</strong> Kde je funkce nespojitá? (dělení nulou, logaritmus záporného čísla, ...)</li>
+            <li><strong>Horizontální:</strong> Co se stane s $\lim_{x \to \infty} f(x)$? (pokud to je konstanta $L$, máme $y = L$)</li>
+            <li><strong>Šikmá:</strong> Podělíme polynom polynomem – zbytek jde k 0 v nekonečnu</li>
         </ul>
+    </div>
 
-        <p><strong>Klesající funkce:</strong> Čím větší vstup, tím menší výstup.</p>
+    <h4>Příklady dalších typů funkcí</h4>
+
+    <p><strong>Kvadratická funkce:</strong> $f(x) = x^2 - nemá asymptoty (roste polynomiálně k nekonečnu)</p>
+
+    <div id="quadraticFunc" style="margin: 20px 0;"></div>
+
+    <script>
+        const xQuad = [];
+        const yQuad = [];
+        for (let x = -4; x <= 4; x += 0.1) {
+            xQuad.push(x);
+            yQuad.push(x * x);
+        }
+
+        const traceQuadFunc = {
+            x: xQuad,
+            y: yQuad,
+            mode: 'lines',
+            line: { color: '#3498db', width: 2.5 },
+            name: 'f(x) = x²'
+        };
+
+        Plotly.newPlot('quadraticFunc', [traceQuadFunc],
+            {
+                title: 'Kvadratická funkce: f(x) = x² (bez asymptot)',
+                xaxis: { title: 'x' },
+                yaxis: { title: 'f(x)' },
+                margin: { l: 60, r: 30, b: 50, t: 60 }
+            },
+            { responsive: true }
+        );
+    </script>
+
+    <p><strong>Logaritmická funkce:</strong> $f(x) = \ln(x)$ – má vertikální asymptotu v $x = 0$ (kde je nespojitá)</p>
+
+    <div id="logarithmicFunc" style="margin: 20px 0;"></div>
+
+    <script>
+        const xLog = [];
+        const yLog = [];
+        for (let x = 0.05; x <= 5; x += 0.05) {
+            xLog.push(x);
+            yLog.push(Math.log(x));
+        }
+
+        const traceLogFunc = {
+            x: xLog,
+            y: yLog,
+            mode: 'lines',
+            line: { color: '#3498db', width: 2.5 },
+            name: 'f(x) = ln(x)'
+        };
+
+        const traceLogAsymptote = {
+            x: [0, 0],
+            y: [-3, 2],
+            mode: 'lines',
+            line: { color: '#e74c3c', width: 2, dash: 'dash' },
+            name: 'Vertikální asymptota: x = 0'
+        };
+
+        Plotly.newPlot('logarithmicFunc', [traceLogFunc, traceLogAsymptote],
+            {
+                title: 'Logaritmická funkce: f(x) = ln(x)',
+                xaxis: { title: 'x', range: [-0.5, 5] },
+                yaxis: { title: 'f(x)', range: [-3, 2] },
+                margin: { l: 60, r: 30, b: 50, t: 60 }
+            },
+            { responsive: true }
+        );
+    </script>
+
+    <p><strong>Sinusoida:</strong> $f(x) = \sin(x)$ – nemá asymptoty, osciluje mezi -1 a 1 (omezená funkce)</p>
+
+    <div id="sinusoidFunc" style="margin: 20px 0;"></div>
+
+    <script>
+        const xSin = [];
+        const ySin = [];
+        for (let x = -2*Math.PI; x <= 2*Math.PI; x += 0.1) {
+            xSin.push(x);
+            ySin.push(Math.sin(x));
+        }
+
+        const traceSinFunc = {
+            x: xSin,
+            y: ySin,
+            mode: 'lines',
+            line: { color: '#3498db', width: 2.5 },
+            name: 'f(x) = sin(x)'
+        };
+
+        const traceSinBound1 = {
+            x: [-2*Math.PI, 2*Math.PI],
+            y: [1, 1],
+            mode: 'lines',
+            line: { color: '#27ae60', width: 1, dash: 'dot' },
+            name: 'Horní mez: y = 1'
+        };
+
+        const traceSinBound2 = {
+            x: [-2*Math.PI, 2*Math.PI],
+            y: [-1, -1],
+            mode: 'lines',
+            line: { color: '#27ae60', width: 1, dash: 'dot' },
+            name: 'Dolní mez: y = -1'
+        };
+
+        Plotly.newPlot('sinusoidFunc', [traceSinFunc, traceSinBound1, traceSinBound2],
+            {
+                title: 'Sinusoida: f(x) = sin(x) (bez asymptot, omezená)',
+                xaxis: { title: 'x' },
+                yaxis: { title: 'f(x)', range: [-1.5, 1.5] },
+                margin: { l: 60, r: 30, b: 50, t: 60 }
+            },
+            { responsive: true }
+        );
+    </script>
+
+    <div class="note-box">
+        <strong>Důležitá poznámka:</strong> Ne všechny funkce mají asymptoty!
         <ul>
-            <li><strong>Formálně:</strong> Jestliže $x_1 < x_2$ pak $f(x_1) > f(x_2)$</li>
-            <li><strong>Příklad:</strong> $f(x) = -x$ — když se x zvětší, výstup se zmenší</li>
+            <li><strong>Polynomy</strong> (kvadratické, kubické, ...) nemají asymptoty – rostou polynomiálně</li>
+            <li><strong>Omezené funkce</strong> (sinusoida, kosinus) nemají asymptoty – jejich hodnoty jsou vždy mezi určitými mezemi</li>
+            <li><strong>Racionální funkce</strong> (podíl polynomů) typicky asymptoty mají</li>
         </ul>
+    </div>
 
-        <h3>Vizualizace Funkcí</h3>
+    <h4>Komplexnější příklad: Racionální funkce s více asymptotami</h4>
 
-        <div id="funcGraphs" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
-            <div id="graphLinear" class="plot-container"></div>
-            <div id="graphQuadratic" class="plot-container"></div>
-            <div id="graphSqrt" class="plot-container"></div>
-            <div id="graphReciprocal" class="plot-container"></div>
+    <p><strong>Funkce:</strong> $$f(x) = \frac{2x^2 + 3x}{x^2 - 4}$$</p>
+
+    <p><strong>Analýza asymptot:</strong></p>
+    <ul>
+        <li><strong>Vertikální asymptoty:</strong> Kde je jmenovatel nula? $x^2 - 4 = 0 \Rightarrow x = \pm 2$</li>
+        <li><strong>Horizontální asymptota:</strong> Limita v nekonečnu? $\lim_{x \to \infty} \frac{2x^2 + 3x}{x^2 - 4} = \lim_{x \to \infty} \frac{2 + \frac{3}{x}}{1 - \frac{4}{x^2}} = \frac{2}{1} = 2$ → asymptota $y = 2$</li>
+    </ul>
+
+    <div id="rationalComplex" style="margin: 20px 0;"></div>
+
+    <script>
+        const xRat = [];
+        const yRat = [];
+
+        // Levá část (x < -2)
+        for (let x = -6; x < -2.05; x += 0.05) {
+            xRat.push(x);
+            yRat.push((2*x*x + 3*x) / (x*x - 4));
+        }
+        // Mezi asymptotami (-2 < x < 2)
+        for (let x = -1.95; x < 1.95; x += 0.05) {
+            xRat.push(x);
+            yRat.push((2*x*x + 3*x) / (x*x - 4));
+        }
+        // Pravá část (x > 2)
+        for (let x = 2.05; x <= 6; x += 0.05) {
+            xRat.push(x);
+            yRat.push((2*x*x + 3*x) / (x*x - 4));
+        }
+
+        const traceRatFunc = {
+            x: xRat,
+            y: yRat,
+            mode: 'lines',
+            line: { color: '#3498db', width: 2.5 },
+            name: 'f(x) = (2x² + 3x)/(x² - 4)'
+        };
+
+        // Vertikální asymptoty
+        const traceVertAsymp1 = {
+            x: [-2, -2],
+            y: [-15, 15],
+            mode: 'lines',
+            line: { color: '#e74c3c', width: 2, dash: 'dash' },
+            name: 'Vertikální: x = -2',
+            showlegend: true
+        };
+
+        const traceVertAsymp2 = {
+            x: [2, 2],
+            y: [-15, 15],
+            mode: 'lines',
+            line: { color: '#e74c3c', width: 2, dash: 'dash' },
+            name: 'Vertikální: x = 2',
+            showlegend: false
+        };
+
+        // Horizontální asymptota
+        const traceHorizAsymp = {
+            x: [-6, 6],
+            y: [2, 2],
+            mode: 'lines',
+            line: { color: '#27ae60', width: 2, dash: 'dash' },
+            name: 'Horizontální: y = 2'
+        };
+
+        Plotly.newPlot('rationalComplex', [traceRatFunc, traceVertAsymp1, traceVertAsymp2, traceHorizAsymp],
+            {
+                title: 'Racionální funkce: f(x) = (2x² + 3x)/(x² - 4)',
+                xaxis: { title: 'x', range: [-6, 6], zeroline: false },
+                yaxis: { title: 'f(x)', range: [-15, 15], zeroline: false },
+                margin: { l: 60, r: 30, b: 50, t: 70 },
+                hovermode: 'closest'
+            },
+            { responsive: true }
+        );
+    </script>
+
+    <p><strong>Pozorování:</strong> Funkce se blíží k asymptotám (červené čáry) ale nikdy je nedosáhne. Vidíš jak se chová v nekonečnu (blíží se k $y = 2$) a jak "exploduje" u vertikálních asymptot.</p>
+
+    <h4>Interaktivní příklad: Měň koeficienty a sleduj asymptoty</h4>
+
+    <p><strong>Funkce:</strong> $$f(x) = \frac{ax^2 + bx}{x^2 - c}$$</p>
+
+    <div style="background: #f9f9f9; padding: 15px; border-radius: 4px; margin: 20px 0;">
+        <div style="margin-bottom: 15px;">
+            <label><strong>a (horizontální asymptota y = a):</strong> <span id="valueA">2</span></label><br>
+            <input type="range" id="sliderA" min="0" max="5" step="0.1" value="2" style="width: 100%; margin-top: 5px;">
         </div>
 
-        <p style="font-size: 0.9em; color: #666; margin-top: 15px; text-align: center;">
-            <strong>Lineární:</strong> Přímka | <strong>Kvadratická:</strong> Parabola |
-            <strong>Odmocnina:</strong> Zakřivená nahoru | <strong>Reciproční:</strong> Hyperbola (není v x=0!)
-        </p>
-
-        <h3>💡 Co SPLŇUJE Definici Funkce – Co Ne?</h3>
-
-        <div class="highlight-box">
-            <p><strong>Definice funkce:</strong> Pro každý vstup z definiční oboru právě jeden výstup.</p>
-
-            <p style="margin-top: 15px;"><strong style="color: green;">✓ SPLŇUJE – Je to funkce:</strong></p>
-            <ul>
-                <li>$f(x) = 2x$ (každému x odpovídá právě jedno 2x)</li>
-                <li>$f(x) = x^2$ (každému x odpovídá právě jedno $x^2$, i když různá x dávají stejný výstup)</li>
-                <li>$f(x) = \sqrt{x}$ s $D = [0, \infty)$ (odmocnina je funkce, když se definuje jen pro ≥0)</li>
-            </ul>
-
-            <p style="margin-top: 15px;"><strong style="color: red;">✗ NESPLŇUJE – NENÍ to funkce:</strong></p>
-            <ul>
-                <li>$y^2 = x$ — pro jeden x existují dva y: $y = \sqrt{x}$ a $y = -\sqrt{x}$</li>
-                <li>"Když venku prší, jaká je teplota?" — k jednomu ději (prší) může být více teplot</li>
-                <li>$f(x) = 1/x$ bez specifikace definičního oboru — v $x=0$ není definováno!</li>
-            </ul>
+        <div style="margin-bottom: 15px;">
+            <label><strong>b (tvar funkce):</strong> <span id="valueB">3</span></label><br>
+            <input type="range" id="sliderB" min="-5" max="5" step="0.1" value="3" style="width: 100%; margin-top: 5px;">
         </div>
 
-        <h3>💡 Co SPLŇUJE Definiční Obor a Obor Hodnot – Co Ne?</h3>
-
-        <div class="highlight-box">
-            <p><strong style="color: green;">✓ SPRÁVNĚ určen definiční obor:</strong></p>
-            <ul>
-                <li>$f(x) = \sqrt{x}$ s $D = [0, \infty)$ (odmocnina jen z ≥0)</li>
-                <li>$f(x) = 1/x$ s $D = \mathbb{R} \setminus \{0\}$ (všechna čísla krom nuly)</li>
-                <li>$f(x) = \ln(x)$ s $D = (0, \infty)$ (jen kladná čísla)</li>
-            </ul>
-
-            <p style="margin-top: 15px;"><strong style="color: red;">✗ CHYBNĚ určen definiční obor:</strong></p>
-            <ul>
-                <li>$f(x) = \sqrt{x}$ s $D = \mathbb{R}$ (není definováno pro x < 0!)</li>
-                <li>$f(x) = 1/x$ s $D = \mathbb{R}$ (nesmí být v 0!)</li>
-                <li>$f(x) = \sqrt{2-x}$ s $D = \mathbb{R}$ (jen pro 2-x ≥ 0, tedy x ≤ 2)</li>
-            </ul>
-
-            <p style="margin-top: 15px;"><strong style="color: green;">✓ SPRÁVNĚ určen obor hodnot:</strong></p>
-            <ul>
-                <li>$f(x) = x^2$ má $H = [0, \infty)$ (všechny čtverce jsou ≥ 0)</li>
-                <li>$f(x) = \sin(x)$ má $H = [-1, 1]$ (sinus osciluje mezi -1 a 1)</li>
-                <li>$f(x) = e^x$ má $H = (0, \infty)$ (exponenciála vždy kladná)</li>
-            </ul>
-
-            <p style="margin-top: 15px;"><strong style="color: red;">✗ CHYBNĚ určen obor hodnot:</strong></p>
-            <ul>
-                <li>$f(x) = x^2$ má $H = \mathbb{R}$ (ne! Neexistuje čtverce záporné číslo)</li>
-                <li>$f(x) = 1/x$ má $H = \mathbb{R}$ (ne! Hodnota 0 se nedosáhne)</li>
-                <li>$f(x) = \sqrt{x}$ má $H = \mathbb{R}$ (ne! Jen [0,∞))</li>
-            </ul>
+        <div style="margin-bottom: 15px;">
+            <label><strong>c (vertikální asymptoty x = ±√c):</strong> <span id="valueC">4</span></label><br>
+            <input type="range" id="sliderC" min="0.5" max="5" step="0.1" value="4" style="width: 100%; margin-top: 5px;">
         </div>
+    </div>
 
+    <div id="interactiveAsymptote" style="margin: 20px 0;"></div>
 
-        <h3>Limita a Spojitost</h3>
+    <script>
+        function redrawInteractiveAsymptote() {
+            const a = parseFloat(document.getElementById('sliderA').value);
+            const b = parseFloat(document.getElementById('sliderB').value);
+            const c = parseFloat(document.getElementById('sliderC').value);
 
-        <h4>Co je limita?</h4>
-        <p><strong>Limita:</strong> Čemu se blíží funkce, když se x blíží k bodu $a$?</p>
-        <div class="formula">$$\lim_{x \to a} f(x) = L$$</div>
+            document.getElementById('valueA').textContent = a.toFixed(1);
+            document.getElementById('valueB').textContent = b.toFixed(1);
+            document.getElementById('valueC').textContent = c.toFixed(1);
 
-        <p><strong>Ústředná myšlenka:</strong> Limita nám říká, k jaké hodnotě se funkční hodnoty přibližují, když se x blíží k bodu $a$. <strong>Důležitě:</strong> Limita nemusí záviset na funkční hodnotě v bodě $a$ samotném!</p>
+            const xInt = [];
+            const yInt = [];
 
-        <div class="note-box">
-            <strong>Praktický příklad — Když se blížíme k hranici:</strong>
-            <p>Představte si, že stojíte ve vzdálenosti 1 metr od zdi a postupně se k ní blížíte:</p>
-            <ul>
-                <li>Na začátku jste 1 metr od zdi</li>
-                <li>Pak 0,5 metru, pak 0,1 metru, pak 0,01 metru...</li>
-                <li>Limita = vaše pozice, když se vzdálenost blíží 0 (máte skoro nos na zdi)</li>
-                <li><strong>Zásadní:</strong> Stát na zdi a stát u zdi je "skoro stejné" z pohledu limity!</li>
-            </ul>
-        </div>
+            const sqrtC = Math.sqrt(c);
+            const xMin = -6, xMax = 6;
 
-        <h4>Jednostranné limity</h4>
-        <p><strong>Limita zprava:</strong> Blížíme se k bodu $a$ z pravé strany (větší hodnoty)</p>
-        <div class="formula">$$\lim_{x \to a^+} f(x) = L^+$$</div>
+            // Levá část
+            for (let x = xMin; x < -sqrtC - 0.05; x += 0.05) {
+                xInt.push(x);
+                yInt.push((a*x*x + b*x) / (x*x - c));
+            }
+            // Mezi asymptotami
+            for (let x = -sqrtC + 0.05; x < sqrtC - 0.05; x += 0.05) {
+                xInt.push(x);
+                yInt.push((a*x*x + b*x) / (x*x - c));
+            }
+            // Pravá část
+            for (let x = sqrtC + 0.05; x <= xMax; x += 0.05) {
+                xInt.push(x);
+                yInt.push((a*x*x + b*x) / (x*x - c));
+            }
 
-        <p><strong>Limita zleva:</strong> Blížíme se k bodu $a$ z levé strany (menší hodnoty)</p>
-        <div class="formula">$$\lim_{x \to a^-} f(x) = L^-$$</div>
+            const traceFunc = {
+                x: xInt,
+                y: yInt,
+                mode: 'lines',
+                line: { color: '#3498db', width: 2.5 },
+                name: `f(x) = (${a.toFixed(1)}x² + ${b.toFixed(1)}x)/(x² - ${c.toFixed(1)})`
+            };
 
-        <p><strong>Věta:</strong> Limita existuje právě když se levá a pravá limita rovnají: $L^+ = L^- = L$</p>
+            // Horizontální asymptota
+            const traceHoriz = {
+                x: [xMin, xMax],
+                y: [a, a],
+                mode: 'lines',
+                line: { color: '#27ae60', width: 2, dash: 'dash' },
+                name: `Horizontální: y = ${a.toFixed(1)}`
+            };
 
-        <h3>Vztah mezi limitou a funkční hodnotou</h3>
+            // Vertikální asymptoty
+            const traceVert1 = {
+                x: [-sqrtC, -sqrtC],
+                y: [-15, 15],
+                mode: 'lines',
+                line: { color: '#e74c3c', width: 2, dash: 'dash' },
+                name: `Vertikální: x = -${sqrtC.toFixed(2)}`,
+                showlegend: true
+            };
 
-        <p><strong>Klíčová otázka:</strong> Platí $\lim_{x \to a} f(x) = f(a)$?</p>
+            const traceVert2 = {
+                x: [sqrtC, sqrtC],
+                y: [-15, 15],
+                mode: 'lines',
+                line: { color: '#e74c3c', width: 2, dash: 'dash' },
+                name: `Vertikální: x = ${sqrtC.toFixed(2)}`,
+                showlegend: false
+            };
 
-        <div class="highlight-box">
-            <p><strong>Odpověď: OBECNĚ NE!</strong></p>
-            <p>Limita v bodě $a$ a funkční hodnota v bodě $a$ jsou dvě zcela nezávislé věci!</p>
-            <ul>
-                <li>Limita se zabývá tím, <strong>k čemu se funkce blíží</strong> když se x blíží k $a$</li>
-                <li>Funkční hodnota je to, <strong>jaká je funkcí hodnota v samotném bodě $a$</strong></li>
-                <li>Tyto dvě věci se nemusejí rovnat!</li>
-            </ul>
+            Plotly.newPlot('interactiveAsymptote', [traceFunc, traceHoriz, traceVert1, traceVert2],
+                {
+                    title: 'Interaktivní asymptoty: měň a, b, c sliders',
+                    xaxis: { title: 'x', range: [xMin, xMax], zeroline: false },
+                    yaxis: { title: 'f(x)', range: [-15, 15], zeroline: false },
+                    margin: { l: 60, r: 30, b: 50, t: 70 },
+                    hovermode: 'closest'
+                },
+                { responsive: true }
+            );
+        }
 
-            <p style="margin-top: 15px;"><strong>ALE KDYŽ se rovnají:</strong></p>
-            <div class="formula">$$\lim_{x \to a} f(x) = f(a) \quad \Rightarrow \quad \text{Funkce je SPOJITÁ v bodě } a$$</div>
-            <p><strong>Spojitost je definována právě tímto vztahem!</strong></p>
-        </div>
+        document.getElementById('sliderA').addEventListener('input', redrawInteractiveAsymptote);
+        document.getElementById('sliderB').addEventListener('input', redrawInteractiveAsymptote);
+        document.getElementById('sliderC').addEventListener('input', redrawInteractiveAsymptote);
 
-        <h3>Co SPLŇUJE Definici Limity – Co Ne?</h3>
+        // Počáteční vykreslení
+        function initInteractive() {
+            if (typeof Plotly !== 'undefined') {
+                redrawInteractiveAsymptote();
+            } else {
+                setTimeout(initInteractive, 100);
+            }
+        }
+        initInteractive();
+    </script>
 
-        <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
-            <p><strong style="color: #2e7d32;">✓ Správně: Limita se rovná funkční hodnotě → SPOJITÁ</strong></p>
-            <p>Funkce: $f(x) = x^2$, hledáme $\lim_{x \to 2} f(x)$</p>
-            <p>Výpočet: Když se x blíží 2, tak se $x^2$ blíží $4$</p>
-            <div class="formula">$$\lim_{x \to 2} x^2 = 4 = f(2)$$ ✓</div>
-            <p><strong>Zleva:</strong> $\lim_{x \to 2^-} x^2 = 4$ | <strong>Zprava:</strong> $\lim_{x \to 2^+} x^2 = 4$ → Obě se rovnají!</p>
-            <p><strong>Závěr:</strong> Protože se limita rovná funkční hodnotě, je funkce <strong>SPOJITÁ v bodě 2</strong> ✓</p>
-        </div>
-
-        <div class="math-box" style="background-color: #fff3cd; border-left: 4px solid #ff9800;">
-            <p><strong style="color: #e65100;">⚠ Limita existuje, ale NEROVNÁ SE funkční hodnotě → NESPOJITÁ!</strong></p>
-            <p>Funkce: $f(x) = \begin{cases} x^2 & \text{když } x \neq 2 \\ 10 & \text{když } x = 2 \end{cases}$</p>
-            <p>V bodě $x=2$ je funkce "nažhavená" na hodnotu 10, ale když se blížíme z obou stran, $x^2 \to 4$</p>
-            <div class="formula">$$\lim_{x \to 2} f(x) = 4 \neq 10 = f(2)$$</div>
-            <p><strong>Zleva:</strong> $\lim_{x \to 2^-} x^2 = 4$ | <strong>Zprava:</strong> $\lim_{x \to 2^+} x^2 = 4$ → Limita JE 4, ale funkční hodnota je 10</p>
-            <p><strong>Důležité:</strong> Protože $\lim_{x \to 2} f(x) \neq f(2)$, je funkce <strong>NESPOJITÁ v bodě 2</strong> (tzv. odstranitelná nespojitost) ⚠</p>
-            <p><em>Poznámka: Kdyby někdo v bodě 2 definoval $f(2) = 4$ místo 10, funkce by byla spojitá!</em></p>
-        </div>
-
-        <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
-            <p><strong style="color: #c62828;">✗ Chyba: Limita NEEXISTUJE (různé strany)</strong></p>
-            <p>Funkce: $f(x) = \begin{cases} 1 & \text{když } x < 0 \\ -1 & \text{když } x \geq 0 \end{cases}$ (skokový skok)</p>
-            <p><strong>Zleva:</strong> $\lim_{x \to 0^-} f(x) = 1$</p>
-            <p><strong>Zprava:</strong> $\lim_{x \to 0^+} f(x) = -1$</p>
-            <p><strong>Závěr:</strong> Protože $1 \neq -1$, limita v bodě 0 NEEXISTUJE! ✗</p>
-        </div>
-
-        <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">
-            <p><strong style="color: #c62828;">✗ Chyba: Funkce není v bodě $a$ definována</strong></p>
-            <p>Funkce: $f(x) = \frac{1}{x}$, hledáme $\lim_{x \to 0} f(x)$</p>
-            <p><strong>Zleva:</strong> Když se blížíme k 0 zleva ($x = -0.1, -0.01, ...$), funkce $\to -\infty$</p>
-            <p><strong>Zprava:</strong> Když se blížíme k 0 zprava ($x = 0.1, 0.01, ...$), funkce $\to +\infty$</p>
-            <div class="formula">$$\lim_{x \to 0^-} \frac{1}{x} = -\infty \neq +\infty = \lim_{x \to 0^+} \frac{1}{x}$$</div>
-            <p><strong>Závěr:</strong> Limita v bodě 0 NEEXISTUJE! (Navíc $f(0)$ není definováno) ✗</p>
-        </div>
-
-        <h3>Vizualizace Limit</h3>
-
-        <div id="limitGraphs" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
-            <div id="graphLimitExists" class="plot-container"></div>
-            <div id="graphLimitNotExists" class="plot-container"></div>
-        </div>
-
-        <p style="font-size: 0.9em; color: #666; margin-top: 15px; text-align: center;">
-            <strong>LIMITA EXISTUJE:</strong> Obě strany se setkávají | <strong>LIMITA NEEXISTUJE:</strong> Rozdílné hodnoty nebo skok!
-        </p>
-
-        <p><strong>Spojitost:</strong> Funkce je "hladká" bez skoků. Můžete ji nakreslit jedním tahem bez zvednutí tužky.</p>
-
-        <div class="highlight-box">
-            <p><strong>Funkce $f$ je spojitá v bodě $a$, když:</strong></p>
-            <ul>
-                <li>$f(a)$ existuje</li>
-                <li>$\lim_{x \to a} f(x) = f(a)$ (limita = funkční hodnota)</li>
-            </ul>
-        </div>
-
-        <h3>Vizualizace Spojitosti</h3>
-
-        <div id="continuityGraphs" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
-            <div id="graphContinuous" class="plot-container"></div>
-            <div id="graphDiscontinuous" class="plot-container"></div>
-        </div>
-
-        <p style="font-size: 0.9em; color: #666; margin-top: 15px; text-align: center;">
-            <strong>SPOJITÁ:</strong> Lze nakreslit jedním tahem | <strong>NESPOJITÁ:</strong> Skok/přerušení!
-        </p>
-
-        <h3>💡 Co SPLŇUJE Definici Spojitosti – Co Ne?</h3>
-
-        <div class="highlight-box">
-            <p><strong style="color: green;">✓ SPOJITÉ funkce:</strong></p>
-            <ul>
-                <li>$f(x) = x^2$ (parabola bez přerušení)</li>
-                <li>$f(x) = \sin(x)$ (vlnka bez skoků)</li>
-                <li>$f(x) = e^x$ (exponenciála)</li>
-            </ul>
-
-            <p style="margin-top: 15px;"><strong style="color: red;">✗ NESPOJITÉ funkce:</strong></p>
-            <ul>
-                <li>$f(x) = 1/x$ (skok v $x=0$ — není tam definováno)</li>
-                <li>$f(x) = \lfloor x \rfloor$ (podlaha — schodovitá funkce)</li>
-                <li>$f(x) = \begin{cases} x & \text{když } x \leq 0 \\ x^2 & \text{když } x > 0 \end{cases}$ (v $x=0$ se sklon změní, není spojitá)</li>
-            </ul>
-        </div>
-
-        <hr>
-
-        <h2>2. Polynomy</h2>
-
-        <h3>Co je polynom?</h3>
-        <p><strong>Polynom</strong> je součet mocnin x s číselnými koeficienty. Prostě to je výraz jako $3x^2 + 2x - 5$.</p>
-
-        <div class="math-box">
-            <strong>Příklady polynomů:</strong>
-            <ul>
-                <li>$5$ — konstanta (polynom stupně 0)</li>
-                <li>$2x + 3$ — lineární funkce (polynom stupně 1)</li>
-                <li>$x^2 - 4x + 3$ — kvadratická funkce (polynom stupně 2)</li>
-                <li>$x^3 + 2x^2 - x + 1$ — kubická funkce (polynom stupně 3)</li>
-            </ul>
-        </div>
-
-        <h3>Obecná forma</h3>
-        <p><strong>Polynom $n$-tého stupně</strong> vypadá takto:</p>
-
-        <div class="formula">$$P(x) = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_1 x + a_0$$</div>
-
-        <p><strong>Co znamená zápis:</strong>
-        <em style="color: #666; font-size: 0.9em;">💡 Symbol $\cdots$ (tři tečky) znamená "a tak dále" — víc členů stejného typu. Dolní index (jako $a_n$) rozlišuje jednotlivé koeficienty.</em></p>
+    <div class="highlight-box">
+        <strong>Jak to funguje:</strong>
         <ul>
-            <li>$n$ je <strong>stupeň polynomu</strong> — nejvyšší mocnina x, která se v polynomu vyskytuje</li>
-            <li>$a_0, a_1, \ldots, a_n$ jsou <strong>koeficienty</strong> — čísla před mocninami x</li>
-            <li>$a_n \neq 0$ je <strong>vedoucí koeficient</strong> — koeficient u nejvyšší mocniny (nesmí být nula)</li>
+            <li>Zvyš <strong>a</strong> → horizontální asymptota se posunuje nahoru</li>
+            <li>Měň <strong>b</strong> → tvar funkce se mění, ale asymptoty zůstávají (b neovlivňuje limitu v ∞)</li>
+            <li>Zvyš <strong>c</strong> → vertikální asymptoty se vzdalují od nuly</li>
         </ul>
+    </div>
 
-        <div class="note-box">
-            <strong>Příklad:</strong> Polynom $P(x) = 3x^3 + 2x^2 - 5x + 1$
-            <ul>
-                <li>Stupeň: 3 (nejvyšší mocnina je $x^3$)</li>
-                <li>Koeficienty: $a_3 = 3$, $a_2 = 2$, $a_1 = -5$, $a_0 = 1$</li>
-                <li>Vedoucí koeficient: $a_3 = 3$</li>
-            </ul>
-        </div>
+    <h3>Graf funkce a základní vlastnosti</h3>
 
-        <h3>💡 Co SPLŇUJE Definici Polynomu – Co Ne?</h3>
+    <p><strong>Graf funkce:</strong> Znázornění všech dvojic $(x, f(x))$ v rovině.</p>
 
-        <div class="highlight-box">
-            <p><strong style="color: green;">✓ JE to polynom:</strong></p>
-            <ul>
-                <li>$5$ (konstanta — stupeň 0)</li>
-                <li>$3x + 2$ (lineární — stupeň 1)</li>
-                <li>$x^2 - 4x + 3$ (kvadratický — stupeň 2)</li>
-                <li>$2x^3 + 0·x^2 - 5x + 1$ (můžou chybět některé členy)</li>
-            </ul>
+    <p><strong>Základní vlastnosti:</strong></p>
+    <ul>
+        <li><strong>Rostoucí funkce:</strong> Větší vstup → větší výstup ($x_1 < x_2 \Rightarrow f(x_1) < f(x_2)$)</li>
+        <li><strong>Klesající funkce:</strong> Větší vstup → menší výstup ($x_1 < x_2 \Rightarrow f(x_1) > f(x_2)$)</li>
+        <li><strong>Konvexní funkce:</strong> Křivka se "kouše nahoru" (průběh zrychluje)</li>
+        <li><strong>Konkávní funkce:</strong> Křivka se "kouše dolů" (průběh zpomaluje)</li>
+    </ul>
 
-            <p style="margin-top: 15px;"><strong style="color: red;">✗ NENÍ to polynom:</strong></p>
-            <ul>
-                <li>$x^{-1} + 2x$ (negativní mocnina — to je racionální funkce)</li>
-                <li>$x^2 + \sqrt{x}$ (odmocnina — to není mocnina se celočíselnýmexponentem)</li>
-                <li>$\sin(x) + x^2$ (sinus — to není polynom)</li>
-                <li>$x^{2.5} + 3x$ (neceločíselný exponent)</li>
-            </ul>
-        </div>
+    <p><strong>Interaktivní vizualizace – základní funkce:</strong></p>
+    <div id="basicFunctions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;"></div>
 
-        <h3>Hornerovo Schéma – Efektivní Výpočet Polynomu</h3>
+    <script>
+        // Lineární funkce: f(x) = x
+        const xLin = [];
+        const yLin = [];
+        for (let x = -5; x <= 5; x += 0.1) {
+            xLin.push(x);
+            yLin.push(x);
+        }
+        const traceLin = { x: xLin, y: yLin, mode: 'lines', line: { color: '#3498db', width: 2 },
+                          name: 'f(x) = x (rostoucí)' };
+        Plotly.newPlot('basicFunctions', [traceLin],
+            { title: 'Lineární funkce', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
+              margin: { l: 50, r: 30, b: 30, t: 50 }, showlegend: true, responsive: true });
 
-        <p><strong>Myšlenka:</strong> Místo výpočtu všech mocnin, vynásobíme a sčítáme postupně.</p>
+        // Kvadratická funkce: f(x) = x²
+        const xQuad = [];
+        const yQuad = [];
+        for (let x = -5; x <= 5; x += 0.1) {
+            xQuad.push(x);
+            yQuad.push(x * x);
+        }
+        const traceQuad = { x: xQuad, y: yQuad, mode: 'lines', line: { color: '#e74c3c', width: 2 },
+                          name: 'f(x) = x² (konvexní)' };
+        const container2 = document.createElement('div');
+        document.getElementById('basicFunctions').appendChild(container2);
+        Plotly.newPlot(container2, [traceQuad],
+            { title: 'Kvadratická funkce', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
+              margin: { l: 50, r: 30, b: 30, t: 50 }, showlegend: true, responsive: true });
+    </script>
 
-        <p><strong>Metoda:</strong> Pro $P(x) = 2x^3 - 3x^2 + 4x - 5$, chceme $P(2)$</p>
+    <h3>Limita funkce</h3>
 
-        <table class="table table-sm" style="max-width: 400px; margin: 15px 0;">
-            <tr><td>Krok 1:</td><td>$y = 2$ (1. koeficient)</td></tr>
-            <tr><td>Krok 2:</td><td>$y = 2 · 2 - 3 = 1$</td></tr>
-            <tr><td>Krok 3:</td><td>$y = 1 · 2 + 4 = 6$</td></tr>
-            <tr><td>Krok 4:</td><td>$y = 6 · 2 - 5 = 7$ ✓</td></tr>
-        </table>
+    <div class="math-box">
+        $$\lim_{x \to a} f(x) = L \quad \Leftrightarrow \quad \text{jak se } x \text{ blíží } a, \text{ tak se } f(x) \text{ blíží } L$$
+        <br><br>
+        <strong>Klíčová vlastnost:</strong> Limita se ptá "co se děje BLÍZKO bodu $a$", ne "co se děje V bodě $a$". Bod $a$ nemusí být v definičním oboru.
+    </div>
 
-        <p><em style="font-size: 0.9em; color: #666;">Výhoda: O 50% méně operací než přímý výpočet!</em></p>
+    <p><strong>Příklad:</strong> $f(x) = \frac{x^2 - 1}{x - 1}$ není v $x = 1$ definovaná, ale:</p>
+    <p style="margin-left: 20px;">$\lim_{x \to 1} \frac{x^2 - 1}{x - 1} = \lim_{x \to 1} (x + 1) = 2$ ✓</p>
 
-        <hr>
+    <h3>Spojitost funkce</h3>
 
-        <h2>3. Numerické řešení rovnic</h2>
-
-        <h3>Proč potřebujeme numerické metody?</h3>
-        <p><strong>Problém:</strong> Chceme najít hodnotu $x$, pro kterou se $f(x) = 0$ (kde funkce protíná osu x).</p>
-
-        <div class="note-box">
-            <strong>Příklady:</strong>
-            <ul>
-                <li>Kdy bude teplota 25°C během dne?</li>
-                <li>Kdy bude řeka nejvyšší?</li>
-                <li>Kdy budou dva objekty na stejné pozici?</li>
-            </ul>
-        </div>
-
-        <p><strong>Problém:</strong> Řešit algebraicky (na papíře) jde jen u jednoduchých rovnic. Pro $e^x + x = 0$ nebo $\sin(x) + x = 0$ nemáme vzorec!</p>
-
-        <p><strong>Řešení:</strong> Použijeme <strong>numerické metody</strong> — počítáme si postupně přesnější aproximace.</p>
-
-        <h3>Metoda půlení intervalu</h3>
-
-        <h4>Princip</h4>
-        <p>Představte si, že hledáte v knize stránku 200. Nepročítáváte od začátku, ale:</p>
-        <ol>
-            <li>Otevřete knižku na půl → stránka 150</li>
-            <li>Pokud jste přes stránku 200, otevřete druhou polovinu</li>
-            <li>Opakujete, dokud se nedostanete na stránku 200</li>
+    <div class="math-box">
+        Funkce $f$ je <strong>spojitá v bodě $a$</strong>, když: $$\lim_{x \to a} f(x) = f(a)$$
+        <br>
+        Tři podmínky (vše musí platit):
+        <ol style="margin-top: 8px;">
+            <li>$f(a)$ je definováno</li>
+            <li>$\lim_{x \to a} f(x)$ existuje</li>
+            <li>Limita se rovná funkční hodnotě</li>
         </ol>
+    </div>
 
-        <p><strong>U rovnic je to stejné:</strong> Pokud $f(a) < 0$ a $f(b) > 0$, kořen je někde mezi $a$ a $b$. Půlíme interval a opakujeme.</p>
+    <p><strong>Příklady:</strong> Polynomy, $\sin x$, $e^x$ jsou spojité na svém oboru. Funkce $\frac{1}{x}$ je spojitá všude mimo $x=0$.</p>
 
-        <h4>Algoritmus v lidské češtině:</h4>
-        <pre><code class="language-plaintext">1. Zadáme interval [a, b], kde funkce mění znaménko
-2. Spočítáme střed: c = (a + b) / 2
-3. Zkoušíme:
-   - Pokud f(c) = 0: našli jsme řešení!
-   - Pokud f(a) a f(c) mají různá znaménka: vyhledáváme v [a, c]
-   - Jinak: vyhledáváme v [c, b]
-4. Opakujeme, dokud není interval dost malý
-</code></pre>
+    <hr>
 
-        <div class="highlight-box">
-            <p><strong>Výhody a nevýhody:</strong></p>
-            <ul>
-                <li>✓ <strong>Konverguje vždy</strong> — zaručeně nás dovede na řešení</li>
-                <li>✗ <strong>Pomalá</strong> — potřebujeme spoustu iterací</li>
-            </ul>
-        </div>
+    <h2>Polynomy</h2>
 
-        <h3>Newtonova metoda</h3>
+    <h3>Definice</h3>
 
-        <h4>Princip</h4>
-        <p>Místo blbého půlení, "kopneme" do funkce chytřeji — použijeme <strong>tečnu</strong> (směr, kterým funkce stoupá/klesá).</p>
+    <div class="math-box">
+        <strong>Polynom stupně $n$:</strong> $$P(x) = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_1 x + a_0, \quad a_n \neq 0$$
+        <br>
+        kde $a_0, a_1, \ldots, a_n$ jsou koeficienty (reálná čísla), $n \geq 0$ je stupeň.
+    </div>
 
-        <ol>
-            <li>Začneme s nějakým odhadem $x_0$</li>
-            <li>Nakreslíme tečnu v bodě $(x_0, f(x_0))$</li>
-            <li>Tečna protíná osu x v novém bodě $x_1$ (lepší odhad!)</li>
-            <li>Opakujeme pro $x_1$, $x_2$, ... dokud se nedostaneme na řešení</li>
-        </ol>
+    <p><strong>Klíčové vlastnosti:</strong></p>
+    <ul>
+        <li>Polynom je <strong>spojitý na $\mathbb{R}$</strong> (žádné asymptoty, bez skoků)</li>
+        <li>Má <strong>definiční obor $D = \mathbb{R}$</strong> (je definován všude)</li>
+        <li>Polynom stupně $n$ má <strong>maximálně $n$ kořenů</strong></li>
+        <li><strong>Chování v nekonečnu:</strong> určuje vedoucí člen $a_n x^n$</li>
+    </ul>
 
-        <div class="formula">$$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$$</div>
+    <h3>Hornerovo schéma – klíč k efektivnímu výpočtu</h3>
 
-        <p><strong>Vysvětlení vzorce:</strong></p>
+    <p><strong>Problém:</strong> Přímý výpočet $P(x) = a_n x^n + a_{n-1} x^{n-1} + \cdots + a_0$ vyžaduje mnoho mocnění.</p>
+
+    <p><strong>Řešení (Hornerovo schéma):</strong> Přepíšeme polynom jako vnořené násobení:</p>
+
+    <div class="math-box">
+        $P(x) = a_3 x^3 + a_2 x^2 + a_1 x + a_0$<br>
+        <br>
+        Místo: $a_3 \cdot x \cdot x \cdot x + a_2 \cdot x \cdot x + a_1 \cdot x + a_0$<br>
+        <br>
+        Napíšeme: $P(x) = ((a_3 x + a_2) x + a_1) x + a_0$<br>
+        <br>
+        <strong>Výpočet pro $x = 2$, $P(x) = 2x^3 - 3x^2 + x - 5$:</strong><br>
+        Schéma: $(((2 \cdot 2 - 3) \cdot 2 + 1) \cdot 2 - 5)$<br>
+        $= (((4 - 3) \cdot 2 + 1) \cdot 2 - 5) = ((1 \cdot 2 + 1) \cdot 2 - 5) = (3 \cdot 2 - 5) = 6 - 5 = 1$
+    </div>
+
+    <p><strong>Výhoda:</strong> Místo $3 + 2 + 1 = 6$ násobení máme jen $3$ násobení. Pro vysoké stupně je to zásadní!</p>
+
+    <h3>Příklady polynomů – chování a vlastnosti</h3>
+
+    <p><strong>Polynom stupně 1 (lineární):</strong> $P(x) = 2x + 1$</p>
+    <ul>
+        <li>Jeden kořen: $2x + 1 = 0 \Rightarrow x = -0.5$</li>
+        <li>Chování v ∞: $P(x) \to +\infty$ (když $x \to +\infty$)</li>
+    </ul>
+
+    <p><strong>Polynom stupně 2 (kvadratický):</strong> $P(x) = x^2 - 3x + 2$</p>
+    <ul>
+        <li>Faktorizace: $P(x) = (x-1)(x-2)$</li>
+        <li>Dva kořeny: $x = 1$ a $x = 2$</li>
+        <li>Chování v ∞: $P(x) \to +\infty$ (sudý stupeň, kladný vedoucí koeficient)</li>
+    </ul>
+
+    <p><strong>Polynom stupně 3 (kubický):</strong> $P(x) = x^3 - 2x^2 - x + 2$</p>
+    <ul>
+        <li>Faktorizace: $P(x) = (x-1)(x+1)(x-2)$</li>
+        <li>Tři kořeny: $x = -1, 1, 2$</li>
+        <li>Chování v ∞: $P(x) \to +\infty$ (když $x \to +\infty$), $P(x) \to -\infty$ (když $x \to -\infty$) [lichý stupeň]</li>
+    </ul>
+
+    <div id="polynomExamples" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;"></div>
+
+    <script>
+        // Polynom stupně 2: P(x) = x² - 3x + 2
+        const xQuad = [];
+        const yQuad = [];
+        for (let x = -1; x <= 4; x += 0.1) {
+            xQuad.push(x);
+            yQuad.push(x*x - 3*x + 2);
+        }
+
+        const traceQuad = {
+            x: xQuad,
+            y: yQuad,
+            mode: 'lines',
+            line: { color: '#3498db', width: 2 },
+            name: 'P(x) = x² - 3x + 2'
+        };
+
+        const traceQuadRoots = {
+            x: [1, 2],
+            y: [0, 0],
+            mode: 'markers',
+            marker: { size: 8, color: '#e74c3c', symbol: 'x' },
+            name: 'Kořeny: x = 1, 2'
+        };
+
+        const containerQuad = document.createElement('div');
+        document.getElementById('polynomExamples').appendChild(containerQuad);
+
+        Plotly.newPlot(containerQuad, [traceQuad, traceQuadRoots],
+            {
+                title: 'Stupeň 2: P(x) = x² - 3x + 2',
+                xaxis: { title: 'x', zeroline: true },
+                yaxis: { title: 'P(x)', zeroline: true },
+                margin: { l: 50, r: 30, b: 40, t: 50 },
+                hovermode: 'closest'
+            },
+            { responsive: true }
+        );
+
+        // Polynom stupně 3: P(x) = x³ - 2x² - x + 2
+        const xCub = [];
+        const yCub = [];
+        for (let x = -2; x <= 3; x += 0.1) {
+            xCub.push(x);
+            yCub.push(x*x*x - 2*x*x - x + 2);
+        }
+
+        const traceCub = {
+            x: xCub,
+            y: yCub,
+            mode: 'lines',
+            line: { color: '#e74c3c', width: 2 },
+            name: 'P(x) = x³ - 2x² - x + 2'
+        };
+
+        const traceCubRoots = {
+            x: [-1, 1, 2],
+            y: [0, 0, 0],
+            mode: 'markers',
+            marker: { size: 8, color: '#27ae60', symbol: 'x' },
+            name: 'Kořeny: x = -1, 1, 2'
+        };
+
+        const containerCub = document.createElement('div');
+        document.getElementById('polynomExamples').appendChild(containerCub);
+
+        Plotly.newPlot(containerCub, [traceCub, traceCubRoots],
+            {
+                title: 'Stupeň 3: P(x) = x³ - 2x² - x + 2',
+                xaxis: { title: 'x', zeroline: true },
+                yaxis: { title: 'P(x)', zeroline: true },
+                margin: { l: 50, r: 30, b: 40, t: 50 },
+                hovermode: 'closest'
+            },
+            { responsive: true }
+        );
+    </script>
+
+    <div class="highlight-box">
+        <strong>Pozorování:</strong>
         <ul>
-            <li>$x_n$ — současný odhad</li>
-            <li>$f'(x_n)$ — strmost funkce (derivace) — jak moc funkce stoupá</li>
-            <li>$\frac{f(x_n)}{f'(x_n)}$ — jak daleko od nuly jsme (oprava)</li>
-            <li>$x_{n+1}$ — nový, lepší odhad</li>
+            <li><strong>Polynom stupně 2:</strong> Máx. 2 kořeny, parabola (oba konce nahoru)</li>
+            <li><strong>Polynom stupně 3:</strong> Máx. 3 kořeny, zleva dolů, zprava nahoru (lichý stupeň)</li>
+            <li>Všechny jsou <strong>spojité bez skoků</strong> a <strong>bez asymptot</strong></li>
         </ul>
+    </div>
 
-        <h4>Algoritmus v krocích:</h4>
-        <pre><code class="language-plaintext">1. Zadáme počáteční odhad x_0 (třeba uprostřed intervalu)
-2. Opakujeme dokud se x nemění:
-   a) Spočítáme: x_new = x - f(x) / f'(x)
-   b) Pokud je změna malá: máme řešení!
-   c) Jinak: x = x_new a opakujeme
-</code></pre>
+    <hr>
 
-        <div class="highlight-box">
-            <p><strong>Výhody a nevýhody:</strong></p>
-            <ul>
-                <li>✓ <strong>Velmi rychlá</strong> — converguje exponenciálně</li>
-                <li>✗ <strong>Potřebujeme derivaci</strong> — musíme vědět, jak se funkce mění</li>
-                <li>✗ <strong>Nemusí konvergovat</strong> — špatný počáteční odhad = ztraceno</li>
+    <h2>Numerické řešení nelineárních rovnic</h2>
+
+    <h3>Princip: Proč potřebujeme numerické metody?</h3>
+
+    <p><strong>Problem:</strong> Nemáme "pěkné" vzorečky pro kořeny.</p>
+
+    <ul>
+        <li>$x^2 - 3 = 0$ → máme kvadratický vzorec ✓</li>
+        <li>$x^3 - 3 = 0$ → kubický vzorec existuje, ale je složitý ✓</li>
+        <li>$\sin(x) - x/2 = 0$ → žádný vzorec ✗</li>
+        <li>$e^x - 3x = 0$ → žádný vzorec ✗</li>
+    </ul>
+
+    <p><strong>Řešení:</strong> Počítáme číselně — hádáme, kontrolujeme, upřesňujeme.</p>
+
+    <h3>Metoda půlení intervalu (Bisekce)</h3>
+
+    <p><strong>Matematický princip:</strong> Věta o mezihodnotě – je-li $f$ spojitá na $[a,b]$ a $f(a) \cdot f(b) < 0$, pak existuje $c \in (a, b)$ takové, že $f(c) = 0$.</p>
+
+    <p><strong>Intuice:</strong> Funkce "přechází" nulu mezi $a$ a $b$ (změní znaménko) → kořen tam určitě existuje. Půlením intervalu se k němu blížíme.</p>
+
+    <p><strong>Algoritmus – krok za krokem:</strong></p>
+    <ol>
+        <li><strong>Najdi interval:</strong> Ověř že $f(a) \cdot f(b) < 0$ (různá znaménka na koncích)</li>
+        <li><strong>Vypočítej střed:</strong> $c = \frac{a + b}{2}$</li>
+        <li><strong>Vyhodnoť středu:</strong>
+            <ul style="margin-top: 8px; margin-bottom: 8px;">
+                <li>Pokud $|f(c)| < \epsilon$ (tolerance), máme kořen ✓</li>
+                <li>Pokud $f(a) \cdot f(c) < 0$ → kořen je v $[a, c]$ → nová hodnota: $b := c$</li>
+                <li>Jinak → kořen je v $[c, b]$ → nová hodnota: $a := c$</li>
             </ul>
-        </div>
+        </li>
+        <li><strong>Opakuj:</strong> Jdi na krok 2 dokud není interval dost malý</li>
+    </ol>
 
-        <h3>Vizualizace: Jak Fungují Numerické Metody?</h3>
+    <div class="math-box">
+        <strong>Podmínky konvergence:</strong>
+        <ul style="margin: 10px 0;">
+            <li>Funkce musí být <strong>spojitá</strong> na $[a,b]$</li>
+            <li>Musí platit <strong>$f(a) \cdot f(b) < 0$</strong> (různá znaménka!)</li>
+        </ul>
+        <strong>Výsledek:</strong> Vždy konverguje! Po $n$ iteracích: chyba ≤ $\frac{b-a}{2^n}$
+    </div>
 
-        <div id="numericalGraphs" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0;">
-            <div id="graphBisection" class="plot-container"></div>
-            <div id="graphNewton" class="plot-container"></div>
-        </div>
+    <p><strong>Praktická rada:</strong> Bisekce je <strong>pomalá, ale robustní</strong>. Vždycky funguje, pokud jsou splněny podmínky. Počet iterací: $\log_2\left(\frac{b-a}{\epsilon}\right)$ ≈ pro 10 přesných číslic → ~33 iterací.</p>
 
-        <p style="font-size: 0.9em; color: #666; margin-top: 15px; text-align: center;">
-            <strong>Půlení:</strong> Postupně zužujeme interval | <strong>Newton:</strong> Skáčeme pomocí tečen
-        </p>
+    <div class="highlight-box">
+        <strong>Příklad:</strong> Řešit $f(x) = x^2 - 2 = 0$ na intervalu $[1, 2]$<br>
+        <br>
+        <strong>Krok 0:</strong> $f(1) = -1$, $f(2) = 2$ ✓ (různá znaménka)<br>
+        <strong>Krok 1:</strong> $c = 1.5$, $f(1.5) = 0.25 > 0$ → kořen v $[1, 1.5]$<br>
+        <strong>Krok 2:</strong> $c = 1.25$, $f(1.25) = -0.4375 < 0$ → kořen v $[1.25, 1.5]$<br>
+        <strong>Krok 3:</strong> $c = 1.375$, $f(1.375) = -0.109 < 0$ → kořen v $[1.375, 1.5]$<br>
+        ... (pokračujeme) → Kořen $\approx 1.414...$ (která je $\sqrt{2}$)
+    </div>
 
-        <h3>💡 Co SPLŇUJE Definici Numerické Metody – Co Ne?</h3>
+    <p><strong>Kdy se selhává:</strong> Pokud $f(a) \cdot f(b) > 0$ (stejné znaménko) nebo pokud tam není právě jeden kořen.</p>
 
-        <div class="highlight-box">
-            <p><strong style="color: green;">✓ Správně APLIKOVANÁ metoda:</strong></p>
-            <ul>
-                <li>Půlení intervalu na intervalu, kde $f(a) \cdot f(b) < 0$ (různá znaménka)</li>
-                <li>Newtonova metoda s dobrou počáteční aproximací</li>
-                <li>Zastavení, když se hodnota nemění o více než $10^{-6}$</li>
-            </ul>
+    <h3>Newtonova metoda (Newton-Raphsonova metoda)</h3>
 
-            <p style="margin-top: 15px;"><strong style="color: red;">✗ Špatně APLIKOVANÁ metoda:</strong></p>
-            <ul>
-                <li>Půlení intervalu, kde $f(a) \cdot f(b) > 0$ (stejná znaménka — nevíme, jestli tam je kořen!)</li>
-                <li>Newtonova metoda bez znalosti derivace</li>
-                <li>Newtonova metoda s špatným počátečním odhadem → diverguje</li>
-                <li>Zastavení bez kritéria — jak víme, kdy máme dost přesnost?</li>
-            </ul>
-        </div>
+    <p><strong>Geometrická idea:</strong> V bodě $x_n$ nakresli <strong>tečnu</strong> k funkci $f$. Tečna má rovnici:</p>
+    <div class="math-box">
+        $$y = f(x_n) + f'(x_n)(x - x_n)$$
+    </div>
 
-        <h3>Srovnění Metod</h3>
+    <p>Najdi kde tečna protíná osu $x$ (kde $y = 0$):
+    $$0 = f(x_n) + f'(x_n)(x - x_n) \quad \Rightarrow \quad x = x_n - \frac{f(x_n)}{f'(x_n)}$$
+    </p>
 
-        <table class="table table-sm table-bordered" style="max-width: 600px;">
-            <tr style="background-color: #f0f0f0;">
-                <th>Aspekt</th>
-                <th>Půlení intervalu</th>
-                <th>Newtonova metoda</th>
-            </tr>
-            <tr>
-                <td><strong>Zaručená konvergence?</strong></td>
-                <td>✓ Ano</td>
-                <td>✗ Jen s dobrým odhadem</td>
-            </tr>
-            <tr>
-                <td><strong>Potřebuje derivaci?</strong></td>
-                <td>✗ Ne</td>
-                <td>✓ Ano</td>
-            </tr>
-            <tr>
-                <td><strong>Rychlost</strong></td>
-                <td>Pomalá</td>
-                <td>Velmi rychlá</td>
-            </tr>
-            <tr>
-                <td><strong>Kdy ji používat?</strong></td>
-                <td>Bez znalosti derivace</td>
-                <td>Máte derivaci a dobrý odhad</td>
-            </tr>
+    <p>Tento nový bod $x_{n+1}$ je obvykle blíže ke kořeni. Opakuj!</p>
+
+    <p><strong>Algoritmus – iterační vzorec:</strong></p>
+    <div class="math-box">
+        $$x_{n+1} = x_n - \frac{f(x_n)}{f'(x_n)}$$
+        <br>
+        Začni s aproximací $x_0$ a iteruj dokud $|f(x_n)| < \epsilon$ (nebo $|x_{n+1} - x_n| < \epsilon$)
+    </div>
+
+    <p><strong>Podmínky konvergence:</strong></p>
+    <ul>
+        <li>Funkce musí být <strong>diferencovatelná</strong> (existuje derivace $f'$)</li>
+        <li>Derivace nesmí být nula: $f'(x_n) \neq 0$ (tečna není vodorovná)</li>
+        <li>Počáteční aproximace $x_0$ musí být <strong>dost blízko</strong> ke kořeni</li>
+    </ul>
+
+    <p><strong>Typ konvergence:</strong> <strong>Kvadratická</strong> – chyba se každou iterací umocňuje na druhou. Pokud máš chybu 0.1, příští je 0.01, pak 0.0001... Velmi rychle!</p>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> Řešit $f(x) = x^2 - 2 = 0$ s $x_0 = 1.5$<br>
+        <br>
+        <strong>Derivace:</strong> $f'(x) = 2x$<br>
+        <strong>Vzorec:</strong> $x_{n+1} = x_n - \frac{x_n^2 - 2}{2x_n}$<br>
+        <br>
+        <strong>Iterace:</strong><br>
+        $x_0 = 1.5$<br>
+        $x_1 = 1.5 - \frac{2.25 - 2}{3} = 1.5 - 0.0833 = 1.4166...$<br>
+        $x_2 = 1.4166 - \frac{(1.4166)^2 - 2}{2(1.4166)} = 1.4142...$<br>
+        $x_3 = 1.41421356...$ (již velmi přesný!)
+    </div>
+
+    <p><strong>Praktická rada:</strong> Newton je <strong>velmi rychlý</strong>, ale <strong>citlivý</strong>. Potřebuje derivaci a dobrý start. Velmi málo iterací (typicky 3-5), ale může vybuchnout.</p>
+
+    <p><strong>Kdy se selhává:</strong></p>
+    <ul>
+        <li>$f'(x_n) \approx 0$ (tečna je téměř vodorovná) → chyba dělení</li>
+        <li>Špatný start $x_0$ → algoritmus diverguje (jde kam chce)</li>
+        <li>Funkce není hladká → derivace neexistuje</li>
+    </ul>
+
+    <h3>Porovnání metod – které kdy použít?</h3>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Kritérium</th>
+                    <th>Bisekce</th>
+                    <th>Newton</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Rychlost konvergence</strong></td>
+                    <td>Lineární – chyba dělena dvěma za iteraci</td>
+                    <td>Kvadratická – chyba umocňuje se na druhou za iteraci</td>
+                </tr>
+                <tr>
+                    <td><strong>Počet iterací</strong></td>
+                    <td>~33 pro 10 správných číslic</td>
+                    <td>~4-5 pro 10 správných čislic</td>
+                </tr>
+                <tr>
+                    <td><strong>Potřebné informace</strong></td>
+                    <td>Interval $[a,b]$ se změnou znaménka</td>
+                    <td>Funkce $f(x)$ a její derivace $f'(x)$</td>
+                </tr>
+                <tr>
+                    <td><strong>Spolehlivost</strong></td>
+                    <td>Vždy funguje (pokud podmínky ✓)</td>
+                    <td>Může divergovat s špatným startem</td>
+                </tr>
+                <tr>
+                    <td><strong>Selhání</strong></td>
+                    <td>Jen když $f(a) \cdot f(b) > 0$ (stejné znaménko)</td>
+                    <td>Když $f'(x_n) \approx 0$ nebo špatný $x_0$</td>
+                </tr>
+                <tr style="background-color: #fff3cd;">
+                    <td><strong>Kdy ji použít?</strong></td>
+                    <td><strong>Bezpečná volba:</strong> Neznáš derivaci nebo není spojitá. Máš interval.</td>
+                    <td><strong>Rychlá volba:</strong> Máš derivaci a dobrý start. Chceš minimum iterací.</td>
+                </tr>
+            </tbody>
         </table>
+    </div>
 
+    <div class="math-box">
+        <strong>Praktická doporučení:</strong>
+        <ul style="margin: 10px 0;">
+            <li><strong>Kombinovaný přístup:</strong> Začni bisekci (najdi interval), pak přepni na Newton (konverguj rychle)</li>
+            <li><strong>Bisekce:</strong> Pro "divné" funkce, když nevíš kde je kořen, nebo když je funkce nespojitá</li>
+            <li><strong>Newton:</strong> Když máš analytickou derivaci a dobrý počáteční odhad</li>
+            <li><strong>Vzdálej se obě:</strong> Když máš pouze numerickou derivaci (přibližně) → chyby se hromadí</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>Praktická aplikace: Pohyb projektilu</h2>
+
+    <h3>Konkrétní příklad – míč vržený vzhůru</h3>
+
+    <p><strong>Situace:</strong> Házíme míček vzhůru z výšky 2 m počáteční rychlostí 20 m/s. Jak se mění výška v čase?</p>
+
+    <p><strong>Fyzikální vzorec (polynom stupně 2):</strong></p>
+
+    <div class="math-box">
+        $$h(t) = h_0 + v_0 t - \frac{1}{2}g t^2$$
+        <br>
+        kde: $h_0 = 2$ m (počáteční výška), $v_0 = 20$ m/s (počáteční rychlost), $g = 10$ m/s² (gravitace)
+        <br>
+        <br>
+        $$h(t) = 2 + 20t - 5t^2$$
+        <br>
+        <strong>Toto je polynom stupně 2!</strong>
+    </div>
+
+    <h3>Analýza pomocí funkcí a jejich vlastností</h3>
+
+    <p><strong>1. Definiční obor:</strong> Fyzicky má smysl jen $h(t) \geq 0$ (míč nemůže být pod zemí)</p>
+
+    <p><strong>2. Rostoucí/klesající:</strong> Nejdříve funkce roste (míč jde nahoru), pak klesá (míč padá)</p>
+
+    <p><strong>3. Limita (fyzikální interpretace):</strong> Co se stane velmi dlouho později?
+    $$\lim_{t \to \infty} h(t) = \lim_{t \to \infty} (2 + 20t - 5t^2) = -\infty$$
+    (Polynom stupně 2 s negativním vedoucím koeficientem jde na $-\infty$)</p>
+
+    <p><strong>Otázky, které se ptáme:</strong></p>
+    <ul>
+        <li><strong>Kdy dosáhne maxima?</strong> Podívej se na derivaci: $h'(t) = 20 - 10t = 0 \Rightarrow t = 2$ s</li>
+        <li><strong>Jaká je maximální výška?</strong> $h(2) = 2 + 20(2) - 5(4) = 2 + 40 - 20 = 22$ m</li>
+        <li><strong>Kdy dopadne na zem?</strong> Řešíme $h(t) = 0$: $2 + 20t - 5t^2 = 0$ ← <strong>Numerická metoda!</strong></li>
+    </ul>
+
+    <h3>Vizualizace – koule v letu</h3>
+
+    <div id="projectileChart" style="margin: 20px 0;"></div>
+
+    <script>
+        // Pohyb projektilu
+        const t = [];
+        const h = [];
+        for (let time = 0; time <= 4.5; time += 0.05) {
+            t.push(time);
+            h.push(2 + 20*time - 5*time*time);
+        }
+
+        const trace = {
+            x: t,
+            y: h,
+            mode: 'lines',
+            line: { color: '#3498db', width: 3 },
+            fill: 'tozeroy',
+            name: 'Výška míče'
+        };
+
+        const maxTime = 2;
+        const maxHeight = 2 + 20*maxTime - 5*maxTime*maxTime;
+        const maxPoint = {
+            x: [maxTime],
+            y: [maxHeight],
+            mode: 'markers',
+            marker: { size: 12, color: '#e74c3c' },
+            name: 'Maximum (22m v 2s)'
+        };
+
+        const layoutProjectile = {
+            title: 'Výška míče během letu: h(t) = 2 + 20t - 5t²',
+            xaxis: { title: 'Čas (sekundy)' },
+            yaxis: { title: 'Výška (metry)' },
+            hovermode: 'closest',
+            margin: { l: 60, r: 30, b: 50, t: 60 }
+        };
+
+        Plotly.newPlot('projectileChart', [trace, maxPoint], layoutProjectile, {responsive: true});
+    </script>
+
+    <h3>Hledání kořene – kdy dopadne míč?</h3>
+
+    <p><strong>Rovnice:</strong> $2 + 20t - 5t^2 = 0$ nebo $5t^2 - 20t - 2 = 0$</p>
+
+    <p><strong>Problém:</strong> Kvadratický vzorec by fungoval, ale pojďme si představit, že funkce je složitější (např. $h(t) = 2 + 20t - 5t^2 + 0.1\sin(t)$ — odpor vzduchu).</p>
+
+    <p><strong>Vizualizace a řešení numerickou metodou (bisekce):</strong></p>
+
+    <div style="border: 1px solid #ddd; border-radius: 4px; padding: 15px; margin: 20px 0; background: #f9f9f9;">
+        <p><strong>Bisekce – interaktivní vizualizace (klik na tlačítko pro další iteraci):</strong></p>
+        <div id="bisectionChart" style="margin: 20px 0;"></div>
+        <div style="text-align: center; margin-top: 10px;">
+            <button onclick="bisectionStep()" class="btn btn-sm btn-primary">Další krok</button>
+            <button onclick="bisectionReset()" class="btn btn-sm btn-secondary">Resetovat</button>
+            <span id="bisectionInfo" style="margin-left: 20px; font-size: 0.9em; color: #555;">Iterace 0: interval [4.00, 4.50]</span>
+        </div>
     </div>
 
     <script>
-        // Vykreslení grafů funkcí
-        window.addEventListener('load', function() {
-            // Lineární funkce: f(x) = 2x
-            const xLin = [];
-            const yLin = [];
-            for (let x = -5; x <= 5; x += 0.1) {
-                xLin.push(x);
-                yLin.push(2 * x);
-            }
-            const traceLin = { x: xLin, y: yLin, mode: 'lines', line: { color: 'blue', width: 2 },
-                             name: 'f(x) = 2x' };
-            Plotly.newPlot('graphLinear', [traceLin],
-                { title: 'Lineární funkce', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
-                  margin: { l: 40, r: 40, b: 40, t: 40 }, showlegend: true, responsive: true });
+        let bisectionState = {
+            iteration: 0,
+            a: 4.0,
+            b: 4.5,
+            history: []
+        };
 
-            // Kvadratická funkce: f(x) = x²
-            const xQuad = [];
-            const yQuad = [];
-            for (let x = -5; x <= 5; x += 0.1) {
-                xQuad.push(x);
-                yQuad.push(x * x);
-            }
-            const traceQuad = { x: xQuad, y: yQuad, mode: 'lines', line: { color: 'green', width: 2 },
-                              name: 'f(x) = x²' };
-            Plotly.newPlot('graphQuadratic', [traceQuad],
-                { title: 'Kvadratická funkce', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
-                  margin: { l: 40, r: 40, b: 40, t: 40 }, showlegend: true, responsive: true });
+        function h_func(t) {
+            return 2 + 20*t - 5*t*t;
+        }
 
-            // Odmocnina: f(x) = √x (jen pro x ≥ 0)
-            const xSqrt = [];
-            const ySqrt = [];
-            for (let x = 0; x <= 10; x += 0.1) {
-                xSqrt.push(x);
-                ySqrt.push(Math.sqrt(x));
-            }
-            const traceSqrt = { x: xSqrt, y: ySqrt, mode: 'lines', line: { color: 'red', width: 2 },
-                              name: 'f(x) = √x' };
-            Plotly.newPlot('graphSqrt', [traceSqrt],
-                { title: 'Odmocnina (D = [0,∞))', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
-                  margin: { l: 40, r: 40, b: 40, t: 40 }, showlegend: true, responsive: true });
-
-            // Reciproční funkce: f(x) = 1/x (není v x=0!)
-            const xRec1 = [];
-            const yRec1 = [];
-            for (let x = -10; x < -0.05; x += 0.1) {
-                xRec1.push(x);
-                yRec1.push(1 / x);
-            }
-            const xRec2 = [];
-            const yRec2 = [];
-            for (let x = 0.05; x <= 10; x += 0.1) {
-                xRec2.push(x);
-                yRec2.push(1 / x);
-            }
-            const traceRec1 = { x: xRec1, y: yRec1, mode: 'lines', line: { color: 'purple', width: 2 },
-                              name: 'f(x) = 1/x' };
-            const traceRec2 = { x: xRec2, y: yRec2, mode: 'lines', line: { color: 'purple', width: 2 },
-                              showlegend: false };
-            Plotly.newPlot('graphReciprocal', [traceRec1, traceRec2],
-                { title: 'Reciproční (skok v x=0!)', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
-                  margin: { l: 40, r: 40, b: 40, t: 40 }, showlegend: true, responsive: true });
-
-            // SPOJITÁ funkce: f(x) = sin(x)
-            const xCont = [];
-            const yCont = [];
-            for (let x = -2*Math.PI; x <= 2*Math.PI; x += 0.05) {
-                xCont.push(x);
-                yCont.push(Math.sin(x));
-            }
-            const traceCont = { x: xCont, y: yCont, mode: 'lines', line: { color: 'green', width: 2 },
-                              name: 'f(x) = sin(x)' };
-            Plotly.newPlot('graphContinuous', [traceCont],
-                { title: 'SPOJITÁ funkce (hladká)', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
-                  margin: { l: 40, r: 40, b: 40, t: 40 }, showlegend: true, responsive: true });
-
-            // NESPOJITÁ funkce: Podlaha (floor)
-            const xDisc = [];
-            const yDisc = [];
-            for (let x = -5; x <= 5; x += 0.01) {
-                xDisc.push(x);
-                yDisc.push(Math.floor(x));
-            }
-            const traceDisc = { x: xDisc, y: yDisc, mode: 'lines', line: { color: 'red', width: 2 },
-                              name: 'f(x) = ⌊x⌋' };
-            Plotly.newPlot('graphDiscontinuous', [traceDisc],
-                { title: 'NESPOJITÁ funkce (skoky!)', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
-                  margin: { l: 40, r: 40, b: 40, t: 40 }, showlegend: true, responsive: true });
-
-            // Métoda PŮLENÍ INTERVALU - Hledáme kořen x³ - 2x = 1
-            // f(x) = x³ - 2x - 1
-            const xBisec = [];
-            const yBisec = [];
-            for (let x = -2.5; x <= 2.5; x += 0.05) {
-                xBisec.push(x);
-                yBisec.push(x*x*x - 2*x - 1);
+        function redrawBisection() {
+            // Curve data
+            const t = [];
+            const h = [];
+            for (let time = 3.7; time <= 4.3; time += 0.02) {
+                t.push(time);
+                h.push(h_func(time));
             }
 
-            // Označení intervalů - ukážeme kde jsme v iteracích
-            const xMarks = [-2.5, -1.25, -0.625, -0.3125]; // Body půlení
-            const yMarks = xMarks.map(x => x*x*x - 2*x - 1);
+            const traceCurve = {
+                x: t,
+                y: h,
+                mode: 'lines',
+                line: { color: '#3498db', width: 3 },
+                name: 'h(t) = 2 + 20t - 5t²',
+                hovertemplate: 'Čas: %{x:.3f}s<br>Výška: %{y:.2f}m'
+            };
 
-            const traceBisecFunc = { x: xBisec, y: yBisec, mode: 'lines', line: { color: 'blue', width: 2 },
-                                   name: 'f(x)' };
-            const traceBisecMarks = { x: xMarks, y: yMarks, mode: 'markers', marker: { color: 'red', size: 8 },
-                                    name: 'Iterace' };
-            const traceZero = { x: [-2.5, 2.5], y: [0, 0], mode: 'lines', line: { color: 'gray', width: 1, dash: 'dash' },
-                              showlegend: false };
+            // Mark endpoints
+            const traceEndpoints = {
+                x: [bisectionState.a, bisectionState.b],
+                y: [h_func(bisectionState.a), h_func(bisectionState.b)],
+                mode: 'markers',
+                marker: { size: 10, color: ['#27ae60', '#c0392b'] },
+                name: 'Koncové body (a, b)',
+                hovertemplate: 't: %{x:.4f}<br>h(t): %{y:.3f}'
+            };
 
-            Plotly.newPlot('graphBisection', [traceBisecFunc, traceBisecMarks, traceZero],
-                { title: 'Půlení intervalu – Kořeny se zužují', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
-                  margin: { l: 40, r: 40, b: 40, t: 40 }, showlegend: true, responsive: true });
+            // Mark current midpoint
+            const traces = [traceCurve, traceEndpoints];
 
-            // Metoda NEWTON - Tečny vedené k řešení
-            // f(x) = x² - 2, f'(x) = 2x, chceme √2 ≈ 1.414
-            const xNewt = [];
-            const yNewt = [];
-            for (let x = -0.5; x <= 3; x += 0.05) {
-                xNewt.push(x);
-                yNewt.push(x*x - 2);
+            if (bisectionState.iteration > 0) {
+                const c = (bisectionState.a + bisectionState.b) / 2;
+                const traceC = {
+                    x: [c],
+                    y: [h_func(c)],
+                    mode: 'markers',
+                    marker: { size: 12, color: '#f39c12', symbol: 'star' },
+                    name: `Střed c = ${c.toFixed(4)}`,
+                    hovertemplate: 't: %{x:.4f}<br>h(t): %{y:.3f}'
+                };
+                traces.push(traceC);
             }
 
-            // Tečny z Newton metody - počáteční odhad x₀ = 2
-            const x0 = 2;
-            const x1 = x0 - (x0*x0 - 2) / (2*x0); // ≈ 1.5
+            // Zero line
+            const traceZero = {
+                x: [3.7, 4.3],
+                y: [0, 0],
+                mode: 'lines',
+                line: { color: '#999', width: 1, dash: 'dash' },
+                name: 'h = 0 (hledaný kořen)',
+                hoverinfo: 'skip'
+            };
+            traces.push(traceZero);
 
-            const xTang1 = [0, 3];
-            const yTang1 = [(2*x0)*0 - x0*x0, (2*x0)*3 - x0*x0]; // tečna v x0=2
+            const layout = {
+                title: `Bisekce – Iterace ${bisectionState.iteration}: interval [${bisectionState.a.toFixed(4)}, ${bisectionState.b.toFixed(4)}]`,
+                xaxis: { title: 'Čas t (sekundy)', range: [3.65, 4.35] },
+                yaxis: { title: 'Výška h(t) (metry)', range: [-2.5, 2.5] },
+                hovermode: 'closest',
+                margin: { l: 70, r: 40, b: 50, t: 70 },
+                showlegend: true,
+                height: 400
+            };
 
-            const xTang2 = [0, 3];
-            const yTang2 = [(2*x1)*0 - x1*x1, (2*x1)*3 - x1*x1]; // tečna v x1
+            Plotly.newPlot('bisectionChart', traces, layout, {responsive: true});
+        }
 
-            const traceNewtFunc = { x: xNewt, y: yNewt, mode: 'lines', line: { color: 'blue', width: 2 },
-                                  name: 'f(x) = x² - 2' };
-            const traceTang1 = { x: xTang1, y: yTang1, mode: 'lines', line: { color: 'red', width: 1.5 },
-                               name: 'Tečna 1' };
-            const traceTang2 = { x: xTang2, y: yTang2, mode: 'lines', line: { color: 'orange', width: 1.5 },
-                               name: 'Tečna 2' };
-            const traceNewtMarks = { x: [x0, x1, Math.sqrt(2)], y: [0, 0, 0], mode: 'markers',
-                                   marker: { color: ['red', 'orange', 'green'], size: 8 },
-                                   name: 'Aproximace' };
-            const traceZero2 = { x: [-0.5, 3], y: [0, 0], mode: 'lines', line: { color: 'gray', width: 1, dash: 'dash' },
-                               showlegend: false };
+        function bisectionStep() {
+            const c = (bisectionState.a + bisectionState.b) / 2;
+            const hc = h_func(c);
+            const ha = h_func(bisectionState.a);
 
-            Plotly.newPlot('graphNewton', [traceNewtFunc, traceTang1, traceTang2, traceNewtMarks, traceZero2],
-                { title: 'Newtonova metoda – Tečny vedou k řešení', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
-                  margin: { l: 40, r: 40, b: 40, t: 40 }, showlegend: true, responsive: true });
-
-            // ===== LIMITA EXISTUJE: f(x) = x² s limitou v bodě 2 =====
-            const xLimExists = [];
-            const yLimExists = [];
-            for (let x = -0.5; x <= 4.5; x += 0.05) {
-                xLimExists.push(x);
-                yLimExists.push(x * x);
+            if (ha * hc < 0) {
+                bisectionState.b = c;
+            } else {
+                bisectionState.a = c;
             }
-            const traceLimExists = { x: xLimExists, y: yLimExists, mode: 'lines',
-                                   line: { color: 'blue', width: 2 }, name: 'f(x) = x²' };
-            const tracePointLimExists = { x: [2], y: [4], mode: 'markers',
-                                        marker: { color: 'green', size: 10 },
-                                        name: 'Bod (2, 4)' };
-            const traceArrowLeft = { x: [1.5, 1.9, 1.99], y: [2.25, 3.61, 3.96], mode: 'markers',
-                                   marker: { color: 'rgba(0,100,200,0.5)', size: 6 },
-                                   name: 'Zleva → 4' };
-            const traceArrowRight = { x: [2.5, 2.1, 2.01], y: [6.25, 4.41, 4.04], mode: 'markers',
-                                    marker: { color: 'rgba(200,100,0,0.5)', size: 6 },
-                                    name: 'Zprava → 4' };
-            const traceLineY = { x: [2, 2], y: [0, 4], mode: 'lines',
-                              line: { color: 'gray', width: 1, dash: 'dot' },
-                              showlegend: false };
-            const traceLineX = { x: [0, 2], y: [4, 4], mode: 'lines',
-                              line: { color: 'gray', width: 1, dash: 'dot' },
-                              showlegend: false };
-            Plotly.newPlot('graphLimitExists', [traceLimExists, tracePointLimExists, traceArrowLeft, traceArrowRight, traceLineX, traceLineY],
-                { title: 'LIMITA EXISTUJE: lim(x²) = 4 při x→2', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
-                  margin: { l: 40, r: 40, b: 40, t: 40 }, showlegend: true, responsive: true });
 
-            // ===== LIMITA NEEXISTUJE: Skokový skok v bodě 0 =====
-            const xLimNotLeft = [];
-            const yLimNotLeft = [];
-            for (let x = -5; x < -0.01; x += 0.1) {
-                xLimNotLeft.push(x);
-                yLimNotLeft.push(1); // Hodnota 1 zleva
+            bisectionState.iteration++;
+            bisectionState.history.push({ a: bisectionState.a, b: bisectionState.b, c: c });
+
+            document.getElementById('bisectionInfo').innerHTML =
+                `<strong>Iterace ${bisectionState.iteration}:</strong> interval [${bisectionState.a.toFixed(4)}, ${bisectionState.b.toFixed(4)}] (šířka: ${(bisectionState.b - bisectionState.a).toFixed(6)})`;
+
+            redrawBisection();
+
+            if (Math.abs(bisectionState.b - bisectionState.a) < 0.001) {
+                const root = (bisectionState.a + bisectionState.b) / 2;
+                alert(`✓ Konvergováno!\n\nKořen ≈ ${root.toFixed(6)} sekundy\nh(${root.toFixed(6)}) = ${h_func(root).toFixed(6)}\n\nPotřebných iterací: ${bisectionState.iteration}`);
             }
-            const xLimNotRight = [];
-            const yLimNotRight = [];
-            for (let x = 0.01; x <= 5; x += 0.1) {
-                xLimNotRight.push(x);
-                yLimNotRight.push(-1); // Hodnota -1 zprava
+        }
+
+        function bisectionReset() {
+            bisectionState = { iteration: 0, a: 4.0, b: 4.5, history: [] };
+            document.getElementById('bisectionInfo').textContent = 'Iterace 0: interval [4.00, 4.50]';
+            redrawBisection();
+        }
+
+        // Čekej, až se Plotly načte
+        function initBisection() {
+            if (typeof Plotly !== 'undefined') {
+                redrawBisection();
+            } else {
+                setTimeout(initBisection, 100);
             }
-            const traceLimNotLeft = { x: xLimNotLeft, y: yLimNotLeft, mode: 'lines',
-                                    line: { color: 'blue', width: 2 }, name: 'f(x) = 1 (x < 0)' };
-            const traceLimNotRight = { x: xLimNotRight, y: yLimNotRight, mode: 'lines',
-                                     line: { color: 'red', width: 2 }, name: 'f(x) = -1 (x ≥ 0)' };
-            const traceCircleLeft = { x: [0], y: [1], mode: 'markers',
-                                    marker: { color: 'white', size: 12, line: { color: 'blue', width: 2 } },
-                                    name: 'Limita zleva = 1' };
-            const traceCircleRight = { x: [0], y: [-1], mode: 'markers',
-                                     marker: { color: 'white', size: 12, line: { color: 'red', width: 2 } },
-                                     name: 'Limita zprava = -1' };
-            const traceVLine = { x: [0, 0], y: [-2, 2], mode: 'lines',
-                              line: { color: 'gray', width: 1, dash: 'dash' },
-                              showlegend: false };
-            Plotly.newPlot('graphLimitNotExists', [traceLimNotLeft, traceLimNotRight, traceCircleLeft, traceCircleRight, traceVLine],
-                { title: 'LIMITA NEEXISTUJE: Různé strany (1 ≠ -1)', xaxis: { title: 'x' }, yaxis: { title: 'f(x)' },
-                  margin: { l: 40, r: 40, b: 40, t: 40 }, showlegend: true, responsive: true });
-        });
+        }
+        initBisection();
     </script>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered" style="max-width: 700px;">
+            <thead>
+                <tr>
+                    <th>Iterace</th>
+                    <th>a (dolní)</th>
+                    <th>b (horní)</th>
+                    <th>c (střed)</th>
+                    <th>h(c)</th>
+                    <th>Šířka intervalu</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>4.0000</td>
+                    <td>4.5000</td>
+                    <td>4.2500</td>
+                    <td>-3.3125</td>
+                    <td>0.5000</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>4.0000</td>
+                    <td>4.2500</td>
+                    <td>4.1250</td>
+                    <td>-0.6797</td>
+                    <td>0.2500</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>4.1250</td>
+                    <td>4.2500</td>
+                    <td>4.1875</td>
+                    <td>-2.0215</td>
+                    <td>0.1250</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>4.0000</td>
+                    <td>4.1250</td>
+                    <td>4.0625</td>
+                    <td>0.5957</td>
+                    <td>0.1250</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>4.0625</td>
+                    <td>4.1250</td>
+                    <td>4.0938</td>
+                    <td>-0.0637</td>
+                    <td>0.0625</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>4.0625</td>
+                    <td>4.0938</td>
+                    <td>4.0781</td>
+                    <td>0.2633</td>
+                    <td>0.0313</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>4.0781</td>
+                    <td>4.0938</td>
+                    <td>4.0859</td>
+                    <td>0.0994</td>
+                    <td>0.0156</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>4.0859</td>
+                    <td>4.0938</td>
+                    <td>4.0898</td>
+                    <td>0.0176</td>
+                    <td>0.0078</td>
+                </tr>
+                <tr style="background-color: #d4edda;">
+                    <td>8</td>
+                    <td>4.0898</td>
+                    <td>4.0938</td>
+                    <td><strong>4.0918</strong></td>
+                    <td><strong>-0.0231</strong></td>
+                    <td><strong>0.0039</strong></td>
+                </tr>
+                <tr style="background-color: #e8f5e9;">
+                    <td>9</td>
+                    <td>4.0898</td>
+                    <td>4.0918</td>
+                    <td><strong>4.0908</strong></td>
+                    <td><strong>-0.0027</strong></td>
+                    <td><strong>0.0020 ✓</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Odpověď:</strong> Míč dopadne na zem přibližně v čase <strong>t ≈ 4.1 sekundy</strong><br>
+        <br>
+        Kontrola: $h(4.1) = 2 + 20(4.1) - 5(4.1)^2 = 2 + 82 - 84.05 = -0.05 \approx 0$ ✓
+    </div>
+
+    <h3>Srovnání: Newtonova metoda vs Bisekce</h3>
+
+    <p><strong>Newtonova metoda je <em>mnohem</em> rychlejší – ale jak to funguje geometricky?</strong></p>
+
+    <div style="border: 1px solid #ddd; border-radius: 4px; padding: 15px; margin: 20px 0; background: #f9f9f9;">
+        <p><strong>Newtonova metoda – tečna vede k řešení (vizualizace):</strong></p>
+        <div id="newtonChart" style="margin: 20px 0;"></div>
+        <div style="text-align: center; margin-top: 10px;">
+            <button onclick="newtonStep()" class="btn btn-sm btn-success">Další iterace</button>
+            <button onclick="newtonReset()" class="btn btn-sm btn-secondary">Resetovat</button>
+            <span id="newtonInfo" style="margin-left: 20px; font-size: 0.9em;">Iterace 0: x = 4.2</span>
+        </div>
+    </div>
+
+    <script>
+        let newtonState = {
+            iteration: 0,
+            x: 4.2,
+            history: [{ iter: 0, x: 4.2, hx: h_func(4.2) }]
+        };
+
+        function h_derivative(t) {
+            return 20 - 10*t;  // derivace h(t) = 2 + 20t - 5t^2
+        }
+
+        function redrawNewton() {
+            const tMin = 3.8, tMax = 4.5;
+            const hMin = -3, hMax = 3;
+
+            // Curve
+            const t = [];
+            const h = [];
+            for (let time = tMin; time <= tMax; time += 0.02) {
+                t.push(time);
+                h.push(h_func(time));
+            }
+
+            const traceCurve = {
+                x: t,
+                y: h,
+                mode: 'lines',
+                line: { color: '#3498db', width: 3 },
+                name: 'h(t) = 2 + 20t - 5t²',
+                hovertemplate: 'Čas: %{x:.3f}s<br>Výška: %{y:.2f}m'
+            };
+
+            // Zero line
+            const traceZero = {
+                x: [tMin, tMax],
+                y: [0, 0],
+                mode: 'lines',
+                line: { color: '#999', width: 1, dash: 'dash' },
+                name: 'h = 0 (hledaný kořen)',
+                hoverinfo: 'skip'
+            };
+
+            const traces = [traceCurve, traceZero];
+
+            // Draw tangent lines from history
+            for (let i = 0; i < newtonState.history.length; i++) {
+                const x_curr = newtonState.history[i].x;
+                const h_curr = h_func(x_curr);
+                const h_prime = h_derivative(x_curr);
+
+                // Tangent line: h = h_curr + h_prime * (t - x_curr)
+                const tangentT = [tMin, tMax];
+                const tangentH = [
+                    h_curr + h_prime * (tMin - x_curr),
+                    h_curr + h_prime * (tMax - x_curr)
+                ];
+
+                const traceTangent = {
+                    x: tangentT,
+                    y: tangentH,
+                    mode: 'lines',
+                    line: { color: '#95a5a6', width: 1, dash: 'dash' },
+                    showlegend: false,
+                    hoverinfo: 'skip'
+                };
+                traces.push(traceTangent);
+
+                // Vertical line from tangent intersection to next point
+                if (i < newtonState.history.length - 1) {
+                    const x_next = newtonState.history[i + 1].x;
+                    const traceVertical = {
+                        x: [x_next, x_next],
+                        y: [0, h_func(x_next)],
+                        mode: 'lines',
+                        line: { color: '#95a5a6', width: 1, dash: 'dot' },
+                        showlegend: false,
+                        hoverinfo: 'skip'
+                    };
+                    traces.push(traceVertical);
+                }
+            }
+
+            // Current point on curve
+            const x_current = newtonState.x;
+            const h_current = h_func(x_current);
+            const tracePoint = {
+                x: [x_current],
+                y: [h_current],
+                mode: 'markers',
+                marker: { size: 12, color: '#2ecc71', symbol: 'circle' },
+                name: `Aktuální bod (x=${x_current.toFixed(4)})`,
+                hovertemplate: 't: %{x:.4f}<br>h(t): %{y:.3f}'
+            };
+            traces.push(tracePoint);
+
+            const layout = {
+                title: `Newtonova metoda – Iterace ${newtonState.iteration}: x = ${x_current.toFixed(6)}`,
+                xaxis: { title: 'Čas t (sekundy)', range: [tMin - 0.05, tMax + 0.05] },
+                yaxis: { title: 'Výška h(t) (metry)', range: [hMin - 0.5, hMax + 0.5] },
+                hovermode: 'closest',
+                margin: { l: 70, r: 40, b: 50, t: 70 },
+                showlegend: true,
+                height: 400
+            };
+
+            Plotly.newPlot('newtonChart', traces, layout, {responsive: true});
+        }
+
+        function newtonStep() {
+            const x_curr = newtonState.x;
+            const h_curr = h_func(x_curr);
+            const h_prime = h_derivative(x_curr);
+
+            if (Math.abs(h_prime) < 0.001) {
+                alert('Chyba: derivace je příliš malá!');
+                return;
+            }
+
+            const x_next = x_curr - h_curr / h_prime;
+            newtonState.x = x_next;
+            newtonState.iteration++;
+            newtonState.history.push({ iter: newtonState.iteration, x: x_next, hx: h_func(x_next) });
+
+            const info = `Iterace ${newtonState.iteration}: x = ${x_next.toFixed(6)}, h(x) = ${h_func(x_next).toFixed(6)}`;
+            document.getElementById('newtonInfo').textContent = info;
+
+            redrawNewton();
+
+            if (Math.abs(h_func(x_next)) < 0.0001) {
+                alert(`Konvergováno! Kořen = ${x_next.toFixed(6)} (jen ${newtonState.iteration} iterací!)`);
+            }
+        }
+
+        function newtonReset() {
+            newtonState = { iteration: 0, x: 4.2, history: [{ iter: 0, x: 4.2, hx: h_func(4.2) }] };
+            document.getElementById('newtonInfo').textContent = 'Iterace 0: x = 4.2';
+            redrawNewton();
+        }
+
+        // Čekej, až se Plotly načte
+        function initNewton() {
+            if (typeof Plotly !== 'undefined') {
+                redrawNewton();
+            } else {
+                setTimeout(initNewton, 100);
+            }
+        }
+        initNewton();
+    </script>
+
+    <h3>Srovnání konvergence – Bisekce vs Newton</h3>
+
+    <p><strong>Vidět rozdíl:</strong> Bisekce potrebuje mnohem více iterací!</p>
+
+    <div id="convergenceChart" style="margin: 20px 0;"></div>
+
+    <script>
+        // Bisekce - pomalá konvergence
+        const bisectionIters = [];
+        const bisectionErrors = [];
+        let a = 4.0, b = 4.5;
+        const trueRoot = 4.0779;  // přibližný kořen
+
+        for (let i = 0; i <= 12; i++) {
+            const c = (a + b) / 2;
+            const err = Math.abs(c - trueRoot);
+            bisectionIters.push(i);
+            bisectionErrors.push(err);
+
+            const ha = h_func(a);
+            const hc = h_func(c);
+            if (ha * hc < 0) {
+                b = c;
+            } else {
+                a = c;
+            }
+        }
+
+        // Newton - rychlá konvergence
+        const newtonIters = [];
+        const newtonErrors = [];
+        let x = 4.2;
+
+        for (let i = 0; i <= 5; i++) {
+            const err = Math.abs(x - trueRoot);
+            newtonIters.push(i);
+            newtonErrors.push(err);
+
+            const hx = h_func(x);
+            const hprime = h_derivative(x);
+            x = x - hx / hprime;
+        }
+
+        const traceBisection = {
+            x: bisectionIters,
+            y: bisectionErrors,
+            mode: 'lines+markers',
+            name: 'Bisekce',
+            line: { color: '#e74c3c', width: 2 },
+            marker: { size: 6 }
+        };
+
+        const traceNewton = {
+            x: newtonIters,
+            y: newtonErrors,
+            mode: 'lines+markers',
+            name: 'Newton',
+            line: { color: '#2ecc71', width: 2 },
+            marker: { size: 6 }
+        };
+
+        const layoutConvergence = {
+            title: 'Chyba aproximace v závislosti na iteraci (logaritmická stupnice)',
+            xaxis: { title: 'Iterace' },
+            yaxis: { title: 'Chyba |x_n - kořen|', type: 'log' },
+            hovermode: 'closest',
+            margin: { l: 60, r: 30, b: 50, t: 60 }
+        };
+
+        Plotly.newPlot('convergenceChart', [traceBisection, traceNewton], layoutConvergence, {responsive: true});
+    </script>
+
+    <div class="table-responsive" style="margin-top: 20px;">
+        <table class="table table-sm table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2" style="text-align: center; background: #ffe8e8;">Bisekce (pomalá)</th>
+                    <th colspan="2" style="text-align: center; background: #e8ffe8;">Newton (rychlá)</th>
+                </tr>
+                <tr>
+                    <th>Iter.</th>
+                    <th>Přesnost</th>
+                    <th>Iter.</th>
+                    <th>Přesnost</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td>0.0221</td>
+                    <td>0</td>
+                    <td>0.1221</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>0.0110</td>
+                    <td>1</td>
+                    <td>0.0084</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>0.0055</td>
+                    <td>2</td>
+                    <td>0.0000039</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>0.0028</td>
+                    <td>3</td>
+                    <td>~0</td>
+                </tr>
+                <tr style="background: #fff3cd;">
+                    <td colspan="2" style="text-align: center;"><strong>~10 iterací na přesnost 10⁻³</strong></td>
+                    <td colspan="2" style="text-align: center;"><strong>~3 iterací na přesnost 10⁻⁶</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="math-box">
+        <strong>Proč je Newton tak rychlejší?</strong><br>
+        <br>
+        Bisekce: Chyba se každou iterací <strong>dělí dvěma</strong> (lineární konvergence)<br>
+        Newton: Chyba se každou iterací <strong>umocňuje na druhou</strong> (kvadratická konvergence)<br>
+        <br>
+        Pokud chyba = 0.01:<br>
+        • Bisekce: 0.01 → 0.005 → 0.0025 → 0.00125 ... (pomalu)<br>
+        • Newton: 0.01 → 0.0001 → 0.00000001 ... (velmi rychle!)
+    </div>
+
+    <h3>Aplikace Hornerova schématu</h3>
+
+    <p><strong>Pokud bychom chtěli vyhodnotit polynom v mnoha bodech (třeba pro graf):</strong></p>
+
+    <p>Místo: $h(t) = 2 + 20t - 5t^2$ (dvě násobení per bod)</p>
+
+    <p>Hornerovo schéma: $h(t) = 2 + t(20 - 5t)$ (jedno násobení per bod)</p>
+
+    <div class="highlight-box">
+        Výpočet pro $t = 2$:<br>
+        Přímý: $2 + 20 \cdot 2 - 5 \cdot 2 \cdot 2 = 2 + 40 - 20 = 22$<br>
+        Horner: $2 + 2(20 - 5 \cdot 2) = 2 + 2(20 - 10) = 2 + 2 \cdot 10 = 2 + 20 = 22$ ✓
+    </div>
+
+    <p><strong>Prakticky:</strong> Když vykreslujeme graf (100+ bodů), ušetříme desítky násobení!</p>
+
+    <hr>
+
+    <h2>Návaznosti a principy</h2>
+
+    <p><strong>Jak se témata propojují:</strong></p>
+    <ol>
+        <li><strong>Funkce</strong> — abstraktní pojem, jak transformovat vstup na výstup</li>
+        <li><strong>Polynomy</strong> — speciální případ funkcí s "pěknou" strukturou (součet mocnin)</li>
+        <li><strong>Limita a spojitost</strong> — jak se funkce chová v blízkosti bodů (základna pro kalkulus)</li>
+        <li><strong>Numerické metody</strong> — praktický nástroj, když nemáme analytické řešení</li>
+    </ol>
+
+    <p><strong>Klíčové principy:</strong></p>
+    <ul>
+        <li><strong>Definiční obor určuje vše:</strong> Kde funkce "žije" závisí na matematických omezeních (odmocnina, logaritmus, dělení)</li>
+        <li><strong>Polynom je nejjednodušší:</strong> Všechny operace jsou jednoduché, bez singularit, spojité všude</li>
+        <li><strong>Hornerovo schéma je elegant:</strong> Optimalizace výpočtu vychází z přepsání struktury</li>
+        <li><strong>Numerika je o aproximaci:</strong> Když nemáme přesný vzorec, aproximujeme s kontrolou chyby</li>
+    </ul>
+
+
+</div>
 </body>
 </html>
