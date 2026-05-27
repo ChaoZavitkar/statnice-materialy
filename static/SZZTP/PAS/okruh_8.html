@@ -77,6 +77,9 @@
             </ul>
         </div>
 
+        <div id="plotDice" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Pravděpodobnostní funkce (PMF) hodu kostkou – každá hodnota má stejnou pravděpodobnost 1/6 ≈ 0.167</p>
+
         <h3>Spojitá náhodná veličina</h3>
 
         <div class="math-box">
@@ -97,6 +100,9 @@
                 <li>U <strong>spojité</strong> veličiny: $P(X = 1.5) = 0$ (přesná hodnota je prakticky nula)</li>
             </ul>
         </div>
+
+        <div id="plotContinuous" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Histogram výšek osob – spojitá náhodná veličina; osa x je plynulá, pravděpodobnost jedné přesné hodnoty je nulová</p>
 
         <h2>Distribuční funkce</h2>
 
@@ -125,6 +131,9 @@
                 <tr><td>6.5</td><td>1</td><td>Padne číslo ≤ 6.5? Určitě!</td></tr>
             </table>
         </div>
+
+        <div id="plotCDF" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Distribuční funkce F(x) hodu kostkou – schodovitý tvar (typický pro diskrétní veličiny); každé číslo zvýší F(x) o 1/6</p>
 
         <h2>Pravděpodobnostní funkce a hustota pravděpodobnosti</h2>
 
@@ -184,7 +193,7 @@
 
         <h3>Střední hodnota (Expected Value)</h3>
 
-        <p><strong>Střední hodnota</strong> $E(X)$ nebo $\mu$ je <strong>průměrná hodnota, kterou náhodná veličina nabývá na dlouhodobě</strong>.</p>
+        <p><strong>Střední hodnota</strong> $E(X)$ je <strong>průměrná hodnota, kterou náhodná veličina nabývá na dlouhodobě</strong>.</p>
 
         <div class="formula">
             <strong>Pro diskrétní veličinu:</strong>
@@ -212,7 +221,7 @@
 
         <h3>Rozptyl (Variance)</h3>
 
-        <p><strong>Rozptyl</strong> $\text{Var}(X)$ nebo $\sigma^2$ měří, <strong>jak moc se hodnoty náhodné veličiny rozptylují okolo střední hodnoty</strong>.</p>
+        <p><strong>Rozptyl</strong> $\text{Var}(X)$ měří, <strong>jak moc se hodnoty náhodné veličiny rozptylují okolo střední hodnoty</strong>.</p>
 
         <div class="formula">
             $$\text{Var}(X) = E[(X - E(X))^2] = E(X^2) - [E(X)]^2$$
@@ -225,12 +234,15 @@
             <li>Větší rozptyl = hodnoty jsou roztroušené daleko od průměru</li>
         </ul>
 
+        <div id="plotStd" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Srovnání tří rozdělení se stejným E(X)=175 cm, ale různými hodnotami Std(X) – čím větší Std(X), tím plošší a širší křivka</p>
+
         <h3>Směrodatná odchylka (Standard Deviation)</h3>
 
-        <p><strong>Směrodatná odchylka</strong> $\sigma$ je <strong>druhá odmocnina rozptylu</strong> – má stejné jednotky jako původní veličina.</p>
+        <p><strong>Směrodatná odchylka</strong> $\text{Std}(X)$ je <strong>druhá odmocnina rozptylu</strong> – má stejné jednotky jako původní veličina.</p>
 
         <div class="formula">
-            $$\sigma = \sqrt{\text{Var}(X)}$$
+            $$\text{Std}(X) = \sqrt{\text{Var}(X)}$$
         </div>
 
         <div class="note-box">
@@ -267,6 +279,9 @@
             </ul>
         </div>
 
+        <div id="plotBoxplot" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Boxplot výšek osob – dolní/horní hranice krabice = Q1 a Q3 (kvartily), středová čára = medián, vousy = min/max bez odlehlých hodnot</p>
+
         <h2>Vybraná rozdělení</h2>
 
         <h3>Normální rozdělení (Gaussovo)</h3>
@@ -275,24 +290,27 @@
             <p><strong>Normální rozdělení</strong> je <strong>nejdůležitější a nejčastější rozdělení</strong> – mnoho přírodních jevů se jím řídí.</p>
             <p><strong>Hustota pravděpodobnosti:</strong></p>
             <div class="formula">
-                $$f(x) = \frac{1}{\sigma\sqrt{2\pi}} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$$
+                $$f(x) = \frac{1}{\text{Std}(X)\sqrt{2\pi}} \exp\left(-\frac{(x-E(X))^2}{2\,\text{Var}(X)}\right)$$
             </div>
             <p><strong>Vlastnosti:</strong></p>
             <ul>
-                <li>Symetrické kolem střední hodnoty $\mu$</li>
+                <li>Symetrické kolem střední hodnoty $E(X)$</li>
                 <li>Tvar: zvonová křivka (bell curve)</li>
-                <li>Definováno dvěma parametry: $\mu$ (střední hodnota) a $\sigma$ (směrodatná odchylka)</li>
+                <li>Definováno dvěma parametry: $E(X)$ (střední hodnota) a $\text{Std}(X)$ (směrodatná odchylka)</li>
             </ul>
         </div>
 
         <div class="note-box">
             <p><strong>Empirické pravidlo (68-95-99.7):</strong></p>
             <ul>
-                <li>~68% dat leží v rozmezí $[\mu - \sigma, \mu + \sigma]$</li>
-                <li>~95% dat leží v rozmezí $[\mu - 2\sigma, \mu + 2\sigma]$</li>
-                <li>~99.7% dat leží v rozmezí $[\mu - 3\sigma, \mu + 3\sigma]$</li>
+                <li>~68% dat leží v rozmezí $[E(X) - \text{Std}(X), E(X) + \text{Std}(X)]$</li>
+                <li>~95% dat leží v rozmezí $[E(X) - 2\text{Std}(X), E(X) + 2\text{Std}(X)]$</li>
+                <li>~99.7% dat leží v rozmezí $[E(X) - 3\text{Std}(X), E(X) + 3\text{Std}(X)]$</li>
             </ul>
         </div>
+
+        <div id="plotNormal68" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Normální rozdělení N(175, 8) s barevně vyznačenými oblastmi ±1, ±2, ±3 Std(X) – ověření empirického pravidla 68–95–99.7 %</p>
 
         <h3>Binomické rozdělení</h3>
 
@@ -310,21 +328,34 @@
             </ul>
         </div>
 
+        <div id="plotBinomial" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Binomické rozdělení Bin(10, 0.5) – pravděpodobnost k orlů v 10 hodech mincí; nejpravděpodobnější je 5 orlů</p>
+
         <h3>Poissonovo rozdělení</h3>
 
         <div class="math-box">
             <p><strong>Poissonovo rozdělení</strong> modeluje <strong>počet jevů, která nastanou v určitém čase/prostoru</strong>.</p>
             <p><strong>Pravděpodobnostní funkce:</strong></p>
             <div class="formula">
-                $$P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
+                $$P(X = k) = \frac{\text{Rate}^k \cdot e^{-\text{Rate}}}{k!}$$
             </div>
+            <p><strong>Kde:</strong></p>
+            <ul>
+                <li>$k$ = počet jevů, jehož pravděpodobnost počítáme (k = 0, 1, 2, ...)</li>
+                <li>$\text{Rate}$ = průměrný počet jevů za daný interval (např. 3 poruchy za měsíc)</li>
+                <li>$e \approx 2{,}718$ = Eulerovo číslo (základ přirozeného logaritmu)</li>
+                <li>$k!$ = faktoriál (např. $3! = 1 \cdot 2 \cdot 3 = 6$)</li>
+            </ul>
             <p><strong>Příklady:</strong></p>
             <ul>
-                <li>Počet poruch serveru za měsíc</li>
-                <li>Počet příchozích e-mailů za hodinu</li>
-                <li>Počet nehod na dálnici za týden</li>
+                <li>Počet poruch serveru za měsíc (Rate = průměrný počet poruch za měsíc)</li>
+                <li>Počet příchozích e-mailů za hodinu (Rate = průměrný počet e-mailů za hodinu)</li>
+                <li>Počet nehod na dálnici za týden (Rate = průměrný počet nehod za týden)</li>
             </ul>
         </div>
+
+        <div id="plotPoisson" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Poissonovo rozdělení s Rate=3 poruchy/měsíc – nejpravděpodobnější jsou 2 nebo 3 poruchy; P(0 poruch) ≈ 5 %</p>
 
         <h3>Exponenciální rozdělení</h3>
 
@@ -332,15 +363,24 @@
             <p><strong>Exponenciální rozdělení</strong> modeluje <strong>čas mezi po sobě jdoucími jevy</strong> (např. doba do příští poruchy).</p>
             <p><strong>Hustota pravděpodobnosti:</strong></p>
             <div class="formula">
-                $$f(x) = \lambda e^{-\lambda x}, \quad x \geq 0$$
+                $$f(x) = \text{Rate} \cdot e^{-\text{Rate} \cdot x}, \quad x \geq 0$$
             </div>
+            <p><strong>Kde:</strong></p>
+            <ul>
+                <li>$x$ = čas (nebo vzdálenost), pro který počítáme hustotu pravděpodobnosti</li>
+                <li>$\text{Rate}$ = průměrný počet jevů za jednotku času (např. 2 poruchy za hodinu)</li>
+                <li>Střední hodnota = $\frac{1}{\text{Rate}}$ (průměrný čas <em>mezi</em> jevy)</li>
+            </ul>
             <p><strong>Příklady:</strong></p>
             <ul>
-                <li>Doba čekání na příští zákazníka v obchodě</li>
-                <li>Čas do příští poruchy zařízení</li>
-                <li>Trvání telefonního hovoru</li>
+                <li>Doba čekání na příští zákazníka v obchodě (Rate = průměrný počet zákazníků za hodinu)</li>
+                <li>Čas do příští poruchy zařízení (Rate = průměrný počet poruch za den)</li>
+                <li>Trvání telefonního hovoru (Rate = průměrný počet hovorů za minutu)</li>
             </ul>
         </div>
+
+        <div id="plotExponential" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Exponenciální rozdělení (Rate=2 zákazníci/hod) – hustota pravděpodobnosti doby čekání; průměrné čekání = 1/Rate = 30 minut</p>
 
         <h2>Interaktivní příklady</h2>
 
@@ -358,26 +398,26 @@
                 <input type="text" id="probabilities" value="0.1667,0.1667,0.1667,0.1667,0.1667,0.1667" style="width: 300px;">
             </label>
 
-            <button onclick="calculateMoments()">Vypočítej E(X), Var(X), σ</button>
+            <button onclick="calculateMoments()">Vypočítej E(X), Var(X), Std(X)</button>
 
             <div class="result-box" id="result" style="display: none;">
                 <p><strong>Střední hodnota E(X):</strong> <span id="expectedValue"></span></p>
                 <p><strong>Rozptyl Var(X):</strong> <span id="variance"></span></p>
-                <p><strong>Směrodatná odchylka σ:</strong> <span id="stdDev"></span></p>
+                <p><strong>Směrodatná odchylka Std(X):</strong> <span id="stdDev"></span></p>
             </div>
         </div>
 
         <div class="interactive-section">
             <h3>Normální rozdělení – Pravděpodobnosti</h3>
-            <p>Spočítej pravděpodobnost pro normální rozdělení N(μ, σ²):</p>
+            <p>Spočítej pravděpodobnost pro normální rozdělení N(E(X), Var(X)):</p>
 
             <label for="mu" style="display: block; margin-bottom: 10px;">
-                Střední hodnota (μ):
+                Střední hodnota (E(X)):
                 <input type="number" id="mu" value="100" style="width: 100px;">
             </label>
 
             <label for="sigma" style="display: block; margin-bottom: 10px;">
-                Směrodatná odchylka (σ):
+                Směrodatná odchylka (Std(X)):
                 <input type="number" id="sigma" value="15" style="width: 100px;">
             </label>
 
@@ -402,6 +442,204 @@
     </div>
 
     <script>
+        // ── Pomocné funkce ──────────────────────────────────────────────────────
+        function normalPDF(x, mean, std) {
+            return (1 / (std * Math.sqrt(2 * Math.PI))) *
+                   Math.exp(-0.5 * Math.pow((x - mean) / std, 2));
+        }
+        function normalRandom(mean, std) {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            return mean + std * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+        }
+        function binomCoeff(n, k) {
+            if (k < 0 || k > n) return 0;
+            let r = 1;
+            for (let i = 0; i < k; i++) r *= (n - i) / (i + 1);
+            return r;
+        }
+        function poissonPMF(k, rate) {
+            let logP = k * Math.log(rate) - rate;
+            for (let i = 1; i <= k; i++) logP -= Math.log(i);
+            return Math.exp(logP);
+        }
+
+        const plotLayout = {
+            font: { family: 'Arial, sans-serif', size: 13 },
+            paper_bgcolor: 'white',
+            plot_bgcolor: '#f8f9fa',
+            margin: { t: 45, r: 20, b: 55, l: 65 }
+        };
+        const plotConfig = { responsive: true, displayModeBar: false };
+
+        window.addEventListener('load', function () {
+
+            // ── 1. PMF kostky ─────────────────────────────────────────────────
+            Plotly.newPlot('plotDice', [{
+                type: 'bar',
+                x: [1, 2, 3, 4, 5, 6],
+                y: [1/6, 1/6, 1/6, 1/6, 1/6, 1/6],
+                text: ['1/6', '1/6', '1/6', '1/6', '1/6', '1/6'],
+                textposition: 'outside',
+                marker: { color: '#0d6efd', opacity: 0.85 },
+                showlegend: false
+            }], { ...plotLayout,
+                title: { text: 'PMF – Hod kostkou', font: { size: 14 } },
+                xaxis: { title: 'Hodnota (k)', tickvals: [1,2,3,4,5,6] },
+                yaxis: { title: 'p(k) = P(X = k)', range: [0, 0.26] }
+            }, plotConfig);
+
+            // ── 2. Histogram výšek (spojitá NV) ──────────────────────────────
+            const heights = Array.from({ length: 800 }, () => normalRandom(175, 8));
+            Plotly.newPlot('plotContinuous', [{
+                type: 'histogram',
+                x: heights,
+                xbins: { start: 148, end: 207, size: 3 },
+                marker: { color: '#0d6efd', opacity: 0.75,
+                          line: { color: 'white', width: 1 } },
+                showlegend: false
+            }], { ...plotLayout,
+                title: { text: 'Histogram – výšky osob (E(X)=175 cm, Std(X)=8 cm)', font: { size: 14 } },
+                xaxis: { title: 'Výška (cm)' },
+                yaxis: { title: 'Počet osob' }
+            }, plotConfig);
+
+            // ── 3. CDF kostky ─────────────────────────────────────────────────
+            Plotly.newPlot('plotCDF', [{
+                type: 'scatter', mode: 'lines',
+                x: [0, 0.999, 1, 1.999, 2, 2.999, 3, 3.999, 4, 4.999, 5, 5.999, 6, 7],
+                y: [0, 0, 1/6, 1/6, 2/6, 2/6, 3/6, 3/6, 4/6, 4/6, 5/6, 5/6, 1, 1],
+                line: { color: '#0d6efd', width: 2.5, shape: 'hv' },
+                showlegend: false
+            }], { ...plotLayout,
+                title: { text: 'Distribuční funkce F(x) – Hod kostkou', font: { size: 14 } },
+                xaxis: { title: 'x', range: [-0.2, 7.2] },
+                yaxis: { title: 'F(x) = P(X ≤ x)', range: [-0.05, 1.1],
+                         tickvals: [0, 1/6, 2/6, 3/6, 4/6, 5/6, 1],
+                         ticktext: ['0', '1/6', '2/6', '3/6', '4/6', '5/6', '1'] }
+            }, plotConfig);
+
+            // ── 4. Porovnání Std(X) – tři křivky ─────────────────────────────
+            const xRange = [];
+            for (let x = 140; x <= 215; x += 0.5) xRange.push(x);
+            Plotly.newPlot('plotStd', [
+                { type: 'scatter', mode: 'lines', x: xRange,
+                  y: xRange.map(x => normalPDF(x, 175, 3)),
+                  line: { color: '#0d6efd', width: 2 },
+                  name: 'Std(X) = 3 cm' },
+                { type: 'scatter', mode: 'lines', x: xRange,
+                  y: xRange.map(x => normalPDF(x, 175, 8)),
+                  line: { color: '#28a745', width: 2 },
+                  name: 'Std(X) = 8 cm' },
+                { type: 'scatter', mode: 'lines', x: xRange,
+                  y: xRange.map(x => normalPDF(x, 175, 15)),
+                  line: { color: '#dc3545', width: 2 },
+                  name: 'Std(X) = 15 cm' }
+            ], { ...plotLayout, showlegend: true,
+                title: { text: 'Vliv Std(X) na tvar normálního rozdělení (E(X) = 175 cm)', font: { size: 14 } },
+                xaxis: { title: 'Výška (cm)' },
+                yaxis: { title: 'f(x) – hustota' },
+                legend: { x: 0.65, y: 0.95 }
+            }, plotConfig);
+
+            // ── 5. Boxplot výšek ──────────────────────────────────────────────
+            const boxData = Array.from({ length: 300 }, () => normalRandom(175, 8));
+            Plotly.newPlot('plotBoxplot', [{
+                type: 'box', y: boxData,
+                marker: { color: '#0d6efd', size: 4, opacity: 0.5 },
+                line: { color: '#0d6efd' },
+                fillcolor: 'rgba(13,110,253,0.15)',
+                boxpoints: 'outliers',
+                name: 'Výšky osob',
+                showlegend: false
+            }], { ...plotLayout,
+                title: { text: 'Boxplot – výšky osob (Q1 ≈ 170, Medián ≈ 175, Q3 ≈ 180 cm)', font: { size: 14 } },
+                yaxis: { title: 'Výška (cm)' },
+                xaxis: { showticklabels: false }
+            }, plotConfig);
+
+            // ── 6. Normální rozdělení – pravidlo 68–95–99.7 ─────────────────
+            const mu = 175, sd = 8;
+            const xN = [];
+            for (let x = mu - 4*sd; x <= mu + 4*sd; x += 0.4) xN.push(x);
+
+            function shadedRegion(lo, hi, color, name) {
+                const xs = xN.filter(x => x >= lo && x <= hi);
+                return {
+                    type: 'scatter', mode: 'none',
+                    x: [...xs, ...xs.slice().reverse()],
+                    y: [...xs.map(x => normalPDF(x, mu, sd)), ...xs.map(() => 0)],
+                    fill: 'toself', fillcolor: color,
+                    name: name, showlegend: true
+                };
+            }
+            Plotly.newPlot('plotNormal68', [
+                shadedRegion(mu-3*sd, mu+3*sd, 'rgba(220,53,69,0.18)', '±3 Std(X) — 99.7 %'),
+                shadedRegion(mu-2*sd, mu+2*sd, 'rgba(255,193,7,0.35)', '±2 Std(X) — 95 %'),
+                shadedRegion(mu-sd,   mu+sd,   'rgba(13,110,253,0.45)', '±1 Std(X) — 68 %'),
+                { type: 'scatter', mode: 'lines',
+                  x: xN, y: xN.map(x => normalPDF(x, mu, sd)),
+                  line: { color: '#1a1a2e', width: 2.5 },
+                  showlegend: false }
+            ], { ...plotLayout, showlegend: true,
+                title: { text: 'Normální rozdělení N(175, 8) – empirické pravidlo 68–95–99.7 %', font: { size: 14 } },
+                xaxis: { title: 'Výška (cm)' },
+                yaxis: { title: 'f(x) – hustota pravděpodobnosti' },
+                legend: { x: 0.62, y: 0.95 }
+            }, plotConfig);
+
+            // ── 7. Binomické rozdělení ────────────────────────────────────────
+            const bn = 10, bp = 0.5;
+            const bk = Array.from({ length: 11 }, (_, i) => i);
+            const bv = bk.map(k => binomCoeff(bn, k) * Math.pow(bp, k) * Math.pow(1-bp, bn-k));
+            Plotly.newPlot('plotBinomial', [{
+                type: 'bar', x: bk, y: bv,
+                text: bv.map(v => v.toFixed(3)), textposition: 'outside',
+                marker: { color: '#6f42c1', opacity: 0.85,
+                          line: { color: 'white', width: 1 } },
+                showlegend: false
+            }], { ...plotLayout,
+                title: { text: 'Binomické rozdělení Bin(10, 0.5) – počet orlů v 10 hodech mincí', font: { size: 14 } },
+                xaxis: { title: 'Počet orlů (k)', tickvals: bk },
+                yaxis: { title: 'P(X = k)', range: [0, 0.30] }
+            }, plotConfig);
+
+            // ── 8. Poissonovo rozdělení ───────────────────────────────────────
+            const pRate = 3;
+            const pk = Array.from({ length: 13 }, (_, i) => i);
+            const pv = pk.map(k => poissonPMF(k, pRate));
+            Plotly.newPlot('plotPoisson', [{
+                type: 'bar', x: pk, y: pv,
+                text: pv.map(v => v.toFixed(3)), textposition: 'outside',
+                marker: { color: '#fd7e14', opacity: 0.85,
+                          line: { color: 'white', width: 1 } },
+                showlegend: false
+            }], { ...plotLayout,
+                title: { text: 'Poissonovo rozdělení (Rate = 3 poruchy/měsíc)', font: { size: 14 } },
+                xaxis: { title: 'Počet poruch (k)', tickvals: pk },
+                yaxis: { title: 'P(X = k)', range: [0, 0.27] }
+            }, plotConfig);
+
+            // ── 9. Exponenciální rozdělení ────────────────────────────────────
+            const eRate = 2;
+            const ex = [];
+            for (let x = 0; x <= 2.5; x += 0.04) ex.push(x);
+            const ey = ex.map(x => eRate * Math.exp(-eRate * x));
+            Plotly.newPlot('plotExponential', [{
+                type: 'scatter', mode: 'lines',
+                x: ex, y: ey,
+                line: { color: '#20c997', width: 2.5 },
+                fill: 'tozeroy', fillcolor: 'rgba(32,201,151,0.15)',
+                showlegend: false
+            }], { ...plotLayout,
+                title: { text: 'Exponenciální rozdělení (Rate = 2 zákazníci/hod, průměr čekání = 30 min)', font: { size: 14 } },
+                xaxis: { title: 'Čas čekání (hodiny)' },
+                yaxis: { title: 'f(x) – hustota pravděpodobnosti' }
+            }, plotConfig);
+
+        }); // end window.load
+
         function calculateMoments() {
             const valuesStr = document.getElementById('values').value;
             const probsStr = document.getElementById('probabilities').value;
@@ -465,7 +703,7 @@
                 return;
             }
 
-            // Standardizace: Z = (X - μ) / σ
+            // Standardizace: Z = (X - E(X)) / Std(X)
             const z = (x - mu) / sigma;
 
             // P(X ≤ x) = Φ(z)

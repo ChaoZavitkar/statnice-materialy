@@ -61,27 +61,30 @@
             <li><strong>Výklad:</strong> Kdyby jsme experiment opakovali mnohokrát, v 95% případů by skutečná hodnota byla v intervalu</li>
         </ul>
 
+        <div id="plotCIConcept" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Vizualizace 95% intervalu spolehlivosti na standardním normálním rozdělení – modrá oblast = 95 % pravděpodobnosti, červené čáry = kritické hodnoty ±1.96</p>
+
         <h2>Klíčové pojmy</h2>
 
-        <h3>Hladina významnosti (α) vs. Hladina spolehlivosti (1 - α)</h3>
+        <h3>Hladina významnosti (Alfa) vs. Hladina spolehlivosti (1 - Alfa)</h3>
 
         <div class="math-box">
             <p><strong>Hladina spolehlivosti</strong> = pravděpodobnost, že interval obsahuje skutečnou hodnotu</p>
             <ul>
-                <li>Nejčastěji: <strong>95%</strong> (α = 0.05) – nejpopulárnější volba</li>
-                <li>Také: 90% (α = 0.10), 99% (α = 0.01), 99.9% (α = 0.001)</li>
+                <li>Nejčastěji: <strong>95%</strong> (Alfa = 0.05) – nejpopulárnější volba</li>
+                <li>Také: 90% (Alfa = 0.10), 99% (Alfa = 0.01), 99.9% (Alfa = 0.001)</li>
             </ul>
 
-            <p><strong>Hladina významnosti (α)</strong> = pravděpodobnost, že interval NEOBSAHUJE skutečnou hodnotu (chyba)</p>
+            <p><strong>Hladina významnosti (Alfa)</strong> = pravděpodobnost, že interval NEOBSAHUJE skutečnou hodnotu (chyba)</p>
             <ul>
-                <li>α = 0.05 znamená: v 5% případů se můžeme mýlit</li>
-                <li>Čím menší α, tím "bezpečnější" interval (ale širší)</li>
+                <li>Alfa = 0.05 znamená: v 5% případů se můžeme mýlit</li>
+                <li>Čím menší Alfa, tím "bezpečnější" interval (ale širší)</li>
             </ul>
         </div>
 
         <div class="confidence-level-box">
             <table>
-                <tr><th>Hladina spolehlivosti</th><th>Hladina významnosti (α)</th><th>Praktické použití</th></tr>
+                <tr><th>Hladina spolehlivosti</th><th>Hladina významnosti (Alfa)</th><th>Praktické použití</th></tr>
                 <tr><td>90%</td><td>0.10</td><td>Průzkumy veřejného mínění</td></tr>
                 <tr><td><strong>95%</strong></td><td><strong>0.05</strong></td><td><strong>Vědecké studie (standard)</strong></td></tr>
                 <tr><td>99%</td><td>0.01</td><td>Farmaceutické testy, bezpečnost</td></tr>
@@ -94,12 +97,24 @@
         <p><strong>Kritická hodnota</strong> je hodnota kvantilu, kterou používáme ve vzorci pro interval spolehlivosti.</p>
 
         <ul>
-            <li><strong>Pro normální rozdělení:</strong> $z_{\alpha/2} = 1.96$ (pro 95% interval)</li>
-            <li><strong>Pro t-rozdělení:</strong> $t_{\alpha/2, n-1}$ (závisí na počtu dat n)</li>
+            <li><strong>Pro normální rozdělení:</strong> $z_{\text{Alfa}/2} = 1.96$ (pro 95% interval)</li>
+            <li><strong>Pro t-rozdělení:</strong> $t_{\text{Alfa}/2, n-1}$ (závisí na počtu dat n)</li>
         </ul>
 
         <div class="note-box">
-            <p><strong>Proč $\alpha/2$?</strong></p>
+            <p><strong>Přehled nejčastějších kritických hodnot:</strong></p>
+            <table style="margin-top: 6px;">
+                <tr><th>Hladina spolehlivosti</th><th>Alfa</th><th>Kritická hodnota z</th><th>Typické použití</th></tr>
+                <tr><td>90 %</td><td>0.10</td><td><strong>1.645</strong></td><td>Průzkumy, orientační odhady</td></tr>
+                <tr><td><strong>95 %</strong></td><td><strong>0.05</strong></td><td><strong>1.960</strong></td><td><strong>Vědecké studie (standard)</strong></td></tr>
+                <tr><td>99 %</td><td>0.01</td><td><strong>2.576</strong></td><td>Farmaceutické testy, bezpečnost</td></tr>
+                <tr><td>99.9 %</td><td>0.001</td><td><strong>3.291</strong></td><td>Kritické systémy, letectví</td></tr>
+            </table>
+            <p style="margin-top: 8px;"><em>Čím vyšší spolehlivost požadujeme, tím větší kritická hodnota → tím širší interval.</em></p>
+        </div>
+
+        <div class="note-box">
+            <p><strong>Proč Alfa/2?</strong></p>
             <p>Interval má dva konce – dáváme si "polovinu" chyby na každou stranu:</p>
             <ul>
                 <li>95% interval: 2.5% chyby vlevo + 2.5% chyby vpravo = 5% celkem</li>
@@ -108,17 +123,17 @@
 
         <h2>Intervaly spolehlivosti pro průměr (střední hodnotu)</h2>
 
-        <h3>Případ 1: Víme standardní odchylku populace (σ)</h3>
+        <h3>Případ 1: Víme standardní odchylku populace (Std(X))</h3>
 
         <div class="formula">
-            <strong>Interval spolehlivosti pro μ (když známe σ):</strong>
-            $$\bar{x} \pm z_{\alpha/2} \cdot \frac{\sigma}{\sqrt{n}}$$
+            <strong>Interval spolehlivosti pro E(X) (když známe Std(X)):</strong>
+            $$\bar{x} \pm z_{\text{Alfa}/2} \cdot \frac{\text{Std}(X)}{\sqrt{n}}$$
 
             Kde:
             <ul>
                 <li>$\bar{x}$ = průměr vzorku (naměřená hodnota)</li>
-                <li>$z_{\alpha/2}$ = kritická hodnota normálního rozdělení (1.96 pro 95%)</li>
-                <li>$\sigma$ = standardní odchylka populace (ZNÁMÁ)</li>
+                <li>$z_{\text{Alfa}/2}$ = kritická hodnota normálního rozdělení (1.96 pro 95%)</li>
+                <li>$\text{Std}(X)$ = standardní odchylka populace (ZNÁMÁ)</li>
                 <li>$n$ = velikost vzorku</li>
             </ul>
         </div>
@@ -141,13 +156,13 @@
         <h3>Případ 2: Neznáme standardní odchylku (musíme ji odhadnout)</h3>
 
         <div class="formula">
-            <strong>Interval spolehlivosti pro μ (když neznáme σ):</strong>
-            $$\bar{x} \pm t_{\alpha/2, n-1} \cdot \frac{s}{\sqrt{n}}$$
+            <strong>Interval spolehlivosti pro E(X) (když neznáme Std(X)):</strong>
+            $$\bar{x} \pm t_{\text{Alfa}/2, n-1} \cdot \frac{s}{\sqrt{n}}$$
 
             Kde:
             <ul>
                 <li>$s$ = standardní odchylka vzorku (ODHADNUTA z dat)</li>
-                <li>$t_{\alpha/2, n-1}$ = kritická hodnota t-rozdělení (závisí na n)</li>
+                <li>$t_{\text{Alfa}/2, n-1}$ = kritická hodnota t-rozdělení (závisí na n)</li>
                 <li>Ostatní symboly: jako výše</li>
             </ul>
         </div>
@@ -164,8 +179,8 @@
         <h2>Interval spolehlivosti pro rozptyl</h2>
 
         <div class="formula">
-            <strong>Interval spolehlivosti pro rozptyl σ²:</strong>
-            $$\left[ \frac{(n-1)s^2}{\chi^2_{\alpha/2, n-1}}, \frac{(n-1)s^2}{\chi^2_{1-\alpha/2, n-1}} \right]$$
+            <strong>Interval spolehlivosti pro rozptyl Var(X):</strong>
+            $$\left[ \frac{(n-1)s^2}{\chi^2_{\text{Alfa}/2, n-1}}, \frac{(n-1)s^2}{\chi^2_{1-\text{Alfa}/2, n-1}} \right]$$
 
             Kde:
             <ul>
@@ -187,7 +202,7 @@
 
         <div class="formula">
             <strong>Interval spolehlivosti pro p (procento/podíl):</strong>
-            $$\hat{p} \pm z_{\alpha/2} \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$$
+            $$\hat{p} \pm z_{\text{Alfa}/2} \sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$$
 
             Kde:
             <ul>
@@ -201,7 +216,7 @@
             <ul>
                 <li>Průzkum: z 1000 respondentů by 52% volilo stranu X</li>
                 <li>$\hat{p} = 0.52$, $n = 1000$</li>
-                <li>Chyba: $\sqrt{\frac{0.52 \cdot 0.48}{1000}} = 0.0158$ (1.58%)</li>
+                <li>Standardní chyba (SE): $\sqrt{\frac{0.52 \cdot 0.48}{1000}} = 0.0158$ (1.58%)</li>
                 <li>Interval (95%): $0.52 \pm 1.96 \cdot 0.0158 = 0.52 \pm 0.031$</li>
                 <li><strong>Výsledek:</strong> [48.9%, 55.1%]</li>
                 <li><em>Strany X bude volit s 95% jistotou mezi 49% a 55% lidí</em></li>
@@ -216,7 +231,7 @@
             <p><strong>Klíčové pozorování:</strong> Když se $n$ zvětší, $SE$ se <em>zmenší</em> √n krát!</p>
 
             <table>
-                <tr><th>Velikost vzorku (n)</th><th>SE = σ/√n (při σ=10)</th><th>Interval (±1.96·SE)</th></tr>
+                <tr><th>Velikost vzorku (n)</th><th>SE = Std(X)/√n (při Std(X)=10)</th><th>Interval (±1.96·SE)</th></tr>
                 <tr><td>25</td><td>2.0</td><td>±3.92 (ŠIRŠÍ – málo dat)</td></tr>
                 <tr><td>100</td><td>1.0</td><td>±1.96 (lepší)</td></tr>
                 <tr><td>400</td><td>0.5</td><td>±0.98 (UŽŠÍ – více dat)</td></tr>
@@ -234,6 +249,9 @@
                 <li>Při plánování studie musíme vybalancovat: Přesnost vs. Náklady</li>
             </ul>
         </div>
+
+        <div id="plotCIWidth" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Šířka 95% intervalu spolehlivosti pro různé velikosti vzorku n (Std(X)=10) – 4× větší n = 2× užší interval</p>
 
         <h2>Interpretace intervalu spolehlivosti</h2>
 
@@ -267,6 +285,9 @@
             <p><strong>Zásada:</strong> Věříme, že náš konkrétní interval je ze "štěstěných" 95%, ale nikdy si to nemůžeme být 100% jistí.</p>
         </div>
 
+        <div id="plotCISim" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Simulace 30 různých 95% intervalů spolehlivosti – modrá = interval obsahuje skutečnou hodnotu (μ=175), červená = interval ji mine (~5 % případů)</p>
+
         <h2>Praktické využití</h2>
 
         <h3>V medicíně a farmacii</h3>
@@ -290,7 +311,7 @@
         <h2>Interaktivní kalkulátor</h2>
 
         <div class="interactive-section">
-            <h3>Interval spolehlivosti pro průměr (neznáme σ)</h3>
+            <h3>Interval spolehlivosti pro průměr (neznáme Std(X))</h3>
             <p>Spočítej 95% interval spolehlivosti pro průměr:</p>
 
             <label for="sampleMean" style="display: block; margin-bottom: 10px;">
@@ -364,7 +385,150 @@
     </div>
 
     <script>
-        // T-distribution critical values (approximate)
+        // ── Pomocné funkce ──────────────────────────────────────────────────────
+        function stdNormalPDF(x) {
+            return (1 / Math.sqrt(2 * Math.PI)) * Math.exp(-0.5 * x * x);
+        }
+        function normalRandom9() {
+            let u = 0, v = 0;
+            while (u === 0) u = Math.random();
+            while (v === 0) v = Math.random();
+            return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+        }
+
+        const plotCfg9 = {
+            layout: {
+                font: { family: 'Arial, sans-serif', size: 13 },
+                paper_bgcolor: 'white', plot_bgcolor: '#f8f9fa',
+                margin: { t: 45, r: 20, b: 55, l: 65 }
+            },
+            config: { responsive: true, displayModeBar: false }
+        };
+
+        window.addEventListener('load', function () {
+
+            // ── 1. Vizualizace IS – standardní normální s kritickými hodnotami ──
+            const zRange = [];
+            for (let z = -3.5; z <= 3.5; z += 0.05) zRange.push(z);
+
+            const innerX = zRange.filter(z => z >= -1.96 && z <= 1.96);
+            const leftX  = zRange.filter(z => z <= -1.96);
+            const rightX = zRange.filter(z => z >= 1.96);
+
+            Plotly.newPlot('plotCIConcept', [
+                // levý ocas (Alfa/2 = 2.5 %)
+                { type: 'scatter', mode: 'none',
+                  x: [...leftX, ...leftX.slice().reverse()],
+                  y: [...leftX.map(stdNormalPDF), ...leftX.map(() => 0)],
+                  fill: 'toself', fillcolor: 'rgba(220,53,69,0.35)',
+                  name: 'Alfa/2 = 2.5 %', showlegend: true },
+                // pravý ocas
+                { type: 'scatter', mode: 'none',
+                  x: [...rightX, ...rightX.slice().reverse()],
+                  y: [...rightX.map(stdNormalPDF), ...rightX.map(() => 0)],
+                  fill: 'toself', fillcolor: 'rgba(220,53,69,0.35)',
+                  name: 'Alfa/2 = 2.5 %', showlegend: false },
+                // střed (95 %)
+                { type: 'scatter', mode: 'none',
+                  x: [...innerX, ...innerX.slice().reverse()],
+                  y: [...innerX.map(stdNormalPDF), ...innerX.map(() => 0)],
+                  fill: 'toself', fillcolor: 'rgba(13,110,253,0.30)',
+                  name: '95 % spolehlivost', showlegend: true },
+                // křivka
+                { type: 'scatter', mode: 'lines',
+                  x: zRange, y: zRange.map(stdNormalPDF),
+                  line: { color: '#1a1a2e', width: 2 }, showlegend: false },
+                // kritické hodnoty
+                { type: 'scatter', mode: 'lines',
+                  x: [-1.96, -1.96], y: [0, stdNormalPDF(-1.96)],
+                  line: { color: '#dc3545', width: 2, dash: 'dash' },
+                  name: 'z = ±1.96', showlegend: true },
+                { type: 'scatter', mode: 'lines',
+                  x: [1.96, 1.96], y: [0, stdNormalPDF(1.96)],
+                  line: { color: '#dc3545', width: 2, dash: 'dash' },
+                  showlegend: false }
+            ], { ...plotCfg9.layout, showlegend: true,
+                title: { text: '95% interval spolehlivosti na standardním normálním rozdělení', font: { size: 14 } },
+                xaxis: { title: 'Hodnota z', tickvals: [-3, -1.96, 0, 1.96, 3],
+                         ticktext: ['-3', '-1.96', '0', '1.96', '3'] },
+                yaxis: { title: 'f(z)' },
+                legend: { x: 0.65, y: 0.95 }
+            }, plotCfg9.config);
+
+            // ── 2. Šířka IS pro různá n ────────────────────────────────────────
+            const nValues = [25, 50, 100, 200, 400, 800, 1600];
+            const stdPop = 10, z95 = 1.96;
+            const halfWidths = nValues.map(n => z95 * stdPop / Math.sqrt(n));
+
+            Plotly.newPlot('plotCIWidth', [
+                { type: 'bar',
+                  x: nValues.map(n => `n = ${n}`),
+                  y: halfWidths.map(hw => 2 * hw),
+                  text: halfWidths.map(hw => `±${hw.toFixed(2)}`),
+                  textposition: 'outside',
+                  marker: {
+                      color: nValues.map(n =>
+                          n <= 50  ? '#dc3545' :
+                          n <= 200 ? '#ffc107' : '#28a745'),
+                      opacity: 0.85,
+                      line: { color: 'white', width: 1 }
+                  },
+                  showlegend: false }
+            ], { ...plotCfg9.layout,
+                title: { text: 'Šířka 95% IS pro různé n (Std(X) = 10, E(X) = 175 cm)', font: { size: 14 } },
+                xaxis: { title: 'Velikost vzorku (n)' },
+                yaxis: { title: 'Celková šířka intervalu (cm)', range: [0, 10] }
+            }, plotCfg9.config);
+
+            // ── 3. Simulace 30 IS ──────────────────────────────────────────────
+            const trueMean = 175, pop_std = 8, sampleN = 50;
+            const numSamples = 30;
+            const simTraces = [];
+            let missCount = 0;
+
+            for (let i = 0; i < numSamples; i++) {
+                // simulujeme výběrový průměr jako N(trueMean, pop_std/sqrt(n))
+                const sampleMeanVal = trueMean + normalRandom9() * (pop_std / Math.sqrt(sampleN));
+                const se = pop_std / Math.sqrt(sampleN);
+                const lo = sampleMeanVal - 1.96 * se;
+                const hi = sampleMeanVal + 1.96 * se;
+                const hits = lo <= trueMean && trueMean <= hi;
+                if (!hits) missCount++;
+                const col = hits ? 'rgba(13,110,253,0.7)' : 'rgba(220,53,69,0.85)';
+
+                simTraces.push({
+                    type: 'scatter', mode: 'lines',
+                    x: [lo, hi], y: [i + 1, i + 1],
+                    line: { color: col, width: 3 },
+                    showlegend: false
+                });
+                simTraces.push({
+                    type: 'scatter', mode: 'markers',
+                    x: [sampleMeanVal], y: [i + 1],
+                    marker: { color: col, size: 6 },
+                    showlegend: false
+                });
+            }
+            // svislá čára = skutečná hodnota
+            simTraces.push({
+                type: 'scatter', mode: 'lines',
+                x: [trueMean, trueMean], y: [0, numSamples + 1],
+                line: { color: '#1a1a2e', width: 2, dash: 'dot' },
+                name: `Skutečný průměr (${trueMean} cm)`,
+                showlegend: true
+            });
+
+            Plotly.newPlot('plotCISim', simTraces, {
+                ...plotCfg9.layout, showlegend: true,
+                title: { text: `Simulace 30× výběru (n=${sampleN}) – ${numSamples - missCount} IS obsahuje skutečný průměr`, font: { size: 14 } },
+                xaxis: { title: 'Výška (cm)', range: [trueMean - 4*pop_std/Math.sqrt(sampleN)*3, trueMean + 4*pop_std/Math.sqrt(sampleN)*3] },
+                yaxis: { title: 'Číslo výběru', showticklabels: false },
+                legend: { x: 0.55, y: 0.02 }
+            }, plotCfg9.config);
+
+        }); // end window.load
+
+        // ── T-distribution critical values (approximate)
         function getTCritical(df, alpha) {
             const tValues = {
                 0.05: {1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571, 10: 2.228, 20: 2.086, 30: 2.042, 50: 2.009, 100: 1.984, 1000: 1.962}
