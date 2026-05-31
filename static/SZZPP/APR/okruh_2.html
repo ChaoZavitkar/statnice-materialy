@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 2: Programování – kolekce</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Syntax Highlighting Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+
+    <h1>Okruh 2 – Programování: kolekce</h1>
+    <p class="subtitle">KI/SZZPP – Algoritmizace a programování</p>
+
+    <hr>
+
+    <div class="note-box">
+        <strong>Předpoklady:</strong> Tento okruh navazuje na okruh 1 (funkce a cykly). Zahrnuje vše z okruhu 1 + nová témata: základní kolekce (list, dict) a jejich použití v cyklech. Témata jako proměnné, podmínky, funkce a výjimky zde nejsou opakována — viz <a href="okruh_1.html">Okruh 1</a>.
+    </div>
+
+    <hr>
+
+    <h2>Seznamy (list)</h2>
+
+    <p>Seznam je <strong>uspořádaná, měnitelná</strong> kolekce libovolných hodnot. Literál: <code>[hodnota1, hodnota2, ...]</code>.</p>
+
+    <div class="math-box">
+        <strong>Klíčové vlastnosti:</strong>
+        <ul>
+            <li>Zachovává pořadí prvků</li>
+            <li>Dovoluje duplicity</li>
+            <li>Prvky mohou být různých typů (ale konvencí je mít stejné typy)</li>
+            <li>Indexování od 0; záporné indexy od konce (<code>-1</code> = poslední)</li>
+        </ul>
+    </div>
+
+    <h3>Vytvoření a přístup</h3>
+    <pre><code class="language-python">prazdny = []
+cisla = [1, 2, 3, 4, 5]
+smiseny = [1, "ahoj", True, 3.14]
+
+print(cisla[0])    # 1  (první prvek)
+print(cisla[-1])   # 5  (poslední prvek)
+print(cisla[-2])   # 4  (předposlední)
+
+# Délka
+print(len(cisla))  # 5</code></pre>
+
+    <h3>Slicing (řezání)</h3>
+    <pre><code class="language-python">cisla = [10, 20, 30, 40, 50]
+
+print(cisla[1:3])    # [20, 30]     (od indexu 1 do 3, bez 3)
+print(cisla[:3])     # [10, 20, 30] (od začátku do indexu 3)
+print(cisla[2:])     # [30, 40, 50] (od indexu 2 do konce)
+print(cisla[::2])    # [10, 30, 50] (každý druhý)
+print(cisla[::-1])   # [50, 40, 30, 20, 10] (obrácené pořadí)</code></pre>
+
+    <h3>Metody seznamu</h3>
+    <pre><code class="language-python">s = [3, 1, 4, 1, 5, 9, 2, 6]
+
+# Přidávání
+s.append(7)           # přidá na konec: [3,1,4,1,5,9,2,6,7]
+s.insert(0, 0)        # vloží na pozici 0: [0,3,1,...]
+s.extend([8, 9])      # přidá více prvků najednou (z jiného listu)
+
+# Odstraňování
+s.remove(1)           # odstraní PRVNÍ výskyt hodnoty 1
+odebrano = s.pop()    # odebere a vrátí poslední prvek
+odebrano = s.pop(2)   # odebere a vrátí prvek na indexu 2
+s.clear()             # vyprázdní seznam
+
+# Vyhledávání
+s = [3, 1, 4, 1, 5]
+print(s.index(1))     # 1  (index prvního výskytu)
+print(s.count(1))     # 2  (počet výskytů)
+print(1 in s)         # True
+
+# Řazení
+s.sort()              # seřadí na místě (vzestupně)
+s.sort(reverse=True)  # seřadí sestupně
+serazeny = sorted(s)  # vrátí NOVÝ seřazený seznam (originál nezměněn)
+
+# Obrácení
+s.reverse()           # obrátí pořadí na místě
+obraceny = list(reversed(s))  # nový obrácený seznam
+
+# Kopie
+kopie = s.copy()      # mělká kopie (nebo: kopie = s[:])
+kopie2 = list(s)      # alternativa</code></pre>
+
+    <h3>List comprehension</h3>
+    <p>Stručný způsob vytvoření nového seznamu transformací nebo filtrací existující sekvence.</p>
+
+    <div class="math-box">
+        <strong>Syntaxe:</strong> <code>[výraz for proměnná in sekvence if podmínka]</code><br>
+        Podmínka (<code>if</code>) je nepovinná.
+    </div>
+
+    <pre><code class="language-python"># Klasicky vs. list comprehension
+druhemocniny = []
+for i in range(1, 6):
+    druhemocniny.append(i ** 2)
+
+# Totéž kompaktně:
+druhemocniny = [i ** 2 for i in range(1, 6)]
+print(druhemocniny)   # [1, 4, 9, 16, 25]
+
+# S podmínkou — pouze sudá čísla
+suda = [i for i in range(20) if i % 2 == 0]
+print(suda)           # [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+
+# Transformace řetězců
+slova = ["ahoj", "svět", "python"]
+velka = [s.upper() for s in slova]
+print(velka)          # ['AHOJ', 'SVĚT', 'PYTHON']
+
+# Filtrování
+dlouha = [s for s in slova if len(s) > 4]
+print(dlouha)         # ['python']</code></pre>
+
+    <hr>
+
+    <h2>Slovníky (dict)</h2>
+
+    <p>Slovník je <strong>neuspořádaná kolekce párů klíč–hodnota</strong>. Literál: <code>{"klíč": hodnota, ...}</code>. Od Python 3.7 zachovává pořadí vložení.</p>
+
+    <div class="math-box">
+        <strong>Klíčové vlastnosti:</strong>
+        <ul>
+            <li>Klíče musí být <strong>unikátní</strong> a <strong>neměnné</strong> (str, int, tuple)</li>
+            <li>Hodnoty mohou být libovolné (i jiný slovník)</li>
+            <li>Přístup přes klíč: O(1) — rychlé vyhledávání</li>
+        </ul>
+    </div>
+
+    <h3>Vytvoření a přístup</h3>
+    <pre><code class="language-python">prazdny = {}
+student = {"jmeno": "Anna", "vek": 22, "studuje": True}
+
+# Přístup k hodnotě
+print(student["jmeno"])        # "Anna"
+print(student.get("vek"))      # 22
+print(student.get("email", "neznámo"))  # "neznámo" (výchozí hodnota)
+
+# POZOR: student["neexistující"] vyvolá KeyError!
+# Proto používat .get() když klíč nemusí existovat
+
+# Přidání / změna
+student["email"] = "anna@example.com"  # přidá nový klíč
+student["vek"] = 23                    # přepíše existující
+
+# Odebrání
+del student["email"]           # odstraní klíč
+hodnota = student.pop("vek")   # odstraní a vrátí hodnotu
+print(hodnota)                  # 23</code></pre>
+
+    <h3>Metody slovníku</h3>
+    <pre><code class="language-python">d = {"a": 1, "b": 2, "c": 3}
+
+# Přístup k částem slovníku
+print(d.keys())    # dict_keys(['a', 'b', 'c'])
+print(d.values())  # dict_values([1, 2, 3])
+print(d.items())   # dict_items([('a', 1), ('b', 2), ('c', 3)])
+
+# Iterace
+for klic in d:
+    print(klic, d[klic])
+
+for klic, hodnota in d.items():
+    print(f"{klic}: {hodnota}")
+
+# Spojení slovníků
+d.update({"d": 4, "e": 5})  # přidá/přepíše klíče z jiného slovníku
+d2 = {**d, "f": 6}          # nový slovník se všemi klíči (Python 3.5+)
+
+# Membership test
+print("a" in d)     # True (testuje klíče)
+print(1 in d.values())  # True
+
+print(len(d))        # počet párů
+d.clear()            # vyprázdní slovník</code></pre>
+
+    <h3>Vnořené slovníky</h3>
+    <pre><code class="language-python">studenti = {
+    "A001": {"jmeno": "Anna", "vek": 22, "znamky": [1, 2, 1]},
+    "A002": {"jmeno": "Bob",  "vek": 24, "znamky": [3, 2, 3]},
+}
+
+# Přístup do vnořené struktury
+print(studenti["A001"]["jmeno"])          # "Anna"
+print(studenti["A001"]["znamky"][0])      # 1
+
+# Procházení vnořeného slovníku
+for id_studenta, data in studenti.items():
+    prumer = sum(data["znamky"]) / len(data["znamky"])
+    print(f"{data['jmeno']}: průměr {prumer:.1f}")</code></pre>
+
+    <h3>Dict comprehension</h3>
+    <pre><code class="language-python"># Vytvoření slovníku ze dvou seznamů
+klice = ["a", "b", "c"]
+hodnoty = [1, 2, 3]
+d = {k: v for k, v in zip(klice, hodnoty)}
+print(d)   # {'a': 1, 'b': 2, 'c': 3}
+
+# Odmocniny čísel 1–5
+odmocniny = {x: x**0.5 for x in range(1, 6)}
+# {1: 1.0, 2: 1.414..., 3: 1.732...}</code></pre>
+
+    <hr>
+
+    <h2>Ostatní kolekce — přehled</h2>
+
+    <h3>Tuple (n-tice)</h3>
+    <p>Jako seznam, ale <strong>neměnný</strong>. Literál: <code>(hodnota1, hodnota2, ...)</code> nebo bez závorek.</p>
+
+    <pre><code class="language-python">bod = (10, 20)
+rgb = (255, 128, 0)
+
+print(bod[0])    # 10
+# bod[0] = 5    # TypeError: tuple je neměnný!
+
+# Tuple unpacking
+x, y = bod
+print(x, y)     # 10 20
+
+# Jednoprvkový tuple — nutná čárka!
+jeden = (42,)    # bez čárky by to byl jen int v závorce
+
+# Kdy použít tuple:
+# - pro souřadnice, RGB, záznamy, které se nesmí měnit
+# - jako klíče slovníku (list jako klíč nelze — je měnitelný)</code></pre>
+
+    <h3>Set (množina)</h3>
+    <p>Kolekce <strong>unikátních</strong> prvků bez definovaného pořadí. Literál: <code>{hodnota1, hodnota2, ...}</code>.</p>
+
+    <pre><code class="language-python">mnozina = {1, 2, 3, 4, 5}
+prazdna = set()     # pozor: {} vytvoří prázdný slovník, ne množinu!
+
+mnozina.add(6)
+mnozina.discard(3)  # odstraní, pokud existuje (bez chyby)
+mnozina.remove(2)   # odstraní, vyvolá KeyError pokud neexistuje
+
+# Množinové operace
+a = {1, 2, 3, 4}
+b = {3, 4, 5, 6}
+print(a | b)        # sjednocení: {1, 2, 3, 4, 5, 6}
+print(a & b)        # průnik: {3, 4}
+print(a - b)        # rozdíl: {1, 2}
+print(a ^ b)        # symetrická diference: {1, 2, 5, 6}
+
+# Odstranění duplicit ze seznamu
+seznam = [1, 2, 2, 3, 3, 3, 4]
+bez_duplicit = list(set(seznam))  # pořadí není zaručeno</code></pre>
+
+    <div class="highlight-box">
+        <strong>Kdy použít kterou kolekci:</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Kolekce</th><th>Měnitelná</th><th>Pořadí</th><th>Duplicity</th><th>Kdy použít</th></tr></thead>
+            <tbody>
+                <tr><td><code>list</code></td><td>✅</td><td>✅</td><td>✅</td><td>Sekvence dat, stack, queue</td></tr>
+                <tr><td><code>tuple</code></td><td>❌</td><td>✅</td><td>✅</td><td>Neměnné záznamy, souřadnice</td></tr>
+                <tr><td><code>dict</code></td><td>✅</td><td>✅ (3.7+)</td><td>klíče ❌</td><td>Mapování klíč→hodnota</td></tr>
+                <tr><td><code>set</code></td><td>✅</td><td>❌</td><td>❌</td><td>Unikátní prvky, množinové operace</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <h2>Práce s kolekcemi v cyklech</h2>
+
+    <h3>enumerate — index + hodnota</h3>
+    <pre><code class="language-python">ovoce = ["jablko", "hruška", "švestka"]
+
+for i, plod in enumerate(ovoce):
+    print(f"{i+1}. {plod}")
+# 1. jablko
+# 2. hruška
+# 3. švestka
+
+# enumerate s počátečním indexem
+for i, plod in enumerate(ovoce, start=1):
+    print(f"{i}. {plod}")  # totéž, bez i+1</code></pre>
+
+    <h3>zip — souběžná iterace</h3>
+    <pre><code class="language-python">jmena = ["Anna", "Bob", "Karel"]
+viky = [22, 25, 30]
+
+for jmeno, vek in zip(jmena, viky):
+    print(f"{jmeno} má {vek} let")
+
+# zip se zastaví u kratšího seznamu
+# Pro zarovnání na delší: itertools.zip_longest
+
+# Vytvoření slovníku ze dvou seznamů
+d = dict(zip(jmena, viky))
+print(d)  # {'Anna': 22, 'Bob': 25, 'Karel': 30}</code></pre>
+
+    <h3>sorted a sort s klíčem</h3>
+    <pre><code class="language-python">studenti = [
+    {"jmeno": "Karel", "vek": 22},
+    {"jmeno": "Anna", "vek": 20},
+    {"jmeno": "Bob", "vek": 25},
+]
+
+# Seřazení podle věku
+serazeni = sorted(studenti, key=lambda s: s["vek"])
+for s in serazeni:
+    print(s["jmeno"], s["vek"])
+# Anna 20, Karel 22, Bob 25
+
+# Seřazení sestupně
+serazeni = sorted(studenti, key=lambda s: s["vek"], reverse=True)
+
+# Seřazení řetězců bez ohledu na velikost písmen
+slova = ["Banana", "apple", "Cherry"]
+print(sorted(slova, key=str.lower))  # ['apple', 'Banana', 'Cherry']</code></pre>
+
+    <h3>Procházení dict.items()</h3>
+    <pre><code class="language-python">znamky = {"matematika": 1, "fyzika": 2, "čeština": 3}
+
+# Procházení klíčů
+for predmet in znamky:
+    print(predmet)
+
+# Procházení hodnot
+for znamka in znamky.values():
+    print(znamka)
+
+# Procházení párů (nejčastější)
+for predmet, znamka in znamky.items():
+    print(f"{predmet}: {znamka}")
+
+# Počítání výskytů pomocí slovníku
+text = "abrakadabra"
+pocty = {}
+for znak in text:
+    pocty[znak] = pocty.get(znak, 0) + 1
+print(pocty)  # {'a': 5, 'b': 2, 'r': 2, 'k': 1, 'd': 1}</code></pre>
+
+    <hr>
+
+    <h2>Výjimky u kolekcí</h2>
+
+    <table class="table table-sm table-bordered" style="max-width: 650px;">
+        <thead class="table-light"><tr><th>Výjimka</th><th>Kdy nastane</th><th>Příklad</th></tr></thead>
+        <tbody>
+            <tr><td><code>IndexError</code></td><td>Index mimo rozsah seznamu</td><td><code>[1,2,3][5]</code></td></tr>
+            <tr><td><code>KeyError</code></td><td>Klíč neexistuje ve slovníku</td><td><code>d["x"]</code> pokud "x" není v d</td></tr>
+            <tr><td><code>TypeError</code></td><td>Neplatný typ pro operaci</td><td><code>[1,2] + (3,4)</code></td></tr>
+            <tr><td><code>ValueError</code></td><td>Hodnota nenalezena</td><td><code>[1,2,3].index(9)</code></td></tr>
+        </tbody>
+    </table>
+
+    <pre><code class="language-python">seznam = [10, 20, 30]
+
+# Bezpečný přístup k seznamu
+try:
+    print(seznam[10])
+except IndexError:
+    print("Index mimo rozsah!")
+
+# Alternativa: kontrola předem
+index = 10
+if 0 <= index < len(seznam):
+    print(seznam[index])
+else:
+    print("Index neplatný")
+
+# Bezpečný přístup ke slovníku
+d = {"a": 1, "b": 2}
+# Metoda 1: .get() s výchozí hodnotou
+hodnota = d.get("c", 0)  # 0 pokud "c" neexistuje
+
+# Metoda 2: in check
+if "c" in d:
+    print(d["c"])
+else:
+    print("Klíč 'c' neexistuje")
+
+# Metoda 3: try/except
+try:
+    print(d["c"])
+except KeyError as e:
+    print(f"Klíč {e} nenalezen")</code></pre>
+
+    <div class="highlight-box">
+        <strong>Doporučení:</strong>
+        <ul>
+            <li>Pro slovník: preferuj <code>.get(klíč, výchozí)</code> před <code>d[klíč]</code> pokud klíč nemusí existovat</li>
+            <li>Pro seznam: před přístupem zkontroluj <code>0 &lt;= i &lt; len(seznam)</code></li>
+            <li>Při hledání: použij <code>if hodnota in kolekce</code> před voláním <code>.index()</code></li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <div class="note-box">
+        <strong>Propojení témat:</strong> Kolekce jsou základem pro OOP — atributy třídy jsou typicky uloženy ve slovníku. Okruh 3 (<a href="okruh_3.html">základy OOP</a>) ukazuje, jak kolekce využít v metodách vlastních tříd.
+    </div>
+
+</div>
+</body>
+</html>

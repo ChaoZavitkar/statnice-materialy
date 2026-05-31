@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 1: Základy elektroniky – analogová část</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Syntax Highlighting Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+
+    <h1>Okruh 1 – Základy elektroniky: analogová část</h1>
+    <p class="subtitle">KI/SZZPP – Základy elektroniky</p>
+
+    <hr>
+
+    <h2>Základní pojmy</h2>
+
+    <table class="table table-sm table-bordered" style="max-width: 680px;">
+        <thead class="table-light">
+            <tr><th>Veličina</th><th>Symbol</th><th>Jednotka</th><th>Popis</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Napětí</td><td>$U$</td><td>Volt (V)</td><td>Elektrický potenciálový rozdíl mezi dvěma body</td></tr>
+            <tr><td>Proud</td><td>$I$</td><td>Ampér (A)</td><td>Množství náboje protékající průřezem za sekundu</td></tr>
+            <tr><td>Odpor</td><td>$R$</td><td>Ohm (Ω)</td><td>Míra odporu vodiče proti průchodu proudu</td></tr>
+            <tr><td>Výkon</td><td>$P$</td><td>Watt (W)</td><td>Energie přeměněná za jednotku času</td></tr>
+        </tbody>
+    </table>
+
+    <div class="math-box">
+        <strong>Ohmův zákon:</strong>
+        $$U = R \cdot I \qquad I = \frac{U}{R} \qquad R = \frac{U}{I}$$
+        <strong>Výkon:</strong> $P = U \cdot I = \frac{U^2}{R} = R \cdot I^2$
+    </div>
+
+    <h3>Topologie obvodu</h3>
+    <ul>
+        <li><strong>Uzel (node):</strong> Bod, kde se setkávají tři nebo více větví. V uzlu se proudy dělí nebo slučují.</li>
+        <li><strong>Větev (branch):</strong> Část obvodu mezi dvěma uzly — obsahuje jeden nebo více prvků zapojených v sérii.</li>
+        <li><strong>Smyčka (loop):</strong> Libovolná uzavřená cesta v obvodu.</li>
+        <li><strong>Síť (mesh):</strong> Smyčka, která neobsahuje žádnou jinou smyčku uvnitř (nejjednodušší smyčka).</li>
+    </ul>
+
+    <h3>Sériové a paralelní zapojení rezistorů</h3>
+    <div class="math-box">
+        <strong>Sériové zapojení</strong> (stejný proud, napětí se sčítají):
+        $$R_{sér} = R_1 + R_2 + \cdots + R_n$$
+        <strong>Paralelní zapojení</strong> (stejné napětí, proudy se sčítají):
+        $$\frac{1}{R_{par}} = \frac{1}{R_1} + \frac{1}{R_2} + \cdots + \frac{1}{R_n}$$
+        Pro dva rezistory paralelně: $R_{par} = \frac{R_1 \cdot R_2}{R_1 + R_2}$
+    </div>
+
+    <hr>
+
+    <h2>Kirchhoffovy zákony</h2>
+
+    <h3>1. Kirchhoffův zákon (KCL — proud)</h3>
+    <div class="math-box">
+        <strong>Znění:</strong> Součet všech proudů vstupujících do uzlu se rovná součtu všech proudů vystupujících z uzlu.
+        $$\sum I_{vstup} = \sum I_{výstup} \qquad \text{neboli} \qquad \sum_{k} I_k = 0$$
+        (proudy vstupující do uzlu jsou kladné, vystupující záporné — nebo naopak)
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> Do uzlu A vstupují proudy $I_1 = 3\,\text{A}$ a $I_2 = 2\,\text{A}$. Kolik je $I_3$ vystupující z uzlu?<br><br>
+        $I_1 + I_2 = I_3 \Rightarrow 3 + 2 = 5\,\text{A}$
+    </div>
+
+    <h3>2. Kirchhoffův zákon (KVL — napětí)</h3>
+    <div class="math-box">
+        <strong>Znění:</strong> Součet všech napětí podél libovolné uzavřené smyčky se rovná nule.
+        $$\sum_{k} U_k = 0$$
+        (napětí zdrojů jsou kladná v jednom smyslu obcházení smyčky, úbytky na prvcích záporná — nebo naopak dle konvence)
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> Jednoduchý obvod: zdroj $U_Z = 12\,\text{V}$, rezistory $R_1 = 4\,\Omega$, $R_2 = 2\,\Omega$ v sérii.<br>
+        Proud: $I = \frac{U_Z}{R_1 + R_2} = \frac{12}{6} = 2\,\text{A}$<br>
+        Ověření KVL: $U_Z - U_{R_1} - U_{R_2} = 12 - 8 - 4 = 0\,\text{V}$ ✓
+    </div>
+
+    <h3>Postup řešení obvodů pomocí KVL a KCL</h3>
+    <ol>
+        <li>Označit uzly a větve; zvolit kladný směr proudů v každé větvi</li>
+        <li>Zapsat rovnice 1. KZ pro každý nezávislý uzel (uzlů − 1 rovnic)</li>
+        <li>Zvolit smyčky a zapsat rovnice 2. KZ (smyček = větví − uzlů + 1)</li>
+        <li>Vyřešit soustavu rovnic</li>
+        <li>Záporný výsledek proudu znamená, že proud teče opačným směrem</li>
+    </ol>
+
+    <hr>
+
+    <h2>Metoda smyčkových proudů</h2>
+
+    <p>Efektivní metoda pro obvody s více smyčkami. Místo proudů ve větvích zavádíme fiktivní <strong>smyčkové proudy</strong> $I_A, I_B, \ldots$ procházející každou sítí.</p>
+
+    <div class="math-box">
+        <strong>Postup:</strong>
+        <ol>
+            <li>Identifikuj sítě (nejjednodušší smyčky) a přiřaď každé smyčkový proud (typicky ve stejném směru — např. po směru hodinových ručiček)</li>
+            <li>Pro každou síť zapiš KVL rovnici: odporové úbytky = součet napětí zdrojů v síti</li>
+            <li>Úbytek na rezistoru sdíleném dvěma smyčkami: $R_{12} \cdot (I_A - I_B)$</li>
+            <li>Vyřeš soustavu rovnic; skutečný proud ve větvi = algebraický součet smyčkových proudů</li>
+        </ol>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad — obvod se dvěma sítěmi:</strong><br>
+        Zdroj $U_1 = 10\,\text{V}$ v síti A, $R_1 = 2\,\Omega$ (jen síť A), $R_{12} = 4\,\Omega$ (sdílený), $R_2 = 6\,\Omega$ (jen síť B), $U_2 = 0$ (žádný zdroj v síti B).<br><br>
+        <strong>Rovnice pro síť A:</strong> $R_1 I_A + R_{12}(I_A - I_B) = U_1$<br>
+        $\Rightarrow 2I_A + 4(I_A - I_B) = 10 \Rightarrow 6I_A - 4I_B = 10$<br><br>
+        <strong>Rovnice pro síť B:</strong> $R_{12}(I_B - I_A) + R_2 I_B = 0$<br>
+        $\Rightarrow 4(I_B - I_A) + 6I_B = 0 \Rightarrow -4I_A + 10I_B = 0$<br><br>
+        <strong>Řešení:</strong> Z druhé rovnice $I_A = 2{,}5\,I_B$. Dosadíme: $6(2{,}5I_B) - 4I_B = 10 \Rightarrow 11I_B = 10 \Rightarrow I_B = \frac{10}{11} \approx 0{,}91\,\text{A}$, $I_A \approx 2{,}27\,\text{A}$
+    </div>
+
+    <hr>
+
+    <h2>Metoda uzlových napětí</h2>
+
+    <p>Řeší obvod pomocí potenciálů uzlů. Vhodná pro obvody s proudovými zdroji a pro obvody s mnoha uzly.</p>
+
+    <div class="math-box">
+        <strong>Postup:</strong>
+        <ol>
+            <li>Zvolte <strong>referenční uzel</strong> (uzemnění, potenciál = 0 V) — typicky uzel s nejvíce připojenými větvemi</li>
+            <li>Zbylým uzlům přiřaďte neznámé napětí $V_1, V_2, \ldots$ vůči referenci</li>
+            <li>Pro každý nezávislý uzel zapište rovnici dle 1. KZ: součet odchozích proudů = 0<br>
+                Proud ve větvi mezi uzlem $k$ a uzlem $j$ přes odpor $R$: $I_{kj} = \frac{V_k - V_j}{R}$</li>
+            <li>Vyřešte soustavu rovnic — výsledkem jsou uzlová napětí</li>
+        </ol>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad — obvod se dvěma nezávislými uzly (V₁, V₂), reference = 0 V:</strong><br>
+        $R_1 = 1\,\Omega$ (mezi napájecím napětím $U_S = 12\,\text{V}$ a uzlem $V_1$), $R_2 = 2\,\Omega$ (mezi $V_1$ a $V_2$), $R_3 = 3\,\Omega$ (mezi $V_2$ a referenčním uzlem).<br><br>
+        Uzel $V_1$: $\frac{V_1 - 12}{R_1} + \frac{V_1 - V_2}{R_2} = 0 \Rightarrow \frac{V_1 - 12}{1} + \frac{V_1 - V_2}{2} = 0 \Rightarrow 3V_1 - V_2 = 24$<br>
+        Uzel $V_2$: $\frac{V_2 - V_1}{R_2} + \frac{V_2}{R_3} = 0 \Rightarrow \frac{V_2 - V_1}{2} + \frac{V_2}{3} = 0 \Rightarrow -3V_1 + 5V_2 = 0$<br><br>
+        Sečtením: $4V_2 = 24 \Rightarrow V_2 = 6\,\text{V}$, $V_1 = 10\,\text{V}$
+    </div>
+
+    <hr>
+
+    <h2>Lineární superpozice</h2>
+
+    <p>Princip superpozice platí pro lineární obvody (obsahující jen rezistory, ideální zdroje, kondenzátory, cívky — bez nelineárních prvků).</p>
+
+    <div class="math-box">
+        <strong>Princip:</strong> Odezva (proud nebo napětí) lineárního obvodu na více zdrojů současně = <em>algebraický součet</em> odezev na každý zdroj samostatně, přičemž ostatní zdroje jsou nahrazeny jejich vnitřním odporem:
+        <ul style="margin-top:6px;">
+            <li><strong>Napěťový zdroj</strong> → nahradit <strong>zkratem</strong> (vodičem, $R_{vnitřní} = 0$)</li>
+            <li><strong>Proudový zdroj</strong> → nahradit <strong>přerušením</strong> (otevřeným obvodem, $R_{vnitřní} = \infty$)</li>
+        </ul>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> Obvod se dvěma napěťovými zdroji $U_1 = 6\,\text{V}$ a $U_2 = 4\,\text{V}$, odpory $R_1 = 2\,\Omega$, $R_2 = 3\,\Omega$.<br><br>
+        <strong>Krok 1</strong> — pouze $U_1$ aktivní ($U_2$ nahrazen zkratem):<br>
+        $I_1' = \frac{U_1}{R_1 + R_2} = \frac{6}{5} = 1{,}2\,\text{A}$<br><br>
+        <strong>Krok 2</strong> — pouze $U_2$ aktivní ($U_1$ nahrazen zkratem):<br>
+        $I_1'' = -\frac{U_2}{R_1 + R_2} = -\frac{4}{5} = -0{,}8\,\text{A}$ (záporné = opačný směr)<br><br>
+        <strong>Výsledek:</strong> $I_1 = I_1' + I_1'' = 1{,}2 - 0{,}8 = 0{,}4\,\text{A}$
+    </div>
+
+    <hr>
+
+    <h2>Théveninova poučka</h2>
+
+    <p>Libovolný lineární obvod (z pohledu dvou svorek) lze nahradit <strong>jediným napěťovým zdrojem $U_{Th}$ v sérii s odporem $R_{Th}$</strong>.</p>
+
+    <div class="math-box">
+        <strong>Postup výpočtu $U_{Th}$ a $R_{Th}$:</strong>
+        <ol>
+            <li><strong>$U_{Th}$ (napětí naprázdno):</strong> Odpoj zátěž. Vypočítej napětí na svorkách <em>bez</em> zátěže.</li>
+            <li><strong>$R_{Th}$ (Théveninův odpor):</strong> Nahraď všechny nezávislé zdroje jejich vnitřním odporem (napěťové zdroje → zkrat, proudové → přerušení). Vypočítej odpor měřený ze svorek.</li>
+            <li><strong>Náhradní obvod:</strong> $U_{Th}$ v sérii s $R_{Th}$. Proudový zdroj zátěží: $I_{zátěž} = \frac{U_{Th}}{R_{Th} + R_{zátěž}}$</li>
+        </ol>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> Obvod: $U_Z = 12\,\text{V}$, $R_1 = 3\,\Omega$, $R_2 = 6\,\Omega$ (dělič napětí). Svorky A-B jsou na $R_2$.<br><br>
+        <strong>$U_{Th}$:</strong> napětí na $R_2$ naprázdno = $U_Z \cdot \frac{R_2}{R_1 + R_2} = 12 \cdot \frac{6}{9} = 8\,\text{V}$<br><br>
+        <strong>$R_{Th}$:</strong> zdroj zkratujeme → $R_1 \parallel R_2 = \frac{3 \cdot 6}{3 + 6} = 2\,\Omega$<br><br>
+        <strong>S zátěží $R_L = 4\,\Omega$:</strong> $I_L = \frac{U_{Th}}{R_{Th} + R_L} = \frac{8}{2 + 4} = \frac{4}{3} \approx 1{,}33\,\text{A}$
+    </div>
+
+    <hr>
+
+    <h2>Nortonova poučka</h2>
+
+    <p>Duální k Théveninově poučce — libovolný lineární obvod lze nahradit <strong>proudovým zdrojem $I_N$ paralelně s odporem $R_N$</strong>.</p>
+
+    <div class="math-box">
+        <strong>Postup výpočtu $I_N$ a $R_N$:</strong>
+        <ol>
+            <li><strong>$I_N$ (proud nakrátko):</strong> Zkratuj svorky. Vypočítej proud tekoucí přes zkrat.</li>
+            <li><strong>$R_N$:</strong> Stejný postup jako $R_{Th}$ — $R_N = R_{Th}$</li>
+        </ol>
+        <strong>Vztah k Théveninovi:</strong>
+        $$I_N = \frac{U_{Th}}{R_{Th}} \qquad U_{Th} = I_N \cdot R_N \qquad R_N = R_{Th}$$
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad</strong> (stejný obvod jako výše: $U_{Th} = 8\,\text{V}$, $R_{Th} = 2\,\Omega$):<br><br>
+        $I_N = \frac{U_{Th}}{R_{Th}} = \frac{8}{2} = 4\,\text{A}$, $R_N = 2\,\Omega$<br><br>
+        <strong>S zátěží $R_L = 4\,\Omega$</strong> (paralelně s $R_N$):<br>
+        $I_L = I_N \cdot \frac{R_N}{R_N + R_L} = 4 \cdot \frac{2}{6} = \frac{4}{3}\,\text{A}$ ✓ (shodný výsledek jako Thévenin)
+    </div>
+
+    <div class="note-box">
+        <strong>Srovnání metod:</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Metoda</th><th>Vhodná pro</th><th>Neznámé</th></tr></thead>
+            <tbody>
+                <tr><td>KVL + KCL přímo</td><td>Jednoduché obvody, ověření</td><td>Proudy ve větvích</td></tr>
+                <tr><td>Smyčkové proudy</td><td>Obvody s napěťovými zdroji, málo smyček</td><td>Smyčkové proudy</td></tr>
+                <tr><td>Uzlová napětí</td><td>Obvody s proudovými zdroji, málo uzlů</td><td>Uzlová napětí</td></tr>
+                <tr><td>Superpozice</td><td>Více zdrojů, lineární obvod</td><td>Každý zdroj zvlášť</td></tr>
+                <tr><td>Thévenin / Norton</td><td>Analýza pro různé zátěže</td><td>$U_{Th}/I_N$ a $R_{Th}$</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+</body>
+</html>

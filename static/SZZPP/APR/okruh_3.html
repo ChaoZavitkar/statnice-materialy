@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 3: Programování – základy OOP</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Syntax Highlighting Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+
+    <h1>Okruh 3 – Programování: základy OOP</h1>
+    <p class="subtitle">KI/SZZPP – Algoritmizace a programování</p>
+
+    <hr>
+
+    <div class="note-box">
+        <strong>Předpoklady:</strong> Tento okruh navazuje na okruh 1 (funkce a cykly). Zahrnuje vše z okruhu 1 — proměnné, podmínky, cykly, funkce, výjimky. Nová témata jsou: vlastní jednoduché třídy, konstruktor, metody a speciální metody. Viz <a href="okruh_1.html">Okruh 1</a>.
+    </div>
+
+    <hr>
+
+    <h2>Co je třída a objekt</h2>
+
+    <p><strong>Objektově orientované programování (OOP)</strong> je způsob organizace kódu, kde data a funkce, které s nimi pracují, patří k sobě — tvoří <em>objekt</em>.</p>
+
+    <div class="math-box">
+        <strong>Základní pojmy:</strong>
+        <ul>
+            <li><strong>Třída (class):</strong> Šablona/vzor, která popisuje, co objekt bude obsahovat a umět. Analogie: výkres domu.</li>
+            <li><strong>Objekt / instance:</strong> Konkrétní výtvor podle třídy. Analogie: postavený dům podle výkresu.</li>
+            <li><strong>Atribut:</strong> Proměnná patřící objektu (data, stav).</li>
+            <li><strong>Metoda:</strong> Funkce patřící objektu (chování).</li>
+        </ul>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Kdy použít třídu místo funkce?</strong>
+        <ul>
+            <li>Pracuješ s entitou, která má <em>stav</em> i <em>chování</em> (např. bankovní účet: zůstatek + vklad/výběr)</li>
+            <li>Potřebuješ více instancí stejného typu (každý student má jméno, věk, znamky…)</li>
+            <li>Kód by jinak přijímal příliš mnoho parametrů (skupinování do objektu)</li>
+        </ul>
+    </div>
+
+    <pre><code class="language-python"># Bez třídy — nevýhodné pro více studentů
+jmeno1 = "Anna"
+vek1 = 22
+jmeno2 = "Bob"
+vek2 = 25
+
+# S třídou — přehledné a rozšiřitelné
+class Student:
+    pass  # zatím prázdná třída
+
+anna = Student()  # vytvoření instance
+bob = Student()</code></pre>
+
+    <hr>
+
+    <h2>Definice třídy</h2>
+
+    <div class="math-box">
+        <strong>Syntaxe:</strong>
+<pre style="background:none; border:none; margin:0; padding:0;">class NazevTridy:
+    """Docstring — popis třídy."""
+
+    def metoda(self, parametry):
+        # tělo metody</pre>
+        <ul style="margin-top:8px;">
+            <li>Název třídy: <strong>PascalCase</strong> (velké první písmeno každého slova)</li>
+            <li><code>self</code> — první parametr každé metody, odkazuje na konkrétní instanci</li>
+        </ul>
+    </div>
+
+    <pre><code class="language-python">class Automobil:
+    """Třída reprezentující automobil."""
+
+    pass  # zatím prázdná tělo
+
+# Vytvoření instancí
+auto1 = Automobil()
+auto2 = Automobil()
+
+# Dynamické přidání atributů (možné, ale nepřehledné — lepší v __init__)
+auto1.znacka = "Škoda"
+auto1.rok = 2020
+print(auto1.znacka)  # Škoda</code></pre>
+
+    <hr>
+
+    <h2>Konstruktor __init__</h2>
+
+    <p>Speciální metoda <code>__init__</code> se automaticky zavolá při vytvoření instance. Slouží k inicializaci atributů.</p>
+
+    <div class="math-box">
+        <strong>Syntaxe:</strong>
+<pre style="background:none; border:none; margin:0; padding:0;">def __init__(self, parametr1, parametr2, ...):
+    self.atribut1 = parametr1
+    self.atribut2 = parametr2</pre>
+        <code>self.atribut</code> — atribut instance; dostupný ze všech metod třídy přes <code>self</code>
+    </div>
+
+    <pre><code class="language-python">class Student:
+    """Třída reprezentující studenta."""
+
+    def __init__(self, jmeno, vek, studijni_obor="Informatika"):
+        self.jmeno = jmeno
+        self.vek = vek
+        self.studijni_obor = studijni_obor
+        self.znamky = []  # prázdný seznam — nový pro každou instanci!
+
+# Vytvoření instancí
+anna = Student("Anna", 22)
+bob = Student("Bob", 25, "Matematika")
+
+print(anna.jmeno)          # Anna
+print(anna.studijni_obor)  # Informatika (výchozí hodnota)
+print(bob.studijni_obor)   # Matematika</code></pre>
+
+    <div class="note-box">
+        <strong>Pozor na mutable výchozí hodnoty!</strong> Nikdy nepiš <code>def __init__(self, znamky=[])</code> — všechny instance by sdílely <em>stejný</em> seznam. Místo toho inicializuj v těle: <code>self.znamky = []</code>.
+    </div>
+
+    <hr>
+
+    <h2>Metody</h2>
+
+    <p>Metoda je funkce definovaná uvnitř třídy. Vždy přijímá <code>self</code> jako první parametr.</p>
+
+    <pre><code class="language-python">class Student:
+
+    def __init__(self, jmeno, vek):
+        self.jmeno = jmeno
+        self.vek = vek
+        self.znamky = []
+
+    def pridat_znamku(self, znamka):
+        """Přidá známku do seznamu."""
+        if not 1 <= znamka <= 5:
+            raise ValueError(f"Neplatná známka: {znamka}. Musí být 1–5.")
+        self.znamky.append(znamka)
+
+    def prumerna_znamka(self):
+        """Vrátí průměrnou známku, nebo None pokud nejsou žádné."""
+        if not self.znamky:
+            return None
+        return sum(self.znamky) / len(self.znamky)
+
+    def prospiva(self):
+        """Vrátí True, pokud je průměr lepší než 3."""
+        prumer = self.prumerna_znamka()
+        return prumer is not None and prumer <= 3.0
+
+# Použití
+anna = Student("Anna", 22)
+anna.pridat_znamku(1)
+anna.pridat_znamku(2)
+anna.pridat_znamku(1)
+
+print(anna.prumerna_znamka())   # 1.3333...
+print(anna.prospiva())          # True
+
+try:
+    anna.pridat_znamku(6)       # ValueError
+except ValueError as e:
+    print(f"Chyba: {e}")</code></pre>
+
+    <div class="highlight-box">
+        <strong>Metoda vs. funkce:</strong>
+        <ul>
+            <li>Metoda má přístup ke stavu objektu přes <code>self</code></li>
+            <li>Voláme ji přes instanci: <code>anna.pridat_znamku(1)</code></li>
+            <li><code>self</code> se předává automaticky — nepíšeme ho při volání</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>Speciální metody (dunder metody)</h2>
+
+    <p>Speciální metody (nazývané také <em>dunder</em> — double underscore) umožňují třídám reagovat na vestavěné operace Pythonu (<code>print</code>, <code>in</code>, <code>len</code>, porovnávání, …).</p>
+
+    <h3>__str__ — pro print()</h3>
+    <p>Vrací <em>čitelný textový popis</em> objektu pro uživatele. Zavolá se při <code>print(objekt)</code> nebo <code>str(objekt)</code>.</p>
+
+    <pre><code class="language-python">class Student:
+    def __init__(self, jmeno, vek):
+        self.jmeno = jmeno
+        self.vek = vek
+
+    def __str__(self):
+        return f"Student: {self.jmeno} (věk: {self.vek})"
+
+anna = Student("Anna", 22)
+print(anna)          # Student: Anna (věk: 22)
+print(str(anna))     # Student: Anna (věk: 22)
+zprava = f"Ahoj, {anna}!"  # f-string volá __str__
+print(zprava)        # Ahoj, Student: Anna (věk: 22)!</code></pre>
+
+    <h3>__repr__ — pro debug a repr()</h3>
+    <p>Vrací <em>technický popis</em> objektu — ideálně výraz, ze kterého lze objekt znovu vytvořit. Zavolá se v interaktivním shellu nebo při <code>repr(objekt)</code>.</p>
+
+    <pre><code class="language-python">class Student:
+    def __init__(self, jmeno, vek):
+        self.jmeno = jmeno
+        self.vek = vek
+
+    def __str__(self):
+        return f"Student: {self.jmeno} (věk: {self.vek})"
+
+    def __repr__(self):
+        return f"Student(jmeno={self.jmeno!r}, vek={self.vek!r})"
+
+anna = Student("Anna", 22)
+print(repr(anna))    # Student(jmeno='Anna', vek=22)
+
+# V seznamu se volá __repr__
+studenti = [anna, Student("Bob", 25)]
+print(studenti)      # [Student(jmeno='Anna', vek=22), Student(jmeno='Bob', vek=25)]</code></pre>
+
+    <div class="note-box">
+        <strong>Pravidlo:</strong> Pokud definuješ jen jednu, definuj <code>__repr__</code>. Pokud definuješ obě, <code>__str__</code> je pro uživatele, <code>__repr__</code> pro vývojáře. Bez <code>__str__</code> Python použije <code>__repr__</code> jako náhradní.
+    </div>
+
+    <h3>__contains__ — pro operátor in</h3>
+    <p>Umožňuje použít operátor <code>in</code> na objekt. Vrací <code>True</code> nebo <code>False</code>.</p>
+
+    <pre><code class="language-python">class Trida:
+    """Třída reprezentující školní třídu (skupinu studentů)."""
+
+    def __init__(self, oznaceni):
+        self.oznaceni = oznaceni
+        self.studenti = []
+
+    def pridat_studenta(self, student):
+        self.studenti.append(student)
+
+    def __contains__(self, jmeno):
+        """Umožňuje: 'Anna' in trida"""
+        for s in self.studenti:
+            if s.jmeno == jmeno:
+                return True
+        return False
+
+    def __str__(self):
+        jmena = [s.jmeno for s in self.studenti]
+        return f"Třída {self.oznaceni}: {', '.join(jmena)}"
+
+# Použití
+trida = Trida("2A")
+trida.pridat_studenta(Student("Anna", 22))
+trida.pridat_studenta(Student("Bob", 25))
+
+print("Anna" in trida)   # True
+print("Karel" in trida)  # False
+print(trida)             # Třída 2A: Anna, Bob</code></pre>
+
+    <div class="math-box">
+        <strong>Přehled nejdůležitějších speciálních metod:</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Metoda</th><th>Kdy se zavolá</th><th>Příklad</th></tr></thead>
+            <tbody>
+                <tr><td><code>__init__</code></td><td>Při vytvoření instance</td><td><code>Student("Anna", 22)</code></td></tr>
+                <tr><td><code>__str__</code></td><td><code>print(obj)</code>, <code>str(obj)</code>, f-string</td><td><code>print(anna)</code></td></tr>
+                <tr><td><code>__repr__</code></td><td><code>repr(obj)</code>, shell, seznam</td><td><code>repr(anna)</code></td></tr>
+                <tr><td><code>__contains__</code></td><td><code>x in obj</code></td><td><code>"Anna" in trida</code></td></tr>
+                <tr><td><code>__len__</code></td><td><code>len(obj)</code></td><td><code>len(trida)</code></td></tr>
+                <tr><td><code>__eq__</code></td><td><code>obj1 == obj2</code></td><td><code>anna == bob</code></td></tr>
+                <tr><td><code>__lt__</code></td><td><code>obj1 &lt; obj2</code></td><td><code>anna &lt; bob</code></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <h2>Kompletní příklad: třída Kniha</h2>
+
+    <p>Komplexní příklad zahrnující všechna témata okruhu — konstruktor, metody, výjimky, speciální metody a použití kolekcí.</p>
+
+    <pre><code class="language-python">class Kniha:
+    """Třída reprezentující knihu v knihovně."""
+
+    def __init__(self, nazev, autor, rok, isbn):
+        if rok < 0 or rok > 2100:
+            raise ValueError(f"Neplatný rok vydání: {rok}")
+        if not isbn.isdigit() or len(isbn) not in (10, 13):
+            raise ValueError(f"Neplatné ISBN: {isbn}")
+
+        self.nazev = nazev
+        self.autor = autor
+        self.rok = rok
+        self.isbn = isbn
+        self.vypujcena = False      # stav: je/není vypůjčena
+
+    def vypujcit(self):
+        """Vypůjčí knihu. Vyvolá výjimku pokud je již vypůjčena."""
+        if self.vypujcena:
+            raise RuntimeError(f"Kniha '{self.nazev}' je již vypůjčena.")
+        self.vypujcena = True
+
+    def vratit(self):
+        """Vrátí knihu. Vyvolá výjimku pokud nebyla vypůjčena."""
+        if not self.vypujcena:
+            raise RuntimeError(f"Kniha '{self.nazev}' není vypůjčena.")
+        self.vypujcena = False
+
+    def je_dostupna(self):
+        """Vrátí True pokud je kniha k dispozici."""
+        return not self.vypujcena
+
+    def __str__(self):
+        stav = "dostupná" if self.je_dostupna() else "vypůjčena"
+        return f'"{self.nazev}" — {self.autor} ({self.rok}) [{stav}]'
+
+    def __repr__(self):
+        return (f"Kniha(nazev={self.nazev!r}, autor={self.autor!r}, "
+                f"rok={self.rok!r}, isbn={self.isbn!r})")
+
+
+class Knihovna:
+    """Kolekce knih."""
+
+    def __init__(self, nazev):
+        self.nazev = nazev
+        self.knihy = []           # seznam instancí Kniha
+
+    def pridat_knihu(self, kniha):
+        self.knihy.append(kniha)
+
+    def najit_knihy_autora(self, autor):
+        """Vrátí seznam knih daného autora."""
+        return [k for k in self.knihy if k.autor.lower() == autor.lower()]
+
+    def dostupne_knihy(self):
+        """Vrátí seznam dostupných knih."""
+        return [k for k in self.knihy if k.je_dostupna()]
+
+    def __contains__(self, isbn):
+        """Umožňuje: '978...' in knihovna"""
+        return any(k.isbn == isbn for k in self.knihy)
+
+    def __str__(self):
+        return (f"Knihovna '{self.nazev}': "
+                f"{len(self.dostupne_knihy())}/{len(self.knihy)} dostupných knih")
+
+
+# --- Použití ---
+knihovna = Knihovna("Městská knihovna")
+
+k1 = Kniha("Malý princ", "Antoine de Saint-Exupéry", 1943, "9780156013987")
+k2 = Kniha("1984", "George Orwell", 1949, "9780451524935")
+k3 = Kniha("Farma zvířat", "George Orwell", 1945, "9780451526342")
+
+knihovna.pridat_knihu(k1)
+knihovna.pridat_knihu(k2)
+knihovna.pridat_knihu(k3)
+
+print(knihovna)          # Knihovna 'Městská knihovna': 3/3 dostupných knih
+
+# Vypůjčení
+k1.vypujcit()
+print(k1)                # "Malý princ" — Antoine... [vypůjčena]
+print(knihovna)          # Knihovna ...: 2/3 dostupných knih
+
+# Test in
+print("9780451524935" in knihovna)   # True
+print("0000000000" in knihovna)      # False
+
+# Hledání podle autora
+orwell = knihovna.najit_knihy_autora("George Orwell")
+for kniha in orwell:
+    print(kniha)
+
+# Výjimka při druhém vypůjčení
+try:
+    k1.vypujcit()
+except RuntimeError as e:
+    print(f"Chyba: {e}")   # Chyba: Kniha 'Malý princ' je již vypůjčena.
+
+# Vrácení
+k1.vratit()
+print(k1)                  # "Malý princ" — Antoine... [dostupná]</code></pre>
+
+    <hr>
+
+    <h2>Výjimky v třídách</h2>
+
+    <p>Výjimky ve třídách se používají stejně jako v běžných funkcích — ale je dobrý zvyk je vyvolávat v metodách, kde je zachytit na místě volání (ne skrývat uvnitř třídy).</p>
+
+    <div class="highlight-box">
+        <strong>Vzory pro výjimky v třídách:</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Kde</th><th>Kdy</th><th>Výjimka</th></tr></thead>
+            <tbody>
+                <tr><td>V <code>__init__</code></td><td>Neplatná inicializační data</td><td><code>ValueError</code>, <code>TypeError</code></td></tr>
+                <tr><td>V metodě</td><td>Neplatný stav nebo argumenty</td><td><code>RuntimeError</code>, <code>ValueError</code></td></tr>
+                <tr><td>V metodě</td><td>Prvek nenalezen</td><td><code>KeyError</code>, <code>IndexError</code>, vlastní výjimka</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <pre><code class="language-python">class BankovniUcet:
+
+    def __init__(self, majitel, pocatecni_zustatek=0):
+        if pocatecni_zustatek < 0:
+            raise ValueError("Počáteční zůstatek nemůže být záporný")
+        self.majitel = majitel
+        self.zustatek = pocatecni_zustatek
+
+    def vlozit(self, castka):
+        if castka <= 0:
+            raise ValueError(f"Vkladaná částka musí být kladná, dostali jsme: {castka}")
+        self.zustatek += castka
+
+    def vybrat(self, castka):
+        if castka <= 0:
+            raise ValueError("Vybraná částka musí být kladná")
+        if castka > self.zustatek:
+            raise RuntimeError(
+                f"Nedostatek prostředků: máte {self.zustatek} Kč, chcete vybrat {castka} Kč"
+            )
+        self.zustatek -= castka
+
+    def __str__(self):
+        return f"Účet {self.majitel}: {self.zustatek:.2f} Kč"
+
+    def __repr__(self):
+        return f"BankovniUcet(majitel={self.majitel!r}, zustatek={self.zustatek!r})"
+
+
+# Testování
+ucet = BankovniUcet("Anna", 1000)
+ucet.vlozit(500)
+print(ucet)         # Účet Anna: 1500.00 Kč
+
+try:
+    ucet.vybrat(2000)
+except RuntimeError as e:
+    print(f"Chyba: {e}")
+
+try:
+    ucet.vlozit(-100)
+except ValueError as e:
+    print(f"Chyba: {e}")</code></pre>
+
+    <hr>
+
+    <div class="note-box">
+        <strong>Propojení témat:</strong>
+        <ul>
+            <li><strong>Okruh 1 (funkce a cykly)</strong> — metody jsou funkce; cykly se používají v metodách jako <code>najit_knihy_autora</code></li>
+            <li><strong>Okruh 2 (kolekce)</strong> — atributy třídy jsou typicky listy nebo slovníky; list comprehension v metodách</li>
+            <li><strong>OOP</strong> je základ pro pokročilejší Python: dědičnost, polymorfismus, abstrakce</li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>

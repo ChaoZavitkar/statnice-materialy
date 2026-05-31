@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 2: Základy elektroniky – digitální část</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Syntax Highlighting Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <style>
+        /* Karnaughova mapa */
+        .kmap table { border-collapse: collapse; font-family: monospace; }
+        .kmap td, .kmap th {
+            border: 2px solid #555; width: 52px; height: 48px;
+            text-align: center; vertical-align: middle; font-size: 1em;
+        }
+        .kmap th { background: #f0f4f8; font-weight: bold; font-size: 0.85em; }
+        .kmap .g1 { background: rgba(52, 152, 219, 0.25); }   /* modrá skupina */
+        .kmap .g2 { background: rgba(39, 174, 96, 0.30); }    /* zelená skupina */
+        .kmap .g3 { background: rgba(231, 76, 60, 0.25); }    /* červená skupina */
+        .kmap .g12 { background: repeating-linear-gradient(
+            45deg, rgba(52,152,219,0.2), rgba(52,152,219,0.2) 5px,
+            rgba(39,174,96,0.25) 5px, rgba(39,174,96,0.25) 10px); }
+        /* 7-segment display */
+        .seg { display: inline-block; width: 60px; height: 100px; position: relative; margin: 5px; }
+        .seg-h { position: absolute; left: 8px; right: 8px; height: 8px; border-radius: 3px; }
+        .seg-v { position: absolute; top: 8px; bottom: 8px; width: 8px; border-radius: 3px; }
+        .seg-on { background: #e74c3c; }
+        .seg-off { background: #ddd; }
+    </style>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+
+    <h1>Okruh 2 – Základy elektroniky: digitální část</h1>
+    <p class="subtitle">KI/SZZPP – Základy elektroniky</p>
+
+    <hr>
+
+    <h2>Logická hradla</h2>
+
+    <p>Logická hradla jsou základní stavební prvky digitálních obvodů. Pracují s binárními hodnotami: <strong>0 (nepravda / nízké napětí)</strong> a <strong>1 (pravda / vysoké napětí)</strong>.</p>
+
+    <h3>Přehled hradel s pravdivostními tabulkami</h3>
+
+    <div class="row">
+        <!-- NOT -->
+        <div class="col-md-4 mb-3">
+            <div class="math-box">
+                <strong>NOT (Negace, Invertor)</strong><br>
+                Výraz: $Y = \overline{A}$
+                <table class="table table-sm table-bordered text-center mt-2" style="max-width:120px;">
+                    <thead class="table-light"><tr><th>A</th><th>Y</th></tr></thead>
+                    <tbody>
+                        <tr><td>0</td><td>1</td></tr>
+                        <tr><td>1</td><td>0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- AND -->
+        <div class="col-md-4 mb-3">
+            <div class="math-box">
+                <strong>AND (Konjunkce)</strong><br>
+                Výraz: $Y = A \cdot B$
+                <table class="table table-sm table-bordered text-center mt-2" style="max-width:150px;">
+                    <thead class="table-light"><tr><th>A</th><th>B</th><th>Y</th></tr></thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>1</td><td>0</td><td>0</td></tr>
+                        <tr><td>1</td><td>1</td><td><strong>1</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- OR -->
+        <div class="col-md-4 mb-3">
+            <div class="math-box">
+                <strong>OR (Disjunkce)</strong><br>
+                Výraz: $Y = A + B$
+                <table class="table table-sm table-bordered text-center mt-2" style="max-width:150px;">
+                    <thead class="table-light"><tr><th>A</th><th>B</th><th>Y</th></tr></thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td><strong>1</strong></td></tr>
+                        <tr><td>1</td><td>0</td><td><strong>1</strong></td></tr>
+                        <tr><td>1</td><td>1</td><td><strong>1</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- NAND -->
+        <div class="col-md-4 mb-3">
+            <div class="math-box">
+                <strong>NAND (negovaný AND)</strong><br>
+                Výraz: $Y = \overline{A \cdot B}$
+                <table class="table table-sm table-bordered text-center mt-2" style="max-width:150px;">
+                    <thead class="table-light"><tr><th>A</th><th>B</th><th>Y</th></tr></thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td><strong>1</strong></td></tr>
+                        <tr><td>0</td><td>1</td><td><strong>1</strong></td></tr>
+                        <tr><td>1</td><td>0</td><td><strong>1</strong></td></tr>
+                        <tr><td>1</td><td>1</td><td>0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- NOR -->
+        <div class="col-md-4 mb-3">
+            <div class="math-box">
+                <strong>NOR (negovaný OR)</strong><br>
+                Výraz: $Y = \overline{A + B}$
+                <table class="table table-sm table-bordered text-center mt-2" style="max-width:150px;">
+                    <thead class="table-light"><tr><th>A</th><th>B</th><th>Y</th></tr></thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td><strong>1</strong></td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>1</td><td>0</td><td>0</td></tr>
+                        <tr><td>1</td><td>1</td><td>0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- XOR -->
+        <div class="col-md-4 mb-3">
+            <div class="math-box">
+                <strong>XOR (exkluzivní OR)</strong><br>
+                Výraz: $Y = A \oplus B$
+                <table class="table table-sm table-bordered text-center mt-2" style="max-width:150px;">
+                    <thead class="table-light"><tr><th>A</th><th>B</th><th>Y</th></tr></thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td>0</td></tr>
+                        <tr><td>0</td><td>1</td><td><strong>1</strong></td></tr>
+                        <tr><td>1</td><td>0</td><td><strong>1</strong></td></tr>
+                        <tr><td>1</td><td>1</td><td>0</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- XNOR -->
+        <div class="col-md-4 mb-3">
+            <div class="math-box">
+                <strong>XNOR (negovaný XOR)</strong><br>
+                Výraz: $Y = \overline{A \oplus B}$
+                <table class="table table-sm table-bordered text-center mt-2" style="max-width:150px;">
+                    <thead class="table-light"><tr><th>A</th><th>B</th><th>Y</th></tr></thead>
+                    <tbody>
+                        <tr><td>0</td><td>0</td><td><strong>1</strong></td></tr>
+                        <tr><td>0</td><td>1</td><td>0</td></tr>
+                        <tr><td>1</td><td>0</td><td>0</td></tr>
+                        <tr><td>1</td><td>1</td><td><strong>1</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+        <strong>NAND a NOR jsou universální hradla</strong> — z jednoho typu lze sestavit libovolnou logickou funkci:
+        <ul>
+            <li>NOT z NAND: $\overline{A} = \overline{A \cdot A}$ (oba vstupy spojit)</li>
+            <li>AND z NAND: $A \cdot B = \overline{\overline{A \cdot B}}$ (NAND + NOT)</li>
+            <li>OR z NAND (De Morgan): $A + B = \overline{\overline{A} \cdot \overline{B}}$ (3 hradla NAND)</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>Booleova algebra</h2>
+
+    <p>Matematický základ pro práci s logickými výrazy. Proměnné nabývají hodnot 0 nebo 1; operace jsou AND ($\cdot$), OR ($+$), NOT ($\overline{\ }$).</p>
+
+    <div class="math-box">
+        <strong>Základní pravidla:</strong>
+        <div class="row mt-2">
+            <div class="col-md-6">
+                <strong>Identita:</strong> $A \cdot 1 = A$, $A + 0 = A$<br>
+                <strong>Nulový prvek:</strong> $A \cdot 0 = 0$, $A + 1 = 1$<br>
+                <strong>Idempotence:</strong> $A \cdot A = A$, $A + A = A$<br>
+                <strong>Doplněk:</strong> $A \cdot \overline{A} = 0$, $A + \overline{A} = 1$<br>
+                <strong>Dvojitá negace:</strong> $\overline{\overline{A}} = A$
+            </div>
+            <div class="col-md-6">
+                <strong>Komutativita:</strong> $A \cdot B = B \cdot A$<br>
+                <strong>Asociativita:</strong> $(A \cdot B) \cdot C = A \cdot (B \cdot C)$<br>
+                <strong>Distributivita:</strong> $A \cdot (B + C) = A \cdot B + A \cdot C$<br>
+                <strong>Absorpce:</strong> $A + A \cdot B = A$, $A \cdot (A + B) = A$<br>
+                <strong>De Morgan:</strong> $\overline{A \cdot B} = \overline{A} + \overline{B}$, $\overline{A + B} = \overline{A} \cdot \overline{B}$
+            </div>
+        </div>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad zjednodušení:</strong><br>
+        $Y = A \cdot B + A \cdot \overline{B}$<br>
+        $= A \cdot (B + \overline{B})$ (distributivita)<br>
+        $= A \cdot 1$ (doplněk)<br>
+        $= A$ (identita)
+    </div>
+
+    <div class="highlight-box">
+        <strong>SOP a POS formy:</strong>
+        <ul>
+            <li><strong>SOP (Sum of Products):</strong> Součet součinů — $Y = \overline{A}\cdot B + A \cdot \overline{B} + A \cdot B$ — každý term (mintermem) popisuje jeden řádek tabulky kde Y=1</li>
+            <li><strong>POS (Product of Sums):</strong> Součin součtů — každý faktor (maxterm) popisuje jeden řádek kde Y=0</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>Karnaughova mapa</h2>
+
+    <p>Grafická metoda minimalizace logických funkcí. Sousední buňky v mapě se liší právě jednou proměnnou (Grayův kód). Skupinami sousedních jedniček (velikost musí být mocnina 2) vyjadřujeme zjednodušené termy.</p>
+
+    <div class="math-box">
+        <strong>Pravidla pro skupiny:</strong>
+        <ul>
+            <li>Skupiny musí mít počet buněk = mocnina 2 (1, 2, 4, 8…)</li>
+            <li>Větší skupiny → jednodušší výraz (méně proměnných)</li>
+            <li>Dovoleno zabalení přes okraje (wrap-around) — mapa je „toroidní"</li>
+            <li>Každá jednička musí být v alespoň jedné skupině</li>
+            <li>Skupiny mohou být překrývající se</li>
+            <li>Hledáme co nejméně co největších skupin</li>
+        </ul>
+    </div>
+
+    <h3>Příklad: 3 proměnné (A, B, C)</h3>
+
+    <p>Funkce zadaná mintermy: $f(A,B,C) = \sum m(0, 2, 3, 7)$ — tj. funkce = 1 pro kombinace 000, 010, 011, 111.</p>
+
+    <div class="kmap">
+        <table>
+            <tr>
+                <th>AB \ C</th>
+                <th>C=0</th>
+                <th>C=1</th>
+            </tr>
+            <tr>
+                <th>AB=00</th>
+                <td class="g1">1 <small>(m0)</small></td>
+                <td>0 <small>(m1)</small></td>
+            </tr>
+            <tr>
+                <th>AB=01</th>
+                <td class="g1">1 <small>(m2)</small></td>
+                <td class="g2">1 <small>(m3)</small></td>
+            </tr>
+            <tr>
+                <th>AB=11</th>
+                <td>0 <small>(m6)</small></td>
+                <td class="g2">1 <small>(m7)</small></td>
+            </tr>
+            <tr>
+                <th>AB=10</th>
+                <td>0 <small>(m4)</small></td>
+                <td>0 <small>(m5)</small></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="highlight-box" style="margin-top:12px;">
+        <strong>Skupiny:</strong>
+        <ul>
+            <li><span style="color:#2980b9">■ Modrá skupina</span> (m0, m2): A=0, C=0 → term $\overline{A} \cdot \overline{C}$</li>
+            <li><span style="color:#27ae60">■ Zelená skupina</span> (m3, m7): C=1, B=1 → term $B \cdot C$</li>
+        </ul>
+        <strong>Minimalizovaný výsledek:</strong> $f = \overline{A}\cdot\overline{C} + B \cdot C$
+    </div>
+
+    <h3>Příklad: 4 proměnné (A, B, C, D)</h3>
+
+    <p>Funkce $f(A,B,C,D) = \sum m(0,1,2,3,8,9,10,11)$ — všechna čísla s $A=0$ nebo $A=1,\, B=0$:</p>
+
+    <div class="kmap">
+        <table>
+            <tr>
+                <th>AB \ CD</th>
+                <th>00</th><th>01</th><th>11</th><th>10</th>
+            </tr>
+            <tr>
+                <th>AB=00</th>
+                <td class="g1">1</td><td class="g1">1</td><td class="g1">1</td><td class="g1">1</td>
+            </tr>
+            <tr>
+                <th>AB=01</th>
+                <td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr>
+                <th>AB=11</th>
+                <td>0</td><td>0</td><td>0</td><td>0</td>
+            </tr>
+            <tr>
+                <th>AB=10</th>
+                <td class="g1">1</td><td class="g1">1</td><td class="g1">1</td><td class="g1">1</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="highlight-box" style="margin-top:12px;">
+        Skupina 8 buněk (celý první a čtvrtý řádek) — A se mění ale B=0 vždy: term = $\overline{B}$<br>
+        <strong>Výsledek:</strong> $f = \overline{B}$
+    </div>
+
+    <hr>
+
+    <h2>Algoritmus Quine-McCluskey</h2>
+
+    <p>Systematická (tabulková) metoda minimalizace — na rozdíl od Karnaughovy mapy funguje i pro více proměnných (počítačem zpracovatelná).</p>
+
+    <div class="math-box">
+        <strong>Postup krok za krokem:</strong>
+        <ol>
+            <li><strong>Zapsat mintermy</strong> v binárním tvaru a seřadit je do skupin podle počtu jedniček v zápisu</li>
+            <li><strong>Slučování:</strong> Dva mintermy lze sloučit, liší-li se právě v 1 bitu → nahradíme tím bitem pomlčkou (–). Opakujeme, dokud lze slučovat.</li>
+            <li><strong>Primární implikáty:</strong> Termy, které nelze dále sloučit, jsou primární implikáty (PI).</li>
+            <li><strong>Tabulka pokrytí:</strong> Sloupce = původní mintermy, řádky = PI. Označíme, které mintermy každý PI pokrývá.</li>
+            <li><strong>Esenciální PI:</strong> PI, který jako jediný pokrývá daný mintermm → musí být ve výsledku.</li>
+            <li><strong>Výsledný výraz:</strong> Součet esenciálních PI (+ případné doplnění pro zbývající mintermy).</li>
+        </ol>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> $f = \sum m(0, 1, 2, 5, 6, 7)$ pro 3 proměnné A, B, C:<br><br>
+        <strong>Krok 1 — skupiny dle počtu jedniček:</strong><br>
+        Skupina 0: 000 (m0)<br>
+        Skupina 1: 001 (m1), 010 (m2)<br>
+        Skupina 2: 101 (m5), 110 (m6)<br>
+        Skupina 3: 111 (m7)<br><br>
+        <strong>Krok 2 — slučování:</strong><br>
+        m0,m1: 00– | m0,m2: 0–0 | m1,m5: –01 | m2,m6: –10 | m5,m7: 1–1 | m6,m7: 11–<br>
+        Druhé kolo: 00–, 0–0 nelze dále (různé pozice) | –01,–10 různé | 1–1, 11– nelze<br>
+        Zkusíme m1,m5,m3,m7 — chybí m3, nelze.<br><br>
+        <strong>Primární implikáty:</strong> {00–}, {0–0}, {–01}, {–10}, {1–1}, {11–}<br>
+        Přeloženo: $\overline{A}\overline{B}$, $\overline{A}\overline{C}$, $\overline{B}C$, $\overline{B}C$ ← (dle konkrétního pokrytí)<br><br>
+        <strong>Výsledek:</strong> $f = \overline{A}\overline{B} + \overline{A}\overline{C} + BC$ (po analýze tabulky pokrytí)
+    </div>
+
+    <hr>
+
+    <h2>Schéma logické funkce</h2>
+
+    <p>Ze Booleovského výrazu (zejm. v SOP tvaru) lze přímo nakreslit obvodové schéma.</p>
+
+    <div class="math-box">
+        <strong>Postup SOP → schéma:</strong>
+        <ol>
+            <li>Každý součinový term → AND hradlo (s případnými invertory na negovaných vstupech)</li>
+            <li>Výstupy AND hradel → OR hradlo (nebo NAND-NAND realizace)</li>
+        </ol>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad:</strong> $Y = \overline{A}\cdot B + A \cdot \overline{B}$ (XOR realizace)<br><br>
+        <strong>Postup kreslení:</strong><br>
+        1. Vstupy: A, B (a jejich negace $\overline{A}$, $\overline{B}$ přes invertory)<br>
+        2. AND₁: vstup $\overline{A}$ a $B$ → výstup $T_1 = \overline{A}\cdot B$<br>
+        3. AND₂: vstup $A$ a $\overline{B}$ → výstup $T_2 = A \cdot \overline{B}$<br>
+        4. OR: vstup $T_1$ a $T_2$ → výstup $Y = T_1 + T_2$<br><br>
+        <strong>NAND-NAND ekvivalent</strong> (De Morgan): $Y = \overline{\overline{\overline{A}\cdot B} \cdot \overline{A\cdot\overline{B}}}$ — realizovatelné čistě NAND hradly
+    </div>
+
+    <div class="note-box">
+        <strong>Standardní schématické symboly hradel (IEC 60617):</strong>
+        AND = „D" tvar s plochým vstupem | OR = zakřivený | NOT = trojúhelník s kroužkem na výstupu | NAND/NOR = AND/OR + kroužek na výstupu
+    </div>
+
+    <hr>
+
+    <h2>Sedmisegmentový displej</h2>
+
+    <p>Sedmisegmentový displej (typ <strong>5161AS, společná katoda 0.56"</strong>) zobrazuje číslice pomocí 7 segmentů označených <strong>a, b, c, d, e, f, g</strong> a volitelně desetinné tečky (dp).</p>
+
+    <div class="math-box">
+        <strong>Rozmístění segmentů:</strong>
+        <pre style="background:none; border:none; font-size:1.1em; line-height:1.3;">
+ _
+|_|   ← segment a (vodorovný, nahoře)
+|_|   ← segmenty f (vlevo nahoře), b (vpravo nahoře),
+          g (vodorovný, uprostřed),
+          e (vlevo dole), c (vpravo dole),
+          d (vodorovný, dole)
+        </pre>
+        <strong>Společná katoda:</strong> Všechny katody spojeny na GND. Segment svítí, přivedeme-li <strong>logickou 1 (HIGH)</strong> na jeho anodu (přes omezovací rezistor).
+    </div>
+
+    <h3>Pravdivostní tabulka segmentů pro číslice 0–9</h3>
+
+    <table class="table table-sm table-bordered text-center" style="max-width: 600px;">
+        <thead class="table-light">
+            <tr>
+                <th>Číslice</th>
+                <th>BCD<br>D C B A</th>
+                <th>a</th><th>b</th><th>c</th><th>d</th><th>e</th><th>f</th><th>g</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>0</strong></td><td>0000</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+            <tr><td><strong>1</strong></td><td>0001</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td><strong>2</strong></td><td>0010</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+            <tr><td><strong>3</strong></td><td>0011</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td></tr>
+            <tr><td><strong>4</strong></td><td>0100</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td><strong>5</strong></td><td>0101</td><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td><strong>6</strong></td><td>0110</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+            <tr><td><strong>7</strong></td><td>0111</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td><strong>8</strong></td><td>1000</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+            <tr><td><strong>9</strong></td><td>1001</td><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>Vizualizace (segment g — střední vodorovná čárka):</strong> Svítí u číslic 2, 3, 4, 5, 6, 8, 9 (g=1). Nesvítí u 0, 1, 7.<br>
+        <strong>Obvod se sedmisegmentovým displejem:</strong> BCD vstup (4 bity) → BCD-na-7-segment dekodér → 7 výstupů (a–g) → segmenty displeje (přes omezovací rezistory ~330 Ω)
+    </div>
+
+    <hr>
+
+    <h2>Dekodér</h2>
+
+    <p>Dekodér převádí binárně kódovaný vstup ($n$ bitů) na $2^n$ výstupních linek — aktivuje právě jednu výstupní linku odpovídající vstupní kombinaci.</p>
+
+    <div class="math-box">
+        <strong>Dekodér 2 na 4 (2-to-4 decoder):</strong><br>
+        Vstupy: A₁, A₀ (2 bity) + enable E<br>
+        Výstupy: Y₀, Y₁, Y₂, Y₃ (4 linky)
+    </div>
+
+    <table class="table table-sm table-bordered text-center" style="max-width:400px;">
+        <thead class="table-light">
+            <tr><th>E</th><th>A₁</th><th>A₀</th><th>Y₃</th><th>Y₂</th><th>Y₁</th><th>Y₀</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>0</td><td>×</td><td>×</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td><strong>1</strong></td></tr>
+            <tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td><strong>1</strong></td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>0</td><td>0</td><td><strong>1</strong></td><td>0</td><td>0</td></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td><strong>1</strong></td><td>0</td><td>0</td><td>0</td></tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>BCD-na-7-segment dekodér</strong> (např. 74LS47): Přijímá 4bitový BCD vstup (0–9) a aktivuje příslušné segmenty (a–g) sedmisegmentového displeje. Je to specializovaný dekodér s pevně zakódovanou tabulkou segmentů.
+    </div>
+
+    <div class="note-box">
+        <strong>Použití dekodérů:</strong> Výběr paměťového čipu (chip select), demultiplexování dat, adresování v procesorech, řízení displeje.
+    </div>
+
+    <hr>
+
+    <h2>Multiplexor</h2>
+
+    <p>Multiplexor (MUX) vybírá jeden z $2^n$ datových vstupů a přepíná ho na jediný výstup podle $n$-bitové <em>adresové</em> (řídicí) kombinace.</p>
+
+    <div class="math-box">
+        <strong>Multiplexor 4 na 1 (4-to-1 MUX):</strong><br>
+        Datové vstupy: D₀, D₁, D₂, D₃<br>
+        Adresové vstupy: S₁, S₀ (2 bity — vybírají jeden ze 4 vstupů)<br>
+        Výstup: Y = vybraný datový vstup
+    </div>
+
+    <table class="table table-sm table-bordered text-center" style="max-width:300px;">
+        <thead class="table-light">
+            <tr><th>S₁</th><th>S₀</th><th>Y (výstup)</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>0</td><td>0</td><td>D₀</td></tr>
+            <tr><td>0</td><td>1</td><td>D₁</td></tr>
+            <tr><td>1</td><td>0</td><td>D₂</td></tr>
+            <tr><td>1</td><td>1</td><td>D₃</td></tr>
+        </tbody>
+    </table>
+
+    <div class="math-box">
+        <strong>Booleovský výraz pro 4-na-1 MUX:</strong>
+        $$Y = \overline{S_1}\cdot\overline{S_0}\cdot D_0 + \overline{S_1}\cdot S_0 \cdot D_1 + S_1\cdot\overline{S_0}\cdot D_2 + S_1\cdot S_0 \cdot D_3$$
+    </div>
+
+    <div class="highlight-box">
+        <strong>MUX jako universální logická funkce:</strong> Multiplexor 2ⁿ-na-1 dokáže realizovat libovolnou logickou funkci $n$ proměnných — datové vstupy nastavíme na konstanty 0/1 dle pravdivostní tabulky, adresové vstupy jsou proměnné funkce.
+    </div>
+
+    <div class="note-box">
+        <strong>Použití multiplexorů:</strong> Přepínání datových sběrnic, sdílení přenosového kanálu (time-division multiplexing), realizace logických funkcí, selektory v ALU.
+    </div>
+
+</div>
+</body>
+</html>
