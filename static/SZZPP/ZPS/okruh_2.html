@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 2: Základy počítačových sítí – návrh a konfigurace</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script>window.MathJax = {tex: {inlineMath: [['$','$']]}, svg: {fontCache:'global'}};</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+    <h1>Okruh 2 – Základy počítačových sítí: návrh a konfigurace</h1>
+    <p class="subtitle">KI/SZZPP – Základy počítačových sítí a protokolů</p>
+    <hr>
+
+    <h2>Návrh počítačové sítě</h2>
+
+    <div class="math-box">
+        <strong>Postup návrhu sítě:</strong>
+        <ol style="margin-top:8px;">
+            <li><strong>Analýza požadavků</strong> — počet zařízení, oddělení (VLAN), bezpečnostní požadavky, redundance</li>
+            <li><strong>Adresní plán</strong> — výběr IP rozsahu, VLSM rozdělení subnetů dle požadavků</li>
+            <li><strong>Návrh fyzické topologie</strong> — rozmístění prvků, kabeláž, typy připojení</li>
+            <li><strong>Návrh logické topologie</strong> — VLAN, směrování, bezpečnostní zóny</li>
+            <li><strong>Bezpečnostní politiky</strong> — ACL, VLAN segmentace, VPN, firewall pravidla</li>
+            <li><strong>Dokumentace</strong> — schéma sítě, tabulka IP rozsahů, seznam aktivních prvků</li>
+        </ol>
+    </div>
+
+    <h3>Vzorová úloha ZPS-A — školní síť ve dvou budovách</h3>
+    <div class="highlight-box">
+        <strong>Zadání:</strong> Školní síť ve dvou budovách (A, B) s různými veřejnými IP. Potřeba 7 VLAN (Management, Učitelé, Device, MDevice, Zaměstnanci, Žáci, Hosté).<br><br>
+        <strong>Požadované výstupy:</strong>
+        <ul>
+            <li>Tabulka IP rozsahů (VLSM) pro každou VLAN a budovu</li>
+            <li>Schéma sítě s aktivními prvky a jejich funkcemi</li>
+            <li>Výčet bezpečnostních politik</li>
+        </ul>
+        <strong>Klíčová rozhodnutí při návrhu:</strong>
+        <ul>
+            <li>VPN tunel mezi budovami pro přístup ke sdíleným službám (tiskárny, úložiště)</li>
+            <li>VLAN segmentace — Žáci nesmí mít přístup do VLAN Management</li>
+            <li>RADIUS server pro autentizaci v VLAN Učitelé/Zaměstnanci</li>
+            <li>Firewall na hranici každé budovy + mezi VLAN</li>
+        </ul>
+    </div>
+
+    <h3>Vzorový adresní plán (část)</h3>
+    <p>Výchozí blok: <code>10.10.0.0/16</code>, rozdělení VLSM sestupně:</p>
+    <div style="overflow-x:auto;">
+    <table class="table table-sm table-bordered">
+        <thead class="table-light">
+            <tr><th>VLAN</th><th>Budova</th><th>Hostů</th><th>Blok</th><th>Prefix</th><th>Síť</th><th>Broadcast</th><th>Rozsah hostů</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Žáci</td><td>A</td><td>635</td><td>1024</td><td>/22</td><td>10.10.0.0</td><td>10.10.3.255</td><td>10.10.0.1 – 10.10.3.254</td></tr>
+            <tr><td>Žáci</td><td>B</td><td>220</td><td>256</td><td>/24</td><td>10.10.4.0</td><td>10.10.4.255</td><td>10.10.4.1 – 10.10.4.254</td></tr>
+            <tr><td>MDevice</td><td>A</td><td>150</td><td>256</td><td>/24</td><td>10.10.5.0</td><td>10.10.5.255</td><td>10.10.5.1 – 10.10.5.254</td></tr>
+            <tr><td>Učitelé</td><td>A</td><td>120</td><td>128</td><td>/25</td><td>10.10.6.0</td><td>10.10.6.127</td><td>10.10.6.1 – 10.10.6.126</td></tr>
+            <tr><td>Učitelé</td><td>B</td><td>120</td><td>128</td><td>/25</td><td>10.10.6.128</td><td>10.10.6.255</td><td>10.10.6.129 – 10.10.6.254</td></tr>
+            <tr><td>Management</td><td>A</td><td>120</td><td>128</td><td>/25</td><td>10.10.7.0</td><td>10.10.7.127</td><td>10.10.7.1 – 10.10.7.126</td></tr>
+            <tr><td>MDevice</td><td>B</td><td>69</td><td>128</td><td>/25</td><td>10.10.7.128</td><td>10.10.7.255</td><td>10.10.7.129 – 10.10.7.254</td></tr>
+            <tr><td>Device</td><td>A</td><td>68</td><td>128</td><td>/25</td><td>10.10.8.0</td><td>10.10.8.127</td><td>10.10.8.1 – 10.10.8.126</td></tr>
+            <tr><td>Zaměstnanci</td><td>A+B</td><td>25</td><td>32</td><td>/27</td><td>10.10.8.128</td><td>10.10.8.159</td><td>10.10.8.129 – 10.10.8.158</td></tr>
+            <tr><td>Device</td><td>B</td><td>31</td><td>32</td><td>/27</td><td>10.10.8.160</td><td>10.10.8.191</td><td>10.10.8.161 – 10.10.8.190</td></tr>
+            <tr><td>Management</td><td>B</td><td>20</td><td>32</td><td>/27</td><td>10.10.8.192</td><td>10.10.8.223</td><td>10.10.8.193 – 10.10.8.222</td></tr>
+            <tr><td>Hosté</td><td>A+B</td><td>18</td><td>32</td><td>/27</td><td>10.10.8.224</td><td>10.10.8.255</td><td>10.10.8.225 – 10.10.8.254</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <hr>
+
+    <h2>Konfigurace v Cisco Packet Tracer (ZPS-B)</h2>
+
+    <p>Packet Tracer je simulátor sítí od Cisco. Konfigurace síťových prvků probíhá přes CLI (IOS příkazy).</p>
+
+    <h3>Základní IOS příkazy</h3>
+    <pre><code class="language-bash">! Přepnutí do privilegovaného módu
+Router> enable
+Router#
+
+! Přepnutí do konfiguračního módu
+Router# configure terminal
+Router(config)#
+
+! Nastavení hostname
+Router(config)# hostname R1
+
+! Uložení konfigurace (nutné před exportem PKT souboru!)
+R1# copy running-config startup-config
+! nebo zkráceně:
+R1# do wr</code></pre>
+
+    <h3>Konfigurace IP adresy na rozhraní</h3>
+    <pre><code class="language-bash">R1(config)# interface GigabitEthernet0/0
+R1(config-if)# ip address 192.168.1.1 255.255.255.0
+R1(config-if)# no shutdown
+R1(config-if)# exit</code></pre>
+
+    <h3>Konfigurace DHCP serveru</h3>
+    <pre><code class="language-bash">! Vyloučit IP adresy ze DHCP poolu (gateway, servery)
+R1(config)# ip dhcp excluded-address 192.168.1.1 192.168.1.10
+
+! Definovat DHCP pool
+R1(config)# ip dhcp pool VLAN_ZACI
+R1(dhcp-config)# network 192.168.1.0 255.255.255.0
+R1(dhcp-config)# default-router 192.168.1.1
+R1(dhcp-config)# dns-server 8.8.8.8
+R1(dhcp-config)# lease 1          ! platnost přidělení v dnech
+R1(dhcp-config)# exit
+
+! Ověření DHCP přidělení
+R1# show ip dhcp binding
+R1# show ip dhcp pool</code></pre>
+
+    <h3>Konfigurace VLAN na L2 switchích</h3>
+    <pre><code class="language-bash">! Vytvoření VLAN
+SW1(config)# vlan 10
+SW1(config-vlan)# name ZACI
+SW1(config-vlan)# exit
+
+! Access port (pro endpointy)
+SW1(config)# interface FastEthernet0/1
+SW1(config-if)# switchport mode access
+SW1(config-if)# switchport access vlan 10
+SW1(config-if)# exit
+
+! Trunk port (pro propojení switch–switch nebo switch–router)
+SW1(config)# interface GigabitEthernet0/1
+SW1(config-if)# switchport mode trunk
+SW1(config-if)# switchport trunk allowed vlan 10,20,30
+SW1(config-if)# exit
+
+! Ověření VLAN
+SW1# show vlan brief
+SW1# show interfaces trunk</code></pre>
+
+    <h3>Router-on-a-Stick (Inter-VLAN routing)</h3>
+    <pre><code class="language-bash">! Subinterface pro každou VLAN na routeru
+R1(config)# interface GigabitEthernet0/0.10
+R1(config-subif)# encapsulation dot1Q 10
+R1(config-subif)# ip address 10.10.4.1 255.255.255.0
+R1(config-subif)# exit
+
+R1(config)# interface GigabitEthernet0/0.20
+R1(config-subif)# encapsulation dot1Q 20
+R1(config-subif)# ip address 10.10.5.1 255.255.255.0
+R1(config-subif)# exit
+
+! Fyzické rozhraní musí být aktivní (no shutdown)
+R1(config)# interface GigabitEthernet0/0
+R1(config-if)# no shutdown</code></pre>
+
+    <h3>Dynamické směrování (OSPF)</h3>
+    <pre><code class="language-bash">! Konfigurace OSPF (dynamické zjišťování sousedů, sdílení sítí)
+R1(config)# router ospf 1
+R1(config-router)# network 10.10.0.0 0.0.255.255 area 0
+R1(config-router)# exit
+
+! Ověření OSPF
+R1# show ip ospf neighbor
+R1# show ip route ospf</code></pre>
+
+    <h3>Statické směrování</h3>
+    <pre><code class="language-bash">! Statická trasa: ip route [cílová síť] [maska] [next-hop nebo výstupní rozhraní]
+R1(config)# ip route 10.20.0.0 255.255.0.0 192.168.100.2
+
+! Výchozí trasa (default route = 0.0.0.0/0)
+R1(config)# ip route 0.0.0.0 0.0.0.0 203.0.113.1   ! gateway do internetu
+
+! Ověření
+R1# show ip route</code></pre>
+
+    <h3>NAT konfigurace</h3>
+    <pre><code class="language-bash">! Označit vnitřní rozhraní (privátní síť)
+R1(config)# interface GigabitEthernet0/0
+R1(config-if)# ip nat inside
+R1(config-if)# exit
+
+! Označit vnější rozhraní (internet)
+R1(config)# interface GigabitEthernet0/1
+R1(config-if)# ip nat outside
+R1(config-if)# exit
+
+! PAT (NAT Overload) — sdílení jedné veřejné IP
+R1(config)# access-list 1 permit 10.10.0.0 0.0.255.255
+R1(config)# ip nat inside source list 1 interface GigabitEthernet0/1 overload
+
+! Ověření
+R1# show ip nat translations</code></pre>
+
+    <h3>Základní zabezpečení — ACL</h3>
+    <pre><code class="language-bash">! Standardní ACL (jen zdrojová IP) — číslovaná
+R1(config)# access-list 10 deny 10.10.4.0 0.0.0.255   ! Blokovat VLAN Žáci
+R1(config)# access-list 10 permit any
+
+! Aplikovat na rozhraní
+R1(config)# interface GigabitEthernet0/0.100
+R1(config-subif)# ip access-group 10 in
+
+! Rozšířená ACL (zdroj, cíl, port) — pojmenovaná
+R1(config)# ip access-list extended BLOK_SSH
+R1(config-ext-nacl)# deny tcp 10.10.4.0 0.0.0.255 any eq 22
+R1(config-ext-nacl)# permit ip any any
+R1(config-ext-nacl)# exit</code></pre>
+
+    <hr>
+
+    <h2>Konektivita do internetu — potřebné funkcionality</h2>
+
+    <div class="highlight-box">
+        <strong>Ze ZPS-B vzorové úlohy:</strong> „Definujte funkcionality/technologie pro zajištění datové konektivity do sítě Internet."
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Funkce</th><th>Popis</th></tr></thead>
+            <tbody>
+                <tr><td><strong>NAT/PAT</strong></td><td>Překlad privátních IP na veřejnou IP ISP</td></tr>
+                <tr><td><strong>Default route</strong></td><td><code>0.0.0.0/0</code> → gateway ISP — odesílá veškerý internet provoz</td></tr>
+                <tr><td><strong>DNS resolver</strong></td><td>Nastavit DNS server v DHCP poolu (8.8.8.8, 1.1.1.1, nebo firemní DNS)</td></tr>
+                <tr><td><strong>Firewall</strong></td><td>Stavová inspekce — povoluje odchozí provoz, blokuje nevyžádané příchozí</td></tr>
+                <tr><td><strong>VPN (site-to-site)</strong></td><td>Šifrovaný tunel mezi budovami přes internet (IPsec)</td></tr>
+                <tr><td><strong>DHCP relay (ip helper-address)</strong></td><td>Přeposílá DHCP broadcast z různých VLAN na centrální DHCP server</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>DHCP Relay (ip helper-address)</h3>
+    <pre><code class="language-bash">! Pokud DHCP server není ve stejné síti jako klient,
+! router musí přeposílat DHCP dotazy (unicast) na server
+
+R1(config)# interface GigabitEthernet0/0.10
+R1(config-subif)# ip helper-address 10.10.9.1    ! IP adresa DHCP serveru
+R1(config-subif)# exit</code></pre>
+
+    <hr>
+
+    <h2>Ověření funkcionality sítě</h2>
+
+    <pre><code class="language-bash">! Ping — základní test konektivity
+R1# ping 8.8.8.8                    ! test internetu
+R1# ping 10.10.4.5 source 10.10.5.1 ! ping z jiné VLAN
+
+! Traceroute — zjištění cesty paketu
+R1# traceroute 8.8.8.8
+
+! Zobrazení ARP tabulky
+R1# show arp
+
+! Zobrazení MAC tabulky switchě
+SW1# show mac address-table
+
+! Zobrazení směrovací tabulky
+R1# show ip route
+
+! Zobrazení stavu rozhraní
+R1# show interfaces GigabitEthernet0/0
+R1# show ip interface brief    ! přehled všech rozhraní
+
+! Ověření OSPF
+R1# show ip ospf neighbor
+R1# show ip ospf database</code></pre>
+
+    <div class="note-box">
+        <strong>Před exportem PKT souboru:</strong> Vždy uložit konfiguraci všech zařízení příkazem <code>do wr</code> (zkratka pro <code>copy running-config startup-config</code>). Bez uložení se konfigurace při opětovném otevření souboru ztratí!<br><br>
+        <strong>Tipy pro Packet Tracer:</strong>
+        <ul>
+            <li>Kliknutí na zařízení → záložka CLI → přímý přístup k příkazovému řádku</li>
+            <li>Simulation mode (hodiny ikona) — krok za krokem sledovat průchod paketu sítí</li>
+            <li>PDU (Add Simple/Complex PDU) — ruční generování paketů pro testování</li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 1: Základy počítačových sítí – teorie a adresování</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script>window.MathJax = {tex: {inlineMath: [['$','$']]}, svg: {fontCache:'global'}};</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+    <h1>Okruh 1 – Základy počítačových sítí: teorie a adresování</h1>
+    <p class="subtitle">KI/SZZPP – Základy počítačových sítí a protokolů</p>
+    <hr>
+
+    <h2>Vrstvové modely sítí</h2>
+
+    <h3>Model ISO/OSI (7 vrstev)</h3>
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>#</th><th>Vrstva</th><th>Funkce</th><th>PDU</th><th>Příklady protokolů</th></tr></thead>
+        <tbody>
+            <tr><td>7</td><td><strong>Aplikační</strong></td><td>Rozhraní pro aplikace</td><td>Data</td><td>HTTP, FTP, DNS, SMTP</td></tr>
+            <tr><td>6</td><td><strong>Prezentační</strong></td><td>Kódování, šifrování, komprese</td><td>Data</td><td>SSL/TLS, JPEG, ASCII</td></tr>
+            <tr><td>5</td><td><strong>Relační</strong></td><td>Správa relací/sessions</td><td>Data</td><td>NetBIOS, RPC</td></tr>
+            <tr><td>4</td><td><strong>Transportní</strong></td><td>End-to-end přenos, porty</td><td>Segment</td><td>TCP, UDP</td></tr>
+            <tr><td>3</td><td><strong>Síťová</strong></td><td>Logické adresování, směrování</td><td>Paket</td><td>IP, ICMP, OSPF, BGP</td></tr>
+            <tr><td>2</td><td><strong>Linková</strong></td><td>Fyzické adresování (MAC), přístup k médiu</td><td>Rámec</td><td>Ethernet, Wi-Fi (802.11), ARP</td></tr>
+            <tr><td>1</td><td><strong>Fyzická</strong></td><td>Přenos bitů, signály, kabely</td><td>Bit</td><td>RJ-45, optika, RS-232</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Model TCP/IP (4 vrstvy)</h3>
+    <table class="table table-sm table-bordered" style="max-width:560px;">
+        <thead class="table-light"><tr><th>Vrstva TCP/IP</th><th>Odpovídá OSI</th><th>Protokoly</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Aplikační</strong></td><td>5 + 6 + 7</td><td>HTTP/S, FTP, SSH, DNS, SMTP, DHCP</td></tr>
+            <tr><td><strong>Transportní</strong></td><td>4</td><td>TCP, UDP</td></tr>
+            <tr><td><strong>Internetová (Síťová)</strong></td><td>3</td><td>IPv4, IPv6, ICMP, ARP</td></tr>
+            <tr><td><strong>Přístup k síti</strong></td><td>1 + 2</td><td>Ethernet, Wi-Fi, PPP</td></tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>Zapouzdření dat:</strong> Data procházejí vrstvami dolů (odesílatel) a každá vrstva přidá svoji <strong>hlavičku</strong> (a případně patičku). Na straně příjemce se vrstvy prochází nahoru a hlavičky se odstraňují.<br>
+        Aplikace → [Data] → Transportní → [TCP hdr | Data] → Síťová → [IP hdr | TCP hdr | Data] → Linková → [Eth hdr | IP hdr | TCP hdr | Data | Eth FCS]
+    </div>
+
+    <hr>
+
+    <h2>Adresování v počítačových sítích</h2>
+
+    <h3>MAC adresa (vrstva 2)</h3>
+    <div class="math-box">
+        48bitová hardwarová adresa síťové karty.<br>
+        Formát: <code>AA:BB:CC:DD:EE:FF</code> (hexadecimálně, 6 bajtů)<br>
+        První 3 bajty = <strong>OUI</strong> (výrobce), poslední 3 bajty = sériové číslo.<br>
+        Broadcast: <code>FF:FF:FF:FF:FF:FF</code>
+    </div>
+
+    <h3>IPv4 adresa (vrstva 3)</h3>
+    <div class="math-box">
+        32bitová logická adresa. Formát: 4 oktety oddělené tečkou: <code>192.168.1.100</code><br><br>
+        <strong>Třídy adres (historicky — dnes nahrazeny CIDR, ale stále se zkouší):</strong>
+        <table class="table table-sm" style="margin-top:8px; max-width:700px;">
+            <thead class="table-light">
+                <tr><th>Třída</th><th>1. oktet (bin.)</th><th>Rozsah</th><th>Výchozí maska</th><th>Max. sítí / hostů</th><th>Použití</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>A</strong></td>
+                    <td><code>0xxxxxxx</code></td>
+                    <td>1.0.0.0 – 126.255.255.255</td>
+                    <td>/8 (255.0.0.0)</td>
+                    <td>126 sítí / 16 777 214 hostů</td>
+                    <td>Velmi velké sítě (ISP, armáda)</td>
+                </tr>
+                <tr>
+                    <td><strong>B</strong></td>
+                    <td><code>10xxxxxx</code></td>
+                    <td>128.0.0.0 – 191.255.255.255</td>
+                    <td>/16 (255.255.0.0)</td>
+                    <td>16 384 sítí / 65 534 hostů</td>
+                    <td>Střední a velké organizace</td>
+                </tr>
+                <tr>
+                    <td><strong>C</strong></td>
+                    <td><code>110xxxxx</code></td>
+                    <td>192.0.0.0 – 223.255.255.255</td>
+                    <td>/24 (255.255.255.0)</td>
+                    <td>2 097 152 sítí / 254 hostů</td>
+                    <td>Malé sítě (domácnosti, firmy)</td>
+                </tr>
+                <tr>
+                    <td><strong>D</strong></td>
+                    <td><code>1110xxxx</code></td>
+                    <td>224.0.0.0 – 239.255.255.255</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td><strong>Multicast</strong> — skupinové vysílání (OSPF: 224.0.0.5, video streaming)</td>
+                </tr>
+                <tr>
+                    <td><strong>E</strong></td>
+                    <td><code>1111xxxx</code></td>
+                    <td>240.0.0.0 – 255.255.255.254</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>Rezervováno pro výzkum, nelze použít v praxi</td>
+                </tr>
+            </tbody>
+        </table>
+        <strong>Speciální rozsahy mimo třídy:</strong>
+        <ul style="margin-top:6px;">
+            <li><code>0.0.0.0/8</code> — nespecifikovaná adresa; výchozí trasa <code>0.0.0.0/0</code></li>
+            <li><code>127.0.0.0/8</code> — loopback (<code>127.0.0.1</code> = localhost), netestovatelné v síti</li>
+            <li><code>169.254.0.0/16</code> — APIPA (link-local), přiděleno, pokud selže DHCP</li>
+        </ul>
+        <strong>Privátní adresy (RFC 1918 — nejsou směrovány na internetu):</strong><br>
+        Třída A: <code>10.0.0.0/8</code> &nbsp;|&nbsp; Třída B: <code>172.16.0.0/12</code> &nbsp;|&nbsp; Třída C: <code>192.168.0.0/16</code>
+    </div>
+
+    <div class="note-box">
+        📄 <strong>Podrobné výpočty IP adres</strong> (jak ze sítě zjistit broadcast, rozsah hostů, VLSM krok za krokem) →
+        <a href="ip_pocitani.html">ip_pocitani.html</a>
+    </div>
+
+    <h3>CIDR a síťová maska</h3>
+    <div class="math-box">
+        <strong>CIDR (Classless Inter-Domain Routing):</strong> Zápis <code>adresa/prefix</code>, kde prefix = počet jedničkových bitů v masce.<br><br>
+        <table class="table table-sm" style="max-width:560px; margin-top:8px;">
+            <thead class="table-light"><tr><th>Prefix</th><th>Maska</th><th>Počet hostů</th><th>Počet adres</th></tr></thead>
+            <tbody>
+                <tr><td>/24</td><td>255.255.255.0</td><td>254</td><td>256</td></tr>
+                <tr><td>/25</td><td>255.255.255.128</td><td>126</td><td>128</td></tr>
+                <tr><td>/26</td><td>255.255.255.192</td><td>62</td><td>64</td></tr>
+                <tr><td>/27</td><td>255.255.255.224</td><td>30</td><td>32</td></tr>
+                <tr><td>/28</td><td>255.255.255.240</td><td>14</td><td>16</td></tr>
+                <tr><td>/29</td><td>255.255.255.248</td><td>6</td><td>8</td></tr>
+                <tr><td>/30</td><td>255.255.255.252</td><td>2</td><td>4</td></tr>
+            </tbody>
+        </table>
+        Vzorec: počet hostů $= 2^{(32-prefix)} - 2$ (odečítají se adresa sítě a broadcast)
+    </div>
+
+    <h3>VLSM a výpočet subnetů</h3>
+    <div class="math-box">
+        <strong>VLSM (Variable Length Subnet Masking)</strong> — přidělujeme subnety různých velikostí ze společného bloku. Postup:<br>
+        <ol style="margin-top:8px;">
+            <li>Seřadit požadované sítě <strong>sestupně</strong> dle počtu hostů</li>
+            <li>Vybrat nejmenší prefix, který pojme požadovaný počet hostů ($2^n - 2 \geq$ hostů)</li>
+            <li>Přidělit adresový blok, poté pokračovat od další volné adresy</li>
+        </ol>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad VLSM (ze ZPS-A vzorové úlohy):</strong><br>
+        Adresní blok: <code>10.0.0.0/16</code>. Požadavky (sestupně):<br>
+        <table class="table table-sm" style="margin-top:6px; max-width:680px;">
+            <thead class="table-light"><tr><th>VLAN</th><th>Hostů (max)</th><th>Potřeba $2^n$</th><th>Prefix</th><th>Síť</th><th>Rozsah hostů</th></tr></thead>
+            <tbody>
+                <tr><td>Žáci A</td><td>635</td><td>1024</td><td>/22</td><td>10.0.0.0/22</td><td>10.0.0.1 – 10.0.3.254</td></tr>
+                <tr><td>Žáci B</td><td>220</td><td>256</td><td>/24</td><td>10.0.4.0/24</td><td>10.0.4.1 – 10.0.4.254</td></tr>
+                <tr><td>MDevice A</td><td>150</td><td>256</td><td>/24</td><td>10.0.5.0/24</td><td>10.0.5.1 – 10.0.5.254</td></tr>
+                <tr><td>Učitelé A</td><td>120</td><td>128</td><td>/25</td><td>10.0.6.0/25</td><td>10.0.6.1 – 10.0.6.126</td></tr>
+                <tr><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+            </tbody>
+        </table>
+        Vždy zarovnat začátek sítě na násobek velikosti bloku!
+    </div>
+
+    <h3>IPv6</h3>
+    <div class="math-box">
+        128bitová adresa. Formát: 8 skupin po 4 hex číslicích: <code>2001:0db8:85a3::8a2e:0370:7334</code><br>
+        Zkracování: <code>::</code> = jeden nebo více bloků samých nul (pouze jednou v adrese).<br>
+        Typy: <strong>Unicast</strong> (jeden příjemce), <strong>Multicast</strong> (skupina), <strong>Anycast</strong> (nejbližší z množiny).<br>
+        Žádný broadcast v IPv6 — nahrazen multicastem.
+    </div>
+
+    <hr>
+
+    <h2>Porty TCP/UDP</h2>
+
+    <table class="table table-sm table-bordered" style="max-width:640px;">
+        <thead class="table-light"><tr><th>Protokol</th><th>Port</th><th>Transportní vrstva</th><th>Popis</th></tr></thead>
+        <tbody>
+            <tr><td>HTTP</td><td>80</td><td>TCP</td><td>Web (nešifrovaný)</td></tr>
+            <tr><td>HTTPS</td><td>443</td><td>TCP</td><td>Web (šifrovaný TLS)</td></tr>
+            <tr><td>FTP</td><td>20/21</td><td>TCP</td><td>Přenos souborů (data/řízení)</td></tr>
+            <tr><td>SSH</td><td>22</td><td>TCP</td><td>Bezpečné vzdálené připojení (shell)</td></tr>
+            <tr><td>Telnet</td><td>23</td><td>TCP</td><td>Vzdálené připojení (nešifrované, zastaralé)</td></tr>
+            <tr><td>SMTP</td><td>25 / 587</td><td>TCP</td><td>Odesílání e-mailů</td></tr>
+            <tr><td>DNS</td><td>53</td><td>UDP (+ TCP pro velké odpovědi)</td><td>Překlad doménových jmen</td></tr>
+            <tr><td>DHCP</td><td>67/68</td><td>UDP</td><td>Automatické přidělování IP</td></tr>
+            <tr><td>POP3</td><td>110</td><td>TCP</td><td>Přijímání e-mailů (stažení)</td></tr>
+            <tr><td>IMAP</td><td>143</td><td>TCP</td><td>Přijímání e-mailů (synchronizace)</td></tr>
+            <tr><td>RDP</td><td>3389</td><td>TCP</td><td>Vzdálená plocha Windows</td></tr>
+            <tr><td>SNMP</td><td>161/162</td><td>UDP</td><td>Správa síťových zařízení</td></tr>
+        </tbody>
+    </table>
+
+    <div class="math-box">
+        <strong>TCP vs. UDP:</strong>
+        <table class="table table-sm" style="margin-top:8px; max-width:560px;">
+            <thead class="table-light"><tr><th></th><th>TCP</th><th>UDP</th></tr></thead>
+            <tbody>
+                <tr><td>Navázání spojení</td><td>3-way handshake (SYN→SYN-ACK→ACK)</td><td>Žádné</td></tr>
+                <tr><td>Spolehlivost</td><td>✅ Potvrzení, opakování</td><td>❌ Best-effort</td></tr>
+                <tr><td>Pořadí paketů</td><td>✅ Garantováno</td><td>❌ Nezaručeno</td></tr>
+                <tr><td>Rychlost</td><td>Pomalejší (overhead)</td><td>Rychlejší</td></tr>
+                <tr><td>Použití</td><td>HTTP, SSH, FTP, e-mail</td><td>DNS, DHCP, streaming, VoIP</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <h2>Terminologie sítí</h2>
+
+    <h3>Aktivní a pasivní prvky</h3>
+    <table class="table table-sm table-bordered" style="max-width:680px;">
+        <thead class="table-light"><tr><th>Prvek</th><th>Typ</th><th>Vrstva OSI</th><th>Funkce</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Hub</strong></td><td>Pasivní/aktivní</td><td>1</td><td>Rozbočovač — vysílá na všechny porty (zastaralé)</td></tr>
+            <tr><td><strong>Switch</strong></td><td>Aktivní</td><td>2</td><td>Přepínač — posílá dle MAC tabulky na konkrétní port</td></tr>
+            <tr><td><strong>Router</strong></td><td>Aktivní</td><td>3</td><td>Směrovač — přesměruje pakety dle IP a směrovací tabulky</td></tr>
+            <tr><td><strong>AP (Access Point)</strong></td><td>Aktivní</td><td>2</td><td>Bezdrátový přístupový bod — připojuje Wi-Fi zařízení</td></tr>
+            <tr><td><strong>Firewall</strong></td><td>Aktivní</td><td>3–7</td><td>Filtruje provoz dle pravidel (ACL, stavový FW, NGFW)</td></tr>
+            <tr><td><strong>Kabel, patch panel</strong></td><td>Pasivní</td><td>1</td><td>Fyzické propojení bez zpracování signálu</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Topologie sítí</h3>
+    <table class="table table-sm table-bordered" style="max-width:600px;">
+        <thead class="table-light"><tr><th>Topologie</th><th>Fyzická / Logická</th><th>Popis</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Hvězda (Star)</strong></td><td>Fyzická</td><td>Vše připojeno do centrálního přepínače — nejběžnější</td></tr>
+            <tr><td><strong>Sběrnice (Bus)</strong></td><td>Fyzická</td><td>Všechna zařízení na jednom kabelu — zastaralé</td></tr>
+            <tr><td><strong>Kruh (Ring)</strong></td><td>Fyzická/logická</td><td>Token Ring, FDDI — dnes vzácné</td></tr>
+            <tr><td><strong>Mesh</strong></td><td>Fyzická</td><td>Každý s každým — vysoká redundance, složité</td></tr>
+            <tr><td><strong>Stromová (Tree)</strong></td><td>Fyzická</td><td>Hierarchická hvězda — typická pro větší sítě</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Klíčové protokoly a služby</h3>
+
+    <div class="highlight-box">
+        <strong>ARP (Address Resolution Protocol):</strong> Překlad IP → MAC adresa ve stejné síti. Zařízení broadcastuje „Kdo má IP x.x.x.x?" a vlastník odpoví svou MAC adresou. ARP tabulka se cachuje.
+    </div>
+
+    <div class="highlight-box">
+        <strong>DNS (Domain Name System):</strong> Překlad doménových jmen → IP adresy. Hierarchická struktura: root servers → TLD servers (.cz, .com) → autoritativní NS. DNS záznamy: A (IPv4), AAAA (IPv6), MX (mail), CNAME (alias), PTR (reverse).
+    </div>
+
+    <div class="highlight-box">
+        <strong>DHCP (Dynamic Host Configuration Protocol):</strong> Automatické přidělování IP konfigurace (IP, maska, gateway, DNS). Postup DORA: <strong>D</strong>iscover (broadcast) → <strong>O</strong>ffer → <strong>R</strong>equest → <strong>A</strong>ck.
+    </div>
+
+    <div class="highlight-box">
+        <strong>NAT (Network Address Translation):</strong> Překlad privátních IP ↔ veřejná IP na routeru. Umožňuje více zařízením sdílet jednu veřejnou IP. PAT (Port Address Translation) = NAT Overload — rozlišuje zařízení dle portů.
+    </div>
+
+    <hr>
+
+    <h2>Bezdrátové sítě (Wi-Fi)</h2>
+
+    <table class="table table-sm table-bordered">
+        <thead class="table-light"><tr><th>Standard</th><th>Pásmo</th><th>Max. propustnost</th><th>Typické použití</th></tr></thead>
+        <tbody>
+            <tr><td>802.11b</td><td>2,4 GHz</td><td>11 Mbit/s</td><td>Historický (1999)</td></tr>
+            <tr><td>802.11g</td><td>2,4 GHz</td><td>54 Mbit/s</td><td>Historický (2003)</td></tr>
+            <tr><td>802.11n (Wi-Fi 4)</td><td>2,4 / 5 GHz</td><td>600 Mbit/s</td><td>Starší zařízení</td></tr>
+            <tr><td>802.11ac (Wi-Fi 5)</td><td>5 GHz</td><td>3,5 Gbit/s</td><td>Běžné domácí/firemní</td></tr>
+            <tr><td>802.11ax (Wi-Fi 6/6E)</td><td>2,4 / 5 / 6 GHz</td><td>9,6 Gbit/s</td><td>Moderní, hustá prostředí</td></tr>
+            <tr><td>802.11ad (WiGig)</td><td>60 GHz</td><td>7 Gbit/s</td><td>Krátký dosah, vysoký výkon</td></tr>
+        </tbody>
+    </table>
+
+    <div class="math-box">
+        <strong>Klíčové pojmy Wi-Fi:</strong>
+        <ul>
+            <li><strong>SSID</strong> — název bezdrátové sítě (broadcast nebo skrytý)</li>
+            <li><strong>PSK (Pre-Shared Key)</strong> — sdílené heslo pro WPA2/WPA3 Personal</li>
+            <li><strong>RADIUS</strong> — server pro WPA2/WPA3 Enterprise — každý uživatel má vlastní přihlašovací údaje (802.1X)</li>
+            <li><strong>Kanály 2,4 GHz:</strong> kanály 1, 6, 11 se nepřekrývají — použít pro sousední AP</li>
+            <li><strong>Šifrování:</strong> WEP (zastaralé, prolomitelné) → WPA → WPA2 (AES/CCMP) → WPA3 (SAE)</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>VLAN a bezpečnost sítě</h2>
+
+    <h3>VLAN (Virtual LAN)</h3>
+    <div class="math-box">
+        VLAN logicky odděluje síťový provoz na úrovni přepínačů bez nutnosti fyzicky oddělené infrastruktury. Každá VLAN = samostatná broadcast doména.<br><br>
+        <strong>Typy portů na switchích:</strong>
+        <ul>
+            <li><strong>Access port</strong> — přiřazen jedné VLAN; připojují se endpointy</li>
+            <li><strong>Trunk port</strong> — přenáší více VLAN; používá IEEE 802.1Q tagging (4bytová VLAN značka)</li>
+        </ul>
+        <strong>Inter-VLAN routing</strong> — komunikace mezi VLAN vyžaduje router nebo L3 switch (Router-on-a-Stick nebo SVIs).
+    </div>
+
+    <h3>Základní bezpečnostní funkcionality sítě</h3>
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Funkce</th><th>Popis</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Firewall (FW)</strong></td><td>Filtrování provozu dle IP, portu, stavu spojení (stateful) nebo aplikačního obsahu (NGFW)</td></tr>
+            <tr><td><strong>ACL (Access Control List)</strong></td><td>Pravidla na routeru/L3 switchích — povolují nebo zakazují provoz dle IP/portu</td></tr>
+            <tr><td><strong>VPN</strong></td><td>Šifrovaný tunel přes veřejnou síť (site-to-site pro pobočky, remote access pro uživatele)</td></tr>
+            <tr><td><strong>AAA (Authn/Authz/Accounting)</strong></td><td>Autentizace (kdo jsi), Autorizace (co smíš), Účtování (co jsi dělal) — RADIUS, TACACS+</td></tr>
+            <tr><td><strong>MFA</strong></td><td>Vícefaktorová autentizace — heslo + OTP/token/biometrie</td></tr>
+            <tr><td><strong>L2 Security (Port Security)</strong></td><td>Omezení MAC adres na portu switchě, Dynamic ARP Inspection, DHCP Snooping</td></tr>
+            <tr><td><strong>Šifrování</strong></td><td>TLS/SSL pro aplikační data, IPsec pro síťovou vrstvu (VPN), WPA3 pro Wi-Fi</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note-box">
+        <strong>MTU (Maximum Transmission Unit):</strong> Maximální velikost jednoho paketu/rámce. Ethernet MTU = 1500 B. Jumbo frames = 9000 B (jen v LAN). Fragmentation nastane, pokud paket přesáhne MTU linky — IPv6 fragmentaci nepodporuje (odkládá na odesílatele pomocí Path MTU Discovery).
+    </div>
+
+</div>
+</body>
+</html>
