@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Základy zpracování dat v R – ZZD</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script>window.MathJax = {tex:{inlineMath:[['$','$']]},svg:{fontCache:'global'}};</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+    <h1>Základy zpracování dat</h1>
+    <p class="subtitle">KI/SZZPP – Základy zpracování dat | nástroj: R + RStudio + tidyverse</p>
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Základní datové typy</h2>
+
+    <table class="table table-sm table-bordered" style="max-width:620px;">
+        <thead class="table-light"><tr><th>Typ</th><th>Popis</th><th>Příklad</th><th>Funkce pro test</th></tr></thead>
+        <tbody>
+            <tr><td><code>numeric</code></td><td>Desetinné číslo (double)</td><td><code>3.14</code>, <code>42</code></td><td><code>is.numeric()</code></td></tr>
+            <tr><td><code>integer</code></td><td>Celé číslo</td><td><code>5L</code></td><td><code>is.integer()</code></td></tr>
+            <tr><td><code>logical</code></td><td>Logická hodnota</td><td><code>TRUE</code>, <code>FALSE</code></td><td><code>is.logical()</code></td></tr>
+            <tr><td><code>character</code></td><td>Řetězec</td><td><code>"ahoj"</code></td><td><code>is.character()</code></td></tr>
+            <tr><td><code>factor</code></td><td>Kategorická proměnná (ordinal/nominal)</td><td><code>factor(c("A","B","A"))</code></td><td><code>is.factor()</code></td></tr>
+            <tr><td><code>NA</code></td><td>Chybějící hodnota</td><td><code>NA</code>, <code>NA_real_</code></td><td><code>is.na()</code></td></tr>
+        </tbody>
+    </table>
+
+    <pre><code class="language-r">x <- 3.14          # numeric
+y <- 5L            # integer
+b <- TRUE          # logical
+s <- "ahoj"        # character
+f <- factor(c("muž", "žena", "muž"), levels = c("muž", "žena"))  # factor
+
+class(x)           # "numeric"
+typeof(x)          # "double"
+is.numeric(x)      # TRUE
+
+# Konverze typů
+as.numeric("3.14") # 3.14
+as.character(42)   # "42"
+as.logical(0)      # FALSE (0 = FALSE, cokoliv jiného = TRUE)</code></pre>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Datové struktury</h2>
+
+    <h3>Vektor</h3>
+    <p>Základní datová struktura v R — jednorozměrné pole hodnot <strong>stejného typu</strong>.</p>
+    <pre><code class="language-r">v <- c(10, 20, 30, 40, 50)   # numeric vector
+v[2]                          # 20  (indexování od 1, ne od 0!)
+v[c(1, 3)]                    # 10 30
+v[v > 25]                     # 30 40 50  (logické indexování)
+length(v)                     # 5
+sum(v); mean(v); max(v)       # 150; 30; 50
+
+# Pojmenované prvky
+jmena <- c(a = 1, b = 2, c = 3)
+jmena["b"]                    # 2</code></pre>
+
+    <h3>Matice</h3>
+    <pre><code class="language-r">m <- matrix(1:12, nrow = 3, ncol = 4)  # matice 3×4
+m[2, 3]        # prvek na řádku 2, sloupci 3
+m[1, ]         # celý 1. řádek (jako vektor)
+m[, 2]         # celý 2. sloupec
+dim(m)         # 3 4
+nrow(m); ncol(m)  # 3; 4</code></pre>
+
+    <h3>Data frame (datová tabulka)</h3>
+    <p>Nejdůležitější struktura pro práci s daty — tabulka se sloupci různých typů.</p>
+    <pre><code class="language-r">df <- data.frame(
+  jmeno = c("Anna", "Bob", "Karel"),
+  vek   = c(22, 25, 30),
+  aktivni = c(TRUE, FALSE, TRUE)
+)
+
+df$jmeno        # přístup ke sloupci
+df[2, ]         # 2. řádek
+df[df$vek > 23, ]  # filtrace — řádky kde vek > 23
+
+nrow(df); ncol(df)
+str(df)         # přehled struktury
+summary(df)     # statistický přehled</code></pre>
+
+    <h3>Seznam (list)</h3>
+    <p>Může obsahovat prvky různých typů a délky, včetně vnořených struktur.</p>
+    <pre><code class="language-r">lst <- list(
+  cislo = 42,
+  retezec = "ahoj",
+  vektor = c(1, 2, 3),
+  df = data.frame(a = 1:3)
+)
+
+lst$cislo        # 42
+lst[["vektor"]]  # c(1, 2, 3)
+lst[[3]]         # c(1, 2, 3)  (pozicí)
+length(lst)      # 4</code></pre>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Základní matematické a logické operace</h2>
+
+    <pre><code class="language-r"># Matematické operace (fungují vektorizovaně)
+x <- c(2, 4, 6, 8)
+x + 10        # 12 14 16 18
+x * 2         # 4 8 12 16
+x ^ 2         # 4 16 36 64
+sqrt(x)       # 1.41 2.00 2.45 2.83
+log(x)        # přirozený logaritmus
+log10(x); log2(x)
+round(3.14159, 2)  # 3.14
+floor(3.7); ceiling(3.2)  # 3; 4
+
+# Logické operace
+TRUE & FALSE   # AND → FALSE
+TRUE | FALSE   # OR  → TRUE
+!TRUE          # NOT → FALSE
+xor(TRUE, FALSE)  # exkluzivní OR → TRUE
+
+# Porovnání (vrací logical vektor)
+c(1,2,3,4) > 2      # FALSE FALSE TRUE TRUE
+c(1,2,3,4) == 2     # FALSE TRUE FALSE FALSE
+c(1,2,NA) %in% c(1,3)  # TRUE FALSE FALSE
+
+# Funkce pro logické vektory
+any(c(FALSE, TRUE, FALSE))   # TRUE — alespoň jeden TRUE
+all(c(TRUE, TRUE, FALSE))    # FALSE — ne všechny TRUE</code></pre>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Operace nad řetězci a regulární výrazy</h2>
+
+    <pre><code class="language-r">s <- "Hello, World!"
+
+# Základní funkce (base R)
+nchar(s)              # 13 — délka řetězce
+toupper(s)            # "HELLO, WORLD!"
+tolower(s)            # "hello, world!"
+substr(s, 1, 5)       # "Hello"
+gsub("o", "0", s)     # "Hell0, W0rld!" — nahradí vše
+sub("o", "0", s)      # "Hell0, World!" — nahradí první výskyt
+paste("Ahoj", "světe", sep = " ")   # "Ahoj světe"
+paste0("prefix_", 1:3)              # "prefix_1" "prefix_2" "prefix_3"
+strsplit("a,b,c", ",")[[1]]         # "a" "b" "c"
+trimws("  ahoj  ")    # "ahoj" — odstraní mezery na okrajích
+startsWith(s, "Hello")  # TRUE
+endsWith(s, "!")        # TRUE</code></pre>
+
+    <div class="math-box">
+        <strong>Regulární výrazy — nejdůležitější vzory:</strong>
+        <table class="table table-sm" style="margin-top:8px; max-width:560px; font-family:monospace;">
+            <thead class="table-light"><tr><th>Vzor</th><th>Význam</th><th>Příklad</th></tr></thead>
+            <tbody>
+                <tr><td><code>.</code></td><td>Libovolný znak</td><td><code>a.c</code> → "abc", "axc"</td></tr>
+                <tr><td><code>*</code></td><td>0 nebo více opakování</td><td><code>ab*c</code> → "ac", "abc", "abbc"</td></tr>
+                <tr><td><code>+</code></td><td>1 nebo více opakování</td><td><code>ab+c</code> → "abc", "abbc"</td></tr>
+                <tr><td><code>?</code></td><td>0 nebo 1 opakování</td><td><code>colou?r</code> → "color", "colour"</td></tr>
+                <tr><td><code>[abc]</code></td><td>Jeden ze znaků</td><td><code>[aeiou]</code> = samohláska</td></tr>
+                <tr><td><code>[^abc]</code></td><td>Žádný z těchto znaků</td><td></td></tr>
+                <tr><td><code>^</code></td><td>Začátek řetězce</td><td><code>^hello</code></td></tr>
+                <tr><td><code>$</code></td><td>Konec řetězce</td><td><code>world$</code></td></tr>
+                <tr><td><code>\\d</code></td><td>Číslice [0-9]</td><td></td></tr>
+                <tr><td><code>\\s</code></td><td>Bílý znak (mezera, tab)</td><td></td></tr>
+                <tr><td><code>\\w</code></td><td>Alfanumerický znak</td><td></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <pre><code class="language-r">x <- c("high school", "some college", "bachelor's degree", "high school graduate")
+
+# Zjistit, zda řetězec obsahuje vzor
+grepl("high school", x)          # TRUE FALSE FALSE TRUE
+grep("high school", x)           # 1 4  (indexy)
+grep("high school", x, value = TRUE)  # vrátí hodnoty
+
+# Filtrace tabulky dle obsahu řetězce (vzorová úloha ZZD)
+library(dplyr)
+df %>% filter(grepl("high school", parental.level.of.education))</code></pre>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Načítání a ukládání dat</h2>
+
+    <pre><code class="language-r"># CSV
+df <- read.csv("data.csv", sep = ",", header = TRUE, stringsAsFactors = FALSE)
+df <- read.csv2("data.csv")     # pro soubory s ; jako oddělovačem (CZ formát)
+
+# S readr (tidyverse) — rychlejší a inteligentnější
+library(readr)
+df <- read_csv("data.csv")      # vždy stringsAsFactors = FALSE, detekuje typy
+df <- read_csv2("data.csv")     # středník jako oddělovač
+
+# XLSX
+library(readxl)
+df <- read_excel("data.xlsx", sheet = 1)
+df <- read_excel("data.xlsx", sheet = "List1", skip = 2)  # přeskočit 2 řádky
+
+# Ukládání
+write.csv(df, "vystup.csv", row.names = FALSE)
+write_csv(df, "vystup.csv")        # readr varianta
+writexl::write_xlsx(df, "vystup.xlsx")
+
+# Základní průzkum načtených dat
+head(df, 10)      # prvních 10 řádků
+tail(df, 5)       # posledních 5 řádků
+dim(df)           # počet řádků a sloupců
+str(df)           # struktura — typ každého sloupce
+summary(df)       # statistický přehled
+colnames(df)      # názvy sloupců
+sum(is.na(df))    # počet chybějících hodnot</code></pre>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Cykly a podmíněné příkazy</h2>
+
+    <pre><code class="language-r"># if / else if / else
+x <- 15
+if (x > 10) {
+  cat("Velké\n")
+} else if (x == 10) {
+  cat("Přesně 10\n")
+} else {
+  cat("Malé\n")
+}
+
+# ifelse — vektorizovaná verze (pro datové rámce)
+vek <- c(17, 22, 15, 30)
+kategorie <- ifelse(vek >= 18, "dospělý", "nezletilý")
+
+# case_when (dplyr) — více podmínek pro tabulky
+library(dplyr)
+df %>% mutate(
+  skupina = case_when(
+    vek < 18 ~ "junior",
+    vek < 65 ~ "dospělý",
+    TRUE ~ "senior"          # else větev
+  )
+)
+
+# for cyklus
+for (i in 1:5) {
+  cat("Iterace:", i, "\n")
+}
+
+# for přes vektor hodnot
+ovoce <- c("jablko", "hruška", "švestka")
+for (plod in ovoce) {
+  cat("Ovoce:", plod, "\n")
+}
+
+# while cyklus
+n <- 1
+while (n <= 5) {
+  cat(n, "")
+  n <- n + 1
+}
+
+# Vectorized alternativy (preferované v R — rychlejší než cykly)
+sapply(1:5, function(x) x^2)      # vrací vektor: 1 4 9 16 25
+lapply(1:3, function(x) x * 10)   # vrací seznam
+vapply(df, class, character(1))    # typ každého sloupce</code></pre>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Vlastní funkce a skripty</h2>
+
+    <pre><code class="language-r"># Definice funkce
+bmi <- function(hmotnost, vyska) {
+  return(hmotnost / vyska^2)
+}
+bmi(70, 1.75)   # 22.86
+
+# Výchozí hodnoty parametrů
+pozdrav <- function(jmeno, pozdrav = "Ahoj") {
+  paste(pozdrav, jmeno)
+}
+pozdrav("Anna")            # "Ahoj Anna"
+pozdrav("Bob", "Dobrý den")  # "Dobrý den Bob"
+
+# Více návratových hodnot (jako seznam)
+statistiky <- function(x) {
+  list(
+    prumer = mean(x),
+    median = median(x),
+    sd = sd(x),
+    rozsah = range(x)
+  )
+}
+s <- statistiky(c(3, 7, 2, 9, 4))
+s$prumer
+
+# Anonymní funkce (lambda)
+sapply(c(1, 4, 9), \(x) sqrt(x))  # R 4.1+ syntaxe
+# nebo starší: function(x) sqrt(x)
+
+# Pipe operátor (dplyr / native R 4.1+)
+c(1, 4, 9) |> sqrt() |> sum()     # nativní pipe
+c(1, 4, 9) %>% sqrt() %>% sum()   # magrittr pipe (tidyverse)</code></pre>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Manipulace s datovými tabulkami (dplyr / tidyverse)</h2>
+
+    <div class="math-box">
+        <strong>Klíčové dplyr funkce — vždy jako <code>df %&gt;% funkce(...)</code>:</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Funkce</th><th>Co dělá</th></tr></thead>
+            <tbody>
+                <tr><td><code>select()</code></td><td>Výběr sloupců</td></tr>
+                <tr><td><code>filter()</code></td><td>Filtrace řádků dle podmínky</td></tr>
+                <tr><td><code>mutate()</code></td><td>Přidání / úprava sloupce</td></tr>
+                <tr><td><code>arrange()</code></td><td>Řazení řádků</td></tr>
+                <tr><td><code>rename()</code></td><td>Přejmenování sloupce</td></tr>
+                <tr><td><code>group_by() + summarise()</code></td><td>Seskupení a agregace</td></tr>
+                <tr><td><code>left_join() / inner_join()</code></td><td>Spojení tabulek</td></tr>
+                <tr><td><code>pivot_longer() / pivot_wider()</code></td><td>Převod formátů (tidyr)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <pre><code class="language-r">library(dplyr)
+library(tidyr)
+
+# Vzorová úloha: StudentsPerformance.csv
+df <- read.csv("StudentsPerformance.csv")
+
+# 1. Nový sloupec avg.score (průměr tří skóre)
+df <- df %>%
+  mutate(avg.score = (math.score + reading.score + writing.score) / 3)
+
+# 2. Filtrování — záznamy kde parental.level obsahuje "high school"
+df_hs <- df %>%
+  filter(grepl("high school", parental.level.of.education))
+
+# 3. Průměrné avg.score pro každou kombinaci gender × race.ethnicity
+df_grouped <- df_hs %>%
+  group_by(gender, race.ethnicity) %>%
+  summarise(prumer = mean(avg.score, na.rm = TRUE), .groups = "drop")
+
+# 4. Pivot do širokého formátu — gender jako sloupce
+df_wide <- df_grouped %>%
+  pivot_wider(names_from = gender, values_from = prumer)
+
+# Výběr sloupců
+df %>% select(gender, math.score, avg.score)
+df %>% select(-writing.score)       # vynechat sloupec
+
+# Řazení
+df %>% arrange(desc(avg.score))     # sestupně
+df %>% arrange(gender, avg.score)   # více klíčů
+
+# Přejmenování
+df %>% rename(pohLavi = gender, etnikum = race.ethnicity)
+
+# Spojení tabulek
+left_join(df1, df2, by = "id")      # zachová všechny řádky z df1
+inner_join(df1, df2, by = "id")     # pouze shodné klíče v obou
+full_join(df1, df2, by = "id")      # zachová vše
+
+# Pivot do dlouhého formátu (wide → long)
+df_long <- df %>%
+  pivot_longer(
+    cols = c(math.score, reading.score, writing.score),
+    names_to = "predmet",
+    values_to = "skore"
+  )
+
+# Kontingenční tabulka
+table(df$gender, df$race.ethnicity)
+# nebo s dplyr:
+df %>% count(gender, race.ethnicity)</code></pre>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Vizualizace dat (ggplot2)</h2>
+
+    <div class="math-box">
+        <strong>Základní struktura ggplot2:</strong>
+        <pre style="background:none;border:none;margin:4px 0;padding:0;font-family:monospace;">ggplot(data, aes(x = ..., y = ..., color = ...)) +
+  geom_*(...)  +   # typ grafu
+  labs(...)    +   # popisky
+  theme_*()</pre>
+        <strong>Aesthetic mapping (aes):</strong> <code>x</code>, <code>y</code>, <code>color</code>, <code>fill</code>, <code>size</code>, <code>shape</code>, <code>alpha</code>
+    </div>
+
+    <pre><code class="language-r">library(ggplot2)
+
+# Bodový graf (scatter plot)
+ggplot(df, aes(x = math.score, y = reading.score, color = gender)) +
+  geom_point(alpha = 0.6) +
+  labs(title = "Math vs. Reading Score", x = "Matematika", y = "Čtení") +
+  theme_minimal()
+
+# Histogram
+ggplot(df, aes(x = avg.score, fill = gender)) +
+  geom_histogram(binwidth = 5, position = "dodge", alpha = 0.8) +
+  labs(title = "Rozdělení průměrného skóre") +
+  theme_classic()
+
+# Boxplot — vzorová úloha ZZD (boxplot avg.score pro každou race.ethnicity)
+ggplot(df, aes(x = race.ethnicity, y = avg.score, fill = race.ethnicity)) +
+  geom_boxplot() +
+  labs(title = "Průměrné skóre dle etnika", x = "Etnikum", y = "Průměrné skóre") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+# Sloupcový graf (bar chart)
+df %>%
+  group_by(gender) %>%
+  summarise(prumer = mean(avg.score)) %>%
+  ggplot(aes(x = gender, y = prumer, fill = gender)) +
+  geom_col() +
+  geom_text(aes(label = round(prumer, 1)), vjust = -0.3) +
+  labs(title = "Průměrné skóre dle pohlaví")
+
+# Čárový graf
+ggplot(df_monthly, aes(x = mesic, y = hodnota, group = kategorie, color = kategorie)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  scale_x_date(date_labels = "%b %Y")
+
+# Uložení grafu
+ggsave("graf.png", width = 8, height = 5, dpi = 150)
+ggsave("graf.pdf", width = 8, height = 5)</code></pre>
+
+    <div class="highlight-box">
+        <strong>Interpretace boxplotu:</strong>
+        <ul>
+            <li><strong>Box</strong> = mezikvartilové rozpětí (IQR) — střední 50 % dat (Q1 až Q3)</li>
+            <li><strong>Čára uvnitř boxu</strong> = medián (Q2)</li>
+            <li><strong>Vousy (whiskers)</strong> = Q1 − 1,5×IQR a Q3 + 1,5×IQR</li>
+            <li><strong>Tečky za vousy</strong> = odlehlé hodnoty (outliers)</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Reprodukovatelné reporty (Rmd / Quarto)</h2>
+
+    <div class="math-box">
+        <strong>Rmarkdown (.Rmd) / Quarto (.qmd)</strong> — kombinuje text (Markdown) + R kód v jednom dokumentu. Renderováním vznikne HTML, PDF nebo prezentace.
+    </div>
+
+    <h3>Základní struktura Rmd souboru</h3>
+    <pre><code class="language-yaml">---
+title: "Analýza dat studentů"
+author: "Jméno Příjmení"
+date: "`r Sys.Date()`"
+output: html_document    # nebo: pdf_document, word_document
+---</code></pre>
+
+    <pre><code class="language-r">## Načtení dat
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+library(tidyverse)
+```
+
+## Načtení dat
+
+```{r nacteni}
+df <- read_csv("StudentsPerformance.csv")
+head(df)
+```
+
+## Přehled dat
+
+Dataset obsahuje `r nrow(df)` záznamů a `r ncol(df)` proměnných.
+
+```{r prehled}
+summary(df)
+```
+
+## Vizualizace
+
+```{r boxplot, fig.width=8, fig.height=5}
+df %>%
+  mutate(avg.score = (math.score + reading.score + writing.score) / 3) %>%
+  ggplot(aes(x = race.ethnicity, y = avg.score, fill = race.ethnicity)) +
+  geom_boxplot() +
+  theme_minimal()
+```</code></pre>
+
+    <h3>Klíčové chunk options</h3>
+    <table class="table table-sm table-bordered" style="max-width:600px;">
+        <thead class="table-light"><tr><th>Option</th><th>Výchozí</th><th>Popis</th></tr></thead>
+        <tbody>
+            <tr><td><code>echo</code></td><td>TRUE</td><td>Zobrazit kód v dokumentu</td></tr>
+            <tr><td><code>eval</code></td><td>TRUE</td><td>Spustit kód (FALSE = jen zobrazit)</td></tr>
+            <tr><td><code>include</code></td><td>TRUE</td><td>Zahrnout kód i výstup</td></tr>
+            <tr><td><code>warning</code></td><td>TRUE</td><td>Zobrazit varování</td></tr>
+            <tr><td><code>message</code></td><td>TRUE</td><td>Zobrazit zprávy</td></tr>
+            <tr><td><code>fig.width / fig.height</code></td><td>7 / 5</td><td>Rozměry obrázku (palce)</td></tr>
+            <tr><td><code>cache</code></td><td>FALSE</td><td>Cachovat výsledky (rychlé rerenderování)</td></tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>Renderování:</strong><br>
+        V RStudiu: tlačítko <strong>Knit</strong> (Rmd) nebo <strong>Render</strong> (Quarto)<br>
+        V konzoli: <code>rmarkdown::render("report.Rmd")</code><br><br>
+        <strong>Inline kód:</strong> <code>`r mean(df$math.score)`</code> — vloží vypočítanou hodnotu přímo do textu
+    </div>
+
+    <hr>
+
+    <!-- ══════════════════════════════════════════════════ -->
+    <h2>Kompletní vzorová úloha (StudentsPerformance)</h2>
+
+    <pre><code class="language-r">library(tidyverse)
+
+# Načtení dat
+df <- read_csv("StudentsPerformance.csv")
+
+# 1. Nový sloupec avg.score
+df <- df %>%
+  mutate(avg.score = (math.score + reading.score + writing.score) / 3)
+
+# 2. Filtrovat záznamy kde parental.level.of.education obsahuje "high school"
+df_hs <- df %>%
+  filter(grepl("high school", `parental level of education`))
+
+# 3. Průměrné avg.score pro každou kombinaci gender × race/ethnicity
+df_summary <- df_hs %>%
+  group_by(gender, `race/ethnicity`) %>%
+  summarise(mean_avg = mean(avg.score, na.rm = TRUE), .groups = "drop")
+
+print(df_summary)
+
+# 4. Pivot do širokého formátu — gender jako sloupce
+df_wide <- df_summary %>%
+  pivot_wider(names_from = gender, values_from = mean_avg)
+
+print(df_wide)
+
+# 5. Boxplot avg.score pro každou race/ethnicity
+ggplot(df_hs, aes(x = `race/ethnicity`, y = avg.score, fill = `race/ethnicity`)) +
+  geom_boxplot() +
+  labs(
+    title = "Průměrné skóre dle etnika (skupina: high school)",
+    x = "Etnikum",
+    y = "Průměrné skóre"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 15, hjust = 1))</code></pre>
+
+    <div class="note-box">
+        <strong>Poznámky k ZZD zkoušce:</strong>
+        <ul>
+            <li>Výstupem je <strong>.Rmd nebo .qmd soubor + vyrenderovaný HTML nebo PDF</strong></li>
+            <li>Kód musí být <strong>komentovaný</strong> (co každý blok dělá)</li>
+            <li>Povinná součást: <strong>charakteristika dat</strong> (co dataset obsahuje, typy proměnných, chybějící hodnoty) a <strong>interpretace výsledků</strong></li>
+            <li>U zkoušky jsou dostupné všechny níže uvedené materiály</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>Dostupné materiály a taháky</h2>
+
+    <p>Tyto materiály jsou dostupné přímo u zkoušky (viz PDF zadání):</p>
+
+    <h3>Učebnice R</h3>
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Materiál</th><th>Obsah</th><th>Odkaz</th></tr></thead>
+        <tbody>
+            <tr>
+                <td>R snadno a rychle – díl 1</td>
+                <td>Základy R, datové typy, struktury, funkce, cykly</td>
+                <td><a href="https://oeconomica.vse.cz/wp-content/uploads/Danko_Safr_R-snadno-a-rychle_1.pdf" target="_blank">↗ PDF</a></td>
+            </tr>
+            <tr>
+                <td>R snadno a rychle – díl 2</td>
+                <td>Zpracování dat, vizualizace, pokročilé techniky</td>
+                <td><a href="https://oeconomica.vse.cz/wp-content/uploads/Safr_Danko_R-snadno-a-rychle_2.pdf" target="_blank">↗ PDF</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Taháky (DataCamp)</h3>
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Tahák</th><th>Obsah</th><th>Odkaz</th></tr></thead>
+        <tbody>
+            <tr>
+                <td><strong>R Cheat Sheet</strong></td>
+                <td>Přehled základních R funkcí — vektory, data.frame, funkce, apply</td>
+                <td><a href="https://images.datacamp.com/image/upload/v1697642178/Marketing/Blog/R_Cheat_Sheet_PNG_1.pdf" target="_blank">↗ PDF</a></td>
+            </tr>
+            <tr>
+                <td><strong>Markdown Cheat Sheet</strong></td>
+                <td>Syntaxe Markdownu pro Rmd/qmd reporty — nadpisy, tabulky, kód, obrázky</td>
+                <td><a href="https://images.datacamp.com/image/upload/v1697797990/Marketing/Blog/Markdown_Cheat_Sheet.pdf" target="_blank">↗ PDF</a></td>
+            </tr>
+            <tr>
+                <td><strong>Working With Text Data in R</strong></td>
+                <td>Stringr, regulární výrazy, operace nad řetězci</td>
+                <td><a href="https://images.datacamp.com/image/upload/v1671098754/Marketing/Blog/Working_With_Text_Data_in_R.pdf" target="_blank">↗ PDF</a></td>
+            </tr>
+            <tr>
+                <td><strong>dplyr Cheat Sheet</strong></td>
+                <td>Manipulace s tabulkami — select/filter/mutate/group_by/join/pivot</td>
+                <td><a href="https://images.datacamp.com/image/upload/v1660300796/Marketing/Blog/Manipulating_Data_in_dplyr_Cheat_Sheet.pdf" target="_blank">↗ PDF</a></td>
+            </tr>
+            <tr>
+                <td><strong>ggplot2 Cheat Sheet</strong></td>
+                <td>Vizualizace — geomy, aes, scales, themes, facets</td>
+                <td><a href="https://images.datacamp.com/image/upload/v1666806657/Marketing/Blog/ggplot2_cheat_sheet.pdf" target="_blank">↗ PDF</a></td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

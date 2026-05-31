@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Základy kyberbezpečnosti – ZKB</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script>window.MathJax = {tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <style>
+        .cipher-grid td { width: 36px; height: 36px; text-align: center; vertical-align: middle;
+                          border: 1px solid #aaa; font-family: monospace; font-size: 1em; }
+        .cipher-grid th { width: 36px; height: 36px; text-align: center; background: #eef3f8;
+                          border: 1px solid #aaa; font-size: 0.85em; }
+        .hl-key  { background: #d5f5e3; }
+        .hl-msg  { background: #d6eaf8; }
+        .hl-res  { background: #fef9e7; }
+        .pigpen-cell { width: 60px; height: 60px; display: inline-flex; align-items: center;
+                       justify-content: center; border: 1px solid #ccc; margin: 2px;
+                       font-size: 1.4em; font-family: monospace; }
+    </style>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+    <h1>Základy kyberbezpečnosti</h1>
+    <p class="subtitle">KI/SZZPP – Základy kyberbezpečnosti</p>
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Substituční a transpoziční šifry</h2>
+
+    <div class="math-box">
+        <strong>Základní pojmy:</strong>
+        <ul style="margin-top:6px;">
+            <li><strong>Plaintext</strong> — původní (nešifrovaný) text</li>
+            <li><strong>Ciphertext</strong> — zašifrovaný text</li>
+            <li><strong>Klíč</strong> — informace potřebná k šifrování/dešifrování</li>
+            <li><strong>Substituční šifra</strong> — znaky jsou nahrazeny jinými znaky (písmeno → jiné písmeno)</li>
+            <li><strong>Transpoziční šifra</strong> — znaky jsou přeuspořádány, ale nezměněny</li>
+        </ul>
+    </div>
+
+    <h3>Posuvná šifra (Caesarova šifra)</h3>
+    <p>Každé písmeno posunuto o pevný počet míst v abecedě. Klíč = číslo posunu (1–25).</p>
+    <div class="math-box">
+        Šifrování: $C = (P + k) \bmod 26$ &nbsp;|&nbsp; Dešifrování: $P = (C - k) \bmod 26$<br>
+        kde $P$ = pozice písmene v abecedě (A=0, B=1, … Z=25), $k$ = klíč (posun)
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad — posun o 3 (klasický Caesar):</strong><br>
+        Plaintext: &nbsp;<code>AHOJ</code><br>
+        Šifrování: A(0)+3=D, H(7)+3=K, O(14)+3=R, J(9)+3=M<br>
+        Ciphertext: <code>DKRM</code><br><br>
+        <strong>Vzorová úloha z PDF:</strong> Klíč je zašifrován posuvnou šifrou: <code>VNBW DOHW RMHW RFRF KFHV</code><br>
+        Postup: vyzkoušet posun 1–25, posun 3 dává: <code>SKYT ALEF OJTE OCOC HCES</code> — čitelná zpráva = klíč = <code>SKYTALEFOJTEOCOCHCES</code><br>
+        (nebo systematicky: <em>index of coincidence</em>, nebo frekvence písmen)
+    </div>
+
+    <h3>Polybiova šifra</h3>
+    <p>Písmena jsou zakódována jako souřadnice v 5×5 mřížce (I a J sdílí jedno pole).</p>
+    <div class="highlight-box">
+        <table class="cipher-grid table table-bordered" style="display:inline-table; max-width:220px; margin-right:20px;">
+            <tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr>
+            <tr><th>1</th><td>A</td><td>B</td><td>C</td><td>D</td><td>E</td></tr>
+            <tr><th>2</th><td>F</td><td>G</td><td>H</td><td>I/J</td><td>K</td></tr>
+            <tr><th>3</th><td>L</td><td>M</td><td>N</td><td>O</td><td>P</td></tr>
+            <tr><th>4</th><td>Q</td><td>R</td><td>S</td><td>T</td><td>U</td></tr>
+            <tr><th>5</th><td>V</td><td>W</td><td>X</td><td>Y</td><td>Z</td></tr>
+        </table>
+        <strong>Příklad:</strong> AHOJ → A=11, H=23, O=34, J=24 → <code>11 23 34 24</code><br>
+        Dešifrování: číslo řádku + číslo sloupce → písmeno
+    </div>
+
+    <h3>Sloupcová transpoziční šifra</h3>
+    <p>Plaintext se zapíše do mřížky po řádcích, ciphertext se čte po sloupcích v pořadí určeném klíčem.</p>
+    <div class="highlight-box">
+        <strong>Příklad:</strong> Klíč: <code>3 1 4 2</code> (pořadí sloupců), plaintext: <code>TAJNAZPRAVA</code> (doplněno: <code>TAJNAZPRAVAX</code>)<br><br>
+        Zapsat do mřížky (4 sloupce):<br>
+        <table class="cipher-grid table table-bordered" style="display:inline-table; width:auto;">
+            <tr><th class="hl-key">3</th><th class="hl-key">1</th><th class="hl-key">4</th><th class="hl-key">2</th></tr>
+            <tr><td>T</td><td>A</td><td>J</td><td>N</td></tr>
+            <tr><td>A</td><td>Z</td><td>P</td><td>R</td></tr>
+            <tr><td>A</td><td>V</td><td>A</td><td>X</td></tr>
+        </table>
+        <br>Číst sloupce dle klíče (1→2→3→4): sloupec 1 = <code>AZV</code>, sloupec 2 = <code>NRX</code>, sloupec 3 = <code>TAA</code>, sloupec 4 = <code>JPA</code><br>
+        Ciphertext: <code>AZV NRX TAA JPA</code>
+    </div>
+
+    <h3>Skytalé / šifra plotu (Rail Fence)</h3>
+    <p>Text se zapisuje cik-cak přes více „kolejnic" (řádků), čte se po řádcích.</p>
+    <div class="highlight-box">
+        <strong>Příklad — 3 kolejnice:</strong> Plaintext: <code>AHOJSVETE</code><br><br>
+        <pre style="background:none; border:none; font-family:monospace; margin:0;">
+Kolejnice 1:  A . . . S . . . E
+Kolejnice 2:  . H . J . V . T .
+Kolejnice 3:  . . O . . . E . .</pre>
+        Číst po řádcích: <code>ASE</code> + <code>HJVT</code> + <code>OE</code> → Ciphertext: <code>ASEHJVTOE</code><br><br>
+        <strong>Dešifrování:</strong> Délka textu a počet kolejnic → zpětně zapsat do vzoru a číst cik-cak
+    </div>
+
+    <h3>Malý kříž a Velký polský kříž (Mřížková šifra)</h3>
+    <p>Písmena jsou zakódována geometrickým tvarem části mřížky kolem písmene (a tečkou pro druhé písmeno v poli).</p>
+    <div class="highlight-box">
+        <strong>Malý kříž</strong> — mřížka 3×3 (9 písmen A–I), písmena = tvar okolního rámečku:<br>
+        <table class="cipher-grid table table-bordered" style="display:inline-table; width:auto; margin: 6px 10px 6px 0;">
+            <tr><td>A</td><td>B</td><td>C</td></tr>
+            <tr><td>D</td><td>E</td><td>F</td></tr>
+            <tr><td>G</td><td>H</td><td>I</td></tr>
+        </table>
+        A = ⌐ (roh vlevo nahoře), E = □ (celý čtverec), atd.<br><br>
+        <strong>PIGPEN šifra</strong> — podobný princip, 26 písmen rozdělených do dvou mřížek (A–M a N–Z) + 2 kříže (• pro 2. písmeno v políčku). Symbol = tvar ohraničení políčka + případná tečka.
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Blokové šifry — DES a AES</h2>
+
+    <table class="table table-sm table-bordered" style="max-width:680px;">
+        <thead class="table-light"><tr><th></th><th>DES</th><th>3DES</th><th>AES</th></tr></thead>
+        <tbody>
+            <tr><td>Délka klíče</td><td>56 bitů</td><td>112/168 bitů</td><td>128 / 192 / 256 bitů</td></tr>
+            <tr><td>Délka bloku</td><td>64 bitů</td><td>64 bitů</td><td>128 bitů</td></tr>
+            <tr><td>Počet rund</td><td>16</td><td>48</td><td>10 / 12 / 14</td></tr>
+            <tr><td>Bezpečnost</td><td>❌ Prolomen (1999)</td><td>⚠️ Zastaralý</td><td>✅ Aktuální standard</td></tr>
+            <tr><td>Použití</td><td>Historicky</td><td>Legacy systémy</td><td>Wi-Fi (WPA2), TLS, disky</td></tr>
+        </tbody>
+    </table>
+
+    <div class="math-box">
+        <strong>Symetrická kryptografie</strong> — stejný klíč pro šifrování i dešifrování.<br>
+        Výhoda: rychlá. Nevýhoda: bezpečná distribuce klíče.<br><br>
+        <strong>Módy blokových šifer:</strong>
+        <ul style="margin-top:4px;">
+            <li><strong>ECB</strong> (Electronic Codebook) — každý blok šifrován zvlášť; nebezpečný (vzory zůstávají)</li>
+            <li><strong>CBC</strong> (Cipher Block Chaining) — každý blok XOR s předchozím ciphertextem; potřeba IV</li>
+            <li><strong>GCM</strong> (Galois/Counter Mode) — přidává autentizaci; používán v TLS 1.3</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Asymetrická kryptografie — RSA a Diffie-Hellman</h2>
+
+    <div class="math-box">
+        <strong>Princip:</strong> Dvojice klíčů — <strong>veřejný klíč</strong> (public, sdílitelný) a <strong>soukromý klíč</strong> (private, tajný).<br>
+        Co zašifruje veřejný klíč, dešifruje pouze soukromý, a naopak.
+    </div>
+
+    <h3>RSA</h3>
+    <div class="highlight-box">
+        <strong>Princip RSA (zjednodušeně):</strong>
+        <ol>
+            <li>Zvol dvě velká prvočísla $p$ a $q$; vypočítej $n = p \cdot q$</li>
+            <li>Euler: $\phi(n) = (p-1)(q-1)$; zvol $e$ nesoudělné s $\phi(n)$ → veřejný klíč $(e, n)$</li>
+            <li>Najdi $d$ tak, aby $e \cdot d \equiv 1 \pmod{\phi(n)}$ → soukromý klíč $(d, n)$</li>
+            <li>Šifrování: $C = M^e \bmod n$ &nbsp;|&nbsp; Dešifrování: $M = C^d \bmod n$</li>
+        </ol>
+        Bezpečnost stojí na obtížnosti faktorizace $n$ zpět na $p \cdot q$ (pro velká čísla).<br>
+        <strong>Použití:</strong> HTTPS (výměna symetrického klíče), digitální podpisy, SSH klíče (RSA-4096)
+    </div>
+
+    <h3>Diffie-Hellman (D-H)</h3>
+    <div class="highlight-box">
+        <strong>Cíl:</strong> Dvě strany si bezpečně vytvoří sdílené tajemství přes nezabezpečený kanál — bez přenosu klíče.<br><br>
+        <strong>Princip:</strong>
+        <ol>
+            <li>Veřejné parametry: prvočíslo $p$ a základ $g$ (generátor)</li>
+            <li>Alice: zvolí soukromé $a$, pošle $A = g^a \bmod p$</li>
+            <li>Bob: zvolí soukromé $b$, pošle $B = g^b \bmod p$</li>
+            <li>Alice: sdílené tajemství $s = B^a \bmod p$ &nbsp;|&nbsp; Bob: $s = A^b \bmod p$ — obě jsou stejné!</li>
+        </ol>
+        Odposlech vidí $A$ a $B$, ale ne $a$ ani $b$ → výpočet $s$ je výpočetně obtížný (diskrétní logaritmus).<br>
+        <strong>Použití:</strong> TLS handshake (ECDH = eliptická varianta), VPN klíče
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Hashovací funkce</h2>
+
+    <div class="math-box">
+        <strong>Vlastnosti kryptografické hashovací funkce:</strong>
+        <ul style="margin-top:6px;">
+            <li><strong>Jednosměrnost</strong> — z hashe nelze zpětně zjistit vstup</li>
+            <li><strong>Deterministická</strong> — stejný vstup → vždy stejný výstup</li>
+            <li><strong>Lavinový efekt</strong> — malá změna vstupu → zcela jiný hash</li>
+            <li><strong>Odolnost proti kolizím</strong> — obtížné najít dva různé vstupy se stejným hashem</li>
+        </ul>
+    </div>
+
+    <table class="table table-sm table-bordered" style="max-width:640px;">
+        <thead class="table-light"><tr><th>Funkce</th><th>Délka hashe</th><th>Bezpečnost</th><th>Použití</th></tr></thead>
+        <tbody>
+            <tr><td><strong>MD5</strong></td><td>128 bitů (32 hex)</td><td>❌ Prolomena, kolize nalezeny</td><td>Checksum, legacy (ne pro bezpečnost)</td></tr>
+            <tr><td><strong>SHA-1</strong></td><td>160 bitů (40 hex)</td><td>❌ Prolomena (2017)</td><td>Zastaralá, odchod</td></tr>
+            <tr><td><strong>SHA-256</strong></td><td>256 bitů (64 hex)</td><td>✅ Bezpečná</td><td>TLS certifikáty, Bitcoin, Git</td></tr>
+            <tr><td><strong>SHA-512</strong></td><td>512 bitů (128 hex)</td><td>✅ Bezpečná</td><td>Autentizace, podpisy</td></tr>
+            <tr><td><strong>bcrypt / Argon2</strong></td><td>Variabilní</td><td>✅ Bezpečná (pomalá záměrně)</td><td>Ukládání hesel (odolné brutforce)</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note-box">
+        <strong>Hash ≠ šifrování:</strong> Hash je jednosměrný a nemá klíč. Šifrování je obousměrné (lze dešifrovat). Hesla se hashují (nikdy nešifrují).
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>CIA triáda a AAA framework</h2>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="math-box">
+                <strong>CIA triáda — základní pilíře bezpečnosti:</strong>
+                <ul style="margin-top:6px;">
+                    <li><strong>C — Confidentiality (Důvěrnost)</strong><br>
+                        Data jsou přístupná pouze oprávněným osobám.<br>
+                        Nástroje: šifrování, ACL, MFA</li>
+                    <li><strong>I — Integrity (Integrita)</strong><br>
+                        Data nebyla neoprávněně změněna.<br>
+                        Nástroje: hashe, digitální podpisy, HMAC</li>
+                    <li><strong>A — Availability (Dostupnost)</strong><br>
+                        Systémy jsou dostupné oprávněným uživatelům.<br>
+                        Nástroje: redundance, zálohy, DDoS ochrana, RAID</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="math-box">
+                <strong>AAA framework — řízení přístupu:</strong>
+                <ul style="margin-top:6px;">
+                    <li><strong>Authentication (Autentizace)</strong><br>
+                        Ověření identity — <em>kdo jsi?</em><br>
+                        Faktory: heslo (CO víš), token (CO máš), biometrie (KDO jsi)</li>
+                    <li><strong>Authorization (Autorizace)</strong><br>
+                        Ověření oprávnění — <em>co smíš dělat?</em><br>
+                        Role, ACL, RBAC</li>
+                    <li><strong>Accounting (Účtování)</strong><br>
+                        Záznam aktivit — <em>co jsi dělal?</em><br>
+                        Logy, audit trail, SIEM</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Analýza hrozeb a rizik</h2>
+
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Pojem</th><th>Definice</th><th>Příklad</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Aktivum</strong></td><td>Co chráníme — data, systémy, reputace</td><td>Databáze zákazníků</td></tr>
+            <tr><td><strong>Zranitelnost</strong></td><td>Slabé místo, které lze zneužít</td><td>Neaktualizovaný SW, slabé heslo</td></tr>
+            <tr><td><strong>Hrozba</strong></td><td>Potenciální příčina škody</td><td>Ransomware, interní útočník</td></tr>
+            <tr><td><strong>Riziko</strong></td><td>Pravděpodobnost × dopad hrozby</td><td>Riziko = hrozba × zranitelnost × dopad</td></tr>
+            <tr><td><strong>Důsledky</strong></td><td>Finanční, reputační, právní škody</td><td>Pokuta GDPR, výpadek provozu</td></tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>Cyklus řízení bezpečnostního incidentu:</strong>
+        <strong>Plánování</strong> → <strong>Prevence</strong> (patch management, MFA, firewall) → <strong>Detekce</strong> (SIEM, IDS) → <strong>Reakce</strong> (CIRT, izolace) → <strong>Obnova</strong> (zálohy, RTO/RPO) → <strong>Lessons learned</strong>
+    </div>
+
+    <div class="math-box">
+        <strong>RPO a RTO:</strong>
+        <ul style="margin-top:6px;">
+            <li><strong>RPO (Recovery Point Objective)</strong> — maximální přijatelná ztráta dat; jak starými zálohami si ještě vystačíme. Příklad: RPO = 4 hodiny → zálohy každé 4 hodiny.</li>
+            <li><strong>RTO (Recovery Time Objective)</strong> — maximální přijatelná doba výpadku; jak rychle musíme obnovit. Příklad: RTO = 2 hodiny → systém musí být zpět do 2 hodin.</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Typy útoků a malware</h2>
+
+    <h3>Typy malware</h3>
+    <table class="table table-sm table-bordered">
+        <thead class="table-light"><tr><th>Typ</th><th>Popis</th><th>Příznaky</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Virus</strong></td><td>Připojuje se k souborům, šíří se spouštěním</td><td>Pomalý systém, poškozené soubory</td></tr>
+            <tr><td><strong>Worm</strong></td><td>Šíří se sám po síti bez zásahu uživatele</td><td>Vysoké síťové zatížení</td></tr>
+            <tr><td><strong>Trojan</strong></td><td>Vydává se za legitimní SW, skrytý backdoor</td><td>Neočekávané síťové spojení</td></tr>
+            <tr><td><strong>Ransomware</strong></td><td>Šifruje data a požaduje výkupné</td><td>Zašifrované soubory, výzva k platbě</td></tr>
+            <tr><td><strong>Spyware</strong></td><td>Sleduje uživatele, odesílá data útočníkovi</td><td>Pomalý prohlížeč, neoprávněné přístupy</td></tr>
+            <tr><td><strong>Adware</strong></td><td>Zobrazuje nevyžádanou reklamu</td><td>Popupy, přesměrování prohlížeče</td></tr>
+            <tr><td><strong>Keylogger</strong></td><td>Zaznamenává stisky kláves</td><td>Odcizená hesla, přihlašovací údaje</td></tr>
+            <tr><td><strong>Rootkit</strong></td><td>Skrývá svou přítomnost, modifikuje OS</td><td>Těžko detekovatelný, privilegovaný přístup</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Typy útoků</h3>
+    <table class="table table-sm table-bordered">
+        <thead class="table-light"><tr><th>Útok</th><th>Popis</th><th>Ochrana</th></tr></thead>
+        <tbody>
+            <tr><td><strong>(D)DoS</strong></td><td>Zahlcení serveru požadavky; DDoS = distribuovaně z botnet sítě</td><td>Rate limiting, CDN, scrubbing centers</td></tr>
+            <tr><td><strong>Phishing</strong></td><td>Podvodný e-mail/web pro získání přihlašovacích údajů</td><td>MFA, školení uživatelů, e-mail filtry</td></tr>
+            <tr><td><strong>Spoofing</strong></td><td>Falšování identity (IP, e-mail, DNS, ARP)</td><td>SPF/DKIM/DMARC, DNSSEC, Dynamic ARP Inspection</td></tr>
+            <tr><td><strong>MitM</strong></td><td>Útočník se vloží mezi komunikující strany (zachytí/modifikuje)</td><td>TLS, HSTS, certifikáty</td></tr>
+            <tr><td><strong>Brute Force</strong></td><td>Systematické zkoušení všech kombinací hesel</td><td>Silná hesla, lockout, MFA, captcha</td></tr>
+            <tr><td><strong>SQL Injection</strong></td><td>Vložení SQL kódu do vstupu aplikace</td><td>Prepared statements, input validation</td></tr>
+            <tr><td><strong>Sociální inženýrství</strong></td><td>Manipulace lidí k prozrazení informací (pretexting, tailgating)</td><td>Školení, ověřování identity, politiky</td></tr>
+            <tr><td><strong>Zero-Day</strong></td><td>Útok na zranitelnost, pro kterou neexistuje patch</td><td>Hloubková obrana, EDR, monitoring</td></tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Bezpečnostní technologie a vrstvy</h2>
+
+    <table class="table table-sm table-bordered">
+        <thead class="table-light"><tr><th>Technologie</th><th>Popis</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Firewall (FW)</strong></td><td>Filtrování provozu dle pravidel; UTM FW = all-in-one (IPS, antivirus, VPN, URL filter)</td></tr>
+            <tr><td><strong>IDS / IPS</strong></td><td>IDS = detekce anomálií (pasivní, alertuje). IPS = aktivně blokuje závadný provoz</td></tr>
+            <tr><td><strong>VPN</strong></td><td>Šifrovaný tunel přes veřejnou síť (IPsec, OpenVPN, WireGuard)</td></tr>
+            <tr><td><strong>DMZ</strong></td><td>Demilitarizovaná zóna — oddělená síť pro veřejné servery (web, mail); odděluje od interní LAN</td></tr>
+            <tr><td><strong>NAT</strong></td><td>Skrývá interní IP za veřejnou; přidává vrstvu anonymity</td></tr>
+            <tr><td><strong>RADIUS</strong></td><td>Centralizovaná autentizace do sítě (WPA2/3 Enterprise, 802.1X)</td></tr>
+            <tr><td><strong>TLS / SSL</strong></td><td>Šifrování transportní vrstvy (HTTPS, SMTPS, IMAPS); SSL = zastaralý, TLS 1.3 = aktuální</td></tr>
+            <tr><td><strong>MFA / 2FA</strong></td><td>Vícefaktorová autentizace — heslo + OTP/token/biometrie</td></tr>
+            <tr><td><strong>WPA2 / WPA3</strong></td><td>Šifrování Wi-Fi; WPA2 = AES-CCMP; WPA3 = SAE (odolné offline útokům)</td></tr>
+            <tr><td><strong>DNSSEC</strong></td><td>Digitální podpisy DNS záznamů — ochrana proti DNS spoofingu</td></tr>
+            <tr><td><strong>ACL</strong></td><td>Access Control List — pravidla omezující přístup (na routeru, OS, aplikaci)</td></tr>
+            <tr><td><strong>SSO</strong></td><td>Single Sign-On — jedno přihlášení pro více systémů (Kerberos, SAML, OAuth)</td></tr>
+            <tr><td><strong>STP (802.1D)</strong></td><td>Spanning Tree Protocol — zabraňuje smyčkám v L2 sítích</td></tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Zálohy, RAID a dostupnost</h2>
+
+    <h3>Druhy zálohování</h3>
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Typ</th><th>Co se zálohuje</th><th>Výhody</th><th>Nevýhody</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Plná (Full)</strong></td><td>Vše</td><td>Rychlá obnova</td><td>Pomalá, zabírá místo</td></tr>
+            <tr><td><strong>Přírůstková (Incremental)</strong></td><td>Změny od poslední zálohy (jakékoli)</td><td>Nejrychlejší, nejméně místa</td><td>Pomalá obnova (řetěz záloh)</td></tr>
+            <tr><td><strong>Rozdílová (Differential)</strong></td><td>Změny od poslední <em>plné</em> zálohy</td><td>Kompromis</td><td>Roste s časem</td></tr>
+        </tbody>
+    </table>
+    <p><strong>Pravidlo 3-2-1:</strong> 3 kopie dat, na 2 různých médiích, 1 mimo lokalitu (off-site).</p>
+
+    <h3>RAID pole</h3>
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>RAID</th><th>Min. disků</th><th>Princip</th><th>Výhody</th><th>Nevýhody</th></tr></thead>
+        <tbody>
+            <tr><td><strong>RAID 0</strong></td><td>2</td><td>Striping — data rozdělena mezi disky</td><td>Rychlost</td><td>Žádná redundance — výpadek 1 disku = ztráta vše</td></tr>
+            <tr><td><strong>RAID 1</strong></td><td>2</td><td>Mirroring — data zrcadlena na oba disky</td><td>Redundance</td><td>50 % využití kapacity</td></tr>
+            <tr><td><strong>RAID 5</strong></td><td>3</td><td>Striping + parity (rozložena na všechny disky)</td><td>Redundance + výkon</td><td>Výpadek max. 1 disku; pomalý zápis při obnově</td></tr>
+            <tr><td><strong>RAID 6</strong></td><td>4</td><td>RAID 5 + dvojitá parita</td><td>Vydrží výpadek 2 disků</td><td>Pomalejší zápis</td></tr>
+            <tr><td><strong>RAID 10</strong></td><td>4</td><td>RAID 1 + RAID 0 (mirror stripů)</td><td>Výkon + redundance</td><td>50 % kapacity</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note-box">
+        <strong>RAID není záloha!</strong> RAID chrání před výpadkem disku, ne před náhodným smazáním, ransomwarem nebo požárem. Zálohy jsou nutné navíc.
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Řízení bezpečnosti</h2>
+
+    <table class="table table-sm table-bordered">
+        <thead class="table-light"><tr><th>Zkratka</th><th>Popis</th></tr></thead>
+        <tbody>
+            <tr><td><strong>ISMS</strong></td><td>Information Security Management System — systém řízení informační bezpečnosti (ISO 27001)</td></tr>
+            <tr><td><strong>SOC</strong></td><td>Security Operations Center — tým monitorující bezpečnostní události 24/7</td></tr>
+            <tr><td><strong>SOAR</strong></td><td>Security Orchestration, Automation and Response — automatizace reakce na incidenty</td></tr>
+            <tr><td><strong>SIEM</strong></td><td>Security Information and Event Management — agregace a korelace logů z celé infrastruktury</td></tr>
+            <tr><td><strong>CIRT / CSIRT</strong></td><td>Computer Incident Response Team — tým reagující na bezpečnostní incidenty</td></tr>
+            <tr><td><strong>EDR</strong></td><td>Endpoint Detection and Response — pokročilý antivirus s detekcí chování na stanicích</td></tr>
+            <tr><td><strong>MDM</strong></td><td>Mobile Device Management — centrální správa mobilních zařízení (politiky, vzdálené smazání)</td></tr>
+            <tr><td><strong>DLP</strong></td><td>Data Loss Prevention — prevence úniku dat (e-mail, USB, cloud upload)</td></tr>
+            <tr><td><strong>ITIL</strong></td><td>IT Infrastructure Library — metodika pro řízení IT služeb (incident management, change management)</td></tr>
+            <tr><td><strong>Zero Trust</strong></td><td>Nikdy nedůvěřuj, vždy ověřuj — žádná implicitní důvěra, i uvnitř sítě</td></tr>
+            <tr><td><strong>Pentest</strong></td><td>Penetrační testování — řízený etický útok k odhalení zranitelností (black/white/grey box)</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Legislativa a normy</h3>
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Norma / zákon</th><th>Obsah</th></tr></thead>
+        <tbody>
+            <tr><td><strong>GDPR</strong></td><td>General Data Protection Regulation — ochrana osobních údajů v EU; práva subjektů, povinnosti správců, pokuty až 4 % obratu</td></tr>
+            <tr><td><strong>Zákon č. 181/2014 Sb.</strong></td><td>Zákon o kybernetické bezpečnosti ČR; povinnosti provozovatelů kritické infrastruktury, hlášení incidentů NÚKIB</td></tr>
+            <tr><td><strong>NIS2</strong></td><td>Směrnice EU o bezpečnosti sítí a informačních systémů — rozšíření okruhu povinných subjektů oproti NIS1</td></tr>
+            <tr><td><strong>ISO 27000</strong></td><td>Rodina norem pro ISMS; ISO 27001 = požadavky pro certifikaci; ISO 27002 = doporučené bezpečnostní kontroly</td></tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>
