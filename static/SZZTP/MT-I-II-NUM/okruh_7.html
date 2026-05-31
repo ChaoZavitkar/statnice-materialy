@@ -114,7 +114,7 @@
         <h3>Geometrické vysvětlení</h3>
         <p>Představte si krajinu (horu). Parciální derivace podle X = jak moc stoupá/klesá v směru Východ-Západ. Parciální derivace podle Y = jak moc stoupá/klesá v směru Sever-Jih.</p>
 
-        <h3>Co SPLŇUJE Definici Parciální Derivace – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
             <p><strong style="color: #2e7d32;">✓ Správně: Parciální derivace podle x (y je konstanta)</strong></p>
             <p>Funkce: $f(x, y) = x^2 y + 3xy^2 + 5$</p>
@@ -150,8 +150,8 @@
             <li><strong>Spočítej parciální derivace:</strong> Najdi $\frac{\partial f}{\partial x}$ a $\frac{\partial f}{\partial y}$</li>
             <li><strong>Najdi kritické body:</strong> Vyřeš soustavu $\frac{\partial f}{\partial x} = 0$ a $\frac{\partial f}{\partial y} = 0$</li>
             <li><strong>Spočítej druhé derivace:</strong> Najdi $\frac{\partial^2 f}{\partial x^2}$, $\frac{\partial^2 f}{\partial y^2}$, $\frac{\partial^2 f}{\partial x \partial y}$</li>
-            <li><strong>Sestav Hessovu matici:</strong> V každém kritickém bodě spočítej H</li>
-            <li><strong>Ověř pomocí vlastních hodnot H:</strong> Rozhodni, zda je to minimum, maximum, nebo sedlo</li>
+            <li><strong>Sestav Hessovu matici:</strong> V každém kritickém bodě spočítej druhe derivace $f_{xx}, f_{yy}, f_{xy}$</li>
+            <li><strong>Ověř pomocí testu $D$:</strong> Spočítej $D = f_{xx} \cdot f_{yy} - (f_{xy})^2$ a rozhodni, zda je to minimum, maximum, nebo sedlo</li>
         </ol>
 
         <h3>Hessova matice (druhé derivace)</h3>
@@ -161,12 +161,13 @@
         \frac{\partial^2 f}{\partial y \partial x} & \frac{\partial^2 f}{\partial y^2}
         \end{pmatrix}$$</div>
 
-        <p><strong>Interpretace podle vlastních hodnot $\lambda_1, \lambda_2$ Hessovy matice:</strong></p>
+        <p><strong>Jak rozhodnout, co kritický bod je? (Praktický test pro funkci 2 proměnných):</strong></p>
+        <p>Spočítáme $D = f_{xx} \cdot f_{yy} - (f_{xy})^2$ (determinant Hessovy matice):</p>
         <ul>
-            <li>✓ <strong>$\lambda_1 > 0$ a $\lambda_2 > 0$:</strong> Lokální MINIMUM (dno údolí, ∪ tvar)</li>
-            <li>✓ <strong>$\lambda_1 < 0$ a $\lambda_2 < 0$:</strong> Lokální MAXIMUM (vrchol hory, ∩ tvar)</li>
-            <li>⚠️ <strong>$\lambda_1$ a $\lambda_2$ opačných znamének:</strong> Sedlový bod (nikoliv extrém!)</li>
-            <li>❓ <strong>$\lambda_1 = 0$ nebo $\lambda_2 = 0$:</strong> Test je nedecizivní (potřebujeme vyšší derivace)</li>
+            <li>✓ <strong>$D > 0$ a $f_{xx} > 0$:</strong> Lokální MINIMUM (dno údolí, ∪ tvar v obou směrech)</li>
+            <li>✓ <strong>$D > 0$ a $f_{xx} < 0$:</strong> Lokální MAXIMUM (vrchol hory, ∩ tvar v obou směrech)</li>
+            <li>⚠️ <strong>$D < 0$:</strong> Sedlový bod — v jednom směru minimum, v druhém maximum (nikoliv extrém!)</li>
+            <li>❓ <strong>$D = 0$:</strong> Test nepomůže — potřebujeme zkoumat hlouběji</li>
         </ul>
 
         <h3>Příklad: Hledání extrémů konkrétní funkce</h3>
@@ -198,17 +199,17 @@
 
         <p><strong>KROK 4: Hessova matice v bodě $(0, 0)$</strong></p>
         <div class="formula">
-            $$\mathbf{H}_{(0,0)} = \begin{pmatrix} 0 & -3 \\ -3 & 0 \end{pmatrix}$$
+            $$\mathbf{H}_{(0,0)} = \begin{pmatrix} f_{xx} & f_{xy} \\ f_{xy} & f_{yy} \end{pmatrix} = \begin{pmatrix} 0 & -3 \\ -3 & 0 \end{pmatrix}$$
         </div>
-        <p>Vlastní hodnoty: $\det(\mathbf{H} - \lambda I) = 0$ → $(0-\lambda)(0-\lambda) - 9 = 0$ → $\lambda^2 = 9$ → $\lambda_1 = 3, \lambda_2 = -3$</p>
-        <p>Protože vlastní hodnoty mají <strong>opačné znaménko</strong> → <strong>SEDLOVÝ BOD (nikoliv extrém!)</strong></p>
+        <p>Test: $D = f_{xx} \cdot f_{yy} - (f_{xy})^2 = 0 \cdot 0 - (-3)^2 = 0 - 9 = -9$</p>
+        <p>Protože $D < 0$ → <strong>SEDLOVÝ BOD (nikoliv extrém!)</strong> — funkce stoupá v jednom směru a klesá v druhém</p>
 
         <p><strong>KROK 5: Hessova matice v bodě $(1, 1)$</strong></p>
         <div class="formula">
             $$\mathbf{H}_{(1,1)} = \begin{pmatrix} 6 & -3 \\ -3 & 6 \end{pmatrix}$$
         </div>
-        <p>Vlastní hodnoty: $\det(\mathbf{H} - \lambda I) = 0$ → $(6-\lambda)^2 - 9 = 0$ → $(6-\lambda)^2 = 9$ → $\lambda_1 = 9, \lambda_2 = 3$</p>
-        <p>Všechny vlastní hodnoty <strong>kladné</strong> → <strong>LOKÁLNÍ MINIMUM v bodě (1, 1)</strong> ✓</p>
+        <p>Test: $D = f_{xx} \cdot f_{yy} - (f_{xy})^2 = 6 \cdot 6 - (-3)^2 = 36 - 9 = 27$</p>
+        <p>$D = 27 > 0$ a $f_{xx} = 6 > 0$ → <strong>LOKÁLNÍ MINIMUM v bodě (1, 1)</strong> ✓</p>
         <p>Hodnota minima: $f(1, 1) = 1 + 1 - 3 = -1$</p>
 
         <h3>Lokální vs. Globální extrémy</h3>
@@ -231,13 +232,13 @@
             </ol>
         </div>
 
-        <h3>Co SPLŇUJE Definici Extrému – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
             <p><strong style="color: #2e7d32;">✓ Správně: Paraboloid má minimum</strong></p>
             <p>Funkce: $f(x, y) = x^2 + y^2$ (paraboloid)</p>
             <p>Kritické body: $\frac{\partial f}{\partial x} = 2x = 0$ a $\frac{\partial f}{\partial y} = 2y = 0$ → bod $(0, 0)$ ✓</p>
             <p>Hessova matice: $\mathbf{H} = \begin{pmatrix} 2 & 0 \\ 0 & 2 \end{pmatrix}$</p>
-            <p>Vlastní hodnoty: $\lambda_1 = 2 > 0$, $\lambda_2 = 2 > 0$ → <strong>MINIMUM v bodě (0, 0)</strong> ✓</p>
+            <p>Test: $D = 2 \cdot 2 - 0^2 = 4 > 0$ a $f_{xx} = 2 > 0$ → <strong>MINIMUM v bodě (0, 0)</strong> ✓</p>
         </div>
 
         <div class="math-box" style="background-color: #fff3cd; border-left: 4px solid #ff9800;">
@@ -245,7 +246,7 @@
             <p>Funkce: $f(x, y) = x^2 - y^2$ (sedlo)</p>
             <p>Kritické body: $\frac{\partial f}{\partial x} = 2x = 0$ a $\frac{\partial f}{\partial y} = -2y = 0$ → bod $(0, 0)$</p>
             <p>Hessova matice: $\mathbf{H} = \begin{pmatrix} 2 & 0 \\ 0 & -2 \end{pmatrix}$</p>
-            <p>Vlastní hodnoty: $\lambda_1 = 2 > 0$, $\lambda_2 = -2 < 0$ → <strong>SEDLOVÝ BOD (nikoliv extrém!)</strong> ⚠</p>
+            <p>Test: $D = 2 \cdot (-2) - 0^2 = -4 < 0$ → <strong>SEDLOVÝ BOD (nikoliv extrém!)</strong> ⚠</p>
             <p>V bodě (0,0) se funkce stoupá ve směru x, ale klesá ve směru y!</p>
         </div>
 
@@ -257,23 +258,23 @@
         <p><strong>Příklad:</strong> Maximalizuj $f(x, y) = xy$ tak, aby platilo $x^2 + y^2 = 1$ (bod leží na jednotkové kružnici).</p>
 
         <h3>Metoda Lagrangeových multiplikátorů</h3>
-        <p><strong>Myšlenka:</strong> Místo volného optima hledáme bod, kde se funkce $f$ "shoduje" s vazbou (gradient $f$ je rovnoběžný s gradientem vazbové podmínky).</p>
+        <p><strong>Myšlenka:</strong> V optimálním bodě jsou parciální derivace funkce $f$ a vazbové podmínky $g$ navzájem proportionální — hledáme bod, kde jsou "sklony" obou funkcí ve stejném poměru.</p>
 
-        <div class="formula">$$\nabla f = \lambda \nabla g$$</div>
+        <div class="formula">$$\frac{\partial f}{\partial x} = \lambda \frac{\partial g}{\partial x}, \quad \frac{\partial f}{\partial y} = \lambda \frac{\partial g}{\partial y}$$</div>
 
-        <p>kde $g(x, y) = 0$ je vazbová podmínka (v příkladu $g(x, y) = x^2 + y^2 - 1$) a $\lambda$ je <strong>Lagrangův multiplikátor</strong>.</p>
+        <p>kde $g(x, y) = 0$ je omezení (v příkladu $g(x, y) = x^2 + y^2 - 1$) a $\lambda$ je <strong>Lagrangův multiplikátor</strong> (pomocné číslo, které pomáhá splnit podmínku).</p>
 
         <div class="math-box">
-            <strong>Algoritmus:</strong>
+            <strong>Postup krok za krokem:</strong>
             <ol>
-                <li>Napíšeme soustavu: $\frac{\partial f}{\partial x} = \lambda \frac{\partial g}{\partial x}$, $\frac{\partial f}{\partial y} = \lambda \frac{\partial g}{\partial y}$, a $g(x,y) = 0$</li>
-                <li>Vyřešíme soustavu (3 rovnice, 3 neznámé: $x, y, \lambda$)</li>
-                <li>Vyhodnotíme $f$ v každém kritickém bodě</li>
+                <li>Zapíšeme soustavu 3 rovnic: parciální derivace $f$ = λ × parciální derivace $g$ (pro x a y) + podmínka $g(x,y) = 0$</li>
+                <li>Vyřešíme soustavu (3 rovnice, 3 neznámé: $x, y, \lambda$) — například substitucí</li>
+                <li>Spočítáme hodnotu $f$ v každém nalezeném bodě</li>
                 <li>Největší hodnota = maximum, nejmenší = minimum</li>
             </ol>
         </div>
 
-        <h3>Co SPLŇUJE Definici Vázaného Extrému – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
             <p><strong style="color: #2e7d32;">✓ Správně: Hledáme extrém s vazbou</strong></p>
             <p>Maximalizuj $f(x, y) = xy$ s podmínkou $x + y = 2$ (bod leží na přímce)</p>
@@ -326,7 +327,7 @@
             </ul>
         </div>
 
-        <h3>Co SPLŇUJE Definici Metody Nejmenších Čtverců – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
             <p><strong style="color: #2e7d32;">✓ Správně: Lineární regrese je vhodná</strong></p>
             <p><strong>Případ 1:</strong> Data mají zhruba lineární trend s normálním šumem</p>
@@ -619,17 +620,17 @@
 
         <hr>
 
-        <h2>7. Shrnutí a praktické doporučení</h2>
+        <h2>Shrnutí a praktické doporučení</h2>
 
         <div class="highlight-box">
             <p><strong>Klíčové pojmy a jejich vztahy:</strong></p>
             <ul>
                 <li><strong>Parciální derivace:</strong> Změna funkce v jednom směru (zatímco ostatní jsou konstanty)</li>
                 <li><strong>Kritické body:</strong> Místa, kde jsou všechny parciální derivace nula (kandidáti na extrémy)</li>
-                <li><strong>Hessova matice:</strong> Matice druhých derivací — určuje typ kritického bodu</li>
+                <li><strong>Hessova matice:</strong> Tabulka druhých derivací — pomocí ní spočítáme test $D$ a zjistíme, zda jde o minimum, maximum nebo sedlo</li>
                 <li><strong>Lokální extrém:</strong> Největší/nejmenší v blízkém okolí (může být více takových bodů)</li>
                 <li><strong>Globální extrém:</strong> Největší/nejmenší v celé doméně (je jen jeden)</li>
-                <li><strong>Vázaný extrém:</strong> Extrém s podmínkou (Lagrangeovy multiplikátory)</li>
+                <li><strong>Vázaný extrém:</strong> Extrém s omezením — bod musí splňovat podmínku (řeší se Lagrangeovou metodou)</li>
                 <li><strong>Metoda nejmenších čtverců:</strong> Fitování dat minimalizací sumy čtvercových chyb</li>
             </ul>
         </div>

@@ -100,8 +100,8 @@
         <p>kde:</p>
         <ul>
             <li>$\mathbf{A}$ = matice koeficientů (tabulka čísel $a_{ij}$)</li>
-            <li>$\mathbf{x}$ = vektor neznámých ($x_1, x_2, \ldots, x_n$)</li>
-            <li>$\mathbf{b}$ = vektor pravých stran ($b_1, b_2, \ldots, b_m$)</li>
+            <li>$\mathbf{x}$ = sloupeček neznámých ($x_1, x_2, \ldots, x_n$ — co hledáme)</li>
+            <li>$\mathbf{b}$ = sloupeček pravých stran ($b_1, b_2, \ldots, b_m$ — výsledky rovnic)</li>
         </ul>
 
         <div class="highlight-box">
@@ -153,27 +153,27 @@
         </ul>
 
         <div class="highlight-box">
-            <p><strong>Formálně (pro pokročilé):</strong> Počet řešení určuje <strong>hodnost matice</strong> (rank) — počet nezávislých rovnic. Pokud je hodnost matice koeficientů stejná jako hodnost rozšířené matice (s pravými stranami), pak má soustava řešení.</p>
+            <p><strong>Formálně:</strong> Počet řešení určuje <strong>hodnost matice (rank)</strong> — kolik rovnic je skutečně nezávislých (tj. nepřidávají jen duplikáty informace). Pokud je hodnost matice koeficientů stejná jako hodnost rozšířené matice (s pravými stranami), pak má soustava řešení.</p>
         </div>
 
-        <h3>Frobeniova věta (řešitelnost soustav)</h3>
-        <p><strong>Věta:</strong> Soustava $\mathbf{Ax} = \mathbf{b}$ má řešení právě když:</p>
-        <div class="formula">$$\text{rank}(\mathbf{A}) = \text{rank}(\mathbf{A}|\mathbf{b})$$</div>
-        <p>kde $(\mathbf{A}|\mathbf{b})$ je <strong>rozšířená matice</strong> (matice $\mathbf{A}$ rozšířená o vektor $\mathbf{b}$).</p>
+        <h3>Frobeniova věta (kdy má soustava řešení)</h3>
+        <p><strong>Věta:</strong> Soustava $\mathbf{Ax} = \mathbf{b}$ má řešení právě když počet nezávislých rovnic je stejný, ať vezmeme jen levé strany (matici $\mathbf{A}$) nebo celou soustavu včetně pravých stran:</p>
+        <div class="formula">$$\text{hodnost}(\mathbf{A}) = \text{hodnost}(\mathbf{A}|\mathbf{b})$$</div>
+        <p>kde $(\mathbf{A}|\mathbf{b})$ je <strong>rozšířená matice</strong> (matice $\mathbf{A}$ s přidaným sloupcem pravých stran $\mathbf{b}$).</p>
 
         <div class="math-box">
             <strong>Co to znamená v praxi:</strong>
             <ul>
-                <li><strong>Stejné hodnosti:</strong> Všechny informace v $\mathbf{b}$ jsou již obsaženy v $\mathbf{A}$ → řešení existuje</li>
-                <li><strong>Různé hodnosti:</strong> Vektor $\mathbf{b}$ přidává nové informace, kterou $\mathbf{A}$ nemůže reprezentovat → spor, žádné řešení</li>
+                <li><strong>Hodnosti se rovnají:</strong> Pravé strany neobsahují žádný "spor" — řešení existuje ✓</li>
+                <li><strong>Hodnosti se liší:</strong> Přidáním pravých stran vzniká nový spor (např. $0 = 5$) — řešení neexistuje ✗</li>
             </ul>
         </div>
 
         <div class="highlight-box">
-            <p><strong>Navíc:</strong> Pokud má soustava řešení a $\text{rank}(\mathbf{A}) = n$ (počet neznámých), pak má <strong>jediné řešení</strong>. Pokud $\text{rank}(\mathbf{A}) < n$, pak má <strong>nekonečně mnoho řešení</strong> (se $n - \text{rank}(\mathbf{A})$ volnými parametry).</p>
+            <p><strong>Navíc:</strong> Pokud má soustava řešení a všechny rovnice jsou nezávislé (hodnost = počtu neznámých), pak má <strong>jediné řešení</strong>. Pokud jsou některé rovnice závislé (hodnost &lt; počtu neznámých), pak má <strong>nekonečně mnoho řešení</strong> — část neznámých si lze zvolit libovolně.</p>
         </div>
 
-        <h3>Co SPLŇUJE Definici Řešitelnosti – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
             <p><strong style="color: #2e7d32;">✓ Správně: Soustava má 1 řešení</strong></p>
             <p>Soustava:</p>
@@ -194,9 +194,9 @@
             2x + 3y &= 7 \\
             4x + 6y &= 14 \quad \text{(Druhá rovnice je 2× první)}
             \end{aligned}$$</div>
-            <p>Matice $\mathbf{A} = \begin{pmatrix} 2 & 3 \\ 4 & 6 \end{pmatrix}$, $\text{rank}(\mathbf{A}) = 1$ (druhý řádek je lineárně závislý)<br>
-            Rozšířená matice $(\mathbf{A}|\mathbf{b}) = \begin{pmatrix} 2 & 3 & 7 \\ 4 & 6 & 14 \end{pmatrix}$, $\text{rank}(\mathbf{A}|\mathbf{b}) = 1$<br>
-            <strong>Kriterium Frobeniovy věty:</strong> $\text{rank}(\mathbf{A}) = \text{rank}(\mathbf{A}|\mathbf{b}) = 1 < 2 = n$ → nekonečně mnoho řešení (všechny body na přímce $2x + 3y = 7$) ✓
+            <p>Matice $\mathbf{A} = \begin{pmatrix} 2 & 3 \\ 4 & 6 \end{pmatrix}$, hodnost $= 1$ (druhý řádek je jen násobek prvního — přidává nulovou informaci)<br>
+            Rozšířená matice $(\mathbf{A}|\mathbf{b}) = \begin{pmatrix} 2 & 3 & 7 \\ 4 & 6 & 14 \end{pmatrix}$, hodnost $= 1$<br>
+            <strong>Frobeniova věta:</strong> hodnost(A) = hodnost(A|b) = 1, ale menší než 2 (počtu neznámých) → nekonečně mnoho řešení (všechny body na přímce $2x + 3y = 7$) ✓
             </p>
         </div>
 
@@ -302,7 +302,7 @@
             </ul>
         </div>
 
-        <h3>Co SPLŇUJE Definici Gaussovy Eliminace – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
             <p><strong style="color: #2e7d32;">✓ Správně: Elementární řádkové operace na 2×2 soustavě</strong></p>
             <p>Soustava:</p>
@@ -554,7 +554,7 @@ Výsledek: U = výsledek po eliminaci, L = zaznamenané faktory (s jedničkami n
         <ul>
             <li>✗ <strong>Nemusí konvergovat</strong> — závisí na vlastnostech matice (viz podmínky níže)</li>
             <li>✗ Dávají pouze <strong>přibližné</strong> řešení (musíme zastavit po určitém kritériu)</li>
-            <li>✗ <strong>Pomalejší konvergence</strong> pro špatně podmíněné matice</li>
+            <li>✗ <strong>Pomalejší konvergence</strong> pro matice, kde jsou prvky na diagonále jen o málo větší než ostatní (iterace se zpomalí)</li>
         </ul>
 
         <h4>Jacobiho iterační metoda (Simultánní)</h4>
@@ -573,16 +573,16 @@ Výsledek: U = výsledek po eliminaci, L = zaznamenané faktory (s jedničkami n
 
         <p><strong>Charakteristika:</strong> Jakmile vypočteme $x_i^{(k+1)}$, okamžitě ji používáme pro výpočet $x_{i+1}^{(k+1)}$. Obvykle <strong>konverguje rychleji</strong> než Jacobi.</p>
 
-        <h5>Podmínky konvergence</h5>
+        <h5>Kdy metoda funguje</h5>
 
         <div class="highlight-box">
-            <strong>Věta:</strong> Jacobiho a Gauss-Seidelova metoda konvergují, pokud matice $\mathbf{A}$ splňuje jednu z podmínek:
+            <strong>Jacobiho a Gauss-Seidelova metoda fungují spolehlivě, pokud matice $\mathbf{A}$ splňuje jednu z podmínek:</strong>
             <ol>
-                <li><strong>Striktně diagonálně dominantní:</strong>
+                <li><strong>Diagonálně dominantní matice:</strong>
                     $$|a_{ii}| > \sum_{j \neq i} |a_{ij}| \quad \text{pro všechna } i$$
-                    <br><em>Slovy: diagonální prvky jsou větší než součet absolutních hodnot ostatních prvků v řádku.</em>
+                    <br><em>Jednoduše: v každém řádku je číslo na diagonále absolutně větší než součet všech ostatních čísel v tom řádku. Diagonála "dominuje".</em>
                 </li>
-                <li><strong>Symetrická pozitivně definitní matice</strong></li>
+                <li><strong>Symetrická matice s kladnými vlastními čísly</strong> (technický případ — při praxi ho nemusíte ověřovat ručně)</li>
             </ol>
         </div>
 
@@ -637,7 +637,7 @@ Výsledek: U = výsledek po eliminaci, L = zaznamenané faktory (s jedničkami n
 
         <p><strong>Pozorování:</strong> Gauss-Seidelova metoda konverguje <strong>rychleji</strong> (dosahuje nižší chyby po 3 krocích) díky použití novějších hodnot.</p>
 
-        <h3>Co SPLŇUJE Definici Iteračních Metod – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
         <div class="math-box" style="background-color: #e8f5e9; border-left: 4px solid #4caf50;">
             <p><strong style="color: #2e7d32;">✓ Správně: Iterační metoda s konvergencí</strong></p>
             <p>Soustava (diagonálně dominantní):</p>
@@ -662,7 +662,7 @@ Výsledek: U = výsledek po eliminaci, L = zaznamenané faktory (s jedničkami n
             \end{aligned}$$</div>
             <p><strong>Problém:</strong> Iterační metody SICE konvergují (je splněna podmínka), ale <strong>velmi pomalu</strong>!</p>
             <p><strong>Počet iterací potřebný pro přesnost $10^{-6}$:</strong> Zatímco pro předchozí soustavu stačily 4 iterace, zde bychom potřebovali stovky!</p>
-            <p><strong>Řešení:</strong> Použít <strong>preconditioning</strong> (předpodmínění) — transformace matice tak, aby se lépe chovala. Nebo switch na přímé metody (Gauss).</p>
+            <p><strong>Řešení:</strong> Použít matematické transformace matice tak, aby se prvky na diagonále staly výrazně větší (technicky "předpodmínění"). Nebo jednoduše přejít na přímé metody (Gauss).</p>
         </div>
 
         <div class="math-box" style="background-color: #ffebee; border-left: 4px solid #f44336;">

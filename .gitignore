@@ -21,6 +21,8 @@ __pycache__/
 
 # Large PDF files (textbook references)
 *.pdf
+*.md
+*.docx
 
 # Node modules (if applicable)
 node_modules/

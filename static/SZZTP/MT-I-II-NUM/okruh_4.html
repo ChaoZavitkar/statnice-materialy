@@ -52,8 +52,8 @@
         <strong>Funkce $f: D \to H$</strong> je předpis, který každému prvku $x \in D$ přiřadí právě jeden prvek $f(x) \in H$.
         <ul style="margin-top: 10px;">
             <li>$D$ — <strong>definiční obor</strong> (kde je funkce definovaná)</li>
-            <li>$H$ — <strong>kodomain</strong> (kam funkce „míří")</li>
-            <li>$\text{Im}(f) = \{f(x) : x \in D\}$ — <strong>obraz funkce</strong> (co se skutečně dosáhne)</li>
+            <li>$H$ — <strong>cílová množina</strong> (množina, do které funkce zobrazuje — ne všechny hodnoty musí být dosaženy)</li>
+            <li>$H(f)$ — <strong>obor hodnot</strong> (hodnoty, které funkce skutečně nabývá; $H(f) \subseteq H$)</li>
         </ul>
     </div>
 
@@ -61,29 +61,29 @@
 
     <h3>Definiční obor a obor hodnot</h3>
 
-    <p><strong>Definiční obor $D$:</strong> Where je funkce matematicky definovaná? (Omezení: bez dělení nulou, bez odmocniny ze záporného, logaritmus jen kladných čísel, atd.)</p>
+    <p><strong>Definiční obor $D(f)$:</strong> Kde je funkce matematicky definovaná? (Omezení: bez dělení nulou, bez odmocniny ze záporného, logaritmus jen kladných čísel, atd.)</p>
 
-    <p><strong>Obraz $\text{Im}(f)$:</strong> Jaké hodnoty se skutečně dosáhnou?</p>
+    <p><strong>Obor hodnot $H(f)$:</strong> Jaké výstupní hodnoty funkce skutečně dosáhne? (Česká notace: $H(f)$ nebo $H_f$)</p>
 
     <table class="table table-sm" style="max-width: 500px;">
-        <tr><td>$f(x) = \sqrt{x}$</td><td>$D = [0, +\infty)$</td><td>$\text{Im}(f) = [0, +\infty)$</td></tr>
-        <tr><td>$f(x) = \frac{1}{x}$</td><td>$D = \mathbb{R} \setminus \{0\}$</td><td>$\text{Im}(f) = \mathbb{R} \setminus \{0\}$</td></tr>
-        <tr><td>$f(x) = x^2$</td><td>$D = \mathbb{R}$</td><td>$\text{Im}(f) = [0, +\infty)$</td></tr>
+        <tr><td>$f(x) = \sqrt{x}$</td><td>$D(f) = [0, +\infty)$</td><td>$H(f) = [0, +\infty)$</td></tr>
+        <tr><td>$f(x) = \frac{1}{x}$</td><td>$D(f) = \mathbb{R} \setminus \{0\}$</td><td>$H(f) = \mathbb{R} \setminus \{0\}$</td></tr>
+        <tr><td>$f(x) = x^2$</td><td>$D(f) = \mathbb{R}$</td><td>$H(f) = [0, +\infty)$</td></tr>
     </table>
 
     <h3>Vlastnosti funkcí</h3>
 
-    <p><strong>Injektivita (prostá funkce):</strong> Různé vstupy dávají různé výstupy. Formálně: $x_1 \neq x_2 \Rightarrow f(x_1) \neq f(x_2)$</p>
+    <p><strong>Prostá funkce (injektivita):</strong> Různé vstupy dávají různé výstupy — žádné dva různé $x$ nedají stejný výsledek. Formálně: $x_1 \neq x_2 \Rightarrow f(x_1) \neq f(x_2)$</p>
 
-    <p><strong>Surjektivita (na):</strong> Každý prvek z kodomenu je obrazem nějakého prvku. Formálně: $\text{Im}(f) = H$</p>
+    <p><strong>Funkce „na" (surjektivita):</strong> Každá hodnota z cílové množiny je dosažitelná — pro každý možný výstup existuje nějaký vstup. Formálně: $H(f) = H$</p>
 
-    <p><strong>Bijektivita:</strong> Funkce je zároveň injektivní a surjektivní. Má inverzní funkci $f^{-1}$.</p>
+    <p><strong>Vzájemně jednoznačná funkce (bijektivita):</strong> Funkce je zároveň prostá (různé vstupy → různé výstupy) a „na" (každý výstup je dosažitelný). Taková funkce má inverzní funkci $f^{-1}$.</p>
 
     <p><strong>Příklady:</strong></p>
     <ul>
-        <li>$f(x) = x^2$ na $\mathbb{R}$ — <strong>není injektivní</strong> ($f(-1) = f(1) = 1$), <strong>není surjektivní</strong> (záporná čísla nejsou obrazem)</li>
-        <li>$f(x) = 2x + 1$ — <strong>injektivní</strong> (různé $x$ → různé $f(x)$), <strong>surjektivní</strong> (každé $y$ je obrazem), tedy <strong>bijektivní</strong> ✓</li>
-        <li>$f(x) = e^x$ — <strong>injektivní</strong>, ale <strong>není surjektivní</strong> na $\mathbb{R}$ (záporné výstupy nejsou možné)</li>
+        <li>$f(x) = x^2$ na $\mathbb{R}$ — <strong>není prostá</strong> ($f(-1) = f(1) = 1$, dva různé vstupy dají stejný výstup), <strong>není „na"</strong> (záporná čísla nikdy nedosáhneme)</li>
+        <li>$f(x) = 2x + 1$ — <strong>prostá</strong> (různé $x$ → různé $f(x)$), <strong>„na"</strong> (každé $y$ je dosažitelné), tedy <strong>vzájemně jednoznačná</strong> ✓</li>
+        <li>$f(x) = e^x$ — <strong>prostá</strong>, ale <strong>není „na"</strong> na $\mathbb{R}$ (záporné výstupy nejsou nikdy možné)</li>
     </ul>
 
     <h3>Asymptoty funkce</h3>
@@ -841,7 +841,7 @@
 
     <h3>Metoda půlení intervalu (Bisekce)</h3>
 
-    <p><strong>Matematický princip:</strong> Věta o mezihodnotě – je-li $f$ spojitá na $[a,b]$ a $f(a) \cdot f(b) < 0$, pak existuje $c \in (a, b)$ takové, že $f(c) = 0$.</p>
+    <p><strong>Matematický princip (Cauchyho věta):</strong> Je-li $f$ spojitá na $[a,b]$ a $f(a) \cdot f(b) < 0$ (na levém konci jiné znaménko než na pravém), pak existuje $c \in (a, b)$ takové, že $f(c) = 0$.</p>
 
     <p><strong>Intuice:</strong> Funkce "přechází" nulu mezi $a$ a $b$ (změní znaménko) → kořen tam určitě existuje. Půlením intervalu se k němu blížíme.</p>
 
@@ -860,12 +860,12 @@
     </ol>
 
     <div class="math-box">
-        <strong>Podmínky konvergence:</strong>
+        <strong>Kdy metoda funguje:</strong>
         <ul style="margin: 10px 0;">
-            <li>Funkce musí být <strong>spojitá</strong> na $[a,b]$</li>
-            <li>Musí platit <strong>$f(a) \cdot f(b) < 0$</strong> (různá znaménka!)</li>
+            <li>Funkce musí být <strong>spojitá</strong> na $[a,b]$ (bez skoků)</li>
+            <li>Musí platit <strong>$f(a) \cdot f(b) < 0$</strong> (na levém konci jiné znaménko než na pravém!)</li>
         </ul>
-        <strong>Výsledek:</strong> Vždy konverguje! Po $n$ iteracích: chyba ≤ $\frac{b-a}{2^n}$
+        <strong>Výsledek:</strong> Vždy najde kořen! Po $n$ iteracích: chyba ≤ $\frac{b-a}{2^n}$
     </div>
 
     <p><strong>Praktická rada:</strong> Bisekce je <strong>pomalá, ale robustní</strong>. Vždycky funguje, pokud jsou splněny podmínky. Počet iterací: $\log_2\left(\frac{b-a}{\epsilon}\right)$ ≈ pro 10 přesných číslic → ~33 iterací.</p>
@@ -902,14 +902,14 @@
         Začni s aproximací $x_0$ a iteruj dokud $|f(x_n)| < \epsilon$ (nebo $|x_{n+1} - x_n| < \epsilon$)
     </div>
 
-    <p><strong>Podmínky konvergence:</strong></p>
+    <p><strong>Kdy metoda funguje:</strong></p>
     <ul>
-        <li>Funkce musí být <strong>diferencovatelná</strong> (existuje derivace $f'$)</li>
-        <li>Derivace nesmí být nula: $f'(x_n) \neq 0$ (tečna není vodorovná)</li>
-        <li>Počáteční aproximace $x_0$ musí být <strong>dost blízko</strong> ke kořeni</li>
+        <li>Funkce musí mít derivaci (musí být hladká, bez ostrých rohů)</li>
+        <li>Derivace nesmí být nulová: $f'(x_n) \neq 0$ (tečna nesmí být vodorovná — pak by neprotínala osu $x$)</li>
+        <li>Počáteční odhad $x_0$ musí být <strong>dost blízko</strong> ke kořeni</li>
     </ul>
 
-    <p><strong>Typ konvergence:</strong> <strong>Kvadratická</strong> – chyba se každou iterací umocňuje na druhou. Pokud máš chybu 0.1, příští je 0.01, pak 0.0001... Velmi rychle!</p>
+    <p><strong>Rychlost:</strong> Velmi rychlá — chyba se každou iterací umocňuje na druhou. Pokud máš chybu 0.1, příští je 0.01, pak 0.0001... Konverguje skokově!</p>
 
     <div class="highlight-box">
         <strong>Příklad:</strong> Řešit $f(x) = x^2 - 2 = 0$ s $x_0 = 1.5$<br>
@@ -946,9 +946,9 @@
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>Rychlost konvergence</strong></td>
-                    <td>Lineární – chyba dělena dvěma za iteraci</td>
-                    <td>Kvadratická – chyba umocňuje se na druhou za iteraci</td>
+                    <td><strong>Rychlost</strong></td>
+                    <td>Pomalá – každá iterace zmenší chybu na polovinu</td>
+                    <td>Velmi rychlá – každá iterace chybu umocní na druhou (0.1 → 0.01 → 0.0001)</td>
                 </tr>
                 <tr>
                     <td><strong>Počet iterací</strong></td>
@@ -1599,8 +1599,8 @@
     <div class="math-box">
         <strong>Proč je Newton tak rychlejší?</strong><br>
         <br>
-        Bisekce: Chyba se každou iterací <strong>dělí dvěma</strong> (lineární konvergence)<br>
-        Newton: Chyba se každou iterací <strong>umocňuje na druhou</strong> (kvadratická konvergence)<br>
+        Bisekce: Chyba se každou iterací <strong>dělí dvěma</strong> (pomalé zmenšování)<br>
+        Newton: Chyba se každou iterací <strong>umocňuje na druhou</strong> (skoková rychlost!)<br>
         <br>
         Pokud chyba = 0.01:<br>
         • Bisekce: 0.01 → 0.005 → 0.0025 → 0.00125 ... (pomalu)<br>

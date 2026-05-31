@@ -83,7 +83,7 @@
             <li>$f(x_0 + h) - f(x_0)$ = změna funkční hodnoty (o kolik se funkce změnila)</li>
             <li>$h$ = jak malá změna x (jak blízko jsme u bodu $x_0$)</li>
             <li>$\frac{\Delta f}{\Delta x}$ = změna funkce / změna x = sklon</li>
-            <li>$\lim_{h \to 0}$ = když se h blíží nule (infinitesimální přírůstek)</li>
+            <li>$\lim_{h \to 0}$ = když se h blíží nule (h se stává nekonečně malé)</li>
         </ul>
 
         <div class="highlight-box">
@@ -91,7 +91,7 @@
             <p>$f'(x)$ nebo $\frac{df}{dx}$ nebo $\frac{dy}{dx}$ nebo $Df(x)$</p>
         </div>
 
-        <h3>💡 Co SPLŇUJE Definici Derivace – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
 
         <div class="highlight-box">
             <p><strong style="color: green;">✓ SPRÁVNÁ interpretace derivace:</strong></p>
@@ -181,15 +181,15 @@
             <p style="margin: 5px 0;">$$[f(x) \pm g(x)]' = f'(x) \pm g'(x)$$</p>
             <p><em>Příklad: $(x^2 + 3x)' = 2x + 3$</em></p>
 
-            <p><strong>2. Součin (Product Rule):</strong> Nemůžete jen násobit derivace!</p>
+            <p><strong>2. Součin (pravidlo pro násobení funkcí):</strong> Nemůžete jen násobit derivace!</p>
             <p style="margin: 5px 0;">$$[f(x) \cdot g(x)]' = f'(x) \cdot g(x) + f(x) \cdot g'(x)$$</p>
             <p><em>Příklad: $(x \cdot \sin(x))' = 1 \cdot \sin(x) + x \cdot \cos(x) = \sin(x) + x\cos(x)$</em></p>
 
-            <p><strong>3. Podíl (Quotient Rule):</strong> Pro dělení funkcí</p>
+            <p><strong>3. Podíl (pravidlo pro dělení funkcí):</strong> Pro dělení funkcí</p>
             <p style="margin: 5px 0;">$$\left[\frac{f(x)}{g(x)}\right]' = \frac{f'(x) \cdot g(x) - f(x) \cdot g'(x)}{[g(x)]^2}$$</p>
             <p><em>Poznámka: "Čitatel primární minus čitatel sekundární, kvadratický jmenovatel"</em></p>
 
-            <p><strong>4. Složená funkce (Chain Rule):</strong> "Vnější funkce krát vnitřní"</p>
+            <p><strong>4. Složená funkce (pravidlo pro funkci uvnitř funkce):</strong> "Vnější funkce krát vnitřní"</p>
             <p style="margin: 5px 0;">$$[f(g(x))]' = f'(g(x)) \cdot g'(x)$$</p>
             <p><em>Příklad: $(e^{2x})' = e^{2x} \cdot 2$</em></p>
         </div>
@@ -380,7 +380,7 @@
 
         <p><strong>Proč $+ C$?</strong> Protože derivace konstanty je 0, takže všechny funkce tvaru $F(x) + 5$, $F(x) + 100$, atd. mají stejnou derivaci. Konstanta $C$ je "libovolná integrační konstanta".</p>
 
-        <h3>💡 Co SPLŇUJE Definici Primitivní Funkce – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
 
         <div class="highlight-box">
             <p><strong style="color: green;">✓ SPRÁVNĚ určená primitivní funkce:</strong></p>
@@ -437,7 +437,7 @@
         <div id="plotIntegral" class="plot-container"></div>
         <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Určitý integrál = plocha pod křivkou (stínovaná oblast)</p>
 
-        <h3>💡 Co SPLŇUJE Definici Určitého Integrálu – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
 
         <div class="highlight-box">
             <p><strong style="color: green;">✓ SPRÁVNĚ spočítaný určitý integrál:</strong></p>
@@ -554,7 +554,7 @@
         <p><strong>Vlastnosti:</strong></p>
         <ul>
             <li>✓ <strong>Výhoda:</strong> Velmi jednoduchá, snadné pochopit a implementovat</li>
-            <li>✗ <strong>Nevýhoda:</strong> Poměrně nepřesná – chyba $\approx O(\frac{1}{n})$ (lineární konvergence)</li>
+            <li>✗ <strong>Nevýhoda:</strong> Poměrně nepřesná – chyba klesá pomalu ($\approx O(1/n)$): 2× více dělení = 2× přesnější</li>
             <li><strong>Kdy se selhává:</strong> Pro velmi "zubatou" funkci (s prudkými změnami) je nepřesná</li>
         </ul>
 
@@ -577,7 +577,7 @@
 
         <p><strong>Vlastnosti:</strong></p>
         <ul>
-            <li>✓ <strong>Výhoda:</strong> Přesnější než obdélníková metoda – chyba $\approx O(\frac{1}{n^2})$ (kvadratická konvergence)</li>
+            <li>✓ <strong>Výhoda:</strong> Přesnější než obdélníková metoda – chyba klesá rychleji ($\approx O(1/n^2)$): 2× více dělení = 4× přesnější</li>
             <li>✓ <strong>Výhoda:</strong> Lichoběžník "přimyká" křivku lépe než obdélník</li>
             <li>✗ <strong>Nevýhoda:</strong> Stále ne ideální pro velmi zakřivené funkce</li>
         </ul>
@@ -602,7 +602,7 @@
 
         <p><strong>Vlastnosti:</strong></p>
         <ul>
-            <li>✓ <strong>Výhoda:</strong> Velmi přesná – chyba $\approx O(\frac{1}{n^4})$ (kvartická konvergence!)</li>
+            <li>✓ <strong>Výhoda:</strong> Velmi přesná – chyba klesá extrémně rychle ($\approx O(1/n^4)$): 2× více dělení = 16× přesnější!</li>
             <li>✓ <strong>Výhoda:</strong> Prakticky ideální pro polynomy až do stupně 3</li>
             <li>✓ <strong>Výhoda:</strong> Málo iterací potřeba (n = 4-10 stačí pro výbornou přesnost)</li>
             <li>✗ <strong>Nevýhoda:</strong> Složitější na pochopení (vzorec s váhami)</li>
@@ -623,10 +623,10 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Řád chyby</strong></td>
-                        <td>$O(1/n)$</td>
-                        <td>$O(1/n^2)$</td>
-                        <td>$O(1/n^4)$</td>
+                        <td><strong>Přesnost (2× více dělení → ?× přesnější)</strong></td>
+                        <td>$O(1/n)$ — 2× přesnější</td>
+                        <td>$O(1/n^2)$ — 4× přesnější</td>
+                        <td>$O(1/n^4)$ — 16× přesnější</td>
                     </tr>
                     <tr>
                         <td><strong>Počet bodů pro přesnost 10⁻⁶</strong></td>
@@ -670,7 +670,7 @@
 
         <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Simpsonovo pravidlo pro $\int_0^\pi \sin(x) \, dx$</p>
 
-        <h3>💡 Co SPLŇUJE Definici Numerických Metod – Co Ne?</h3>
+        <h3>Příklady: správně / špatně</h3>
 
         <div class="highlight-box">
             <p><strong style="color: green;">✓ SPRÁVNĚ aplikovaná numerická metoda:</strong></p>

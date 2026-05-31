@@ -463,9 +463,17 @@ def najdi_minimum(root):
 
     <hr>
 
-    <h2>Průchody stromem</h2>
+    <h2>Průchody a vyhledávání ve stromě</h2>
 
-    <h3>A) In-order (LDR) – Levý &rarr; Data &rarr; Pravý</h3>
+    <p>Existují dva základní přístupy k procházení stromem:</p>
+    <ul>
+        <li><strong>DFS (Depth-First Search)</strong> – jde nejdřív do hloubky, využívá rekurzi nebo zásobník</li>
+        <li><strong>BFS (Breadth-First Search)</strong> – jde po úrovních (level-order), využívá frontu</li>
+    </ul>
+
+    <h3>DFS – Prohledávání do hloubky (3 varianty)</h3>
+
+    <h4>A) In-order (LDR) – Levý &rarr; Data &rarr; Pravý</h4>
 
     <pre><code class="language-python">def inorder(root):
     if root is not None:
@@ -481,7 +489,7 @@ def najdi_minimum(root):
 
 In-order: 20 30 40 50 70 80  ← seřazené!</code></pre>
 
-    <h3>B) Pre-order (DLR) – Data &rarr; Levý &rarr; Pravý</h3>
+    <h4>B) Pre-order (DLR) – Data &rarr; Levý &rarr; Pravý</h4>
 
     <pre><code class="language-python">def preorder(root):
     if root is not None:
@@ -491,7 +499,7 @@ In-order: 20 30 40 50 70 80  ← seřazené!</code></pre>
 
     <pre><code>Pre-order: 50 30 20 40 70 80  ← rodič před dětmi</code></pre>
 
-    <h3>C) Post-order (LRD) – Levý &rarr; Pravý &rarr; Data</h3>
+    <h4>C) Post-order (LRD) – Levý &rarr; Pravý &rarr; Data</h4>
 
     <pre><code class="language-python">def postorder(root):
     if root is not None:
@@ -501,12 +509,81 @@ In-order: 20 30 40 50 70 80  ← seřazené!</code></pre>
 
     <pre><code>Post-order: 20 40 30 80 70 50  ← děti před rodičem</code></pre>
 
-    <p><strong>Použití průchodů:</strong></p>
+    <p><strong>Použití DFS průchodů:</strong></p>
     <ul>
         <li><strong>In-order:</strong> Získání seřazených dat z BST</li>
         <li><strong>Pre-order:</strong> Kopírování stromu, prefixová notace</li>
         <li><strong>Post-order:</strong> Mazání stromu (smažu nejdřív děti, pak rodiče)</li>
     </ul>
+
+    <hr>
+
+    <h3>BFS – Prohledávání do šířky (Level-order)</h3>
+
+    <p>BFS prochází strom <strong>úroveň po úrovni</strong> zleva doprava. Místo rekurze používá <strong>frontu (queue)</strong>.</p>
+
+    <pre><code class="language-python">from collections import deque
+
+def bfs(root):
+    if root is None:
+        return
+    fronta = deque([root])        # Začneme s kořenem
+    while fronta:
+        uzel = fronta.popleft()   # Vezmi první uzel z fronty
+        print(uzel.data, end=" ")
+        if uzel.left:             # Přidej levé dítě do fronty
+            fronta.append(uzel.left)
+        if uzel.right:            # Přidej pravé dítě do fronty
+            fronta.append(uzel.right)</code></pre>
+
+    <pre><code>       [50]         ← úroveň 0  → zpracuj: 50
+       /  \
+     [30] [70]      ← úroveň 1  → zpracuj: 30, 70
+     /  \    \
+   [20][40]  [80]   ← úroveň 2  → zpracuj: 20, 40, 80
+
+BFS: 50 30 70 20 40 80  ← po úrovních!</code></pre>
+
+    <p><strong>Jak to funguje krok za krokem:</strong></p>
+    <pre><code>Fronta: [50]
+Vezmi 50, přidej 30 a 70  →  Fronta: [30, 70]
+Vezmi 30, přidej 20 a 40  →  Fronta: [70, 20, 40]
+Vezmi 70, přidej 80       →  Fronta: [20, 40, 80]
+Vezmi 20, bez dětí        →  Fronta: [40, 80]
+Vezmi 40, bez dětí        →  Fronta: [80]
+Vezmi 80, bez dětí        →  Fronta: []  → KONEC</code></pre>
+
+    <p><strong>Použití BFS:</strong></p>
+    <ul>
+        <li>Hledání <strong>nejkratší cesty</strong> (nejmenší počet kroků)</li>
+        <li>Zjišťení <strong>výšky stromu</strong></li>
+        <li>Tisk stromu <strong>po úrovních</strong></li>
+        <li>Vyhledávání, když hledaná hodnota bývá <strong>blízko kořene</strong></li>
+    </ul>
+
+    <hr>
+
+    <h3>Srovnání DFS vs BFS</h3>
+
+    <div class="table-responsive">
+    <table class="table table-bordered table-sm">
+        <thead class="table-light">
+            <tr>
+                <th>Vlastnost</th>
+                <th>DFS (in/pre/post-order)</th>
+                <th>BFS (level-order)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Datová struktura</td><td>Zásobník / rekurze</td><td>Fronta (deque)</td></tr>
+            <tr><td>Pořadí průchodu</td><td>Do hloubky (větve)</td><td>Po úrovních</td></tr>
+            <tr><td>Časová složitost</td><td>O(n)</td><td>O(n)</td></tr>
+            <tr><td>Paměťová složitost</td><td>O(výška) ≈ O(log n)</td><td>O(šířka) ≈ O(n)</td></tr>
+            <tr><td>Nejkratší cesta</td><td>Ne</td><td><strong>Ano</strong></td></tr>
+            <tr><td>Seřazená data (BST)</td><td><strong>Ano</strong> (in-order)</td><td>Ne</td></tr>
+        </tbody>
+    </table>
+    </div>
 
     <hr>
 
@@ -563,9 +640,17 @@ In-order: 20 30 40 50 70 80  ← seřazené!</code></pre>
 
     <p><strong>5. Jaké jsou průchody stromem a k čemu slouží?</strong></p>
     <ul>
-        <li>In-order: seřazené hodnoty z BST</li>
-        <li>Pre-order: rodič před dětmi</li>
-        <li>Post-order: děti před rodičem (mazání stromu)</li>
+        <li><strong>DFS – In-order:</strong> seřazené hodnoty z BST</li>
+        <li><strong>DFS – Pre-order:</strong> rodič před dětmi, kopírování stromu</li>
+        <li><strong>DFS – Post-order:</strong> děti před rodičem, mazání stromu</li>
+        <li><strong>BFS (level-order):</strong> průchod po úrovních pomocí fronty, nejkratší cesta</li>
+    </ul>
+
+    <p><strong>6. Jaký je rozdíl mezi DFS a BFS?</strong></p>
+    <ul>
+        <li>DFS jde do hloubky (zásobník/rekurze), BFS jde po úrovních (fronta)</li>
+        <li>Oboje O(n), ale BFS spotřebuje více paměti (ukládá celou úroveň)</li>
+        <li>BFS garantuje nejkratší cestu, DFS ne</li>
     </ul>
 
     <hr>
