@@ -135,16 +135,46 @@
 
     <h3>Řešení převodem na algebraické rovnice</h3>
 
-    <p><strong>Generující funkce:</strong> Sečti všechny členy formální řady a vyřeš algebraicky.</p>
+    <p>Metoda funguje pro <strong>homogenní lineární rekurence</strong> — takové, kde každý člen je lineární kombinací předchozích členů (bez jiného přídavku):</p>
+    <div class="math-box">
+        $$a_n = c_1 a_{n-1} + c_2 a_{n-2} + \cdots + c_k a_{n-k}$$
+    </div>
+
+    <p><strong>Postup (4 kroky):</strong></p>
+    <ol>
+        <li><strong>Sestavit charakteristický polynom:</strong> Každý člen $a_{n-i}$ nahradíme $r^{k-i}$, pravou stranu přesuneme doleva.
+            <div class="highlight-box" style="margin-top:6px;">
+                $a_n = c_1 a_{n-1} + c_2 a_{n-2}$ → charakteristický polynom: $r^2 - c_1 r - c_2 = 0$
+            </div>
+        </li>
+        <li><strong>Vyřešit charakteristickou rovnici</strong> — najít kořeny $r_1, r_2, \ldots$</li>
+        <li><strong>Sestavit obecné řešení</strong> podle typu kořenů:
+            <table class="table table-sm table-bordered" style="max-width: 620px; margin-top: 8px;">
+                <thead class="table-light"><tr><th>Typ kořenů</th><th>Obecné řešení</th></tr></thead>
+                <tbody>
+                    <tr><td>$k$ různých kořenů $r_1, \ldots, r_k$</td><td>$a_n = A_1 r_1^n + A_2 r_2^n + \cdots + A_k r_k^n$</td></tr>
+                    <tr><td>Kořen $r$ s násobností $m$</td><td>$(A_1 + A_2 n + \cdots + A_m n^{m-1}) \cdot r^n$</td></tr>
+                </tbody>
+            </table>
+        </li>
+        <li><strong>Určit konstanty</strong> $A_1, A_2, \ldots$ dosazením počátečních podmínek ($a_0, a_1, \ldots$) a řešením soustavy rovnic.</li>
+    </ol>
 
     <div class="highlight-box">
-        <strong>Příklad:</strong> $F(n) = F(n-1) + F(n-2)$ (Fibonacciho posloupnost)<br>
-        <br>
-        Definuj $G(x) = \sum_{n=0}^{\infty} F(n) x^n$<br>
-        <br>
-        Pak lze ukázat, že $G(x) = \frac{x}{1 - x - x^2}$<br>
-        <br>
-        Pomocí parciálních zlomků lze získat explicitní formuli (Binetův vzorec)
+        <strong>Příklad:</strong> $a_n = 3a_{n-1} - 2a_{n-2}$, $a_0 = 1$, $a_1 = 3$<br><br>
+        <strong>1. Char. polynom:</strong> $r^2 - 3r + 2 = 0$<br>
+        <strong>2. Kořeny:</strong> $(r-1)(r-2) = 0$ → $r_1 = 1$, $r_2 = 2$ (různé)<br>
+        <strong>3. Obecné řešení:</strong> $a_n = A \cdot 1^n + B \cdot 2^n = A + B \cdot 2^n$<br>
+        <strong>4. Dosadíme podmínky:</strong> $a_0 = A + B = 1$; $a_1 = A + 2B = 3$ → $A = -1$, $B = 2$<br>
+        <strong>Výsledek:</strong> $a_n = -1 + 2^{n+1}$
+    </div>
+
+    <p><strong>Nehomogenní rekurence</strong> (s přídavným členem, např. $a_n = 2a_{n-1} + 3$): řeší se jako součet <em>homogenního řešení</em> + <em>partikulárního řešení</em> (hádáme tvar partikulárního řešení — pro konstantu předpokládáme konstantu $C$, dosadíme a vyjádříme $C$).</p>
+    <div class="highlight-box">
+        <strong>Příklad:</strong> $a_n = 2a_{n-1} + 3$, $a_0 = 1$<br>
+        Homogenní: $a_n^{(h)} = A \cdot 2^n$. Partikulární: předpokládáme $C$ → $C = 2C + 3$ → $C = -3$.<br>
+        Celkové řešení: $a_n = A \cdot 2^n - 3$. Dosadíme $a_0 = 1$: $A - 3 = 1$ → $A = 4$.<br>
+        <strong>Výsledek:</strong> $a_n = 4 \cdot 2^n - 3$
     </div>
 
     <h3>Příklady</h3>
@@ -446,6 +476,33 @@
     <p><strong>Základní věta aritmetiky:</strong> Každé přirozené číslo $n > 1$ lze jedinečně rozepsat jako součin prvočísel (až na pořadí).
     $$n = p_1^{a_1} \cdot p_2^{a_2} \cdot \ldots \cdot p_k^{a_k}$$
     </p>
+
+    <h3>Eratosthenovo síto</h3>
+
+    <p>Algoritmus pro nalezení <strong>všech prvočísel</strong> do čísla $n$. Princip: zapiš čísla 2 až $n$, pak postupně škrtej násobky každého prvočísla.</p>
+
+    <ol>
+        <li>Vytvoř seznam čísel $2, 3, \ldots, n$ (všechna označena jako „prvočíslo")</li>
+        <li>Začni od $p = 2$ — nejmenšího neoznačeného čísla</li>
+        <li>Všechny násobky $p$ (tj. $2p, 3p, \ldots$) označ jako „složené"</li>
+        <li>Přejdi na další neoznačené číslo a opakuj od bodu 3</li>
+        <li>Stačí hledat jen do $\sqrt{n}$ — větší čísla už budou odškrtnuta dříve</li>
+    </ol>
+
+    <pre><code class="language-python">def eratosthenes(n):
+    je_prvocislo = [True] * (n + 1)
+    je_prvocislo[0] = je_prvocislo[1] = False
+    p = 2
+    while p * p <= n:
+        if je_prvocislo[p]:
+            for nasobek in range(p * p, n + 1, p):
+                je_prvocislo[nasobek] = False
+        p += 1
+    return [i for i in range(2, n + 1) if je_prvocislo[i]]
+
+print(eratosthenes(30))  # [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]</code></pre>
+
+    <p><strong>Časová složitost:</strong> $O(n \log \log n)$ — velmi rychlé pro nalezení všech prvočísel do $n$</p>
 
     <h3>Test primality</h3>
 

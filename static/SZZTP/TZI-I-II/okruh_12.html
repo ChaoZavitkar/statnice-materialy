@@ -161,13 +161,24 @@
 
     <h3>Základní pojmy</h3>
 
-    <p><strong>Stupeň vrcholu (degree):</strong> V neorientovaném grafu počet hran připojených k vrcholu.</p>
+    <p><strong>Stupeň vrcholu (degree):</strong> V neorientovaném grafu počet hran připojených k vrcholu. V orientovaném grafu rozlišujeme <strong>vstupní stupeň</strong> ($\deg^-$) a <strong>výstupní stupeň</strong> ($\deg^+$).</p>
 
-    <p><strong>Cesta (path):</strong> Posloupnost vrcholů $v_1, v_2, \ldots, v_k$ takových, že mezi každými dvěma po sobě jdoucími vrcholy existuje hrana.</p>
+    <div class="math-box">
+        <strong>Lemma o handshakingu:</strong> $\sum_{v \in V} \deg(v) = 2|E|$<br>
+        <em>Důvod:</em> Každá hrana přispívá ke stupni právě dvou vrcholů → součet je vždy sudý. Z toho plyne, že počet vrcholů s lichým stupněm je vždy sudý.
+    </div>
+
+    <p><strong>Sled (walk):</strong> Posloupnost vrcholů $v_0, v_1, \ldots, v_k$ kde každé dva sousední vrcholy jsou spojeny hranou. Vrcholy i hrany se mohou opakovat.</p>
+
+    <p><strong>Tah (trail):</strong> Sled bez opakování <em>hran</em> (vrcholy se opakovat mohou).</p>
+
+    <p><strong>Cesta (path):</strong> Sled bez opakování <em>vrcholů</em> (ani hran).</p>
+
+    <p><strong>Cyklus (cycle):</strong> Uzavřený tah — začíná a končí ve stejném vrcholu, hrany se neopakují.</p>
+
+    <p><strong>Původní definice (pro přehled):</strong> Cesta (path) je posloupnost vrcholů $v_1, v_2, \ldots, v_k$ takových, že mezi každými dvěma po sobě jdoucími vrcholy existuje hrana.</p>
 
     <p><strong>Sled (walk):</strong> Cesta, která může být delší a opakovat vrcholy/hrany.</p>
-
-    <p><strong>Cyklus (cycle):</strong> Cesta, která začíná a končí ve stejném vrcholu.</p>
 
     <p><strong>Souvislost (connectivity):</strong></p>
     <ul>
@@ -248,7 +259,43 @@
     <p><strong>Výhody:</strong> Paměť $O(|V| + |E|)$, efektivní pro řídké grafy<br>
     <strong>Nevýhody:</strong> Kontrola existence hrany je $O(\text{degree}(v))$</p>
 
+    <p><strong>3. Matice incidence:</strong></p>
+    <p>Matice $B$ o velikosti $|V| \times |E|$ — řádky jsou vrcholy, sloupce jsou hrany:</p>
+    <ul>
+        <li><strong>Neorientovaný graf:</strong> $B[v][e] = 1$ pokud vrchol $v$ je krajním bodem hrany $e$, jinak $0$</li>
+        <li><strong>Orientovaný graf:</strong> $B[v][e] = -1$ pokud hrana $e$ z $v$ vychází, $+1$ pokud do $v$ vstupuje, $0$ jinak</li>
+    </ul>
+    <div class="highlight-box">
+        <strong>Příklad (neorientovaný):</strong> Vrcholy $\{1,2,3\}$, hrany $e_1=(1,2),\ e_2=(2,3),\ e_3=(1,3)$
+        <pre>
+      e1  e2  e3
+1  [  1   0   1 ]
+2  [  1   1   0 ]
+3  [  0   1   1 ]</pre>
+        Součet každého sloupce = 2 (každá hrana má dva krajní body).<br>
+        <strong>Výhoda:</strong> Přehledný pro malé grafy; v orientovaných součet sloupce = 0 (jedna hrana vstupuje, jedna vychází).
+    </div>
+
+    <h3>Isomorfismus grafů</h3>
+    <p>Grafy $G$ a $H$ jsou <strong>isomorfní</strong>, pokud existuje bijekce $f: V(G) \to V(H)$ taková, že $(u,v) \in E(G) \Leftrightarrow (f(u), f(v)) \in E(H)$.</p>
+    <p>Laicky: grafy jsou isomorfní, pokud jeden lze „překreslit" na druhý pouhým přečíslováním vrcholů.</p>
+    <div class="highlight-box">
+        <strong>Nutné podmínky isomorfismu</strong> (nestačí, ale pokud nesplněny → nejsou isomorfní):
+        <ul>
+            <li>Stejný počet vrcholů $|V|$</li>
+            <li>Stejný počet hran $|E|$</li>
+            <li>Stejná posloupnost stupňů vrcholů (seřazená)</li>
+        </ul>
+        Obecný efektivní algoritmus pro ověření isomorfismu není znám (pravděpodobně NP).
+    </div>
+
     <h3>Významné typy grafů</h3>
+
+    <p><strong>Kružnice $C_n$:</strong> Cyklus na $n$ vrcholech — každý vrchol má stupeň 2, celkem $n$ hran.</p>
+    <div class="highlight-box">$C_3$ = trojúhelník, $C_4$ = čtverec, $C_5$ = pětiúhelník, …</div>
+
+    <p><strong>Cesta $P_n$:</strong> Graf tvořený $n$ vrcholy v řadě, spojených $n-1$ hranami. Krajní vrcholy mají stupeň 1, ostatní stupeň 2.</p>
+    <div class="highlight-box">$P_3$: $1 - 2 - 3$ (3 vrcholy, 2 hrany)</div>
 
     <p><strong>Úplný graf $K_n$:</strong> Každý vrchol je spojen s každým dalším vrcholem.</p>
     <ul>
@@ -331,9 +378,17 @@
 
     <h3>Základní pojmy</h3>
 
+    <p><strong>Kostra grafu (spanning tree):</strong> Podgraf, který je stromem a obsahuje <em>všechny vrcholy</em> původního grafu. Kostra existuje právě pro souvislé grafy; strom s $n$ vrcholy má $n-1$ hran.</p>
+    <div class="highlight-box">
+        Odstraněním libovolné hrany kostry vznikne nesouvislý podgraf. Přidáním jakékoliv hrany zpět vznikne cyklus.<br>
+        <strong>Minimální kostra (MST):</strong> Ve váženém grafu kostra s nejmenším součtem vah hran (Kruskal, Prim).
+    </div>
+
+    <p><strong>Kořenový strom:</strong> Strom s jedním vyznačeným vrcholem — <strong>kořenem</strong>. Kořen určuje orientaci hierarchie: každý vrchol (kromě kořene) má právě jednoho <em>rodiče</em>, kořen nemá rodiče.</p>
+
     <p><strong>Kořen (root):</strong> Zvolený vrchol, od kterého začíná hierarchie stromu.</p>
 
-    <p><strong>Rodič a dítě:</strong> V orientovaném stromu je hrana $(u, v)$ relace rodič-dítě.</p>
+    <p><strong>Rodič a dítě:</strong> V kořenovém stromě je vrchol $u$ rodičem $v$, pokud hrana $(u,v)$ vede od kořene dolů.</p>
 
     <p><strong>List (leaf):</strong> Vrchol bez dětí (stupeň 1 v neorientovaném stromě).</p>
 
@@ -493,7 +548,13 @@ Strom:
 
     <p><strong>Hamiltonovská cesta:</strong> Cesta, která projde každý vrchol právě jednou (ne nutně každou hranu).</p>
 
-    <p><strong>Hamiltonovský cyklus:</strong> Hamiltonovská cesta, která se vrací do počátečního vrcholu.</p>
+    <p><strong>Hamiltonovská kružnice (hamiltonovský cyklus):</strong> Hamiltonovská cesta, která se vrací do počátečního vrcholu — prochází každý vrchol právě jednou a tvoří uzavřený cyklus.</p>
+
+    <div class="math-box">
+        <strong>Podmínky:</strong> Na rozdíl od Eulerovských grafů neexistuje jednoduchá nutná a postačující podmínka.<br>
+        Hamiltonovská kružnice <strong>nemusí existovat</strong> — rozhodnutí je NP-úplný problém.<br>
+        <em>Dostačující podmínka (Diracova věta):</em> Pokud má graf $n \geq 3$ vrcholů a každý vrchol má stupeň $\geq n/2$, pak hamiltonovská kružnice existuje.
+    </div>
 
     <div class="highlight-box">
         <strong>Příklad:</strong> Obchodní cestující chce navštívit $n$ měst právě jednou a vrátit se domů.<br>
