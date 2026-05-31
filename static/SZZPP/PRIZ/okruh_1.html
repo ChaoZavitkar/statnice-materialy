@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projektové řízení – PRIZ</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Syntax Highlighting Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <style>
+        /* RACI colors */
+        .raci-r { background: #d5f5e3; font-weight: bold; }
+        .raci-a { background: #fadbd8; font-weight: bold; }
+        .raci-c { background: #d6eaf8; }
+        .raci-i { background: #f2f3f4; color: #777; }
+        /* SWOT */
+        .swot-s { background: #d5f5e3; }
+        .swot-w { background: #fadbd8; }
+        .swot-o { background: #d6eaf8; }
+        .swot-t { background: #fef9e7; }
+        .swot-cell { padding: 12px; border: 1px solid #ccc; min-height: 100px; }
+        .swot-cell h5 { font-weight: bold; margin-bottom: 8px; }
+        /* Risk matrix */
+        .risk-low  { background: #d5f5e3; }
+        .risk-med  { background: #fef9e7; }
+        .risk-high { background: #fadbd8; }
+    </style>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+
+    <h1>Projektové řízení</h1>
+    <p class="subtitle">KI/SZZPP – Projektové řízení</p>
+
+    <hr>
+
+    <h2>Co je projekt</h2>
+
+    <div class="math-box">
+        <strong>Definice projektu:</strong> Dočasná činnost s definovaným začátkem, koncem, cílem a omezenými zdroji, jejímž výsledkem je unikátní produkt, služba nebo výsledek.
+        <ul style="margin-top:8px;">
+            <li><strong>Unikátní</strong> — každý projekt je jiný, není to rutinní provoz</li>
+            <li><strong>Dočasný</strong> — má jasné zahájení a ukončení</li>
+            <li><strong>Cílový</strong> — směřuje k definovanému výstupu nebo změně</li>
+            <li><strong>Omezené zdroje</strong> — čas, peníze, lidé</li>
+        </ul>
+    </div>
+
+    <h3>Projekt vs. provoz</h3>
+    <table class="table table-sm table-bordered" style="max-width:560px;">
+        <thead class="table-light"><tr><th>Projekt</th><th>Provoz (operativa)</th></tr></thead>
+        <tbody>
+            <tr><td>Dočasný, má konec</td><td>Průběžný, opakující se</td></tr>
+            <tr><td>Unikátní výsledek</td><td>Standardní výstup</td></tr>
+            <tr><td>Tým se sestavuje a rozpouští</td><td>Stálý tým</td></tr>
+            <tr><td>Proměnlivé požadavky</td><td>Zavedené procesy</td></tr>
+            <tr><td>Příklad: vývoj nového e-shopu</td><td>Příklad: provoz hotového e-shopu</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Klíčové aspekty IT projektů</h3>
+    <ul>
+        <li><strong>Scope creep</strong> — nekontrolované rozrůstání rozsahu; nutné řídit změny formálně</li>
+        <li><strong>Technický dluh</strong> — kompromisy v kvalitě kódu kvůli termínům; časem zpomaluje vývoj</li>
+        <li><strong>Komunikace</strong> — největší příčina selhání IT projektů (ne technické problémy)</li>
+        <li><strong>Odhady</strong> — IT projekty jsou notoricky špatně odhadnutelné; iterativní přístupy pomáhají</li>
+        <li><strong>Závislosti</strong> — integrační body, API třetích stran, infrastruktura</li>
+    </ul>
+
+    <hr>
+
+    <h2>Fáze projektu</h2>
+
+    <div class="math-box">
+        <strong>5 fází projektového životního cyklu (PMBOK):</strong>
+        <ol style="margin-top:8px;">
+            <li><strong>Zahájení (Initiating)</strong> — definice záměru, schválení projektu (Project Charter), jmenování PM</li>
+            <li><strong>Plánování (Planning)</strong> — WBS, harmonogram, rozpočet, rizika, komunikační plán, RACI</li>
+            <li><strong>Realizace (Executing)</strong> — plnění úkolů, řízení týmu, komunikace se stakeholdery</li>
+            <li><strong>Monitorování a kontrola (Monitoring &amp; Controlling)</strong> — sledování odchylek, řízení změn, reporting</li>
+            <li><strong>Uzavření (Closing)</strong> — předání výstupů, lessons learned, formální ukončení, archivace</li>
+        </ol>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Milník (milestone):</strong> Klíčová událost v projektu bez trvání — označuje dosažení důležitého bodu (podpis smlouvy, schválení designu, spuštění beta verze). V harmonogramu se značí jako diamant (◆).
+    </div>
+
+    <h3>Integrovaný systém řízení projektu</h3>
+    <p>PM musí koordinovat všechny oblasti řízení současně — změna v jedné oblasti ovlivňuje ostatní:</p>
+    <div class="row">
+        <div class="col-md-6">
+            <ul>
+                <li><strong>Rozsah (Scope)</strong> — co bude a nebude součástí</li>
+                <li><strong>Čas (Schedule)</strong> — harmonogram, milníky</li>
+                <li><strong>Náklady (Cost)</strong> — rozpočet, earned value</li>
+                <li><strong>Kvalita (Quality)</strong> — standardy, testování</li>
+            </ul>
+        </div>
+        <div class="col-md-6">
+            <ul>
+                <li><strong>Rizika (Risk)</strong> — identifikace, strategie</li>
+                <li><strong>Komunikace (Communication)</strong> — kdo, co, kdy, jak</li>
+                <li><strong>Lidé (HR)</strong> — role, odpovědnosti, rozvoj</li>
+                <li><strong>Nákupy (Procurement)</strong> — dodavatelé, smlouvy</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+
+    <h2>Projektový trojúhelník a PDCA</h2>
+
+    <h3>Projektový trojúhelník (Iron Triangle)</h3>
+
+    <div class="row align-items-center">
+        <div class="col-md-5">
+            <svg viewBox="0 0 340 225" style="width:100%; max-width:320px; display:block;">
+                <polygon points="170,22 300,188 40,188" fill="#d6eaf8" stroke="#2980b9" stroke-width="2.5"/>
+                <!-- ČAS — nahoře uprostřed -->
+                <text x="170" y="14" text-anchor="middle" font-size="14" font-weight="bold" fill="#2980b9">ČAS</text>
+                <text x="170" y="28" text-anchor="middle" font-size="10" fill="#555">(termín)</text>
+                <!-- NÁKLADY — vpravo dole, text zarovnán doprava -->
+                <text x="338" y="201" text-anchor="end" font-size="14" font-weight="bold" fill="#e74c3c">NÁKLADY</text>
+                <text x="338" y="215" text-anchor="end" font-size="10" fill="#555">(budget)</text>
+                <!-- ROZSAH — vlevo dole, text zarovnán doleva -->
+                <text x="2" y="201" text-anchor="start" font-size="14" font-weight="bold" fill="#27ae60">ROZSAH</text>
+                <text x="2" y="215" text-anchor="start" font-size="10" fill="#555">(scope)</text>
+                <!-- KVALITA — střed trojúhelníku -->
+                <text x="170" y="128" text-anchor="middle" font-size="12" fill="#666">KVALITA</text>
+                <text x="170" y="143" text-anchor="middle" font-size="10" fill="#888">(střed)</text>
+            </svg>
+        </div>
+        <div class="col-md-7">
+            <div class="math-box">
+                <strong>Pravidlo:</strong> Změna jednoho rohu ovlivní alespoň jeden ze zbývajících.<br><br>
+                <strong>Příklady:</strong>
+                <ul>
+                    <li>Zkrátíš čas → zvýšíš náklady (více lidí) NEBO omezíš rozsah</li>
+                    <li>Rozšíříš rozsah → prodloužíš čas NEBO zvýšíš náklady</li>
+                    <li>Snížíš náklady → prodloužíš čas NEBO omezíš rozsah</li>
+                </ul>
+                Střed trojúhelníku = <strong>kvalita</strong> — trpí, pokud jsou ostatní limity příliš přísné.
+            </div>
+        </div>
+    </div>
+
+    <h3>PDCA cyklus (Demingův cyklus)</h3>
+
+    <div class="math-box">
+        <strong>Iterativní cyklus neustálého zlepšování:</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Fáze</th><th>Anglicky</th><th>Co děláme</th></tr></thead>
+            <tbody>
+                <tr><td><strong>P — Plánuj</strong></td><td>Plan</td><td>Definuj cíl, analyzuj situaci, navrhni řešení</td></tr>
+                <tr><td><strong>D — Dělej</strong></td><td>Do</td><td>Implementuj plán (pilot nebo plný rozsah)</td></tr>
+                <tr><td><strong>C — Kontroluj</strong></td><td>Check</td><td>Měř výsledky, porovnej s plánem</td></tr>
+                <tr><td><strong>A — Jednej</strong></td><td>Act</td><td>Standardizuj úspěšné řešení nebo opakuj cyklus</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+        <strong>PDCA v kontextu projektu:</strong> Každá iterace (sprint v agilním vývoji) = jeden PDCA cyklus. Retrospektiva = fáze Check + Act.
+    </div>
+
+    <hr>
+
+    <h2>SMART cíle</h2>
+
+    <div class="math-box">
+        <strong>SMART = metodika pro správnou formulaci cílů:</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Písmeno</th><th>Anglicky</th><th>Česky</th><th>Otázka</th></tr></thead>
+            <tbody>
+                <tr><td><strong>S</strong></td><td>Specific</td><td>Konkrétní</td><td>Co přesně chceme dosáhnout?</td></tr>
+                <tr><td><strong>M</strong></td><td>Measurable</td><td>Měřitelný</td><td>Jak poznáme, že jsme uspěli?</td></tr>
+                <tr><td><strong>A</strong></td><td>Achievable</td><td>Dosažitelný</td><td>Je cíl realistický s dostupnými zdroji?</td></tr>
+                <tr><td><strong>R</strong></td><td>Relevant</td><td>Relevantní</td><td>Je cíl v souladu se strategií firmy?</td></tr>
+                <tr><td><strong>T</strong></td><td>Time-bound</td><td>Časově ohraničený</td><td>Do kdy má být splněno?</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Příklad (vzorová úloha z PDF — e-shop projekt):</strong><br><br>
+        ❌ <strong>Špatný cíl:</strong> „Vyvinout e-shop pro prodej žvýkaček."<br><br>
+        ✅ <strong>SMART cíl:</strong> „Navrhnout, vyvinout a spustit e-shop pro prodej tatoo žvýkaček pro programátory s plnou platební bránou, košíkem a správou objednávek, tak aby byl funkčně spuštěn do provozu do 12 měsíců od zahájení projektu, v rámci schváleného rozpočtu 5 mil. Kč, a aby po spuštění generoval alespoň 200 objednávek měsíčně."<br><br>
+        <strong>Breakdown dlouhodobého cíle na SMART dílčí cíle:</strong>
+        <ul>
+            <li><strong>Analýza a design (M1–M2):</strong> Dokončit UX wireframy pro 5 klíčových stránek a schválit je s vedením do konce 2. měsíce.</li>
+            <li><strong>Backend (M3–M6):</strong> Implementovat API pro produkt, košík a platby, pokryté unit testy ≥ 80 %, do konce 6. měsíce.</li>
+            <li><strong>Beta spuštění (M9):</strong> Spustit beta verzi pro 50 testovacích uživatelů a sbírat zpětnou vazbu po dobu 1 měsíce.</li>
+            <li><strong>Produkční spuštění (M12):</strong> Spustit e-shop v plném provozu s SLA 99,9 % dostupnosti do konce 12. měsíce.</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>SWOT analýza</h2>
+
+    <p>Nástroj pro strategické hodnocení projektu nebo organizace ve dvou dimenzích: interní (co ovlivníme) vs. externí (co přichází z prostředí), pozitivní vs. negativní.</p>
+
+    <div class="row mb-3">
+        <div class="col-6">
+            <div class="swot-cell swot-s">
+                <h5>💪 Strengths (Silné stránky)</h5>
+                <em>Interní / pozitivní</em><br>
+                Co děláme dobře? Jaké máme unikátní výhody?<br><br>
+                <strong>Příklad (e-shop):</strong>
+                <ul>
+                    <li>Zkušený vývojářský tým</li>
+                    <li>Unikátní produkt s jasnou cílovou skupinou</li>
+                    <li>Stabilní financování (5 mil. Kč)</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="swot-cell swot-w">
+                <h5>⚠️ Weaknesses (Slabé stránky)</h5>
+                <em>Interní / negativní</em><br>
+                Co děláme špatně? Kde máme mezery?<br><br>
+                <strong>Příklad (e-shop):</strong>
+                <ul>
+                    <li>Žádná zkušenost s e-commerce</li>
+                    <li>Omezený marketingový tým</li>
+                    <li>Závislost na jednom dodavateli platební brány</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6 mt-2">
+            <div class="swot-cell swot-o">
+                <h5>🚀 Opportunities (Příležitosti)</h5>
+                <em>Externí / pozitivní</em><br>
+                Jaké trendy nebo situace mohu využít?<br><br>
+                <strong>Příklad (e-shop):</strong>
+                <ul>
+                    <li>Rostoucí trh IT produktů</li>
+                    <li>Nízká konkurence v niche segmentu</li>
+                    <li>Možnost expanze do zahraničí</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-6 mt-2">
+            <div class="swot-cell swot-t">
+                <h5>🔴 Threats (Hrozby)</h5>
+                <em>Externí / negativní</em><br>
+                Jaká rizika přicházejí z prostředí?<br><br>
+                <strong>Příklad (e-shop):</strong>
+                <ul>
+                    <li>Vstup velkého e-shopu do segmentu</li>
+                    <li>Regulační změny (GDPR, DPH)</li>
+                    <li>Ekonomická recese — snížení výdajů zákazníků</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="note-box">
+        <strong>SWOT a 5 Porterových sil (externa):</strong> Příležitosti a hrozby jsou ovlivněny: silou dodavatelů, silou odběratelů, hrozbou substitutů, hrozbou nových konkurentů a rivalitou stávajících hráčů. SWOT analýza toto syntetizuje do jednoduché 2×2 matice.
+    </div>
+
+    <hr>
+
+    <h2>Finanční plánování projektu</h2>
+
+    <h3>WBS — Work Breakdown Structure</h3>
+    <p>Hierarchický rozklad celého rozsahu projektu na menší, zvladatelné části (pracovní balíky).</p>
+    <div class="highlight-box">
+        <strong>Příklad WBS pro e-shop projekt:</strong>
+        <pre style="background:none; border:none; margin:0; padding:0; font-size:0.9em;">
+1. E-shop projekt
+   1.1 Analýza a design
+       1.1.1 Analýza požadavků
+       1.1.2 UX/UI design
+       1.1.3 Technická architektura
+   1.2 Vývoj backendu
+       1.2.1 API produktů
+       1.2.2 Platební brána
+       1.2.3 Správa objednávek
+   1.3 Vývoj frontendu
+   1.4 Testování a QA
+   1.5 Nasazení a spuštění</pre>
+        Každý list WBS = pracovní balík s odhadnutým časem, náklady a zodpovědnou osobou.
+    </div>
+
+    <h3>Ganttův diagram</h3>
+    <p>Vizualizace harmonogramu projektu — úkoly na ose Y, čas na ose X, délka pruhu = trvání úkolu.</p>
+    <div class="math-box">
+        <strong>Klíčové pojmy:</strong>
+        <ul>
+            <li><strong>Kritická cesta (CPM):</strong> Nejdelší sled závislých úkolů — zpoždění čehokoliv na kritické cestě zpozdí celý projekt</li>
+            <li><strong>Float/Slack:</strong> Čas, o který lze úkol zpozdit bez dopadu na projekt (ne-kritické úkoly)</li>
+            <li><strong>Závislosti:</strong> FS (Finish-Start), SS (Start-Start), FF (Finish-Finish)</li>
+        </ul>
+    </div>
+
+    <h3>Earned Value Management (EVM)</h3>
+    <div class="math-box">
+        <strong>Klíčové metriky EVM:</strong>
+        <table class="table table-sm" style="margin-top:8px; max-width:560px;">
+            <thead class="table-light"><tr><th>Zkratka</th><th>Název</th><th>Výpočet / Popis</th></tr></thead>
+            <tbody>
+                <tr><td>PV</td><td>Planned Value</td><td>Kolik práce mělo být hotovo (dle plánu)</td></tr>
+                <tr><td>EV</td><td>Earned Value</td><td>Kolik práce skutečně hotovo (v penězích)</td></tr>
+                <tr><td>AC</td><td>Actual Cost</td><td>Kolik bylo skutečně utraceno</td></tr>
+                <tr><td>SV</td><td>Schedule Variance</td><td>$EV - PV$ (+ = před plánem)</td></tr>
+                <tr><td>CV</td><td>Cost Variance</td><td>$EV - AC$ (+ = pod rozpočtem)</td></tr>
+                <tr><td>SPI</td><td>Schedule Performance Index</td><td>$EV / PV$ (&gt;1 = před plánem)</td></tr>
+                <tr><td>CPI</td><td>Cost Performance Index</td><td>$EV / AC$ (&gt;1 = pod rozpočtem)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <h2>Analýza rizik</h2>
+
+    <div class="math-box">
+        <strong>Postup analýzy rizik:</strong>
+        <ol>
+            <li><strong>Identifikace</strong> — brainstorming, historické projekty, seznam hrozeb</li>
+            <li><strong>Hodnocení</strong> — ohodnoť každé riziko: <em>pravděpodobnost</em> (1–5) × <em>dopad</em> (1–5) = <em>skóre rizika</em></li>
+            <li><strong>Prioritizace</strong> — matice rizik (nízká / střední / vysoká)</li>
+            <li><strong>Strategie</strong> — pro každé riziko zvol strategii reakce</li>
+            <li><strong>Monitorování</strong> — pravidelná revize v průběhu projektu</li>
+        </ol>
+    </div>
+
+    <h3>Čtyři strategie řízení rizik</h3>
+    <table class="table table-sm table-bordered" style="max-width:680px;">
+        <thead class="table-light"><tr><th>Strategie</th><th>Popis</th><th>Příklad</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Přijetí (Acceptance)</strong></td><td>Riziko akceptujeme, žádná opatření</td><td>Mírné prodloužení termínu o 1 den</td></tr>
+            <tr><td><strong>Přenos (Transfer)</strong></td><td>Riziko přeneseme na třetí stranu</td><td>Pojištění, smluvní pokuty dodavatele</td></tr>
+            <tr><td><strong>Vyhnutí (Avoidance)</strong></td><td>Změníme plán tak, aby riziko nevzniklo</td><td>Nevyvineme vlastní platební bránu — použijeme Stripe</td></tr>
+            <tr><td><strong>Snížení (Mitigation)</strong></td><td>Snížíme pravděpodobnost nebo dopad</td><td>Průběžné testy snižují riziko chyb při spuštění</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Matice rizik (příklad)</h3>
+    <table class="table table-sm table-bordered text-center" style="max-width:420px;">
+        <thead class="table-light"><tr><th>Dopad →<br>Pravděp. ↓</th><th>Nízký</th><th>Střední</th><th>Vysoký</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Vysoká</strong></td><td class="risk-med">Střední</td><td class="risk-high">Vysoké</td><td class="risk-high">Kritické</td></tr>
+            <tr><td><strong>Střední</strong></td><td class="risk-low">Nízké</td><td class="risk-med">Střední</td><td class="risk-high">Vysoké</td></tr>
+            <tr><td><strong>Nízká</strong></td><td class="risk-low">Zanedb.</td><td class="risk-low">Nízké</td><td class="risk-med">Střední</td></tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Projektový tým a manažer</h2>
+
+    <h3>Role projektového manažera</h3>
+    <div class="math-box">
+        <strong>Odpovědnosti PM:</strong>
+        <ul>
+            <li>Definice a sledování rozsahu, harmonogramu, rozpočtu</li>
+            <li>Řízení týmu a stakeholderů</li>
+            <li>Komunikace a reporting</li>
+            <li>Řízení rizik a změn</li>
+            <li>Zajištění kvality výstupů</li>
+        </ul>
+        <strong>Dovednosti PM:</strong> Tvrdé (plánování, MS Project, Excel, metodiky) + měkké (vedení, komunikace, empatie, rozhodování pod tlakem)
+    </div>
+
+    <h3>Složení IT projektového týmu</h3>
+    <table class="table table-sm table-bordered" style="max-width:600px;">
+        <thead class="table-light"><tr><th>Role</th><th>Odpovědnost</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Projektový manažer (PM)</strong></td><td>Koordinace, plánování, reporting, řízení rizik</td></tr>
+            <tr><td><strong>Architekt</strong></td><td>Technická architektura, rozhodnutí o technologiích</td></tr>
+            <tr><td><strong>Vývojáři (Backend/Frontend)</strong></td><td>Implementace funkcionality</td></tr>
+            <tr><td><strong>UX/UI designér</strong></td><td>Návrh uživatelského rozhraní a zážitku</td></tr>
+            <tr><td><strong>QA inženýr</strong></td><td>Testování, zajištění kvality</td></tr>
+            <tr><td><strong>DevOps / SRE</strong></td><td>Infrastruktura, nasazení, monitoring</td></tr>
+            <tr><td><strong>Produktový vlastník (PO)</strong></td><td>Priority backlogu, hlas zákazníka (agilní metodiky)</td></tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>RACI matice</h2>
+
+    <p>RACI definuje odpovědnosti jednotlivých rolí ke konkrétním úkolům nebo rozhodnutím projektu.</p>
+
+    <div class="math-box">
+        <table class="table table-sm" style="max-width:560px; margin-top:8px;">
+            <thead class="table-light"><tr><th>Písmeno</th><th>Anglicky</th><th>Česky</th><th>Popis</th></tr></thead>
+            <tbody>
+                <tr><td class="raci-r">R</td><td>Responsible</td><td>Odpovědný za výkon</td><td>Kdo skutečně práci <strong>vykonává</strong>; může být více osob</td></tr>
+                <tr><td class="raci-a">A</td><td>Accountable</td><td>Zodpovědný</td><td>Kdo <strong>schvaluje</strong> a nese finální zodpovědnost; vždy právě jedna osoba</td></tr>
+                <tr><td class="raci-c">C</td><td>Consulted</td><td>Konzultován</td><td>Kdo <strong>poskytuje vstup</strong> před rozhodnutím nebo provedením</td></tr>
+                <tr><td class="raci-i">I</td><td>Informed</td><td>Informován</td><td>Kdo je <strong>informován o výsledku</strong>, ale nezasahuje do procesu</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h3>Příklad RACI matice pro e-shop projekt</h3>
+    <div style="overflow-x:auto;">
+    <table class="table table-sm table-bordered text-center" style="min-width:620px;">
+        <thead class="table-light">
+            <tr>
+                <th style="text-align:left;">Úkol / Rozhodnutí</th>
+                <th>PM</th><th>Architekt</th><th>Backend dev.</th><th>Frontend dev.</th><th>QA</th><th>UX/UI</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td style="text-align:left;">Definice požadavků</td><td class="raci-a">A</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-i">I</td><td class="raci-r">R</td></tr>
+            <tr><td style="text-align:left;">Volba technologie (stack)</td><td class="raci-a">A</td><td class="raci-r">R</td><td class="raci-c">C</td><td class="raci-c">C</td><td class="raci-i">I</td><td class="raci-i">I</td></tr>
+            <tr><td style="text-align:left;">Vývoj API backendu</td><td class="raci-i">I</td><td class="raci-c">C</td><td class="raci-r">R</td><td class="raci-i">I</td><td class="raci-a">A</td><td class="raci-i">I</td></tr>
+            <tr><td style="text-align:left;">UX/UI design</td><td class="raci-i">I</td><td class="raci-c">C</td><td class="raci-i">I</td><td class="raci-c">C</td><td class="raci-i">I</td><td class="raci-r">R / <span class="raci-a">A</span></td></tr>
+            <tr><td style="text-align:left;">Testování a release</td><td class="raci-a">A</td><td class="raci-c">C</td><td class="raci-r">R</td><td class="raci-r">R</td><td class="raci-r">R</td><td class="raci-i">I</td></tr>
+            <tr><td style="text-align:left;">Schválení rozpočtu</td><td class="raci-r">R</td><td class="raci-i">I</td><td class="raci-i">I</td><td class="raci-i">I</td><td class="raci-i">I</td><td class="raci-i">I</td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="note-box">
+        <strong>Pravidlo RACI:</strong> Každý řádek musí mít přesně jedno <span class="raci-a" style="padding:1px 4px; border-radius:3px;">A</span>. Pokud má řádek dvě A, není jasné, kdo nese finální zodpovědnost.
+    </div>
+
+    <hr>
+
+    <h2>Komunikace a pravidla týmu</h2>
+
+    <h3>Komunikační plán</h3>
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Meeting / Artefakt</th><th>Frekvence</th><th>Účastníci</th><th>Výstup</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Daily stand-up</strong></td><td>Každý den, max 15 min</td><td>Celý tým</td><td>Co jsem udělal / co budu dělat / co mě blokuje</td></tr>
+            <tr><td><strong>Sprint review</strong></td><td>Konec sprintu (1–2 týdny)</td><td>Tým + stakeholdeři</td><td>Demo hotových funkcí, zpětná vazba</td></tr>
+            <tr><td><strong>Retrospektiva</strong></td><td>Konec sprintu</td><td>Tým (bez stakeholderů)</td><td>Co šlo dobře / špatně / co zlepšit</td></tr>
+            <tr><td><strong>Status report</strong></td><td>Týdně / 2× měsíčně</td><td>PM → management</td><td>Stav vůči plánu, rizika, požadavky</td></tr>
+            <tr><td><strong>Change request</strong></td><td>Průběžně, dle potřeby</td><td>PM + schvalovatel</td><td>Formální schválení změny rozsahu/rozpočtu</td></tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>Pravidla pro efektivní komunikaci v týmu:</strong>
+        <ul>
+            <li>Jeden kanál pro každý typ komunikace (Jira pro úkoly, Slack pro chat, e-mail pro formální)</li>
+            <li>Stand-up je stojací — drží délku</li>
+            <li>Rozhodnutí a akční položky se vždy zapisují a přiřazují konkrétní osobě</li>
+            <li>Feedback se dává konstruktivně: situace → dopad → návrh zlepšení</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>Management změn projektu</h2>
+
+    <p>Změny jsou v IT projektech nevyhnutelné — klíčové je řídit je formálně, aby nerozkymácely trojúhelník (čas/náklady/rozsah).</p>
+
+    <div class="math-box">
+        <strong>Proces řízení změn:</strong>
+        <ol>
+            <li><strong>Identifikace</strong> — kdokoliv navrhne změnu (Change Request / CR)</li>
+            <li><strong>Analýza dopadu</strong> — PM odhadne vliv na čas, náklady a rozsah</li>
+            <li><strong>Schválení</strong> — Change Control Board (CCB) nebo sponzor projektu schválí / zamítne</li>
+            <li><strong>Implementace</strong> — schválená změna se zapracuje do plánu, WBS, rozpočtu</li>
+            <li><strong>Dokumentace</strong> — Change Log zaznamenává historii všech změn</li>
+        </ol>
+    </div>
+
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Č.</th><th>Popis změny</th><th>Datum</th><th>Dopad</th><th>Stav</th><th>Schválil</th></tr></thead>
+        <tbody>
+            <tr><td>CR-001</td><td>Přidat funkci „sledování zásilky"</td><td>2024-03-15</td><td>+3 týdny, +150 tis. Kč</td><td class="raci-r">Schváleno</td><td>Sponzor</td></tr>
+            <tr><td>CR-002</td><td>Integrace s Allegro marketplace</td><td>2024-04-02</td><td>+6 týdnů, +300 tis. Kč</td><td class="raci-a">Zamítnuto</td><td>CCB</td></tr>
+            <tr><td>CR-003</td><td>Změna designu homepage</td><td>2024-04-10</td><td>+1 týden, bez dopadu na náklady</td><td class="raci-r">Schváleno</td><td>PM</td></tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Agilní přístupy</h2>
+
+    <h3>Scrum</h3>
+    <div class="math-box">
+        <strong>Role:</strong> Product Owner (PO) — Scrum Master (SM) — Development Team<br>
+        <strong>Artefakty:</strong> Product Backlog → Sprint Backlog → Inkrement<br>
+        <strong>Eventy:</strong> Sprint Planning → Daily Scrum (15 min) → Sprint Review → Sprint Retrospektiva
+    </div>
+
+    <div class="highlight-box">
+        <strong>Sprint:</strong> Časově ohraničená iterace (1–4 týdny). Výstupem každého sprintu je funkční inkrement produktu.<br>
+        <strong>User Story:</strong> „Jako [uživatel] chci [funkci], aby [přínos]." Odhaduje se v Story Points.<br>
+        <strong>Definition of Done (DoD):</strong> Kritéria, kdy je práce opravdu hotová (kód, testy, dokumentace, code review).
+    </div>
+
+    <h3>Kanban</h3>
+    <div class="math-box">
+        <strong>Kanban board</strong> — vizualizace toku práce přes sloupce:
+        <div style="display:flex; gap:12px; margin-top:10px; flex-wrap:wrap;">
+            <div style="border:2px solid #bbb; border-radius:6px; padding:10px; min-width:100px; background:#f9f9f9; text-align:center;"><strong>Backlog</strong><br><small>To Do</small></div>
+            <div style="font-size:1.5em; padding-top:12px;">→</div>
+            <div style="border:2px solid #3498db; border-radius:6px; padding:10px; min-width:100px; background:#d6eaf8; text-align:center;"><strong>In Progress</strong><br><small>WIP ≤ 3</small></div>
+            <div style="font-size:1.5em; padding-top:12px;">→</div>
+            <div style="border:2px solid #f39c12; border-radius:6px; padding:10px; min-width:100px; background:#fef9e7; text-align:center;"><strong>Review</strong><br><small>WIP ≤ 2</small></div>
+            <div style="font-size:1.5em; padding-top:12px;">→</div>
+            <div style="border:2px solid #27ae60; border-radius:6px; padding:10px; min-width:100px; background:#d5f5e3; text-align:center;"><strong>Done</strong></div>
+        </div>
+        <br>
+        <strong>WIP limit (Work In Progress):</strong> Maximální počet úkolů ve sloupci současně → zabraňuje přetěžování a odhaluje úzká místa.
+    </div>
+
+    <h3>Srovnání přístupů</h3>
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Vlastnost</th><th>Waterfall</th><th>Scrum</th><th>Kanban</th></tr></thead>
+        <tbody>
+            <tr><td>Plánování</td><td>Upfront, detailní</td><td>Sprint by sprint</td><td>Průběžné</td></tr>
+            <tr><td>Iterace</td><td>Žádné</td><td>Pevné sprinty</td><td>Kontinuální tok</td></tr>
+            <tr><td>Změny</td><td>Obtížné</td><td>Přijímány mezi sprinty</td><td>Kdykoli</td></tr>
+            <tr><td>Vhodné pro</td><td>Stabilní požadavky, compliance</td><td>Vývoj softwaru s měnícími se požadavky</td><td>Podpora, správa operací</td></tr>
+            <tr><td>Metriky</td><td>Gantt, milníky</td><td>Velocity, burndown chart</td><td>Lead time, cycle time, throughput</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note-box">
+        <strong>Prince2 Agile:</strong> Kombinuje Prince2 (governance, role, fáze, produktové plány) s agilními technikami (Scrum, Kanban). Vhodné pro větší organizace, kde je nutná formální struktura, ale tým chce flexibilitu agilního přístupu.
+    </div>
+
+</div>
+</body>
+</html>

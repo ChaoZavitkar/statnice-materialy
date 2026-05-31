@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 1: Architektura počítačů – výběr komponent</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Syntax Highlighting Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+
+    <h1>Okruh 1 – Architektura počítačů: výběr komponent</h1>
+    <p class="subtitle">KI/SZZPP – Architektura počítačů</p>
+
+    <hr>
+
+    <h2>Základní principy fungování počítače</h2>
+
+    <div class="math-box">
+        <strong>Von Neumannova architektura</strong> — základ všech moderních počítačů:
+        <ul style="margin-top:8px;">
+            <li><strong>CPU</strong> — provádí instrukce (fetch → decode → execute)</li>
+            <li><strong>Paměť (RAM)</strong> — ukládá data i program ve stejném adresovém prostoru</li>
+            <li><strong>Vstup/Výstup</strong> — komunikace s periferními zařízeními</li>
+            <li><strong>Sběrnice</strong> — propojuje komponenty (adresová, datová, řídicí)</li>
+        </ul>
+    </div>
+
+    <h3>Sběrnice a rozhraní</h3>
+    <table class="table table-sm table-bordered" style="max-width:640px;">
+        <thead class="table-light"><tr><th>Rozhraní</th><th>Použití</th><th>Rychlost (max)</th></tr></thead>
+        <tbody>
+            <tr><td><strong>PCIe 4.0 ×16</strong></td><td>Grafická karta</td><td>32 GB/s</td></tr>
+            <tr><td><strong>PCIe 4.0 ×4 (M.2)</strong></td><td>NVMe SSD</td><td>8 GB/s</td></tr>
+            <tr><td><strong>SATA III</strong></td><td>SSD, HDD</td><td>600 MB/s</td></tr>
+            <tr><td><strong>USB 3.2 Gen 2</strong></td><td>Periferní zařízení</td><td>10 Gbit/s</td></tr>
+            <tr><td><strong>DDR5 (paměťová sběrnice)</strong></td><td>RAM → CPU</td><td>~100 GB/s</td></tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>BIOS/UEFI boot sekvence:</strong> Zapnutí → POST (Power-On Self Test) → inicializace HW → načtení bootloaderu z disku → spuštění OS.<br>
+        <strong>UEFI</strong> (moderní) podporuje disky &gt;2 TB (GPT), Secure Boot, rychlejší start oproti staršímu BIOS (MBR).
+    </div>
+
+    <hr>
+
+    <h2>Procesor (CPU)</h2>
+
+    <div class="math-box">
+        <strong>Klíčové parametry CPU:</strong>
+        <table class="table table-sm" style="margin-top:8px; max-width:600px;">
+            <thead class="table-light"><tr><th>Parametr</th><th>Popis</th><th>Příklad</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Jádra / vlákna</strong></td><td>Fyzická jádra × SMT/HT multiplier</td><td>8 jader / 16 vláken</td></tr>
+                <tr><td><strong>Frekvence (GHz)</strong></td><td>Base clock / Boost clock</td><td>3,8 / 5,2 GHz</td></tr>
+                <tr><td><strong>Cache</strong></td><td>L1 (nejrychlejší), L2, L3 (sdílená)</td><td>L3 = 32 MB</td></tr>
+                <tr><td><strong>TDP (W)</strong></td><td>Tepelný výkon — určuje požadavek na chlazení</td><td>65 W / 125 W</td></tr>
+                <tr><td><strong>Socket</strong></td><td>Fyzický konektor na základní desce</td><td>AM5 (AMD), LGA1700 (Intel)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Intel vs AMD (aktuální generace):</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th></th><th>Intel Core Ultra (LGA1851)</th><th>AMD Ryzen 7000/9000 (AM5)</th></tr></thead>
+            <tbody>
+                <tr><td>Silné stránky</td><td>Výkon na jádro, integrovaná grafika</td><td>Energetická efektivita, více jader za cenu</td></tr>
+                <tr><td>Socket životnost</td><td>Mění se každé 1–2 generace</td><td>AM5 plánován do ~2027</td></tr>
+                <tr><td>Paměť</td><td>DDR5</td><td>DDR5</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <h2>Základní deska (MB)</h2>
+
+    <ul>
+        <li><strong>Socket</strong> — musí odpovídat CPU (AM5 pro AMD Ryzen 7000+, LGA1700 pro Intel 12.–14. gen)</li>
+        <li><strong>Chipset</strong> — určuje podporované funkce (přetaktování, počet PCIe linek, USB portů); např. B650 (AMD střední třída), Z790 (Intel high-end)</li>
+        <li><strong>Formát:</strong>
+            <ul>
+                <li><strong>ATX</strong> (305×244 mm) — plná velikost, nejvíce slotů</li>
+                <li><strong>mATX / Micro-ATX</strong> (244×244 mm) — kompaktnější, méně slotů</li>
+                <li><strong>ITX</strong> (170×170 mm) — mini PC, jeden slot PCIe, omezené chlazení</li>
+            </ul>
+        </li>
+        <li><strong>Sloty a konektory:</strong> PCIe ×16 (GPU), M.2 (NVMe SSD), DIMM (RAM), SATA, USB hlavičky, audio</li>
+        <li><strong>VRM</strong> (Voltage Regulator Module) — napájení CPU; kvalitní VRM nutné pro přetaktování nebo high-end CPU</li>
+    </ul>
+
+    <hr>
+
+    <h2>Operační paměť (RAM)</h2>
+
+    <table class="table table-sm table-bordered" style="max-width:640px;">
+        <thead class="table-light"><tr><th>Parametr</th><th>DDR4</th><th>DDR5</th></tr></thead>
+        <tbody>
+            <tr><td>Typická frekvence</td><td>2400–3600 MHz</td><td>4800–7200+ MHz</td></tr>
+            <tr><td>Napájení</td><td>1,2 V</td><td>1,1 V (efektivnější)</td></tr>
+            <tr><td>Kapacita modulu</td><td>do 32 GB</td><td>do 64+ GB</td></tr>
+            <tr><td>Podpora</td><td>Intel 12./13. gen, AMD Ryzen 5000</td><td>Intel 12.+ gen, AMD Ryzen 7000+</td></tr>
+        </tbody>
+    </table>
+
+    <div class="math-box">
+        <strong>Dual Channel:</strong> 2 moduly ve správných slotech (viz manuál desky) zdvojnásobí propustnost paměťové sběrnice. Vždy instalovat RAM ve párech pro optimální výkon.<br><br>
+        <strong>XMP / EXPO profil:</strong> Profil v SPD čipu RAM pro přetaktování nad základní JEDEC frekvenci — aktivuje se v BIOSu jedním kliknutím.
+    </div>
+
+    <hr>
+
+    <h2>Grafická karta (GPU)</h2>
+
+    <table class="table table-sm table-bordered" style="max-width:660px;">
+        <thead class="table-light"><tr><th>Typ</th><th>Popis</th><th>Vhodné pro</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Integrovaná (iGPU)</strong></td><td>Součást CPU (Intel UHD, AMD Radeon)</td><td>Kancelář, základní multimédia, úspora</td></tr>
+            <tr><td><strong>Dedikovaná (dGPU)</strong></td><td>Samostatná karta s vlastní VRAM</td><td>Hry, video střih, 3D render, AI</td></tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>Klíčové parametry GPU:</strong> VRAM (kapacita — min. 8 GB pro hry 2024), paměťová sběrnice (bit), shader jádra, TDP, podpora API (DirectX 12 Ultimate, Vulkan), výstupní porty (HDMI 2.1, DisplayPort 2.1).<br><br>
+        <strong>Výrobci:</strong> NVIDIA (GeForce RTX série) a AMD (Radeon RX série). Pro pracovní stanice: NVIDIA RTX / AMD Radeon Pro.
+    </div>
+
+    <hr>
+
+    <h2>Úložiště</h2>
+
+    <table class="table table-sm table-bordered">
+        <thead class="table-light"><tr><th>Typ</th><th>Rozhraní</th><th>Rychlost čtení</th><th>Výhody</th><th>Nevýhody</th></tr></thead>
+        <tbody>
+            <tr><td><strong>HDD</strong></td><td>SATA III</td><td>~150 MB/s</td><td>Nízká cena/GB, velká kapacita</td><td>Pomalý, mechanický, hlučný</td></tr>
+            <tr><td><strong>SATA SSD</strong></td><td>SATA III</td><td>~550 MB/s</td><td>Rychlejší než HDD, spolehlivý</td><td>Limitován SATA sběrnicí</td></tr>
+            <tr><td><strong>NVMe SSD (PCIe 3.0)</strong></td><td>M.2 PCIe 3.0</td><td>~3500 MB/s</td><td>Výrazně rychlejší, kompaktní</td><td>Dražší než SATA SSD</td></tr>
+            <tr><td><strong>NVMe SSD (PCIe 4.0)</strong></td><td>M.2 PCIe 4.0</td><td>~7000 MB/s</td><td>Nejrychlejší, vhodné pro profesionály</td><td>Nejvyšší cena</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note-box">
+        <strong>TBW (Terabytes Written):</strong> Udává životnost SSD — kolik dat lze celkem zapsat. Příklad: 600 TBW = lze zapsat 600 TB dat. Pro běžné použití postačuje i nižší TBW.<br>
+        <strong>Doporučení:</strong> OS na NVMe SSD, data/zálohy na HDD nebo levném SATA SSD.
+    </div>
+
+    <hr>
+
+    <h2>Napájecí zdroj (PSU)</h2>
+
+    <div class="math-box">
+        <strong>Výpočet potřebného výkonu PSU:</strong>
+        $$P_{PSU} \geq (P_{CPU} + P_{GPU} + P_{ostatní}) \times 1{,}2$$
+        Přidejte 20% rezervu pro účinnost a budoucí upgrade.<br><br>
+        <strong>Příklad:</strong> CPU 125 W + GPU 200 W + zbytek 75 W = 400 W → PSU ≥ 480 W → volíme 550 W.
+    </div>
+
+    <table class="table table-sm table-bordered" style="max-width:560px;">
+        <thead class="table-light"><tr><th>80 Plus certifikace</th><th>Účinnost při 50% zátěži</th></tr></thead>
+        <tbody>
+            <tr><td>80 Plus White</td><td>≥ 80 %</td></tr>
+            <tr><td>80 Plus Bronze</td><td>≥ 85 %</td></tr>
+            <tr><td>80 Plus Gold</td><td>≥ 90 %</td></tr>
+            <tr><td>80 Plus Platinum</td><td>≥ 92 %</td></tr>
+            <tr><td>80 Plus Titanium</td><td>≥ 94 %</td></tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>Modularity:</strong> Non-modular (všechny kabely pevné), Semi-modular (základní kabely pevné, ostatní odnímatelné), Full-modular (vše odnímatelné) — lepší kabelový management, chlazení.
+    </div>
+
+    <hr>
+
+    <h2>Kompatibilita komponent</h2>
+
+    <div class="math-box">
+        <strong>Klíčové kompatibilitní kontroly:</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Co kontrolovat</th><th>Jak</th></tr></thead>
+            <tbody>
+                <tr><td>CPU ↔ Základní deska</td><td>Stejný socket (AM5/LGA1700) + ověřit QVL desky</td></tr>
+                <tr><td>CPU ↔ RAM</td><td>Generace DDR (DDR4/DDR5), max. frekvence podporovaná CPU</td></tr>
+                <tr><td>GPU ↔ PSU</td><td>Dostatečný příkon, konektor PCIe 8-pin / 12VHPWR</td></tr>
+                <tr><td>GPU ↔ Skříň</td><td>Délka GPU vs. clearance skříně (mm)</td></tr>
+                <tr><td>Chlazení ↔ TDP</td><td>TDP chladiče ≥ TDP CPU; výška chladiče vs. výška skříně</td></tr>
+                <tr><td>PSU ↔ Skříň</td><td>Formát PSU (ATX) a umístění (spodní/horní)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="note-box">
+        <strong>Nástroj pcpartpicker.com</strong> automaticky kontroluje kompatibilitu komponent a zobrazuje varování (nekompatibilní socket, nedostatečný PSU, fyzické kolize).
+    </div>
+
+    <hr>
+
+    <h2>Výběr komponent dle požadavků</h2>
+
+    <table class="table table-sm table-bordered">
+        <thead class="table-light">
+            <tr><th>Use case</th><th>CPU</th><th>GPU</th><th>RAM</th><th>Úložiště</th><th>Orientační cena</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>Kancelář / internet</strong></td><td>Intel Core i3 / Ryzen 5 (s iGPU)</td><td>iGPU stačí</td><td>16 GB DDR4/5</td><td>256–512 GB SSD</td><td>10 000–15 000 Kč</td></tr>
+            <tr><td><strong>Multimédia / streaming</strong></td><td>Ryzen 5 / Core i5</td><td>Střední třída (RTX 3060)</td><td>16–32 GB</td><td>512 GB SSD + 1 TB HDD</td><td>20 000–30 000 Kč</td></tr>
+            <tr><td><strong>Hraní her (1080p/1440p)</strong></td><td>Ryzen 7 / Core i5–i7</td><td>RTX 4070 / RX 7700 XT</td><td>32 GB DDR5</td><td>1 TB NVMe SSD</td><td>35 000–55 000 Kč</td></tr>
+            <tr><td><strong>Pracovní stanice (střih, 3D)</strong></td><td>Ryzen 9 / Core i9</td><td>RTX 4080/4090</td><td>64 GB DDR5</td><td>2× NVMe SSD (RAID)</td><td>80 000+ Kč</td></tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>Vzorová sestava z PDF — kancelářský PC za ~15 000 Kč:</strong>
+        <table class="table table-sm" style="margin-top:8px; max-width:600px;">
+            <thead class="table-light"><tr><th>Komponenta</th><th>Volba</th><th>Důvod</th></tr></thead>
+            <tbody>
+                <tr><td>CPU</td><td>AMD Ryzen 5 8600G</td><td>Výkonné iGPU (Radeon 760M), není třeba dGPU</td></tr>
+                <tr><td>Základní deska</td><td>ASRock B650M-HDV/M.2</td><td>AM5 socket, mATX, základní funkce</td></tr>
+                <tr><td>RAM</td><td>16 GB DDR5-5600 (2×8 GB)</td><td>Dual channel, iGPU využívá RAM jako VRAM</td></tr>
+                <tr><td>SSD</td><td>500 GB NVMe SSD</td><td>Rychlý systémový disk</td></tr>
+                <tr><td>PSU</td><td>450 W 80+ Bronze</td><td>Stačí pro 65W CPU bez dGPU</td></tr>
+                <tr><td>Skříň</td><td>mATX midi tower</td><td>Kompaktní, dobrý airflow</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr>
+
+    <h2>Instalace operačního systému a ovladačů</h2>
+
+    <ol>
+        <li><strong>Vytvoření bootovatelného USB</strong> — nástroj <em>Rufus</em> nebo <em>Media Creation Tool</em> (Windows); ISO soubor OS → USB flash disk (min. 8 GB)</li>
+        <li><strong>Boot z USB</strong> — v BIOSu nastavit USB jako první boot zařízení; spustit instalátor</li>
+        <li><strong>Výběr disku a oddílů</strong> — formátovat disk (GPT pro UEFI), vytvořit systémový oddíl</li>
+        <li><strong>Instalace Windows</strong> — průvodce instalací, vytvoření účtu, aktivace licencí</li>
+        <li><strong>Windows Update</strong> — ihned po instalaci spustit aktualizace</li>
+        <li><strong>Ovladače</strong> — chipset (ze stránek výrobce MB), GPU (NVIDIA GeForce Experience / AMD Adrenalin), audio, síťová karta</li>
+        <li><strong>Ověření</strong> — Device Manager (Správce zařízení) — žádná zařízení bez ovladačů (žluté vykřičníky)</li>
+    </ol>
+
+    <div class="note-box">
+        <strong>Pořadí instalace ovladačů:</strong> 1. Chipset → 2. GPU → 3. Zvuk → 4. Síť → 5. Ostatní.<br>
+        Chipset ovladač musí být první — inicializuje komunikaci CPU ↔ MB a ostatní ovladače na něm závisejí.
+    </div>
+
+    <hr>
+
+    <h2>Nastavení BIOSu</h2>
+
+    <table class="table table-sm table-bordered" style="max-width:680px;">
+        <thead class="table-light"><tr><th>Nastavení</th><th>Popis</th><th>Kde najít</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Boot order</strong></td><td>Pořadí zařízení pro bootování; USB na první místo pro instalaci OS</td><td>Boot tab</td></tr>
+            <tr><td><strong>XMP / EXPO</strong></td><td>Aktivace rychlostního profilu RAM (bez něj běží RAM na základní JEDEC frekvenci)</td><td>AI Tweaker / OC / Memory</td></tr>
+            <tr><td><strong>Secure Boot</strong></td><td>Ochrana proti bootování neověřeného kódu; nutné pro Windows 11</td><td>Security tab</td></tr>
+            <tr><td><strong>Virtualizace</strong></td><td>VT-x (Intel) / AMD-V — nutné pro VM (VirtualBox, WSL2, Hyper-V)</td><td>CPU tab</td></tr>
+            <tr><td><strong>Fan curves</strong></td><td>Nastavení otáček ventilátorů dle teploty CPU/skříně</td><td>H/W Monitor / Fan Control</td></tr>
+            <tr><td><strong>Fast Boot</strong></td><td>Přeskočí část POST pro rychlejší start; vypnout při instalaci OS</td><td>Boot tab</td></tr>
+            <tr><td><strong>CMOS Reset</strong></td><td>Obnoví výchozí nastavení BIOSu (fyzicky jumperem nebo baterií)</td><td>HW reset na MB</td></tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Optimalizace výkonu</h2>
+
+    <div class="highlight-box">
+        <strong>Monitoring teplot (HWiNFO64 / HWMonitor):</strong>
+        <table class="table table-sm" style="margin-top:8px; max-width:480px;">
+            <thead class="table-light"><tr><th>Komponenta</th><th>Bezpečná teplota</th><th>Kritická teplota</th></tr></thead>
+            <tbody>
+                <tr><td>CPU (idle)</td><td>30–50 °C</td><td>&gt;90 °C (throttling)</td></tr>
+                <tr><td>CPU (zátěž)</td><td>60–80 °C</td><td>&gt;95 °C</td></tr>
+                <tr><td>GPU (zátěž)</td><td>65–85 °C</td><td>&gt;95 °C</td></tr>
+                <tr><td>NVMe SSD</td><td>40–60 °C</td><td>&gt;75 °C</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <ul>
+        <li><strong>Tepelná pasta</strong> — nanést při montáži CPU chladiče; vyměnit po 3–5 letech (vyschne, zhorší přenos tepla)</li>
+        <li><strong>Airflow ve skříni</strong> — přetlak (více přívodních ventilátorů) snižuje prach; podtlak (více výfukových) lépe odvádí teplo</li>
+        <li><strong>Čištění</strong> — stlačený vzduch každých 6–12 měsíců; zejména filtry, chladič CPU, GPU radiátor</li>
+        <li><strong>Přetaktování (OC)</strong> — zvýšení frekvence CPU/GPU/RAM za výchozí specifikaci; nutné stabilní napájení a lepší chlazení; proveditelné jen s K/X/XT procesorovými verzemi a odpovídajícím chipsetem (Z-series Intel, X-series AMD)</li>
+    </ul>
+
+</div>
+</body>
+</html>

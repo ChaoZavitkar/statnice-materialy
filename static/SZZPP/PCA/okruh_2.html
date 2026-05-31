@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Okruh 2: Architektura počítačů – diagnostika a řešení problémů</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- MathJax -->
+    <script>
+        window.MathJax = {
+            tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+            svg: {fontCache: 'global'}
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <!-- Syntax Highlighting Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+
+    <h1>Okruh 2 – Architektura počítačů: diagnostika a řešení problémů</h1>
+    <p class="subtitle">KI/SZZPP – Architektura počítačů</p>
+
+    <hr>
+
+    <h2>Systematický přístup k diagnostice</h2>
+
+    <div class="math-box">
+        <strong>Zlaté pravidlo diagnostiky: izolace a eliminace.</strong>
+        <ol style="margin-top:8px;">
+            <li><strong>Reprodukovat problém</strong> — ověřit, že problém nastává konzistentně</li>
+            <li><strong>Shromáždit informace</strong> — kdy nastalo, po jaké změně, chybové hlášky</li>
+            <li><strong>Zúžit příčinu</strong> — vyloučit komponenty jednu po druhé (swap test)</li>
+            <li><strong>Ověřit hypotézu</strong> — změnit jednu věc najednou, ne více</li>
+            <li><strong>Řešit a dokumentovat</strong> — zaznamenat závadu a řešení</li>
+        </ol>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Checklist před zahájením diagnostiky:</strong>
+        <ul>
+            <li>Je počítač správně zapojen do sítě? Svítí kontrolky na PSU?</li>
+            <li>Není HW přehřátý? (hmatáním ventilátoru nebo teplotními senzory)</li>
+            <li>Nenastala fyzická změna (nová komponenta, přesun PC, pád)?</li>
+            <li>Byl nedávno nainstalován nový SW nebo ovladač?</li>
+            <li>Jsou v Event Viewer (Prohlížeč událostí) chybové záznamy?</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>POST a chybové signály</h2>
+
+    <p><strong>POST (Power-On Self Test)</strong> — při každém spuštění MB otestuje základní HW (CPU, RAM, GPU, klávesnici). Pokud test selže, PC se nespustí a signalizuje chybu.</p>
+
+    <div class="math-box">
+        <strong>Způsoby signalizace POST chyb:</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Metoda</th><th>Popis</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Beep kódy</strong></td><td>Zvukové signály z reproduktoru na MB; vzor závisí na výrobci BIOS (AMI, Award, Phoenix)</td></tr>
+                <tr><td><strong>POST debug karta</strong></td><td>Karta do PCIe/PCI slotu zobrazující hexadecimální kód chyby</td></tr>
+                <tr><td><strong>Q-LED / POST LED</strong></td><td>Barevné LED na moderních MB (červená = CPU, žlutá = DRAM, bílá = GPU, zelená = Boot)</td></tr>
+                <tr><td><strong>Chybová obrazovka</strong></td><td>Pokud POST projde, BIOS zobrazí chybu na monitoru</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Nejčastější beep kódy (AMI BIOS):</strong>
+        <ul>
+            <li>1 krátký pípnutí — POST OK, spouštění OS</li>
+            <li>3 krátké — RAM chyba (špatně osazená nebo vadná)</li>
+            <li>1 dlouhý + 2 krátké — GPU chyba (špatně osazená nebo vadná)</li>
+            <li>Nepřetržité pípání — CPU / PSU problém</li>
+            <li>Žádný zvuk + žádný obraz — PSU nebo MB problém</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <h2>Diagnostické nástroje</h2>
+
+    <table class="table table-sm table-bordered">
+        <thead class="table-light">
+            <tr><th>Nástroj</th><th>Diagnostikuje</th><th>OS</th><th>Popis</th></tr>
+        </thead>
+        <tbody>
+            <tr><td><strong>MemTest86+</strong></td><td>RAM</td><td>Bootovatelný (bez OS)</td><td>Komplexní test paměti — odhalí chybné buňky; spustit přes USB, trvá hodiny</td></tr>
+            <tr><td><strong>CPU-Z</strong></td><td>CPU, MB, RAM</td><td>Windows</td><td>Detailní informace o procesoru (frekvence, napětí, cache), desce a paměti</td></tr>
+            <tr><td><strong>GPU-Z</strong></td><td>GPU</td><td>Windows</td><td>Informace o grafické kartě (VRAM, frekvence, teplota, zatížení)</td></tr>
+            <tr><td><strong>HWiNFO64</strong></td><td>Vše (teploty, napětí)</td><td>Windows</td><td>Komplexní monitoring — teploty, napětí, spotřeba, chyby; klíčové pro diagnostiku přehřívání</td></tr>
+            <tr><td><strong>CrystalDiskInfo</strong></td><td>HDD/SSD</td><td>Windows</td><td>SMART atributy disku — počet přerozdělených sektorů, teplota, odhad zdraví</td></tr>
+            <tr><td><strong>CrystalDiskMark</strong></td><td>SSD/HDD výkon</td><td>Windows</td><td>Benchmark čtení/zápisu — potvrdí, zda disk pracuje na očekávané rychlosti</td></tr>
+            <tr><td><strong>Windows Event Viewer</strong></td><td>SW/HW chyby</td><td>Windows</td><td>Záznamy chyb OS, aplikací, ovladačů; klíčové pro BSOD analýzu</td></tr>
+            <tr><td><strong>Reliability Monitor</strong></td><td>Stabilita systému</td><td>Windows</td><td>Grafický přehled pádů a chyb v čase — snadno odhalí vzor problémů</td></tr>
+            <tr><td><strong>MSI Afterburner</strong></td><td>GPU</td><td>Windows</td><td>Monitoring a přetaktování GPU, zobrazení teploty a frekvence v overlay</td></tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>PC se nespustí / černá obrazovka</h2>
+
+    <p>Vzorová úloha z PDF: <em>„Uživatel si stěžuje, že se počítač nespustí — po zapnutí napájení se zobrazí pouze černá obrazovka."</em></p>
+
+    <div class="math-box">
+        <strong>Systematický checklist — od nejjednodušší příčiny:</strong>
+        <ol>
+            <li><strong>Napájení</strong>
+                <ul>
+                    <li>Je PSU zapnutý (přepínač na zadní straně)?</li>
+                    <li>Svítí kontrolka na MB (standby LED)?</li>
+                    <li>Funguje zásuvka / prodlužovák?</li>
+                    <li>Jsou všechny napájecí konektory zapojeny? (24pin MB, 8pin CPU, 6+2pin GPU)</li>
+                </ul>
+            </li>
+            <li><strong>Zobrazení</strong>
+                <ul>
+                    <li>Je monitor napájen a zapnut?</li>
+                    <li>Správný vstup na monitoru (HDMI/DP)?</li>
+                    <li>Kabel není poškozen?</li>
+                    <li>Je GPU správně osazena v PCIe slotu?</li>
+                </ul>
+            </li>
+            <li><strong>RAM</strong>
+                <ul>
+                    <li>Vyjmout a znovu osadit RAM moduly (vyčistit kontakty pryžovou gumou)</li>
+                    <li>Zkusit jeden modul v slotu A2 (dle manuálu desky)</li>
+                    <li>Q-LED na MB svítí žlutě → RAM problém</li>
+                </ul>
+            </li>
+            <li><strong>GPU</strong>
+                <ul>
+                    <li>Vyjmout a znovu osadit GPU</li>
+                    <li>Zkusit monitor přes iGPU (HDMI/DP na základní desce) — pokud funguje, závada v dGPU</li>
+                    <li>Q-LED bílá → GPU problém</li>
+                </ul>
+            </li>
+            <li><strong>CMOS Reset</strong>
+                <ul>
+                    <li>Odpojit PC od sítě, vyjmout CMOS baterii na 30 s (nebo jumper CLR_CMOS)</li>
+                    <li>Obnoví BIOS do výchozího stavu — opravuje problémy po neúspěšném přetaktování</li>
+                </ul>
+            </li>
+            <li><strong>CPU a MB</strong>
+                <ul>
+                    <li>Zkontrolovat ohnuté piny v socketu (AM5 má piny na CPU, LGA na MB)</li>
+                    <li>Ověřit POST LED / beep kódy</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <h2>Modré obrazovky (BSOD)</h2>
+
+    <p>BSOD (Blue Screen of Death) = Windows detekoval fatální chybu kernelu a zastavil systém pro ochranu dat.</p>
+
+    <div class="highlight-box">
+        <strong>Čtení BSOD stop kódu:</strong><br>
+        Příklad: <code>MEMORY_MANAGEMENT (0x0000001A)</code><br>
+        <ul>
+            <li>Textový kód → indikuje kategori problému</li>
+            <li>Hex kód (0x...) → přesný identifikátor chyby</li>
+            <li>Soubor .dmp v <code>C:\Windows\Minidump\</code> → analyzovat nástrojem WinDbg nebo WhoCrashed</li>
+        </ul>
+    </div>
+
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Stop kód</th><th>Nejčastější příčina</th><th>Řešení</th></tr></thead>
+        <tbody>
+            <tr><td><code>MEMORY_MANAGEMENT</code></td><td>Vadná RAM, chybný XMP profil</td><td>MemTest86+, deaktivovat XMP, vyměnit RAM</td></tr>
+            <tr><td><code>IRQL_NOT_LESS_OR_EQUAL</code></td><td>Špatný ovladač, vadná RAM</td><td>Aktualizace/rollback ovladačů, MemTest86+</td></tr>
+            <tr><td><code>CRITICAL_PROCESS_DIED</code></td><td>Poškozené systémové soubory</td><td><code>sfc /scannow</code>, <code>DISM /RestoreHealth</code></td></tr>
+            <tr><td><code>KERNEL_SECURITY_CHECK_FAILURE</code></td><td>Nekompatibilní ovladač, malware</td><td>Aktualizace ovladačů, antivirová kontrola</td></tr>
+            <tr><td><code>NTFS_FILE_SYSTEM</code></td><td>Vadný disk</td><td>CrystalDiskInfo SMART, <code>chkdsk /f /r</code></td></tr>
+        </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Problémy s úložištěm</h2>
+
+    <div class="math-box">
+        <strong>SMART atributy (CrystalDiskInfo) — na co si dát pozor:</strong>
+        <table class="table table-sm" style="margin-top:8px; max-width:640px;">
+            <thead class="table-light"><tr><th>Atribut</th><th>Popis</th><th>Kritická hodnota</th></tr></thead>
+            <tbody>
+                <tr><td>Reallocated Sectors Count</td><td>Počet přerozdělených špatných sektorů (HDD)</td><td>&gt;0 = pozor</td></tr>
+                <tr><td>Uncorrectable Error Count</td><td>Neopravitelné chyby čtení/zápisu (SSD)</td><td>&gt;0 = kritické</td></tr>
+                <tr><td>Temperature</td><td>Aktuální teplota</td><td>&gt;60 °C (HDD), &gt;70 °C (SSD)</td></tr>
+                <tr><td>SSD Life Remaining</td><td>Zbývající životnost SSD v %</td><td>&lt;10 % = plánovat výměnu</td></tr>
+                <tr><td>Power On Hours</td><td>Celkový čas provozu</td><td>Informativní</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Postup při podezření na vadný disk:</strong>
+        <ol>
+            <li>CrystalDiskInfo — zkontrolovat stav (Zdravý / Varování / Špatný)</li>
+            <li><strong>Ihned zálohovat data!</strong> (před jakoukoliv opravou)</li>
+            <li><code>chkdsk C: /f /r</code> — opraví logické chyby a označí vadné sektory</li>
+            <li>Benchmark (CrystalDiskMark) — pomalé čtení/zápis může indikovat degradaci</li>
+            <li>Výměna disku — klonování (Macrium Reflect, Clonezilla) nebo čistá instalace OS</li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <h2>Přehřívání</h2>
+
+    <div class="math-box">
+        <strong>Příznaky přehřívání:</strong>
+        <ul>
+            <li>PC se automaticky vypne při zátěži (thermal shutdown)</li>
+            <li>Snížení výkonu za provozu — CPU/GPU snižuje frekvenci (thermal throttling)</li>
+            <li>Hlučné ventilátory i při nízké zátěži</li>
+            <li>Vysoké teploty v HWiNFO (CPU &gt;90 °C, GPU &gt;90 °C)</li>
+        </ul>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Postup řešení přehřívání CPU:</strong>
+        <ol>
+            <li><strong>Ověřit teploty</strong> — HWiNFO64, zatížit CPU (Prime95, Cinebench)</li>
+            <li><strong>Zkontrolovat ventilátory</strong> — točí se? Jsou čisté?</li>
+            <li><strong>Vyčistit chladič CPU</strong> — stlačený vzduch, kartáček</li>
+            <li><strong>Vyměnit tepelnou pastu</strong> — odborně setřít starou (izopropylalkohol), nanést novou vrstvou velikosti hrášku</li>
+            <li><strong>Zkontrolovat airflow skříně</strong> — volný průchod vzduchu, žádné kabely blokující ventilátory</li>
+            <li><strong>Zkontrolovat montáž chladiče</strong> — dostatečný přítlak na CPU heatspreader</li>
+            <li>Pokud stále přehřívání → upgrade chlazení nebo snížení TDP v BIOSu (PL1/PL2 limity)</li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <h2>Upgrade komponent</h2>
+
+    <div class="math-box">
+        <strong>Klíčové kompatibilitní kontroly před upgradem:</strong>
+        <table class="table table-sm" style="margin-top:8px;">
+            <thead class="table-light"><tr><th>Upgrade</th><th>Co zkontrolovat</th></tr></thead>
+            <tbody>
+                <tr><td><strong>CPU</strong></td><td>Stejný socket jako MB; aktualizovat BIOS před montáží nového CPU (nutné pro nové generace)</td></tr>
+                <tr><td><strong>RAM</strong></td><td>Stejná generace DDR jako MB (DDR4 vs DDR5); ověřit QVL (Qualified Vendor List) desky; max. kapacita per slot</td></tr>
+                <tr><td><strong>GPU</strong></td><td>Dostatečný PCIe slot (×16); PSU wattáž; délka GPU vs. skříň; napájecí konektory</td></tr>
+                <tr><td><strong>SSD (upgrade z HDD)</strong></td><td>Volný M.2 slot (NVMe PCIe 4.0?); nebo SATA port; kapacita pro migraci dat</td></tr>
+                <tr><td><strong>PSU</strong></td><td>Formát (ATX); délka vs. skříň; dostatečné konektory pro GPU (12VHPWR pro RTX 40xx)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="highlight-box">
+        <strong>Kdy upgradovat vs. koupit nový PC?</strong>
+        <table class="table table-sm" style="margin-top:8px; max-width:560px;">
+            <thead class="table-light"><tr><th>Případ</th><th>Doporučení</th></tr></thead>
+            <tbody>
+                <tr><td>Pomalý jen při hrách</td><td>Upgrade GPU — největší přínos</td></tr>
+                <tr><td>Pomalé načítání, freezy</td><td>HDD → SSD — dramatické zlepšení</td></tr>
+                <tr><td>Málo paměti (RAM &lt;16 GB)</td><td>Přidat RAM — levný a efektivní upgrade</td></tr>
+                <tr><td>Starý socket (AM3, LGA1155)</td><td>Upgrade CPU nevýhodný → nový systém</td></tr>
+                <tr><td>MB nepodporuje DDR5 / PCIe 4.0</td><td>Nový systém (MB + CPU + RAM)</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="note-box">
+        <strong>BIOS update před CPU upgrade:</strong> Nové CPU generace vyžadují aktualizovaný BIOS s podporou nového mikrokódu. Postup: stáhnout BIOS z webu výrobce MB → uložit na USB → Flash BIOS v BIOS/UEFI menu (nebo EZ Flash nástroj). <strong>Nikdy nevypínat PC v průběhu flash!</strong>
+    </div>
+
+</div>
+</body>
+</html>
