@@ -47,12 +47,12 @@
             <p>Inferenční statistika odvozuje závěry o celé <strong>populaci</strong> na základě <strong>výběrového vzorku</strong>.</p>
             <p><strong>Bodový odhad</strong> = jedno číslo, které odhaduje parametr populace:</p>
             <ul>
-                <li>Výběrový průměr $\bar{x}$ odhaduje populační střední hodnotu $\mu$</li>
+                <li>Výběrový průměr $\bar{x}$ odhaduje populační střední hodnotu $E(X)$</li>
                 <li>Výběrová proporce $\hat{p}$ odhaduje populační podíl $p$</li>
             </ul>
             <p><strong>Intervalový odhad</strong> = rozsah hodnot, ve kterém se parametr pravděpodobně nachází:</p>
             <ul>
-                <li>$\mu \in [\bar{x} - \text{ME},\; \bar{x} + \text{ME}]$</li>
+                <li>$E(X) \in [\bar{x} - \text{ME},\; \bar{x} + \text{ME}]$</li>
                 <li>Říkáme mu <strong>interval spolehlivosti (IS)</strong></li>
             </ul>
         </div>
@@ -72,7 +72,7 @@
             <p>Proč vůbec intervaly spolehlivosti fungují? Díky <strong>Centrální limitní větě (CLT)</strong>.</p>
             <p><strong>Výběrový průměr</strong> $\bar{X}$ z výběru velikosti $n$ má (pro velká $n$) přibližně normální rozdělení:</p>
             <div class="formula">
-                $$\bar{X} \sim N\!\left(\mu,\; \frac{\sigma^2}{n}\right) \quad \Rightarrow \quad \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1)$$
+                $$\bar{X} \sim N\!\left(E(X),\; \frac{\text{Var}(X)}{n}\right) \quad \Rightarrow \quad \frac{\bar{X} - E(X)}{\text{Std}(X) / \sqrt{n}} \sim N(0, 1)$$
             </div>
             <p><strong>Centrální limitní věta (CLT):</strong> Pro $n \geq 30$ je $\bar{X}$ přibližně normálně rozdělena, <em>nezávisle na rozdělení původní populace</em>.</p>
             <ul>
@@ -83,7 +83,7 @@
 
         <div class="note-box">
             <p><strong>Standardní chyba průměru (SE):</strong></p>
-            <div class="formula" style="text-align:left; padding: 6px 16px;">$$SE(\bar{X}) = \frac{\sigma}{\sqrt{n}} \quad \text{(pokud známe } \sigma\text{)} \qquad SE(\bar{X}) = \frac{s}{\sqrt{n}} \quad \text{(pokud } \sigma \text{ neznáme)}$$</div>
+            <div class="formula" style="text-align:left; padding: 6px 16px;">$$SE(\bar{X}) = \frac{\text{Std}(X)}{\sqrt{n}} \quad \text{(pokud známe Std(X))} \qquad SE(\bar{X}) = \frac{s}{\sqrt{n}} \quad \text{(pokud Std(X) neznáme)}$$</div>
             <p>SE říká, o kolik se typicky liší výběrový průměr od skutečného populačního průměru. Čím větší $n$, tím menší SE.</p>
         </div>
 
@@ -229,19 +229,19 @@
 
             <p><strong>Oboustranný IS</strong> – hledáme dolní i horní mez:</p>
             <div class="formula">
-                $$\left(\bar{x} - t_{\alpha/2,\,n-1} \cdot \frac{s}{\sqrt{n}},\quad \bar{x} + t_{\alpha/2,\,n-1} \cdot \frac{s}{\sqrt{n}}\right)$$
+                $$\left(\bar{x} - t_{\text{Alfa}/2,\,n-1} \cdot \frac{s}{\sqrt{n}},\quad \bar{x} + t_{\text{Alfa}/2,\,n-1} \cdot \frac{s}{\sqrt{n}}\right)$$
             </div>
             <p><em>Použití: „Průměrná výška je mezi 173 cm a 177 cm."</em></p>
 
             <p><strong>Pravostranný IS</strong> (dolní mez) – víme jen, že průměr není příliš malý:</p>
             <div class="formula">
-                $$\left(\bar{x} - t_{\alpha,\,n-1} \cdot \frac{s}{\sqrt{n}},\quad +\infty\right)$$
+                $$\left(\bar{x} - t_{\text{Alfa},\,n-1} \cdot \frac{s}{\sqrt{n}},\quad +\infty\right)$$
             </div>
             <p><em>Použití: „Průměrná životnost baterie je alespoň 450 hodin."</em></p>
 
             <p><strong>Levostranný IS</strong> (horní mez) – víme jen, že průměr není příliš velký:</p>
             <div class="formula">
-                $$\left(-\infty,\quad \bar{x} + t_{\alpha,\,n-1} \cdot \frac{s}{\sqrt{n}}\right)$$
+                $$\left(-\infty,\quad \bar{x} + t_{\text{Alfa},\,n-1} \cdot \frac{s}{\sqrt{n}}\right)$$
             </div>
             <p><em>Použití: „Průměrná doba čekání je nejvýše 5 minut."</em></p>
         </div>
@@ -249,10 +249,10 @@
         <div class="highlight-box">
             <strong>Klíčový rozdíl:</strong>
             <ul>
-                <li>Oboustranný: chyba $\alpha$ rozdělena na obě strany → kritická hodnota $t_{\alpha/2}$</li>
-                <li>Jednostranný: celá chyba $\alpha$ na jednu stranu → kritická hodnota $t_{\alpha}$ (menší číslo → užší interval!)</li>
+                <li>Oboustranný: chyba Alfa rozdělena na obě strany → kritická hodnota $t_{\text{Alfa}/2}$</li>
+                <li>Jednostranný: celá chyba Alfa na jednu stranu → kritická hodnota $t_{\text{Alfa}}$ (menší číslo → užší interval!)</li>
             </ul>
-            <p>Příklad pro 95% IS (α = 0.05, n = 30, df = 29):</p>
+            <p>Příklad pro 95% IS (Alfa = 0.05, n = 30, df = 29):</p>
             <ul>
                 <li>Oboustranný: $t_{0.025, 29} \approx 2.045$</li>
                 <li>Jednostranný: $t_{0.05, 29} \approx 1.699$</li>
@@ -265,21 +265,21 @@
             <p><strong>Chí-kvadrát rozdělení</strong> $\chi^2(k)$ vzniká jako součet $k$ druhých mocnin nezávislých standardně normálních veličin. Parametr $k$ = <em>stupně volnosti</em>.</p>
             <ul>
                 <li>Je <strong>nesymetrické</strong> a nabývá jen kladných hodnot</li>
-                <li>Pro IS rozptylu: $\frac{(n-1)s^2}{\sigma^2} \sim \chi^2(n-1)$</li>
+                <li>Pro IS rozptylu: $\frac{(n-1)s^2}{\text{Var}(X)} \sim \chi^2(n-1)$</li>
             </ul>
         </div>
 
         <div class="formula">
             <strong>Interval spolehlivosti pro rozptyl Var(X):</strong>
-            $$\left[ \frac{(n-1)s^2}{\chi^2_{1-\alpha/2,\; n-1}},\quad \frac{(n-1)s^2}{\chi^2_{\alpha/2,\; n-1}} \right]$$
-            <p style="margin-top:8px;">Kde $\chi^2_{\alpha/2, n-1}$ a $\chi^2_{1-\alpha/2, n-1}$ jsou kvantily chí-kvadrát rozdělení se $n-1$ stupni volnosti.</p>
+            $$\left[ \frac{(n-1)s^2}{\chi^2_{1-\text{Alfa}/2,\; n-1}},\quad \frac{(n-1)s^2}{\chi^2_{\text{Alfa}/2,\; n-1}} \right]$$
+            <p style="margin-top:8px;">Kde $\chi^2_{\text{Alfa}/2, n-1}$ a $\chi^2_{1-\text{Alfa}/2, n-1}$ jsou kvantily chí-kvadrát rozdělení se $n-1$ stupni volnosti.</p>
         </div>
 
         <div class="note-box">
             <p><strong>Příklad – konzistence výroby:</strong></p>
             <p>Měříme délky 16 součástek (n = 16). Výběrová směrodatná odchylka s = 0.5 mm. Chceme 95% IS pro populační rozptyl.</p>
             <ol>
-                <li>$df = n - 1 = 15$, $\alpha = 0.05$</li>
+                <li>$df = n - 1 = 15$, Alfa = 0.05</li>
                 <li>Z tabulky: $\chi^2_{0.025, 15} = 6.262$, $\chi^2_{0.975, 15} = 27.488$</li>
                 <li>$s^2 = 0.5^2 = 0.25$</li>
                 <li>Dolní mez: $\dfrac{15 \cdot 0.25}{27.488} \approx 0.136$ mm²</li>
@@ -510,8 +510,8 @@
             <ul>
                 <li><strong>Definice:</strong> IS je interval odhadu parametru populace, který s danou pravděpodobností (hladinou spolehlivosti) obsahuje skutečnou hodnotu</li>
                 <li><strong>Obecný tvar:</strong> $\bar{x} \pm \text{kritická hodnota} \cdot SE$ (bodový odhad ± mez chyby)</li>
-                <li><strong>Spolehlivost vs. hladina významnosti:</strong> $(1-\alpha) \cdot 100\,\%$ spolehlivosti, $\alpha$ = pravděpodobnost chyby</li>
-                <li><strong>Šířka IS:</strong> závisí na $n$ (větší $n$ → užší), na $\alpha$ (větší spolehlivost → širší), na variabilitě dat</li>
+                <li><strong>Spolehlivost vs. hladina významnosti:</strong> $(1 - \text{Alfa}) \cdot 100\,\%$ spolehlivosti, Alfa = pravděpodobnost chyby</li>
+                <li><strong>Šířka IS:</strong> závisí na $n$ (větší $n$ → užší), na Alfa (větší spolehlivost → širší), na variabilitě dat</li>
                 <li><strong>Správná interpretace:</strong> „Kdybychom postup opakovali mnohokrát, ~95 % intervalů by obsahovalo skutečnou hodnotu" – NE „skutečná hodnota má 95% pravděpodobnost být uvnitř"</li>
             </ul>
         </div>
@@ -525,26 +525,26 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td rowspan="2"><strong>Střední hodnota μ</strong></td>
-                            <td>Známe σ</td>
-                            <td>$\bar{x} \pm z_{\alpha/2} \cdot \dfrac{\sigma}{\sqrt{n}}$</td>
+                            <td rowspan="2"><strong>Střední hodnota E(X)</strong></td>
+                            <td>Známe Std(X)</td>
+                            <td>$\bar{x} \pm z_{\text{Alfa}/2} \cdot \dfrac{\text{Std}(X)}{\sqrt{n}}$</td>
                             <td>Normální (z)</td>
                         </tr>
                         <tr>
-                            <td>Neznáme σ</td>
-                            <td>$\bar{x} \pm t_{\alpha/2,\, n-1} \cdot \dfrac{s}{\sqrt{n}}$</td>
+                            <td>Neznáme Std(X)</td>
+                            <td>$\bar{x} \pm t_{\text{Alfa}/2,\, n-1} \cdot \dfrac{s}{\sqrt{n}}$</td>
                             <td>t-rozdělení</td>
                         </tr>
                         <tr>
-                            <td><strong>Rozptyl σ²</strong></td>
+                            <td><strong>Rozptyl Var(X)</strong></td>
                             <td>Norm. populace</td>
-                            <td>$\left[\dfrac{(n-1)s^2}{\chi^2_{1-\alpha/2}},\; \dfrac{(n-1)s^2}{\chi^2_{\alpha/2}}\right]$</td>
+                            <td>$\left[\dfrac{(n-1)s^2}{\chi^2_{1-\text{Alfa}/2}},\; \dfrac{(n-1)s^2}{\chi^2_{\text{Alfa}/2}}\right]$</td>
                             <td>χ²-rozdělení</td>
                         </tr>
                         <tr>
                             <td><strong>Proporce p</strong></td>
                             <td>$n\hat{p} \geq 5$, $n(1-\hat{p}) \geq 5$</td>
-                            <td>$\hat{p} \pm z_{\alpha/2} \sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}}$</td>
+                            <td>$\hat{p} \pm z_{\text{Alfa}/2} \sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}}$</td>
                             <td>Normální (z)</td>
                         </tr>
                     </tbody>
@@ -555,7 +555,7 @@
         <div class="note-box">
             <strong>Kritické hodnoty – rychlý přehled:</strong>
             <table style="margin-top: 6px; width: 100%;">
-                <tr><th>Spolehlivost</th><th>α</th><th>z (oboustranný)</th><th>t pro df=∞ (oboustranný)</th></tr>
+                <tr><th>Spolehlivost</th><th>Alfa</th><th>z (oboustranný)</th><th>t pro df=∞ (oboustranný)</th></tr>
                 <tr><td>90 %</td><td>0.10</td><td>1.645</td><td>1.645</td></tr>
                 <tr><td><strong>95 %</strong></td><td><strong>0.05</strong></td><td><strong>1.960</strong></td><td><strong>1.960</strong></td></tr>
                 <tr><td>99 %</td><td>0.01</td><td>2.576</td><td>2.576</td></tr>

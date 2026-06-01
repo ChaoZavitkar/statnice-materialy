@@ -366,14 +366,14 @@
         <h3>Standardizace a Z-skóre</h3>
 
         <div class="math-box">
-            <p><strong>Standardizace</strong> převádí libovolné normální rozdělení $N(\mu, \sigma^2)$ na <strong>standardní normální rozdělení $N(0, 1)$</strong>.</p>
+            <p><strong>Standardizace</strong> převádí libovolné normální rozdělení $N(E(X), \text{Var}(X))$ na <strong>standardní normální rozdělení $N(0, 1)$</strong>.</p>
             <div class="formula">
-                $$Z = \frac{X - \mu}{\sigma} \quad \Rightarrow \quad Z \sim N(0, 1)$$
+                $$Z = \frac{X - E(X)}{\text{Std}(X)} \quad \Rightarrow \quad Z \sim N(0, 1)$$
             </div>
             <p><strong>Proč to děláme?</strong> Abychom mohli použít jednu tabulku hodnot pro jakékoli normální rozdělení.</p>
             <p><strong>Výpočet pravděpodobnosti:</strong></p>
             <div class="formula">
-                $$P(X \leq a) = P\!\left(Z \leq \frac{a - \mu}{\sigma}\right) = \Phi(z)$$
+                $$P(X \leq a) = P\!\left(Z \leq \frac{a - E(X)}{\text{Std}(X)}\right) = \Phi(z)$$
             </div>
             <p>kde $\Phi(z)$ je <strong>distribuční funkce standardního normálního rozdělení</strong> (hodnota z tabulky nebo z kalkulátoru).</p>
         </div>
@@ -386,7 +386,7 @@
                 <li>$P(X > 183) = P(Z > 1) = 1 - \Phi(1) = 1 - 0{,}8413 = 0{,}1587$</li>
                 <li>Přibližně <strong>15,87 %</strong> mužů je vyšší než 183 cm</li>
             </ol>
-            <p><em>Pozorování: 183 cm je přesně μ + 1·σ, tedy z empirického pravidla víme, že nad ní leží (100% − 68%) / 2 ≈ 16 % dat – sedí!</em></p>
+            <p><em>Pozorování: 183 cm je přesně E(X) + 1·Std(X), tedy z empirického pravidla víme, že nad ní leží (100% − 68%) / 2 ≈ 16 % dat – sedí!</em></p>
         </div>
 
         <div class="highlight-box">
@@ -558,11 +558,11 @@
                         <td>Počet pokusů do 1. úspěchu</td>
                     </tr>
                     <tr>
-                        <td><strong>Poissonovo</strong> Po(λ)</td>
+                        <td><strong>Poissonovo</strong> Po(Rate)</td>
                         <td>Diskrétní</td>
-                        <td>λ &gt; 0</td>
-                        <td>λ</td>
-                        <td>λ</td>
+                        <td>Rate &gt; 0</td>
+                        <td>Rate</td>
+                        <td>Rate</td>
                         <td>Počet jevů za čas/prostor</td>
                     </tr>
                     <tr class="table-info">
@@ -574,19 +574,19 @@
                         <td>Stejně pravděpodobné hodnoty v intervalu</td>
                     </tr>
                     <tr class="table-info">
-                        <td><strong>Normální</strong> N(μ, σ²)</td>
+                        <td><strong>Normální</strong> N(E(X), Var(X))</td>
                         <td>Spojité</td>
-                        <td>μ ∈ ℝ, σ &gt; 0</td>
-                        <td>μ</td>
-                        <td>σ²</td>
+                        <td>E(X) ∈ ℝ, Std(X) &gt; 0</td>
+                        <td>E(X)</td>
+                        <td>Var(X)</td>
                         <td>Výšky, chyby měření, přírodní jevy</td>
                     </tr>
                     <tr class="table-info">
-                        <td><strong>Exponenciální</strong> Exp(λ)</td>
+                        <td><strong>Exponenciální</strong> Exp(Rate)</td>
                         <td>Spojité</td>
-                        <td>λ &gt; 0</td>
-                        <td>1/λ</td>
-                        <td>1/λ²</td>
+                        <td>Rate &gt; 0</td>
+                        <td>1/Rate</td>
+                        <td>1/Rate²</td>
                         <td>Čas mezi jevy (čekání)</td>
                     </tr>
                 </tbody>
@@ -597,8 +597,8 @@
             <strong>Vztahy mezi rozděleními:</strong>
             <ul>
                 <li>$n$ nezávislých Bernoulliho pokusů → Binomické $\text{Bin}(n, p)$</li>
-                <li>Binomické s velkým $n$ a malým $p$ (np = λ) → Poissonovo $\text{Po}(\lambda)$</li>
-                <li>Poissonův proces (počet jevů) + Exponenciální (čas mezi jevy) jsou propojeny: pokud X ~ Po(λ), pak časy čekání ~ Exp(λ)</li>
+                <li>Binomické s velkým $n$ a malým $p$ ($np = \text{Rate}$) → Poissonovo $\text{Po}(\text{Rate})$</li>
+                <li>Poissonův proces (počet jevů) + Exponenciální (čas mezi jevy) jsou propojeny: pokud X ~ Po(Rate), pak časy čekání ~ Exp(Rate)</li>
             </ul>
         </div>
 
