@@ -41,6 +41,52 @@
         <h1>Okruh 9 – Intervaly spolehlivosti</h1>
         <p class="subtitle">KI/SZZTP – Pravděpodobnost a statistika</p>
 
+        <h2>Bodový vs. intervalový odhad</h2>
+
+        <div class="math-box">
+            <p>Inferenční statistika odvozuje závěry o celé <strong>populaci</strong> na základě <strong>výběrového vzorku</strong>.</p>
+            <p><strong>Bodový odhad</strong> = jedno číslo, které odhaduje parametr populace:</p>
+            <ul>
+                <li>Výběrový průměr $\bar{x}$ odhaduje populační střední hodnotu $\mu$</li>
+                <li>Výběrová proporce $\hat{p}$ odhaduje populační podíl $p$</li>
+            </ul>
+            <p><strong>Intervalový odhad</strong> = rozsah hodnot, ve kterém se parametr pravděpodobně nachází:</p>
+            <ul>
+                <li>$\mu \in [\bar{x} - \text{ME},\; \bar{x} + \text{ME}]$</li>
+                <li>Říkáme mu <strong>interval spolehlivosti (IS)</strong></li>
+            </ul>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Vlastnosti dobrého (bodového) odhadu:</strong>
+            <ul>
+                <li><strong>Nestrannost:</strong> $E(\hat{\theta}) = \theta$ – odhad se v průměru trefuje do skutečné hodnoty</li>
+                <li><strong>Konzistence:</strong> s rostoucím n se odhad blíží skutečné hodnotě</li>
+                <li><strong>Eficience:</strong> odhad má co nejmenší rozptyl (přesný, ne rozptýlený)</li>
+            </ul>
+        </div>
+
+        <h2>Výběrové rozdělení a Centrální limitní věta (CLT)</h2>
+
+        <div class="math-box">
+            <p>Proč vůbec intervaly spolehlivosti fungují? Díky <strong>Centrální limitní větě (CLT)</strong>.</p>
+            <p><strong>Výběrový průměr</strong> $\bar{X}$ z výběru velikosti $n$ má (pro velká $n$) přibližně normální rozdělení:</p>
+            <div class="formula">
+                $$\bar{X} \sim N\!\left(\mu,\; \frac{\sigma^2}{n}\right) \quad \Rightarrow \quad \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim N(0, 1)$$
+            </div>
+            <p><strong>Centrální limitní věta (CLT):</strong> Pro $n \geq 30$ je $\bar{X}$ přibližně normálně rozdělena, <em>nezávisle na rozdělení původní populace</em>.</p>
+            <ul>
+                <li>Toto je důvod, proč používáme z-hodnoty (nebo t-hodnoty) ve vzorcích pro IS</li>
+                <li>Pro $n &lt; 30$ je potřeba, aby populace sama byla přibližně normální</li>
+            </ul>
+        </div>
+
+        <div class="note-box">
+            <p><strong>Standardní chyba průměru (SE):</strong></p>
+            <div class="formula" style="text-align:left; padding: 6px 16px;">$$SE(\bar{X}) = \frac{\sigma}{\sqrt{n}} \quad \text{(pokud známe } \sigma\text{)} \qquad SE(\bar{X}) = \frac{s}{\sqrt{n}} \quad \text{(pokud } \sigma \text{ neznáme)}$$</div>
+            <p>SE říká, o kolik se typicky liší výběrový průměr od skutečného populačního průměru. Čím větší $n$, tím menší SE.</p>
+        </div>
+
         <h2>Co je interval spolehlivosti?</h2>
 
         <div class="note-box">
@@ -176,25 +222,105 @@
             <p><strong>Kdy $t$ > $z$?</strong> Když máme malý vzorek (n < 30), interval je <em>širší</em> (více nejistoty)</p>
         </div>
 
-        <h2>Interval spolehlivosti pro rozptyl</h2>
+        <h2>Typy intervalů spolehlivosti</h2>
 
-        <div class="formula">
-            <strong>Interval spolehlivosti pro rozptyl Var(X):</strong>
-            $$\left[ \frac{(n-1)s^2}{\chi^2_{\text{Alfa}/2, n-1}}, \frac{(n-1)s^2}{\chi^2_{1-\text{Alfa}/2, n-1}} \right]$$
+        <div class="math-box">
+            <p>Intervaly spolehlivosti mohou být <strong>oboustranné</strong> (nejčastější) nebo <strong>jednostranné</strong>.</p>
 
-            Kde:
+            <p><strong>Oboustranný IS</strong> – hledáme dolní i horní mez:</p>
+            <div class="formula">
+                $$\left(\bar{x} - t_{\alpha/2,\,n-1} \cdot \frac{s}{\sqrt{n}},\quad \bar{x} + t_{\alpha/2,\,n-1} \cdot \frac{s}{\sqrt{n}}\right)$$
+            </div>
+            <p><em>Použití: „Průměrná výška je mezi 173 cm a 177 cm."</em></p>
+
+            <p><strong>Pravostranný IS</strong> (dolní mez) – víme jen, že průměr není příliš malý:</p>
+            <div class="formula">
+                $$\left(\bar{x} - t_{\alpha,\,n-1} \cdot \frac{s}{\sqrt{n}},\quad +\infty\right)$$
+            </div>
+            <p><em>Použití: „Průměrná životnost baterie je alespoň 450 hodin."</em></p>
+
+            <p><strong>Levostranný IS</strong> (horní mez) – víme jen, že průměr není příliš velký:</p>
+            <div class="formula">
+                $$\left(-\infty,\quad \bar{x} + t_{\alpha,\,n-1} \cdot \frac{s}{\sqrt{n}}\right)$$
+            </div>
+            <p><em>Použití: „Průměrná doba čekání je nejvýše 5 minut."</em></p>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Klíčový rozdíl:</strong>
             <ul>
-                <li>$\chi^2$ = kritické hodnoty chí-kvadrát rozdělení</li>
-                <li>Ostatní: jako výše</li>
+                <li>Oboustranný: chyba $\alpha$ rozdělena na obě strany → kritická hodnota $t_{\alpha/2}$</li>
+                <li>Jednostranný: celá chyba $\alpha$ na jednu stranu → kritická hodnota $t_{\alpha}$ (menší číslo → užší interval!)</li>
+            </ul>
+            <p>Příklad pro 95% IS (α = 0.05, n = 30, df = 29):</p>
+            <ul>
+                <li>Oboustranný: $t_{0.025, 29} \approx 2.045$</li>
+                <li>Jednostranný: $t_{0.05, 29} \approx 1.699$</li>
             </ul>
         </div>
 
-        <div class="note-box">
-            <p><strong>Kdy jej používáme?</strong></p>
+        <h2>Interval spolehlivosti pro rozptyl</h2>
+
+        <div class="math-box">
+            <p><strong>Chí-kvadrát rozdělení</strong> $\chi^2(k)$ vzniká jako součet $k$ druhých mocnin nezávislých standardně normálních veličin. Parametr $k$ = <em>stupně volnosti</em>.</p>
             <ul>
-                <li>Když chceme znát <em>variabilitu</em> veličiny (ne jen průměr)</li>
-                <li>Kontrola kvality: "Je výroba dostatečně konzistentní?"</li>
-                <li>Zdravotnictví: "Je rozpětí hodnot přípustné?"</li>
+                <li>Je <strong>nesymetrické</strong> a nabývá jen kladných hodnot</li>
+                <li>Pro IS rozptylu: $\frac{(n-1)s^2}{\sigma^2} \sim \chi^2(n-1)$</li>
+            </ul>
+        </div>
+
+        <div class="formula">
+            <strong>Interval spolehlivosti pro rozptyl Var(X):</strong>
+            $$\left[ \frac{(n-1)s^2}{\chi^2_{1-\alpha/2,\; n-1}},\quad \frac{(n-1)s^2}{\chi^2_{\alpha/2,\; n-1}} \right]$$
+            <p style="margin-top:8px;">Kde $\chi^2_{\alpha/2, n-1}$ a $\chi^2_{1-\alpha/2, n-1}$ jsou kvantily chí-kvadrát rozdělení se $n-1$ stupni volnosti.</p>
+        </div>
+
+        <div class="note-box">
+            <p><strong>Příklad – konzistence výroby:</strong></p>
+            <p>Měříme délky 16 součástek (n = 16). Výběrová směrodatná odchylka s = 0.5 mm. Chceme 95% IS pro populační rozptyl.</p>
+            <ol>
+                <li>$df = n - 1 = 15$, $\alpha = 0.05$</li>
+                <li>Z tabulky: $\chi^2_{0.025, 15} = 6.262$, $\chi^2_{0.975, 15} = 27.488$</li>
+                <li>$s^2 = 0.5^2 = 0.25$</li>
+                <li>Dolní mez: $\dfrac{15 \cdot 0.25}{27.488} \approx 0.136$ mm²</li>
+                <li>Horní mez: $\dfrac{15 \cdot 0.25}{6.262} \approx 0.599$ mm²</li>
+                <li><strong>95% IS pro rozptyl: [0.136, 0.599] mm²</strong></li>
+                <li>Pro Std(X): $[\sqrt{0.136}, \sqrt{0.599}] \approx [0.37, 0.77]$ mm</li>
+            </ol>
+        </div>
+
+        <div class="note-box">
+            <p><strong>Tabulka kritických hodnot χ² (nejčastěji používané df a hladiny):</strong></p>
+            <div class="table-responsive">
+                <table class="table table-bordered" style="font-size: 0.88em;">
+                    <thead class="table-light">
+                        <tr>
+                            <th>df (n−1)</th>
+                            <th>χ²<sub>0.025</sub> (levý)</th>
+                            <th>χ²<sub>0.975</sub> (pravý)</th>
+                            <th>χ²<sub>0.005</sub> (levý)</th>
+                            <th>χ²<sub>0.995</sub> (pravý)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>5</td><td>0.831</td><td>12.833</td><td>0.412</td><td>16.750</td></tr>
+                        <tr><td>10</td><td>3.247</td><td>20.483</td><td>2.156</td><td>25.188</td></tr>
+                        <tr><td>15</td><td>6.262</td><td>27.488</td><td>4.601</td><td>32.801</td></tr>
+                        <tr><td>20</td><td>9.591</td><td>34.170</td><td>7.434</td><td>39.997</td></tr>
+                        <tr><td>25</td><td>13.120</td><td>40.646</td><td>10.520</td><td>46.928</td></tr>
+                        <tr><td>30</td><td>16.791</td><td>46.979</td><td>13.787</td><td>53.672</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><em>Levý kvantil = dolní χ², pravý kvantil = horní χ² (pro 95% IS použijte χ²<sub>0.025</sub> a χ²<sub>0.975</sub>).</em></p>
+        </div>
+
+        <div class="note-box">
+            <p><strong>Kdy IS pro rozptyl používáme?</strong></p>
+            <ul>
+                <li>Kontrola kvality: „Je výroba dostatečně konzistentní?"</li>
+                <li>Zdravotnictví: „Je variabilita měření v přijatelném rozsahu?"</li>
+                <li>Finance: „Jaké je riziko (rozptyl výnosů) portfolia?"</li>
             </ul>
         </div>
 
@@ -377,6 +503,66 @@
             </div>
         </div>
 
+        <h2>Shrnutí pro zkoušku</h2>
+
+        <div class="highlight-box">
+            <strong>Co musím vědět o intervalech spolehlivosti:</strong>
+            <ul>
+                <li><strong>Definice:</strong> IS je interval odhadu parametru populace, který s danou pravděpodobností (hladinou spolehlivosti) obsahuje skutečnou hodnotu</li>
+                <li><strong>Obecný tvar:</strong> $\bar{x} \pm \text{kritická hodnota} \cdot SE$ (bodový odhad ± mez chyby)</li>
+                <li><strong>Spolehlivost vs. hladina významnosti:</strong> $(1-\alpha) \cdot 100\,\%$ spolehlivosti, $\alpha$ = pravděpodobnost chyby</li>
+                <li><strong>Šířka IS:</strong> závisí na $n$ (větší $n$ → užší), na $\alpha$ (větší spolehlivost → širší), na variabilitě dat</li>
+                <li><strong>Správná interpretace:</strong> „Kdybychom postup opakovali mnohokrát, ~95 % intervalů by obsahovalo skutečnou hodnotu" – NE „skutečná hodnota má 95% pravděpodobnost být uvnitř"</li>
+            </ul>
+        </div>
+
+        <div class="math-box">
+            <strong>Přehled vzorců:</strong>
+            <div class="table-responsive" style="margin-top: 8px;">
+                <table class="table table-bordered" style="font-size: 0.90em;">
+                    <thead class="table-light">
+                        <tr><th>Parametr</th><th>Podmínka</th><th>Vzorec IS</th><th>Rozdělení</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2"><strong>Střední hodnota μ</strong></td>
+                            <td>Známe σ</td>
+                            <td>$\bar{x} \pm z_{\alpha/2} \cdot \dfrac{\sigma}{\sqrt{n}}$</td>
+                            <td>Normální (z)</td>
+                        </tr>
+                        <tr>
+                            <td>Neznáme σ</td>
+                            <td>$\bar{x} \pm t_{\alpha/2,\, n-1} \cdot \dfrac{s}{\sqrt{n}}$</td>
+                            <td>t-rozdělení</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rozptyl σ²</strong></td>
+                            <td>Norm. populace</td>
+                            <td>$\left[\dfrac{(n-1)s^2}{\chi^2_{1-\alpha/2}},\; \dfrac{(n-1)s^2}{\chi^2_{\alpha/2}}\right]$</td>
+                            <td>χ²-rozdělení</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Proporce p</strong></td>
+                            <td>$n\hat{p} \geq 5$, $n(1-\hat{p}) \geq 5$</td>
+                            <td>$\hat{p} \pm z_{\alpha/2} \sqrt{\dfrac{\hat{p}(1-\hat{p})}{n}}$</td>
+                            <td>Normální (z)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="note-box">
+            <strong>Kritické hodnoty – rychlý přehled:</strong>
+            <table style="margin-top: 6px; width: 100%;">
+                <tr><th>Spolehlivost</th><th>α</th><th>z (oboustranný)</th><th>t pro df=∞ (oboustranný)</th></tr>
+                <tr><td>90 %</td><td>0.10</td><td>1.645</td><td>1.645</td></tr>
+                <tr><td><strong>95 %</strong></td><td><strong>0.05</strong></td><td><strong>1.960</strong></td><td><strong>1.960</strong></td></tr>
+                <tr><td>99 %</td><td>0.01</td><td>2.576</td><td>2.576</td></tr>
+            </table>
+            <p style="margin-top: 6px;"><em>t-hodnoty závisí na stupních volnosti (df = n−1); pro malá n jsou výrazně větší než z-hodnoty.</em></p>
+        </div>
+
     </div>
 
     <script>
@@ -523,13 +709,17 @@
 
         }); // end window.load
 
-        // ── T-distribution critical values (approximate)
+        // ── T-distribution critical values (two-tailed, approximate)
         function getTCritical(df, alpha) {
             const tValues = {
-                0.05: {1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571, 10: 2.228, 20: 2.086, 30: 2.042, 50: 2.009, 100: 1.984, 1000: 1.962}
+                0.10: {1: 6.314, 2: 2.920, 3: 2.353, 4: 2.132, 5: 2.015, 10: 1.812, 20: 1.725, 30: 1.697, 50: 1.676, 100: 1.660, 1000: 1.645},
+                0.05: {1: 12.706, 2: 4.303, 3: 3.182, 4: 2.776, 5: 2.571, 10: 2.228, 20: 2.086, 30: 2.042, 50: 2.009, 100: 1.984, 1000: 1.960},
+                0.01: {1: 63.657, 2: 9.925, 3: 5.841, 4: 4.604, 5: 4.032, 10: 3.169, 20: 2.845, 30: 2.750, 50: 2.678, 100: 2.626, 1000: 2.576}
             };
 
-            const dfKey = df >= 1000 ? 1000 : Object.keys(tValues[alpha]).filter(k => k <= df).sort((a, b) => b - a)[0];
+            if (!tValues[alpha]) return null;
+            const keys = Object.keys(tValues[alpha]).map(Number).sort((a, b) => a - b);
+            const dfKey = df >= 1000 ? 1000 : keys.filter(k => k <= df).pop() || keys[0];
             return tValues[alpha][dfKey];
         }
 

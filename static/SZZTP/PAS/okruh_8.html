@@ -96,8 +96,9 @@
         <div class="highlight-box">
             <strong>Důležitý rozdíl:</strong>
             <ul>
-                <li>U <strong>diskrétní</strong> veličiny: $P(X = 1.5)$ má smysl (může se rovnat něčemu)</li>
-                <li>U <strong>spojité</strong> veličiny: $P(X = 1.5) = 0$ (přesná hodnota je prakticky nula)</li>
+                <li>U <strong>diskrétní</strong> veličiny: $P(X = 3) = \frac{1}{6}$ – pravděpodobnost přesné hodnoty z oboru hodnot může být nenulová</li>
+                <li>U <strong>spojité</strong> veličiny: $P(X = 175{,}0) = 0$ – pravděpodobnost jedné přesné hodnoty je vždy nulová</li>
+                <li>U spojité veličiny má smysl jen interval: $P(174{,}5 \leq X \leq 175{,}5) > 0$</li>
             </ul>
         </div>
 
@@ -134,6 +135,15 @@
 
         <div id="plotCDF" class="plot-container"></div>
         <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Distribuční funkce F(x) hodu kostkou – schodovitý tvar (typický pro diskrétní veličiny); každé číslo zvýší F(x) o 1/6</p>
+
+        <div class="math-box">
+            <strong>Vztah distribuční funkce a pravděpodobnostní funkce / hustoty:</strong>
+            <ul>
+                <li><strong>Diskrétní NV:</strong> $F(x) = \sum_{x_i \leq x} p(x_i)$ — F(x) roste skokově v místech, kde $p(x_i) > 0$</li>
+                <li><strong>Spojitá NV:</strong> $F(x) = \int_{-\infty}^{x} f(t)\,dt$ — F(x) je spojitá, plynule roste</li>
+                <li><strong>Klíčový vztah:</strong> $f(x) = F'(x)$ — hustota pravděpodobnosti je <em>derivací</em> distribuční funkce</li>
+            </ul>
+        </div>
 
         <h2>Pravděpodobnostní funkce a hustota pravděpodobnosti</h2>
 
@@ -257,25 +267,39 @@
 
         <h3>Kvantily</h3>
 
-        <p><strong>Kvantil řádu p</strong> (také percentil) je <strong>hodnota, pod kterou leží právě p% dat</strong>.</p>
+        <p><strong>Kvantil řádu p</strong> (také percentil) je <strong>hodnota, pod kterou leží právě p·100 % pravděpodobnosti</strong>.</p>
 
         <div class="formula">
-            $$x_p: P(X \leq x_p) = p$$
+            $$x_p = F^{-1}(p) \quad \text{tzn.} \quad F(x_p) = P(X \leq x_p) = p$$
         </div>
+
+        <p>Jinými slovy: kvantil je <strong>inverzní distribuční funkcí</strong> – hledáme hodnotu $x$, pro níž je $F(x) = p$.</p>
 
         <p><strong>Speciální kvantily:</strong></p>
         <ul>
-            <li><strong>Medián</strong> = 50. percentil ($x_{0.5}$) – polovina dat pod ní, polovina nad</li>
-            <li><strong>Dolní kvartil</strong> = 25. percentil ($x_{0.25}$)</li>
-            <li><strong>Horní kvartil</strong> = 75. percentil ($x_{0.75}$)</li>
+            <li><strong>Medián</strong> = 50. percentil ($x_{0.5}$) – polovina dat pod ním, polovina nad</li>
+            <li><strong>Dolní kvartil Q1</strong> = 25. percentil ($x_{0.25}$)</li>
+            <li><strong>Horní kvartil Q3</strong> = 75. percentil ($x_{0.75}$)</li>
         </ul>
 
-        <div class="note-box">
-            <p><strong>Příklad – výšky lidí:</strong></p>
+        <div class="math-box">
+            <strong>Mezikvartilové rozpětí (IQR):</strong>
+            <div class="formula" style="margin: 8px 0;">$$\text{IQR} = Q_3 - Q_1 = x_{0.75} - x_{0.25}$$</div>
+            <p>IQR je <strong>robustní míra variability</strong> – na rozdíl od rozptylu není ovlivněno extrémními hodnotami.</p>
             <ul>
-                <li>Medián = 175 cm (polovina lidí je vyšší, polovina nižší)</li>
-                <li>25. percentil = 170 cm (25% lidí je nižších)</li>
-                <li>75. percentil = 180 cm (75% lidí je nižších)</li>
+                <li>Malé IQR → data jsou koncentrovaná blízko mediánu</li>
+                <li>Velké IQR → data jsou roztroušená</li>
+                <li>Používá se v boxplotu (krabicovém grafu): krabice = IQR, středová čára = medián</li>
+            </ul>
+        </div>
+
+        <div class="note-box">
+            <p><strong>Příklad – výšky lidí N(175, 8²):</strong></p>
+            <ul>
+                <li>Medián $x_{0.5}$ = 175 cm (50 % lidí je nižších)</li>
+                <li>Q1 $x_{0.25}$ ≈ 169,6 cm (25 % lidí je nižších)</li>
+                <li>Q3 $x_{0.75}$ ≈ 180,4 cm (75 % lidí je nižších)</li>
+                <li>IQR ≈ 180,4 − 169,6 = <strong>10,8 cm</strong></li>
             </ul>
         </div>
 
@@ -283,6 +307,33 @@
         <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Boxplot výšek osob – dolní/horní hranice krabice = Q1 a Q3 (kvartily), středová čára = medián, vousy = min/max bez odlehlých hodnot</p>
 
         <h2>Vybraná rozdělení</h2>
+
+        <h3>Rovnoměrné rozdělení (Uniformní)</h3>
+
+        <div class="math-box">
+            <p><strong>Rovnoměrné rozdělení</strong> $U(a, b)$ modeluje situaci, kdy <strong>všechny hodnoty v intervalu $\langle a, b \rangle$ jsou stejně pravděpodobné</strong>.</p>
+            <p><strong>Hustota pravděpodobnosti:</strong></p>
+            <div class="formula">
+                $$f(x) = \frac{1}{b - a} \quad \text{pro } x \in \langle a, b \rangle, \quad f(x) = 0 \text{ jinak}$$
+            </div>
+            <p><strong>Distribuční funkce:</strong></p>
+            <div class="formula">
+                $$F(x) = \frac{x - a}{b - a} \quad \text{pro } x \in \langle a, b \rangle$$
+            </div>
+            <p><strong>Číselné charakteristiky:</strong></p>
+            <ul>
+                <li>$E(X) = \dfrac{a + b}{2}$ (střed intervalu)</li>
+                <li>$\text{Var}(X) = \dfrac{(b - a)^2}{12}$</li>
+            </ul>
+            <p><strong>Příklady:</strong></p>
+            <ul>
+                <li>Čekání na autobus, který jezdí každých 10 minut: $X \sim U(0, 10)$, $E(X) = 5$ min</li>
+                <li>Náhodné generování čísla počítačem: $X \sim U(0, 1)$</li>
+            </ul>
+        </div>
+
+        <div id="plotUniform" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Rovnoměrné rozdělení U(0, 10) – hustota f(x) = 0.1 (konstantní) a distribuční funkce F(x) (lineárně rostoucí)</p>
 
         <h3>Normální rozdělení (Gaussovo)</h3>
 
@@ -312,6 +363,62 @@
         <div id="plotNormal68" class="plot-container"></div>
         <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Normální rozdělení N(175, 8) s barevně vyznačenými oblastmi ±1, ±2, ±3 Std(X) – ověření empirického pravidla 68–95–99.7 %</p>
 
+        <h3>Standardizace a Z-skóre</h3>
+
+        <div class="math-box">
+            <p><strong>Standardizace</strong> převádí libovolné normální rozdělení $N(\mu, \sigma^2)$ na <strong>standardní normální rozdělení $N(0, 1)$</strong>.</p>
+            <div class="formula">
+                $$Z = \frac{X - \mu}{\sigma} \quad \Rightarrow \quad Z \sim N(0, 1)$$
+            </div>
+            <p><strong>Proč to děláme?</strong> Abychom mohli použít jednu tabulku hodnot pro jakékoli normální rozdělení.</p>
+            <p><strong>Výpočet pravděpodobnosti:</strong></p>
+            <div class="formula">
+                $$P(X \leq a) = P\!\left(Z \leq \frac{a - \mu}{\sigma}\right) = \Phi(z)$$
+            </div>
+            <p>kde $\Phi(z)$ je <strong>distribuční funkce standardního normálního rozdělení</strong> (hodnota z tabulky nebo z kalkulátoru).</p>
+        </div>
+
+        <div class="note-box">
+            <p><strong>Příklad – výšky mužů N(175, 8²):</strong></p>
+            <p>Jaká je pravděpodobnost, že náhodně vybraný muž je vyšší než 183 cm?</p>
+            <ol>
+                <li>Standardizujeme: $z = \dfrac{183 - 175}{8} = \dfrac{8}{8} = 1$</li>
+                <li>$P(X > 183) = P(Z > 1) = 1 - \Phi(1) = 1 - 0{,}8413 = 0{,}1587$</li>
+                <li>Přibližně <strong>15,87 %</strong> mužů je vyšší než 183 cm</li>
+            </ol>
+            <p><em>Pozorování: 183 cm je přesně μ + 1·σ, tedy z empirického pravidla víme, že nad ní leží (100% − 68%) / 2 ≈ 16 % dat – sedí!</em></p>
+        </div>
+
+        <div class="highlight-box">
+            <strong>Přehled Z-hodnot pro nejčastější pravděpodobnosti:</strong>
+            <table style="margin-top: 8px; width: 100%;">
+                <tr><th>Z</th><th>Φ(z) = P(Z ≤ z)</th><th>P(|Z| ≤ z) = 2Φ(z) − 1</th></tr>
+                <tr><td>1.00</td><td>84.13 %</td><td>68.27 %</td></tr>
+                <tr><td>1.645</td><td>95.00 %</td><td>90.00 %</td></tr>
+                <tr><td>1.960</td><td>97.50 %</td><td>95.00 %</td></tr>
+                <tr><td>2.00</td><td>97.72 %</td><td>95.45 %</td></tr>
+                <tr><td>2.576</td><td>99.50 %</td><td>99.00 %</td></tr>
+                <tr><td>3.00</td><td>99.87 %</td><td>99.73 %</td></tr>
+            </table>
+        </div>
+
+        <h3>Bernoulliho rozdělení</h3>
+
+        <div class="math-box">
+            <p><strong>Bernoulliho rozdělení</strong> popisuje <strong>jeden pokus se dvěma výsledky: úspěch (1) nebo neúspěch (0)</strong>.</p>
+            <p><strong>Pravděpodobnostní funkce:</strong></p>
+            <div class="formula">
+                $$P(X = 1) = p, \quad P(X = 0) = 1 - p$$
+            </div>
+            <p><strong>Číselné charakteristiky:</strong> $E(X) = p$, $\text{Var}(X) = p(1-p)$</p>
+            <p><strong>Příklady:</strong></p>
+            <ul>
+                <li>Jeden hod mincí: úspěch = padne orel, $p = 0{,}5$</li>
+                <li>Jeden výrobek: úspěch = výrobek je vadný, $p = 0{,}02$</li>
+            </ul>
+            <p><em>Binomické rozdělení je součet $n$ nezávislých Bernoulliho pokusů.</em></p>
+        </div>
+
         <h3>Binomické rozdělení</h3>
 
         <div class="math-box">
@@ -330,6 +437,35 @@
 
         <div id="plotBinomial" class="plot-container"></div>
         <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Binomické rozdělení Bin(10, 0.5) – pravděpodobnost k orlů v 10 hodech mincí; nejpravděpodobnější je 5 orlů</p>
+
+        <h3>Geometrické rozdělení</h3>
+
+        <div class="math-box">
+            <p><strong>Geometrické rozdělení</strong> modeluje <strong>počet pokusů potřebných k prvnímu úspěchu</strong>.</p>
+            <p><strong>Pravděpodobnostní funkce:</strong></p>
+            <div class="formula">
+                $$P(X = k) = (1 - p)^{k-1} \cdot p, \quad k = 1, 2, 3, \ldots$$
+            </div>
+            <p><strong>Kde:</strong></p>
+            <ul>
+                <li>$k$ = číslo pokusu, při němž poprvé nastane úspěch</li>
+                <li>$p$ = pravděpodobnost úspěchu v jednom pokusu</li>
+            </ul>
+            <p><strong>Číselné charakteristiky:</strong></p>
+            <ul>
+                <li>$E(X) = \dfrac{1}{p}$ (průměrný počet pokusů do prvního úspěchu)</li>
+                <li>$\text{Var}(X) = \dfrac{1-p}{p^2}$</li>
+            </ul>
+            <p><strong>Příklady:</strong></p>
+            <ul>
+                <li>Házíme mincí, dokud nepadne orel: $p = 0{,}5$, $E(X) = 2$ hody</li>
+                <li>Voláme zákazníkům, dokud se někdo neozve: $p = 0{,}3$, $E(X) \approx 3{,}3$ volání</li>
+                <li>Výroba: testujeme kusy, dokud nenajdeme vadný: $p = 0{,}1$, $E(X) = 10$ kusů</li>
+            </ul>
+        </div>
+
+        <div id="plotGeometric" class="plot-container"></div>
+        <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Geometrické rozdělení Geom(0.3) – pravděpodobnost, že první úspěch nastane při k-tém pokusu; nejpravděpodobnější je 1. pokus</p>
 
         <h3>Poissonovo rozdělení</h3>
 
@@ -381,6 +517,137 @@
 
         <div id="plotExponential" class="plot-container"></div>
         <p style="text-align: center; color: #7f8c8d; font-size: 0.9em;">Exponenciální rozdělení (Rate=2 zákazníci/hod) – hustota pravděpodobnosti doby čekání; průměrné čekání = 1/Rate = 30 minut</p>
+
+        <h2>Přehled rozdělení – rychlá tabulka</h2>
+
+        <div class="table-responsive">
+            <table class="table table-bordered" style="font-size: 0.92em;">
+                <thead class="table-light">
+                    <tr>
+                        <th>Rozdělení</th>
+                        <th>Typ</th>
+                        <th>Parametry</th>
+                        <th>E(X)</th>
+                        <th>Var(X)</th>
+                        <th>Typické použití</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Bernoulliho</strong> Ber(p)</td>
+                        <td>Diskrétní</td>
+                        <td>p ∈ (0,1)</td>
+                        <td>p</td>
+                        <td>p(1−p)</td>
+                        <td>Jeden pokus: úspěch/neúspěch</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Binomické</strong> Bin(n, p)</td>
+                        <td>Diskrétní</td>
+                        <td>n ∈ ℕ, p ∈ (0,1)</td>
+                        <td>np</td>
+                        <td>np(1−p)</td>
+                        <td>Počet úspěchů v n pokusech</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Geometrické</strong> Geom(p)</td>
+                        <td>Diskrétní</td>
+                        <td>p ∈ (0,1)</td>
+                        <td>1/p</td>
+                        <td>(1−p)/p²</td>
+                        <td>Počet pokusů do 1. úspěchu</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Poissonovo</strong> Po(λ)</td>
+                        <td>Diskrétní</td>
+                        <td>λ &gt; 0</td>
+                        <td>λ</td>
+                        <td>λ</td>
+                        <td>Počet jevů za čas/prostor</td>
+                    </tr>
+                    <tr class="table-info">
+                        <td><strong>Rovnoměrné</strong> U(a, b)</td>
+                        <td>Spojité</td>
+                        <td>a &lt; b</td>
+                        <td>(a+b)/2</td>
+                        <td>(b−a)²/12</td>
+                        <td>Stejně pravděpodobné hodnoty v intervalu</td>
+                    </tr>
+                    <tr class="table-info">
+                        <td><strong>Normální</strong> N(μ, σ²)</td>
+                        <td>Spojité</td>
+                        <td>μ ∈ ℝ, σ &gt; 0</td>
+                        <td>μ</td>
+                        <td>σ²</td>
+                        <td>Výšky, chyby měření, přírodní jevy</td>
+                    </tr>
+                    <tr class="table-info">
+                        <td><strong>Exponenciální</strong> Exp(λ)</td>
+                        <td>Spojité</td>
+                        <td>λ &gt; 0</td>
+                        <td>1/λ</td>
+                        <td>1/λ²</td>
+                        <td>Čas mezi jevy (čekání)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="note-box">
+            <strong>Vztahy mezi rozděleními:</strong>
+            <ul>
+                <li>$n$ nezávislých Bernoulliho pokusů → Binomické $\text{Bin}(n, p)$</li>
+                <li>Binomické s velkým $n$ a malým $p$ (np = λ) → Poissonovo $\text{Po}(\lambda)$</li>
+                <li>Poissonův proces (počet jevů) + Exponenciální (čas mezi jevy) jsou propojeny: pokud X ~ Po(λ), pak časy čekání ~ Exp(λ)</li>
+            </ul>
+        </div>
+
+        <h2>Shrnutí pro zkoušku</h2>
+
+        <div class="highlight-box">
+            <strong>Co musím vědět o náhodné veličině:</strong>
+            <ul>
+                <li><strong>Diskrétní NV</strong>: nabývá oddělených hodnot → pravděpodobnostní funkce $p(x) = P(X = x)$</li>
+                <li><strong>Spojitá NV</strong>: nabývá hodnot z intervalu → hustota $f(x)$, pravděpodobnost jen pro intervaly $\int_a^b f(x)\,dx$</li>
+                <li><strong>Distribuční funkce</strong>: $F(x) = P(X \leq x)$, neklesající, $F(-\infty)=0$, $F(+\infty)=1$; pro spojité NV platí $f(x) = F'(x)$</li>
+                <li><strong>E(X)</strong>: průměrná hodnota, $\sum x \cdot p(x)$ nebo $\int x \cdot f(x)\,dx$</li>
+                <li><strong>Var(X)</strong>: rozptyl, $E[(X-E(X))^2] = E(X^2) - [E(X)]^2$ – vždy ≥ 0</li>
+                <li><strong>Std(X)</strong> = $\sqrt{\text{Var}(X)}$ – ve stejných jednotkách jako X</li>
+                <li><strong>Kvantil</strong> $x_p = F^{-1}(p)$: hodnota, pod níž leží $p \cdot 100\,\%$ pravděpodobnosti; IQR = Q3 − Q1</li>
+                <li><strong>Standardizace</strong>: $Z = (X - \mu)/\sigma \sim N(0, 1)$ – umožňuje použít tabulky normálního rozdělení</li>
+            </ul>
+        </div>
+
+        <div class="math-box">
+            <strong>Klíčové vzorce – přehled:</strong>
+            <table style="width:100%; margin-top: 8px;">
+                <tr>
+                    <th style="width:35%">Veličina</th>
+                    <th>Diskrétní</th>
+                    <th>Spojitá</th>
+                </tr>
+                <tr>
+                    <td>Pravděpodobnost hodnoty</td>
+                    <td>$p(x) = P(X = x)$</td>
+                    <td>$P(X = x) = 0$</td>
+                </tr>
+                <tr>
+                    <td>Pravděpodobnost intervalu</td>
+                    <td>$P(a \leq X \leq b) = \sum_{a}^{b} p(x_i)$</td>
+                    <td>$P(a \leq X \leq b) = \int_a^b f(x)\,dx$</td>
+                </tr>
+                <tr>
+                    <td>Střední hodnota</td>
+                    <td>$E(X) = \sum x_i \cdot p(x_i)$</td>
+                    <td>$E(X) = \int x \cdot f(x)\,dx$</td>
+                </tr>
+                <tr>
+                    <td>Normalizační podmínka</td>
+                    <td>$\sum p(x_i) = 1$</td>
+                    <td>$\int_{-\infty}^{\infty} f(x)\,dx = 1$</td>
+                </tr>
+            </table>
+        </div>
 
         <h2>Interaktivní příklady</h2>
 
@@ -630,6 +897,45 @@
                 title: { text: 'Exponenciální rozdělení (Rate = 2 zákazníci/hod, průměr čekání = 30 min)', font: { size: 14 } },
                 xaxis: { title: 'Čas čekání (hodiny)' },
                 yaxis: { title: 'f(x) – hustota pravděpodobnosti' }
+            }, plotConfig);
+
+            // ── 10. Rovnoměrné rozdělení U(0,10) ────────────────────────────────
+            const uA = 0, uB = 10;
+            const uX = [];
+            for (let x = -1; x <= 11; x += 0.05) uX.push(x);
+            const uPDF = uX.map(x => (x >= uA && x <= uB) ? 1/(uB - uA) : 0);
+            const uCDF = uX.map(x => x < uA ? 0 : x > uB ? 1 : (x - uA)/(uB - uA));
+
+            Plotly.newPlot('plotUniform', [
+                { type: 'scatter', mode: 'lines', x: uX, y: uPDF,
+                  line: { color: '#0d6efd', width: 2.5 },
+                  fill: 'tozeroy', fillcolor: 'rgba(13,110,253,0.12)',
+                  name: 'f(x) – hustota', yaxis: 'y1' },
+                { type: 'scatter', mode: 'lines', x: uX, y: uCDF,
+                  line: { color: '#dc3545', width: 2.5, dash: 'dot' },
+                  name: 'F(x) – distr. funkce', yaxis: 'y2' }
+            ], { ...plotLayout, showlegend: true,
+                title: { text: 'Rovnoměrné rozdělení U(0, 10)', font: { size: 14 } },
+                xaxis: { title: 'x', range: [-1, 11] },
+                yaxis:  { title: 'f(x)', range: [-0.02, 0.18], side: 'left' },
+                yaxis2: { title: 'F(x)', range: [-0.05, 1.1], side: 'right', overlaying: 'y' },
+                legend: { x: 0.55, y: 0.5 }
+            }, plotConfig);
+
+            // ── 11. Geometrické rozdělení Geom(0.3) ──────────────────────────────
+            const gp = 0.3;
+            const gk = Array.from({ length: 12 }, (_, i) => i + 1);
+            const gv = gk.map(k => Math.pow(1 - gp, k - 1) * gp);
+            Plotly.newPlot('plotGeometric', [{
+                type: 'bar', x: gk, y: gv,
+                text: gv.map(v => v.toFixed(3)), textposition: 'outside',
+                marker: { color: '#6610f2', opacity: 0.85,
+                          line: { color: 'white', width: 1 } },
+                showlegend: false
+            }], { ...plotLayout,
+                title: { text: 'Geometrické rozdělení Geom(0.3) – 1. úspěch nastane při k-tém pokusu', font: { size: 14 } },
+                xaxis: { title: 'Číslo pokusu (k)', tickvals: gk },
+                yaxis: { title: 'P(X = k)', range: [0, 0.38] }
             }, plotConfig);
 
         }); // end window.load
