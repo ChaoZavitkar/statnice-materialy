@@ -101,14 +101,35 @@
                 <li>$f'(x) = \cos(x)$ pro $f(x) = \sin(x)$: Správné pravidlo pro sinus</li>
                 <li>Derivace v bodě = sklon tečny v tom bodě</li>
             </ul>
+        </div>
 
-            <p style="margin-top: 15px;"><strong style="color: red;">✗ ŠPATNÁ interpretace:</strong></p>
-            <ul>
-                <li>"Derivace je výsledek dělení" - Derivace je LIMITA podílu, ne jen prostý podíl!</li>
-                <li>$f'(2) = f(2)$ pro $f(x) = x^2$ - Není pravda! $f'(2) = 4$, ale $f(2) = 4$ (shodou)</li>
-                <li>Derivace může být libovolná funkce - Ne! Musí splňovat definici přes limitu</li>
-                <li>Derivace a sklon tečny jsou různé věci - NENÍ PRAVDA! Jsou to totéž!</li>
-            </ul>
+        <div class="table-responsive" style="margin-top: 16px;">
+            <table class="table table-bordered" style="font-size: 0.93em;">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 45%; color: #c0392b;">❌ Častý omyl</th>
+                        <th style="color: #27ae60;">✅ Jak to správně je</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>„Derivace je výsledek dělení"</td>
+                        <td>Derivace je <strong>limita podílu</strong> $\lim_{\Delta x \to 0} \frac{\Delta f}{\Delta x}$ – samotný zlomek by byl $\frac{0}{0}$, limita to zachrání</td>
+                    </tr>
+                    <tr>
+                        <td>„Hodnota funkce a derivace jsou totéž" – např. $f'(x) = f(x)$</td>
+                        <td>Obecně jsou to různé věci. Pro $f(x) = x^2$: $f(3) = 9$, ale $f'(3) = 6$ – jasně různé</td>
+                    </tr>
+                    <tr>
+                        <td>„Derivace a sklon tečny jsou různé věci"</td>
+                        <td>Jsou to <strong>jedno a totéž</strong> – derivace $f'(x_0)$ je přesně sklon tečny ke grafu v bodě $x_0$</td>
+                    </tr>
+                    <tr>
+                        <td>„Každá funkce má derivaci"</td>
+                        <td>Ne – derivace existuje jen tam, kde je funkce <strong>hladká</strong> (bez „rohů" a skoků). Např. absolutní hodnota $|x|$ má v grafu ostrý roh v bodě $x = 0$ → tam derivace neexistuje</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
         <h3>Tečna k funkcí</h3>
