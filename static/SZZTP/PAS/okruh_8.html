@@ -139,9 +139,9 @@
         <div class="math-box">
             <strong>Vztah distribuční funkce a pravděpodobnostní funkce / hustoty:</strong>
             <ul>
-                <li><strong>Diskrétní NV:</strong> $F(x) = \sum_{x_i \leq x} p(x_i)$ — F(x) roste skokově v místech, kde $p(x_i) > 0$</li>
-                <li><strong>Spojitá NV:</strong> $F(x) = \int_{-\infty}^{x} f(t)\,dt$ — F(x) je spojitá, plynule roste</li>
-                <li><strong>Klíčový vztah:</strong> $f(x) = F'(x)$ — hustota pravděpodobnosti je <em>derivací</em> distribuční funkce</li>
+                <li><strong>Diskrétní NV:</strong> $F(x) = \sum_{x_i \leq x} p(x_i)$ — F(x) je <em>součet pravděpodobností všech hodnot menších nebo rovných x</em>; roste skokově</li>
+                <li><strong>Spojitá NV:</strong> $F(x) = \int_{-\infty}^{x} f(t)\,dt$ — F(x) je <em>integrál hustoty od −∞ do x</em>; roste plynule</li>
+                <li><strong>Klíčový vztah:</strong> $f(x) = F'(x)$ — hustota pravděpodobnosti je <em>derivací</em> distribuční funkce (platí pro spojitou NV)</li>
             </ul>
         </div>
 
@@ -373,9 +373,9 @@
             <p><strong>Proč to děláme?</strong> Abychom mohli použít jednu tabulku hodnot pro jakékoli normální rozdělení.</p>
             <p><strong>Výpočet pravděpodobnosti:</strong></p>
             <div class="formula">
-                $$P(X \leq a) = P\!\left(Z \leq \frac{a - E(X)}{\text{Std}(X)}\right) = \Phi(z)$$
+                $$P(X \leq a) = P\!\left(Z \leq \frac{a - E(X)}{\text{Std}(X)}\right) = F(z)$$
             </div>
-            <p>kde $\Phi(z)$ je <strong>distribuční funkce standardního normálního rozdělení</strong> (hodnota z tabulky nebo z kalkulátoru).</p>
+            <p>kde $F(z)$ je <strong>distribuční funkce standardního normálního rozdělení N(0, 1)</strong> – pravděpodobnost, že standardizovaná veličina Z nabude hodnoty ≤ z (hodnota z tabulky nebo kalkulátoru).</p>
         </div>
 
         <div class="note-box">
@@ -383,7 +383,7 @@
             <p>Jaká je pravděpodobnost, že náhodně vybraný muž je vyšší než 183 cm?</p>
             <ol>
                 <li>Standardizujeme: $z = \dfrac{183 - 175}{8} = \dfrac{8}{8} = 1$</li>
-                <li>$P(X > 183) = P(Z > 1) = 1 - \Phi(1) = 1 - 0{,}8413 = 0{,}1587$</li>
+                <li>$P(X > 183) = P(Z > 1) = 1 - F(1) = 1 - 0{,}8413 = 0{,}1587$</li>
                 <li>Přibližně <strong>15,87 %</strong> mužů je vyšší než 183 cm</li>
             </ol>
             <p><em>Pozorování: 183 cm je přesně E(X) + 1·Std(X), tedy z empirického pravidla víme, že nad ní leží (100% − 68%) / 2 ≈ 16 % dat – sedí!</em></p>
@@ -392,7 +392,7 @@
         <div class="highlight-box">
             <strong>Přehled Z-hodnot pro nejčastější pravděpodobnosti:</strong>
             <table style="margin-top: 8px; width: 100%;">
-                <tr><th>Z</th><th>Φ(z) = P(Z ≤ z)</th><th>P(|Z| ≤ z) = 2Φ(z) − 1</th></tr>
+                <tr><th>Z</th><th>F(z) = P(Z ≤ z)</th><th>P(|Z| ≤ z) = 2·F(z) − 1</th></tr>
                 <tr><td>1.00</td><td>84.13 %</td><td>68.27 %</td></tr>
                 <tr><td>1.645</td><td>95.00 %</td><td>90.00 %</td></tr>
                 <tr><td>1.960</td><td>97.50 %</td><td>95.00 %</td></tr>
