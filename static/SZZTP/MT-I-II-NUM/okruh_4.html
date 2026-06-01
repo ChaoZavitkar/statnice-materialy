@@ -152,10 +152,11 @@
 
     <h4>2. Horizontální asymptota</h4>
 
-    <p><strong>Definice:</strong> Přímka $y = L$ je horizontální asymptotou, když:</p>
+    <p><strong>Definice:</strong> Přímka $y = K$ je horizontální asymptotou, když:</p>
     <div class="math-box">
-        $$\lim_{x \to \infty} f(x) = L \quad \text{nebo} \quad \lim_{x \to -\infty} f(x) = L$$
+        $$\lim_{x \to \infty} f(x) = K \quad \text{nebo} \quad \lim_{x \to -\infty} f(x) = K$$
     </div>
+    <p style="color: #555; font-size: 0.95em;">kde <strong>K je reálná konstanta</strong> (konkrétní číslo) – hodnota, ke které se funkce blíží.</p>
 
     <p><strong>Příklad:</strong> $f(x) = \frac{1}{x}$ má horizontální asymptotu $y = 0$ (když $x \to \infty$, hodnota se blíží k 0)</p>
 
@@ -258,7 +259,7 @@
         <strong>Prakticky – jak najít asymptoty:</strong>
         <ul>
             <li><strong>Vertikální:</strong> Kde je funkce nespojitá? (dělení nulou, logaritmus záporného čísla, ...)</li>
-            <li><strong>Horizontální:</strong> Co se stane s $\lim_{x \to \infty} f(x)$? (pokud to je konstanta $L$, máme $y = L$)</li>
+            <li><strong>Horizontální:</strong> Co se stane s $\lim_{x \to \infty} f(x)$? (pokud to je konstanta $K$, máme $y = K$)</li>
             <li><strong>Šikmá:</strong> Podělíme polynom polynomem – zbytek jde k 0 v nekonečnu</li>
         </ul>
     </div>
@@ -564,7 +565,7 @@
                 showlegend: false
             };
 
-            Plotly.newPlot('interactiveAsymptote', [traceFunc, traceHoriz, traceVert1, traceVert2],
+            Plotly.react('interactiveAsymptote', [traceFunc, traceHoriz, traceVert1, traceVert2],
                 {
                     title: 'Interaktivní asymptoty: měň a, b, c sliders',
                     xaxis: { title: 'x', range: [xMin, xMax], zeroline: false },
@@ -648,7 +649,7 @@
     <h3>Limita funkce</h3>
 
     <div class="math-box">
-        $$\lim_{x \to a} f(x) = L \quad \Leftrightarrow \quad \text{jak se } x \text{ blíží } a, \text{ tak se } f(x) \text{ blíží } L$$
+        $$\lim_{x \to a} f(x) = K \quad \Leftrightarrow \quad \text{jak se } x \text{ blíží } a, \text{ tak se } f(x) \text{ blíží } K$$
         <br><br>
         <strong>Klíčová vlastnost:</strong> Limita se ptá "co se děje BLÍZKO bodu $a$", ne "co se děje V bodě $a$". Bod $a$ nemusí být v definičním oboru.
     </div>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Databázové systémy – URDB</title>
+    <link rel="icon" type="image/x-icon" href="../../css/matros/favicon.ico">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-light.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script>window.MathJax={tex:{inlineMath:[['$','$'],['\\(','\\)']]},svg:{fontCache:'global'}};</script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+    <style>
+        /* ERD diagram styles */
+        .er-entity { border: 2px solid #2980b9; border-radius: 4px; display: inline-block;
+                     min-width: 160px; margin: 6px; vertical-align: top; font-size: 0.9em; }
+        .er-entity-name { background: #2980b9; color: white; padding: 5px 10px;
+                          font-weight: bold; text-align: center; }
+        .er-entity-attr { padding: 3px 10px; border-top: 1px solid #d5e8f0; }
+        .er-pk { font-weight: bold; }
+        .er-fk { font-style: italic; color: #666; }
+        .er-rel { display: inline-block; padding: 6px 14px; background: #fef9e7;
+                  border: 1px solid #f39c12; border-radius: 20px; margin: 4px; font-size: 0.85em; }
+    </style>
+</head>
+<body>
+<div class="page-container">
+
+    <a href="../szzpp.html" class="back-link">← Zpět na SZZPP</a>
+    <h1>Databázové systémy</h1>
+    <p class="subtitle">KI/SZZPP – Úvod do relačních databází | PostgreSQL</p>
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Konceptuální návrh</h2>
+
+    <div class="math-box">
+        <strong>Tři úrovně návrhu databáze:</strong>
+        <ol style="margin-top:6px;">
+            <li><strong>Konceptuální</strong> — co existuje v reálném světě: entity, atributy, vztahy (nezávislé na DB systému)</li>
+            <li><strong>Logický</strong> — jak to uložíme v relačním modelu: tabulky, klíče, normalizace, E-R diagram</li>
+            <li><strong>Fyzický</strong> — SQL příkazy v konkrétním DBMS: CREATE TABLE, datové typy, indexy</li>
+        </ol>
+    </div>
+
+    <h3>Základní pojmy</h3>
+    <table class="table table-sm table-bordered" style="max-width:680px;">
+        <thead class="table-light"><tr><th>Pojem</th><th>Popis</th><th>Příklad</th></tr></thead>
+        <tbody>
+            <tr><td><strong>Entita</strong></td><td>Objekt reálného světa, o němž ukládáme data</td><td>Student, Předmět, Profesor</td></tr>
+            <tr><td><strong>Atribut</strong></td><td>Vlastnost entity</td><td>jméno, datum_narozeni, email</td></tr>
+            <tr><td><strong>Relační vztah</strong></td><td>Vazba mezi entitami</td><td>Student <em>studuje</em> Předmět</td></tr>
+            <tr><td><strong>Primární klíč (PK)</strong></td><td>Jednoznačně identifikuje řádek v tabulce</td><td>student_id (INT, unikátní)</td></tr>
+            <tr><td><strong>Cizí klíč (FK)</strong></td><td>Odkazuje na PK jiné tabulky</td><td>student_id v tabulce zapisu</td></tr>
+        </tbody>
+    </table>
+
+    <div class="note-box">
+        <strong>Odvozené atributy — příklad z PDF zadání:</strong><br>
+        Zadání uvádí atribut <code>počet studentů</code> u entity <strong>předmět</strong>. Tento atribut je <em>odvozený</em> — jeho hodnota plyne z počtu záznamů ve vazební tabulce a lze ji kdykoli získat přes <code>SELECT COUNT(*)</code>. Ukládání odvozeného atributu by způsobilo redundanci a anomálie při aktualizaci, proto ho při návrhu <strong>vynecháme</strong>.
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>E-R diagram a kardinality vztahů (vraní nohy)</h2>
+
+    <h3>Typy vztahů a jejich rozklad</h3>
+    <table class="table table-sm table-bordered" style="max-width:700px;">
+        <thead class="table-light"><tr><th>Vztah</th><th>Příklad</th><th>Rozklad do tabulek</th></tr></thead>
+        <tbody>
+            <tr>
+                <td><strong>1 : 1</strong></td>
+                <td>Osoba — Pas (každý má max. 1 pas)</td>
+                <td>FK v jedné z tabulek (nebo sloučení)</td>
+            </tr>
+            <tr>
+                <td><strong>1 : N</strong></td>
+                <td>Oddělení — Zaměstnanci (oddělení má více zaměstnanců)</td>
+                <td>FK na straně N (zaměstnanec.oddeleni_id)</td>
+            </tr>
+            <tr>
+                <td><strong>M : N</strong></td>
+                <td>Student — Předmět (student studuje více předmětů, předmět má více studentů)</td>
+                <td><strong>Vazební (asociační) tabulka</strong> s oběma FK jako složeným PK</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="highlight-box">
+        <strong>Notace vraních noh (Crow's Foot):</strong>
+        <table class="table table-sm" style="max-width:500px; margin-top:8px; font-family:monospace;">
+            <thead class="table-light"><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+            <tbody>
+                <tr><td><code>|</code></td><td>Přesně jedna (povinná)</td></tr>
+                <tr><td><code>O</code></td><td>Nula nebo jedna (volitelná)</td></tr>
+                <tr><td><code>&lt;|</code> (vraní noha)</td><td>Jedna nebo více</td></tr>
+                <tr><td><code>&lt;O</code></td><td>Nula nebo více</td></tr>
+            </tbody>
+        </table>
+        Každý konec vztahové čáry nese dvě hodnoty: <em>minimální</em> (povinnost) a <em>maximální</em> kardinalitu.
+    </div>
+
+    <h3>Příklad E-R diagramu (vzorová úloha)</h3>
+    <div style="padding:16px; background:#f9f9f9; border:1px solid #ddd; border-radius:6px; margin-bottom:12px;">
+        <div class="er-entity">
+            <div class="er-entity-name">student</div>
+            <div class="er-entity-attr er-pk">🔑 student_id (PK)</div>
+            <div class="er-entity-attr">jmeno</div>
+            <div class="er-entity-attr">datum_narozeni</div>
+            <div class="er-entity-attr er-fk">🔗 program_id (FK)</div>
+        </div>
+        <span style="font-size:1.8em; vertical-align:middle; margin:0 8px;">—</span>
+        <div class="er-rel">studuje<br><small>M:N</small></div>
+        <span style="font-size:1.8em; vertical-align:middle; margin:0 8px;">—</span>
+        <div class="er-entity">
+            <div class="er-entity-name">predmet</div>
+            <div class="er-entity-attr er-pk">🔑 predmet_id (PK)</div>
+            <div class="er-entity-attr">nazev</div>
+            <div class="er-entity-attr">rocnik</div>
+            <div class="er-entity-attr">semestr</div>
+        </div>
+        <span style="font-size:1.8em; vertical-align:middle; margin:0 20px;">+</span>
+        <div class="er-entity">
+            <div class="er-entity-name">studijni_program</div>
+            <div class="er-entity-attr er-pk">🔑 program_id (PK)</div>
+            <div class="er-entity-attr">nazev</div>
+            <div class="er-entity-attr">titul</div>
+            <div class="er-entity-attr">delka_let</div>
+        </div>
+        <br><br>
+        <div class="er-entity" style="margin-left:80px;">
+            <div class="er-entity-name">zapis (vazební)</div>
+            <div class="er-entity-attr er-pk er-fk">🔑🔗 student_id (FK → student)</div>
+            <div class="er-entity-attr er-pk er-fk">🔑🔗 predmet_id (FK → predmet)</div>
+            <div class="er-entity-attr">datum_zapisu</div>
+        </div>
+    </div>
+
+    <div class="note-box">
+        <strong>Postup při návrhu z PDF zadání:</strong>
+        <ol>
+            <li>Identifikovat entity ze slovního popisu (podstatná jména)</li>
+            <li>Identifikovat atributy každé entity</li>
+            <li>Identifikovat vztahy (slovesa: <em>studuje, pracuje, vlastní…</em>)</li>
+            <li>Určit kardinality (1:1, 1:N, M:N)</li>
+            <li>M:N vztahy rozložit na vazební tabulku</li>
+            <li>Každá tabulka musí mít primární klíč</li>
+        </ol>
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Normalizace (1NF → 2NF → 3NF)</h2>
+
+    <div class="math-box">
+        <strong>Cíl normalizace:</strong> Eliminovat redundanci dat a anomálie při vkládání, úpravě a mazání.
+    </div>
+
+    <h3>1. normální forma (1NF)</h3>
+    <div class="highlight-box">
+        <strong>Požadavek:</strong> Každá buňka obsahuje <strong>atomickou hodnotu</strong> (ne seznam, ne více hodnot).<br><br>
+        ❌ <strong>Porušení:</strong>
+        <table class="table table-sm" style="max-width:500px; margin-top:6px;">
+            <thead class="table-light"><tr><th>student_id</th><th>jmeno</th><th>predmety</th></tr></thead>
+            <tbody>
+                <tr><td>1</td><td>Anna</td><td>Matematika, Fyzika</td></tr>
+            </tbody>
+        </table>
+        ✅ <strong>Oprava:</strong> Každý předmět na samostatný řádek (nebo vazební tabulka)
+    </div>
+
+    <h3>2. normální forma (2NF)</h3>
+    <div class="highlight-box">
+        <strong>Požadavek:</strong> Musí být v 1NF + každý neklíčový atribut závisí na <strong>celém</strong> primárním klíči (ne jen jeho části).<br>
+        Relevantní jen při <em>složeném</em> PK.<br><br>
+        ❌ <strong>Porušení</strong> (tabulka zapis se složeným PK student_id + predmet_id):
+        <table class="table table-sm" style="max-width:520px; margin-top:6px;">
+            <thead class="table-light"><tr><th>student_id</th><th>predmet_id</th><th>jmeno_studenta</th><th>nazev_predmetu</th></tr></thead>
+            <tbody><tr><td>1</td><td>10</td><td>Anna</td><td>Matematika</td></tr></tbody>
+        </table>
+        <code>jmeno_studenta</code> závisí jen na <code>student_id</code> — porušení!<br>
+        ✅ <strong>Oprava:</strong> Přesunout <code>jmeno_studenta</code> do tabulky <code>student</code>, <code>nazev_predmetu</code> do tabulky <code>predmet</code>
+    </div>
+
+    <h3>3. normální forma (3NF)</h3>
+    <div class="highlight-box">
+        <strong>Požadavek:</strong> Musí být v 2NF + žádný neklíčový atribut <em>tranzitivně</em> nezávisí na PK (atributy závisí přímo na PK, ne na jiném neklíčovém atributu).<br><br>
+        ❌ <strong>Porušení:</strong>
+        <table class="table table-sm" style="max-width:520px; margin-top:6px;">
+            <thead class="table-light"><tr><th>student_id (PK)</th><th>program_id</th><th>nazev_programu</th><th>delka_programu</th></tr></thead>
+            <tbody><tr><td>1</td><td>2</td><td>Informatika Bc.</td><td>3</td></tr></tbody>
+        </table>
+        <code>nazev_programu</code> závisí na <code>program_id</code>, ne na <code>student_id</code> — tranzitivní závislost!<br>
+        ✅ <strong>Oprava:</strong> Vytvořit samostatnou tabulku <code>studijni_program(program_id, nazev, delka)</code>
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Fyzický návrh — CREATE TABLE</h2>
+
+    <h3>Základní datové typy (PostgreSQL)</h3>
+    <table class="table table-sm table-bordered" style="max-width:680px;">
+        <thead class="table-light"><tr><th>Kategorie</th><th>Typ</th><th>Popis</th><th>Příklad</th></tr></thead>
+        <tbody>
+            <tr><td rowspan="4"><strong>Číselné</strong></td><td><code>INTEGER</code> / <code>INT</code></td><td>Celé číslo (4 B)</td><td>42</td></tr>
+            <tr><td><code>BIGINT</code></td><td>Velké celé číslo (8 B)</td><td>12345678901</td></tr>
+            <tr><td><code>NUMERIC(p,s)</code></td><td>Přesné desetinné číslo</td><td>NUMERIC(10,2) pro ceny</td></tr>
+            <tr><td><code>REAL</code> / <code>FLOAT</code></td><td>Přibližné desetinné</td><td>3.14</td></tr>
+            <tr><td rowspan="3"><strong>Řetězcové</strong></td><td><code>VARCHAR(n)</code></td><td>Řetězec max. n znaků</td><td>VARCHAR(100)</td></tr>
+            <tr><td><code>CHAR(n)</code></td><td>Řetězec přesně n znaků (doplní mezerami)</td><td>CHAR(2) pro 'CZ'</td></tr>
+            <tr><td><code>TEXT</code></td><td>Neomezený řetězec</td><td>Poznámky, popis</td></tr>
+            <tr><td rowspan="3"><strong>Časové</strong></td><td><code>DATE</code></td><td>Datum (YYYY-MM-DD)</td><td>'2024-03-15'</td></tr>
+            <tr><td><code>TIME</code></td><td>Čas (HH:MM:SS)</td><td>'14:30:00'</td></tr>
+            <tr><td><code>TIMESTAMP</code></td><td>Datum + čas</td><td>'2024-03-15 14:30:00'</td></tr>
+            <tr><td><strong>Logický</strong></td><td><code>BOOLEAN</code></td><td>TRUE / FALSE</td><td>aktivni BOOLEAN</td></tr>
+            <tr><td><strong>Auto-ID</strong></td><td><code>SERIAL</code></td><td>Auto-increment integer</td><td>id SERIAL PRIMARY KEY</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Omezení (constraints)</h3>
+    <pre><code class="language-sql">CREATE TABLE studijni_program (
+    program_id  SERIAL          PRIMARY KEY,        -- auto-increment PK
+    nazev       VARCHAR(100)    NOT NULL UNIQUE,     -- povinné + unikátní
+    titul       CHAR(2)         NOT NULL,            -- 'Bc', 'Ing', 'Mgr'
+    delka_let   INTEGER         NOT NULL CHECK (delka_let BETWEEN 1 AND 6)
+);
+
+CREATE TABLE student (
+    student_id      SERIAL          PRIMARY KEY,
+    jmeno           VARCHAR(50)     NOT NULL,
+    prijmeni        VARCHAR(50)     NOT NULL,
+    datum_narozeni  DATE            NOT NULL,
+    email           VARCHAR(100)    UNIQUE,          -- může být NULL, ale unikátní
+    program_id      INTEGER         REFERENCES studijni_program(program_id)
+                                    ON DELETE SET NULL   -- při smazání programu nastaví NULL
+);
+
+CREATE TABLE predmet (
+    predmet_id  SERIAL          PRIMARY KEY,
+    nazev       VARCHAR(100)    NOT NULL,
+    rocnik      INTEGER         NOT NULL CHECK (rocnik BETWEEN 1 AND 4),
+    semestr     CHAR(2)         NOT NULL CHECK (semestr IN ('ZS', 'LS'))
+);
+
+-- Vazební tabulka pro M:N vztah student — predmet
+CREATE TABLE zapis (
+    student_id  INTEGER     NOT NULL REFERENCES student(student_id) ON DELETE CASCADE,
+    predmet_id  INTEGER     NOT NULL REFERENCES predmet(predmet_id) ON DELETE CASCADE,
+    datum       DATE        DEFAULT CURRENT_DATE,
+    PRIMARY KEY (student_id, predmet_id)    -- složený primární klíč
+);</code></pre>
+
+    <div class="math-box">
+        <strong>ON DELETE akce pro cizí klíče:</strong>
+        <ul style="margin-top:6px;">
+            <li><code>RESTRICT</code> / <code>NO ACTION</code> — zakáže smazání rodiče, pokud existují děti (výchozí)</li>
+            <li><code>CASCADE</code> — smaže i všechny závislé záznamy</li>
+            <li><code>SET NULL</code> — nastaví FK na NULL</li>
+            <li><code>SET DEFAULT</code> — nastaví FK na výchozí hodnotu</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>INSERT INTO — vkládání dat</h2>
+
+    <pre><code class="language-sql">-- Vložení jednoho záznamu
+INSERT INTO studijni_program (nazev, titul, delka_let)
+VALUES ('Aplikovaná informatika', 'Bc', 3);
+
+-- Vložení více záznamů najednou
+INSERT INTO student (jmeno, prijmeni, datum_narozeni, email, program_id)
+VALUES
+    ('Jiří',  'Novák',  '2006-05-20', 'jiri.novak@ujep.cz',  1),
+    ('Anna',  'Svobodová', '2005-11-03', 'anna.sv@ujep.cz',  1),
+    ('Karel', 'Marek',  '2004-07-15', NULL,                  1);
+
+INSERT INTO predmet (nazev, rocnik, semestr)
+VALUES
+    ('Relační databáze bez SQL', 2, 'LS'),
+    ('Algoritmy a datové struktury', 1, 'ZS'),
+    ('Úvod do programování',    1, 'ZS');
+
+-- Zápisy studentů na předměty (M:N)
+INSERT INTO zapis (student_id, predmet_id)
+VALUES (1, 1), (1, 2), (2, 1), (3, 3);</code></pre>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>SELECT — dotazy</h2>
+
+    <div class="math-box">
+        <strong>Pořadí klauzulí v SELECT:</strong>
+        <pre style="background:none;border:none;margin:4px 0;padding:0;font-family:monospace;">SELECT  [sloupce / agregace]       -- projekce: co zobrazit
+FROM    [tabulka]                   -- odkud
+[JOIN   [tabulka] ON [podmínka]]    -- spojení
+WHERE   [podmínka]                  -- selekce: které řádky
+GROUP BY [sloupce]                  -- seskupení
+HAVING  [podmínka na skupiny]       -- filtr skupin (jako WHERE po GROUP BY)
+ORDER BY [sloupce] [ASC|DESC]       -- řazení
+LIMIT   [n]                         -- omezení počtu výsledků</pre>
+    </div>
+
+    <h3>Základní SELECT, WHERE, ORDER BY</h3>
+    <pre><code class="language-sql">-- Všechny sloupce
+SELECT * FROM student;
+
+-- Projekce — vybrané sloupce
+SELECT jmeno, prijmeni, datum_narozeni FROM student;
+
+-- Selekce — filtrace řádků (WHERE)
+SELECT * FROM student WHERE program_id = 1;
+SELECT * FROM predmet WHERE rocnik = 2 AND semestr = 'LS';
+SELECT * FROM student WHERE email IS NOT NULL;
+SELECT * FROM predmet WHERE nazev LIKE '%databáz%';   -- LIKE: % = libovolný text
+
+-- Řazení (ORDER BY)
+SELECT * FROM student ORDER BY prijmeni ASC;          -- vzestupně (výchozí)
+SELECT * FROM studijni_program ORDER BY nazev DESC;   -- sestupně</code></pre>
+
+    <h3>JOIN — spojení tabulek</h3>
+    <div class="highlight-box">
+        <strong>Typy JOIN:</strong>
+        <table class="table table-sm" style="max-width:600px; margin-top:8px;">
+            <thead class="table-light"><tr><th>Typ</th><th>Vrátí</th></tr></thead>
+            <tbody>
+                <tr><td><code>INNER JOIN</code></td><td>Pouze řádky se shodou v obou tabulkách</td></tr>
+                <tr><td><code>LEFT JOIN</code></td><td>Vše z levé tabulky + shody z pravé (NULL pokud neshoduje)</td></tr>
+                <tr><td><code>RIGHT JOIN</code></td><td>Vše z pravé tabulky + shody z levé</td></tr>
+                <tr><td><code>FULL JOIN</code></td><td>Vše z obou tabulek</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <pre><code class="language-sql">-- 1. Vzorová úloha: Zobrazit všechny studenty a jména předmětů, které studují
+SELECT s.jmeno, s.prijmeni, p.nazev AS predmet
+FROM student s
+INNER JOIN zapis z ON s.student_id = z.student_id
+INNER JOIN predmet p ON z.predmet_id = p.predmet_id
+ORDER BY s.prijmeni, p.nazev;
+
+-- LEFT JOIN: studenti včetně těch bez zápisů
+SELECT s.jmeno, s.prijmeni, p.nazev
+FROM student s
+LEFT JOIN zapis z ON s.student_id = z.student_id
+LEFT JOIN predmet p ON z.predmet_id = p.predmet_id;
+
+-- Spojení se studijním programem (1:N)
+SELECT s.jmeno, s.prijmeni, sp.nazev AS program
+FROM student s
+INNER JOIN studijni_program sp ON s.program_id = sp.program_id;</code></pre>
+
+    <h3>GROUP BY — seskupení a agregace</h3>
+    <pre><code class="language-sql">-- Agregační funkce: COUNT, SUM, AVG, MIN, MAX
+
+-- 2. Vzorová úloha: Studijní programy a počty studentů, seřazené dle názvu
+SELECT sp.nazev AS program, COUNT(s.student_id) AS pocet_studentu
+FROM studijni_program sp
+LEFT JOIN student s ON sp.program_id = s.program_id
+GROUP BY sp.nazev
+ORDER BY sp.nazev ASC;
+
+-- 3. Vzorová úloha: Předměty seskupené dle ročníku (agregace názvů)
+SELECT rocnik,
+       STRING_AGG(nazev, ', ' ORDER BY nazev) AS predmety
+FROM predmet
+GROUP BY rocnik
+ORDER BY rocnik;
+
+-- Filtrování skupin pomocí HAVING
+SELECT program_id, COUNT(*) AS pocet
+FROM student
+GROUP BY program_id
+HAVING COUNT(*) > 10;   -- pouze programy s více než 10 studenty
+
+-- Příklady dalších agregací
+SELECT
+    semestr,
+    COUNT(*)    AS pocet_predmetu,
+    MIN(rocnik) AS nejnizsi_rocnik,
+    MAX(rocnik) AS nejvyssi_rocnik
+FROM predmet
+GROUP BY semestr;</code></pre>
+
+    <hr>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <h2>Kompletní vzorová úloha</h2>
+
+    <pre><code class="language-sql">-- ═══════════════════════════════════════
+-- 1. Vytvoření tabulek (fyzický návrh)
+-- ═══════════════════════════════════════
+CREATE TABLE studijni_program (
+    program_id  SERIAL       PRIMARY KEY,
+    nazev       VARCHAR(100) NOT NULL UNIQUE,
+    titul       CHAR(3)      NOT NULL,
+    delka_let   INTEGER      NOT NULL
+);
+
+CREATE TABLE student (
+    student_id     SERIAL       PRIMARY KEY,
+    jmeno          VARCHAR(50)  NOT NULL,
+    prijmeni       VARCHAR(50)  NOT NULL,
+    datum_narozeni DATE         NOT NULL,
+    program_id     INTEGER      REFERENCES studijni_program(program_id)
+);
+
+CREATE TABLE predmet (
+    predmet_id  SERIAL       PRIMARY KEY,
+    nazev       VARCHAR(100) NOT NULL,
+    rocnik      INTEGER      NOT NULL,
+    semestr     CHAR(2)      NOT NULL
+);
+
+CREATE TABLE zapis (
+    student_id  INTEGER  REFERENCES student(student_id) ON DELETE CASCADE,
+    predmet_id  INTEGER  REFERENCES predmet(predmet_id) ON DELETE CASCADE,
+    PRIMARY KEY (student_id, predmet_id)
+);
+
+-- ═══════════════════════════════════════
+-- 2. Vložení ukázkových dat
+-- ═══════════════════════════════════════
+INSERT INTO studijni_program (nazev, titul, delka_let) VALUES
+    ('Aplikovaná informatika', 'Bc', 3),
+    ('Informatika', 'Mgr', 2);
+
+INSERT INTO student (jmeno, prijmeni, datum_narozeni, program_id) VALUES
+    ('Jiří',   'Novák',     '2006-05-20', 1),
+    ('Anna',   'Svobodová', '2005-11-03', 1),
+    ('Karel',  'Marek',     '2004-07-15', 2);
+
+INSERT INTO predmet (nazev, rocnik, semestr) VALUES
+    ('Relační databáze bez SQL', 2, 'LS'),
+    ('Algoritmy',               1, 'ZS'),
+    ('Úvod do programování',    1, 'ZS');
+
+INSERT INTO zapis VALUES (1,1),(1,2),(2,1),(3,2),(3,3);
+
+-- ═══════════════════════════════════════
+-- 3. Dotazy SELECT
+-- ═══════════════════════════════════════
+
+-- Všichni studenti a předměty, které studují
+SELECT s.jmeno, s.prijmeni, p.nazev AS predmet
+FROM student s
+JOIN zapis z ON s.student_id = z.student_id
+JOIN predmet p ON z.predmet_id = p.predmet_id
+ORDER BY s.prijmeni;
+
+-- Studijní programy a počty studentů (seřazené vzestupně dle názvu)
+SELECT sp.nazev, COUNT(s.student_id) AS pocet_studentu
+FROM studijni_program sp
+LEFT JOIN student s ON sp.program_id = s.program_id
+GROUP BY sp.nazev
+ORDER BY sp.nazev ASC;
+
+-- Předměty seskupené dle ročníku
+SELECT rocnik,
+       STRING_AGG(nazev, ', ' ORDER BY nazev) AS predmety
+FROM predmet
+GROUP BY rocnik
+ORDER BY rocnik;</code></pre>
+
+    <div class="note-box">
+        <strong>Tipy pro zkoušku:</strong>
+        <ul>
+            <li>Při normalizaci vždy zkontrolovat: jsou všechna M:N rozložena do vazební tabulky?</li>
+            <li>Každá tabulka musí mít <code>PRIMARY KEY</code></li>
+            <li><code>SERIAL</code> = auto-increment; nemusíme zadávat hodnotu při INSERT</li>
+            <li><code>STRING_AGG(sloupec, ', ')</code> agreguje textové hodnoty do jednoho řetězce</li>
+            <li>Pokud studijní program nemá studenty, <code>LEFT JOIN</code> ho stále zobrazí (COUNT = 0)</li>
+            <li>PostgreSQL: příkazy ukončovat středníkem <code>;</code> v <code>psql</code></li>
+            <li>Konzolový klient PostgreSQL se jmenuje <code>psql</code> (PDF chybně uvádí <em>pgsql</em>)</li>
+        </ul>
+    </div>
+
+</div>
+</body>
+</html>
