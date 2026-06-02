@@ -443,12 +443,15 @@
 
     <h2>Dekodér</h2>
 
-    <p>Dekodér převádí binárně kódovaný vstup ($n$ bitů) na $2^n$ výstupních linek — aktivuje právě jednu výstupní linku odpovídající vstupní kombinaci.</p>
+    <p>Dekodér převádí binárně kódovaný vstup ($n$ bitů) na $2^n$ výstupních linek — v daný okamžik je aktivní právě <strong>jedna</strong> linka odpovídající vstupní kombinaci. Výstupy jsou vzájemně exkluzivní.</p>
 
     <div class="math-box">
-        <strong>Dekodér 2 na 4 (2-to-4 decoder):</strong><br>
-        Vstupy: A₁, A₀ (2 bity) + enable E<br>
-        Výstupy: Y₀, Y₁, Y₂, Y₃ (4 linky)
+        <strong>Dekodér 2-na-4 — logické rovnice každého výstupu (s enable E):</strong><br><br>
+        $Y_0 = E \cdot \overline{A_1} \cdot \overline{A_0}$ &emsp; aktivní pro vstup <code>00</code><br>
+        $Y_1 = E \cdot \overline{A_1} \cdot A_0$ &emsp;&emsp; aktivní pro vstup <code>01</code><br>
+        $Y_2 = E \cdot A_1 \cdot \overline{A_0}$ &emsp;&emsp; aktivní pro vstup <code>10</code><br>
+        $Y_3 = E \cdot A_1 \cdot A_0$ &emsp;&emsp;&ensp; aktivní pro vstup <code>11</code><br><br>
+        Každý výstup je prostý <strong>mintermem</strong> vstupní kombinace — proto lze dekodér přímo použít k realizaci libovolné logické funkce (výstupy = mintermy → stačí OR).
     </div>
 
     <table class="table table-sm table-bordered text-center" style="max-width:400px;">
@@ -465,11 +468,21 @@
     </table>
 
     <div class="highlight-box">
-        <strong>BCD-na-7-segment dekodér</strong> (např. 74LS47): Přijímá 4bitový BCD vstup (0–9) a aktivuje příslušné segmenty (a–g) sedmisegmentového displeje. Je to specializovaný dekodér s pevně zakódovanou tabulkou segmentů.
+        <strong>Jak dekodér funguje uvnitř</strong> — každý výstup je jedno AND hradlo:<br><br>
+        <table class="table table-sm table-bordered" style="max-width:420px;">
+            <thead class="table-light"><tr><th>Výstup</th><th>Hradlo (realizace)</th></tr></thead>
+            <tbody>
+                <tr><td>Y₀</td><td>AND($\overline{A_1}$, $\overline{A_0}$) — oba vstupy negované</td></tr>
+                <tr><td>Y₁</td><td>AND($\overline{A_1}$, $A_0$) — A₁ negován, A₀ přímý</td></tr>
+                <tr><td>Y₂</td><td>AND($A_1$, $\overline{A_0}$) — A₁ přímý, A₀ negován</td></tr>
+                <tr><td>Y₃</td><td>AND($A_1$, $A_0$) — oba vstupy přímé</td></tr>
+            </tbody>
+        </table>
+        Každý výstup je aktivní (<strong>1</strong>) pro právě jednu kombinaci vstupů. Enable E je zapojen do každého AND jako třetí vstup — pokud E = 0, jsou všechny výstupy 0.
     </div>
 
     <div class="note-box">
-        <strong>Použití dekodérů:</strong> Výběr paměťového čipu (chip select), demultiplexování dat, adresování v procesorech, řízení displeje.
+        <strong>Použití dekodérů:</strong> výběr paměťového čipu (chip select), adresování periferií na sběrnici, demultiplexování, řízení displeje (BCD → 7-segment).
     </div>
 
     <hr>
